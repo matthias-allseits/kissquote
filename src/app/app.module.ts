@@ -5,12 +5,18 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {LandingpageComponent} from './sites/landingpage/landingpage.component';
 import {HttpClientModule} from '@angular/common/http';
+import { MoreInfoComponent } from './sites/more-info/more-info.component';
+import { FeedbackComponent } from './sites/feedback/feedback.component';
+import { SessionRestoreComponent } from './sites/session-restore/session-restore.component';
 
 
 @NgModule({
     declarations: [
         AppComponent,
-        LandingpageComponent
+        LandingpageComponent,
+        MoreInfoComponent,
+        FeedbackComponent,
+        SessionRestoreComponent
     ],
     imports: [
         BrowserModule,
@@ -20,5 +26,6 @@ import {HttpClientModule} from '@angular/common/http';
     providers: [],
     bootstrap: [AppComponent]
 })
+
 export class AppModule {
 }
