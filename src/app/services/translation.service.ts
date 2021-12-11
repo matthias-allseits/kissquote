@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Translation} from '../models/translation';
 import {Observable, of} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
 
 
 @Injectable({
@@ -9,56 +10,16 @@ import {Observable, of} from 'rxjs';
 
 export class TranslationService {
 
-    private language = 'de';
+    private baseUrl = 'http://localhost:8000/api/translations';
 
-    constructor() {
+    constructor(
+        private http: HttpClient,
+    ) {
     }
 
-    public getTranslations(): Observable<Translation[]> {
-        const translations = [];
-        translations.push(new Translation(
-            1,
-            'GURKE',
-            'Gurke',
-            'Cucumber',
-        ));
-        translations.push(new Translation(
-            1,
-            'PRAKTIKANT',
-            'Praktikant',
-            'Trainee',
-        ));
-        translations.push(new Translation(
-            1,
-            'ROOKIE',
-            'Anfänger',
-            'Rookie',
-        ));
-        translations.push(new Translation(
-            1,
-            'HATER',
-            'Hasser',
-            'Hater',
-        ));
-        translations.push(new Translation(
-            1,
-            'PROFESSIONAL',
-            'Profi',
-            'Professional',
-        ));
-
-        return of(translations);
+    public getTranslations(): Observable<Translation[]>
+    {
+        return this.http.get<Translation[]>(this.baseUrl);
     }
-
-
-    // public getTranslationByKey(key: string): string
-    // {
-    //     const allTranslations = this.getTranslations();
-    //     allTranslations.forEach((translation) => {
-    //         if (translation.key === key) {
-    //             return translation.de;
-    //         }
-    //     });
-    // }
 
 }

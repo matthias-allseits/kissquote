@@ -27,13 +27,15 @@ export class LandingpageComponent implements OnInit {
 
     public getTranslationByKey(key: string): string
     {
-        let hit = 'not found';
-        this.translations.forEach((translation) => {
-            if (translation.key === key) {
+        let hit = 'missing: ' + key;
+        if (this.translations) {
+            this.translations.forEach((translation) => {
+                if (translation.key === key) {
 
-                hit = translation[this.language];
-            }
-        });
+                    hit = translation[this.language];
+                }
+            });
+        }
 
         return hit;
     }
