@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {TranslationService} from '../../services/translation.service';
+
 
 @Component({
     selector: 'app-more-info',
@@ -7,7 +9,9 @@ import {Component, OnInit} from '@angular/core';
 })
 export class MoreInfoComponent implements OnInit {
 
-    constructor() {
+    constructor(
+        public translationService: TranslationService
+    ) {
     }
 
     ngOnInit(): void {
