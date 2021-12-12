@@ -8,6 +8,10 @@ import {HttpClientModule} from '@angular/common/http';
 import { MoreInfoComponent } from './sites/more-info/more-info.component';
 import { FeedbackComponent } from './sites/feedback/feedback.component';
 import { SessionRestoreComponent } from './sites/session-restore/session-restore.component';
+import { DemoComponent } from './sites/demo/demo.component';
+import { UploadComponent } from './sites/upload/upload.component';
+import { UploadExplanationComponent } from './sites/upload-explanation/upload-explanation.component';
+import { FaqComponent } from './sites/faq/faq.component';
 
 
 @NgModule({
@@ -16,7 +20,11 @@ import { SessionRestoreComponent } from './sites/session-restore/session-restore
         LandingpageComponent,
         MoreInfoComponent,
         FeedbackComponent,
-        SessionRestoreComponent
+        SessionRestoreComponent,
+        DemoComponent,
+        UploadComponent,
+        UploadExplanationComponent,
+        FaqComponent
     ],
     imports: [
         BrowserModule,
