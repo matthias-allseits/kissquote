@@ -8,6 +8,7 @@ import {DemoComponent} from './sites/demo/demo.component';
 import {UploadComponent} from './sites/upload/upload.component';
 import {UploadExplanationComponent} from './sites/upload-explanation/upload-explanation.component';
 import {FaqComponent} from './sites/faq/faq.component';
+import {UploadAlternativeComponent} from './sites/upload-alternative/upload-alternative.component';
 
 
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
     { path: 'upload', component: UploadComponent },
     { path: 'demo', component: DemoComponent },
     { path: 'upload-explanation', component: UploadExplanationComponent },
+    { path: 'upload-alternative', component: UploadAlternativeComponent },
     { path: 'faq', component: FaqComponent },
     { path: 'feedback', component: FeedbackComponent }
 ];

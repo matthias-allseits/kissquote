@@ -10,7 +10,7 @@ import {HttpClient} from '@angular/common/http';
 
 export class TranslationService {
 
-    private baseUrl = 'http://localhost:8000/api/translations';
+    private baseUrl = 'http://api-kissquote.local/api/translations';
     private translations: Translation[];
     private language = 'de';
 

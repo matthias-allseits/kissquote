@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Translation} from './models/translation';
 import {TranslationService} from './services/translation.service';
 
 @Component({
@@ -11,7 +10,6 @@ import {TranslationService} from './services/translation.service';
 export class AppComponent implements OnInit {
 
     title = 'Kissquote';
-    translations: Translation[];
     language = 'de';
 
     constructor(

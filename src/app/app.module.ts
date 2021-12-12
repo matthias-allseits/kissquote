@@ -12,6 +12,7 @@ import { DemoComponent } from './sites/demo/demo.component';
 import { UploadComponent } from './sites/upload/upload.component';
 import { UploadExplanationComponent } from './sites/upload-explanation/upload-explanation.component';
 import { FaqComponent } from './sites/faq/faq.component';
+import { UploadAlternativeComponent } from './sites/upload-alternative/upload-alternative.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { FaqComponent } from './sites/faq/faq.component';
         DemoComponent,
         UploadComponent,
         UploadExplanationComponent,
-        FaqComponent
+        FaqComponent,
+        UploadAlternativeComponent
     ],
     imports: [
         BrowserModule,

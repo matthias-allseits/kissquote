@@ -29,7 +29,7 @@ export class FeedbackComponent implements OnInit {
                 this.placeholder = 'Ist ja ganz nett hier, aber ich fühle mich in meiner Meinung bestärkt, dass künftig für die Erstellung neuer bunter Webseiten ein Baugesuch gestellt werden sollte.';
                 break;
             case 'good':
-                this.placeholder = 'Wir werden unseren Erstgeborenen Kissquote nennen.';
+                this.placeholder = 'Wir werden unseren Erstgeborenen ' + 'Kissquote' + ' nennen.';
                 break;
         }
     }

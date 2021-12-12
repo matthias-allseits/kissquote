@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {TranslationService} from '../../services/translation.service';
 
 @Component({
-    selector: 'app-session-restore',
-    templateUrl: './session-restore.component.html',
-    styleUrls: ['./session-restore.component.scss']
+    selector: 'app-upload-alternative',
+    templateUrl: './upload-alternative.component.html',
+    styleUrls: ['./upload-alternative.component.scss']
 })
-export class SessionRestoreComponent implements OnInit {
+export class UploadAlternativeComponent implements OnInit {
 
     constructor(
         public tranService: TranslationService
