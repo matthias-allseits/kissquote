@@ -1,7 +1,10 @@
 <div class="container py-3">
     <header>
         <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-            <h1 class="display-4 fw-normal">{{ tranService.trans('GLOB_TITLE') }}</h1>
+            <h1 class="display-4 fw-normal">
+                <img src="assets/kissquote.svg" width="55" title="{{ tranService.trans('GLOB_TITLE') }}">
+                {{ tranService.trans('GLOB_TITLE') }}
+            </h1>
             <p class="fs-5 text-muted">
                 {{ tranService.trans('LAPA_HEAD1') }}<br>
                 Primärer Zweck dieser bunten Webseiten besteht darin, Swissquote-Kunden mit Auswertungen und Analysen zu ihren Investitionen zu unterstützen.<br>
