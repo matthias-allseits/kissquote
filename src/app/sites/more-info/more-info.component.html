@@ -62,12 +62,15 @@
         <p class="lead mb-4">
             {{ tranService.trans('MOIN_FAQ') }}
         </p>
+        <p class="lead mb-4">
+            Der Programmator ist seit mehr als einem Jahrzent einer von vielen äusserst zufriedener Swissquote-Kunden. Die Apps sind super. Aber die Desktop-Version ist irgendwann hängen geblieben. Es gibt kein Summary.
+        </p>
         <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
             <div class="feature col">
                 <div class="feature-icon bg-primary bg-gradient">
                     <svg class="bi" width="1em" height="1em"><use xlink:href="#collection"/></svg>
                 </div>
-                <h2>Upload Explanation</h2>
+                <h2>{{ tranService.trans('MOIN_TITLE1') }}</h2>
                 <p>{{ tranService.trans('UPEX_LEAD') }}</p>
                 <a href="/upload-explanation" class="icon-link">
                     Call to action

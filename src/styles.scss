@@ -18,24 +18,34 @@ a:hover {
     color: #c9461a;
 }
 
+//primary btn
 .btn-primary {
     background-color: #ff6633;
     border-color: #ff6633;
 }
 
-.btn-primary:hover {
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
     background-color: #c9461a;
     border-color: #c9461a;
 }
 
+.btn-primary:focus, .btn-primary:active:focus {
+    box-shadow: 0 0 0 0.25rem rgb(255 102 51 / 50%);
+}
+
+//outline primary btn
 .btn-outline-primary {
     color: #ff6633;
     border-color: #ff6633;
 }
 
-.btn-outline-primary:hover {
+.btn-outline-primary:hover, .btn-outline-primary:active, .btn-outline-primary:focus {
     background-color: #ff6633;
     border-color: #ff6633;
+}
+
+.btn-outline-primary:focus, .btn-outline-primary:active:focus {
+    box-shadow: 0 0 0 0.25rem rgb(255 102 51 / 50%);
 }
 
 .bg-primary {

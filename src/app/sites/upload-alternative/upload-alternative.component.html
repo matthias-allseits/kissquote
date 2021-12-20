@@ -6,7 +6,7 @@
             Sie sind nicht Swissquote-Kunde, unser Upload hat kläglich versagt oder Sie misstrauen dem Upload oder was auch immer der Grund ist, weshalb Sie hier gelandet sind?
         </p>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <button type="button" class="btn btn-primary btn-lg px-4 gap-3">{{ tranService.trans('UPAL_TRIGGER') }}</button>
+            <button (click)="createPortfolio()" type="button" class="btn btn-primary btn-lg px-4 gap-3">{{ tranService.trans('UPAL_TRIGGER') }}</button>
         </div>
     </div>
 </div>
