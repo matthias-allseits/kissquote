@@ -10,7 +10,7 @@
                 Primärer Zweck dieser bunten Webseiten besteht darin, Swissquote-Kunden mit Auswertungen und Analysen zu ihren Investitionen zu unterstützen.<br>
                 Wir beginnen damit, Kunden von Swissquote einen einfachen, anonymen Import ihrer Transaktionen anzubieten.<br>
                 Der Programmator ist optimistisch, aus Ihrem anonymen Upload ein informatives Portfolio erstellen zu können.<br>
-                <a href="/upload-alternative">{{ tranService.trans('LAPA_ALTERNATIVE') }}</a><br>
+                <a routerLink="/upload-alternative">{{ tranService.trans('LAPA_ALTERNATIVE') }}</a><br>
             </p>
         </div>
     </header>
@@ -46,8 +46,8 @@
                         <h2 class="card-title pricing-card-title">{{ tranService.trans('ANONYMOUS') }}</h2>
                         <h2 class="card-title pricing-card-title">{{ tranService.trans('INFORMATIVE') }}</h2>
                         <ul class="list-unstyled mt-3 mb-4">
-                            <li>Sie sind unzufrieden?</li>
-                            <li>Wahrscheinlich ist es Hass?</li>
+                            <li>{{ tranService.trans('LAPA_HATER1') }}</li>
+                            <li>{{ tranService.trans('LAPA_HATER2') }}</li>
                             <li>Sie möchten Ihren Hass artikulieren?</li>
                             <li>Sie suchen ein Ventil?</li>
                         </ul>

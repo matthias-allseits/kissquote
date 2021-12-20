@@ -6,13 +6,13 @@
             {{ tranService.trans('UPLO_LEAD') }}
         </p>
         <p class="lead mb-4">
-            <a href="/upload-explanation">Sie haben Ihre Transaktionen nicht zur Hand und wissen nicht wie Sie dazu kommen?</a>
+            <a routerLink="/upload-explanation">Sie haben Ihre Transaktionen nicht zur Hand und wissen nicht wie Sie dazu kommen?</a>
         </p>
         <div class="input-group">
             <input type="file" class="form-control" id="inputGroupFile02">
         </div>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
-            <button type="button" class="btn btn-primary btn-lg px-4 gap-3">Senden</button>
+            <button type="button" class="btn btn-primary btn-lg px-4 gap-3">{{ tranService.trans('GLOB_SUBMIT') }}</button>
         </div>
     </div>
 </div>
