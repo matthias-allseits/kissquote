@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {TranslationService} from '../../services/translation.service';
 import {PortfolioService} from '../../services/portfolio.service';
 import {Portfolio} from '../../models/portfolio';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -14,7 +15,8 @@ export class UploadAlternativeComponent implements OnInit {
 
     constructor(
         public tranService: TranslationService,
-        public portfolioService: PortfolioService
+        private portfolioService: PortfolioService,
+        private router: Router,
     ) {
     }
 
@@ -25,8 +27,10 @@ export class UploadAlternativeComponent implements OnInit {
     {
         const portfolio = new Portfolio(null, null, null, null);
         this.portfolioService.create(portfolio)
-            .subscribe(response => {
-                 console.log(response);
+            .subscribe(returnedPortfolio => {
+                console.log(returnedPortfolio);
+                localStorage.setItem('my-key', returnedPortfolio.hashKey);
+                document.location.href = '/my-dashboard';
             });
     }
 

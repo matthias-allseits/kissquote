@@ -9,11 +9,13 @@ import {UploadComponent} from './sites/upload/upload.component';
 import {UploadExplanationComponent} from './sites/upload-explanation/upload-explanation.component';
 import {FaqComponent} from './sites/faq/faq.component';
 import {UploadAlternativeComponent} from './sites/upload-alternative/upload-alternative.component';
+import {MyDashboardComponent} from './sites/my-dashboard/my-dashboard.component';
 
 
 const routes: Routes = [
     { path: '', redirectTo: '/landingpage', pathMatch: 'full' },
     { path: 'landingpage', component: LandingpageComponent },
+    { path: 'my-dashboard', component: MyDashboardComponent },
     { path: 'more-info', component: MoreInfoComponent },
     { path: 'restore', component: SessionRestoreComponent },
     { path: 'upload', component: UploadComponent },

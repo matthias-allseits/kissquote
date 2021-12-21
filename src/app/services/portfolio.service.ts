@@ -4,6 +4,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Portfolio} from '../models/portfolio';
 import { HttpHeaders } from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
+import {Translation} from '../models/translation';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -28,6 +29,19 @@ export class PortfolioService {
     public create(portfolio: Portfolio): Observable<Portfolio>
     {
         return this.http.post<Portfolio>(this.baseUrl, portfolio, httpOptions)
+            .pipe(
+                map(res => Portfolio.oneFromApiArray(res))
+                // map(this.extractData),
+                // catchError(this.handleError('addHero', portfolio))
+                // catchError(this.handleError('addHero', portfolio))
+            );
+    }
+
+
+    public portfolioByKey(key: string): Observable<Portfolio>
+    {
+        // return this.http.get<Translation[]>(this.baseUrl + '/' + this.language);
+        return this.http.get<Portfolio>(this.baseUrl + '/restore/' + key)
             .pipe(
                 map(res => Portfolio.oneFromApiArray(res))
                 // map(this.extractData),

@@ -3,9 +3,9 @@
     <h1 class="h3 fw-normal centered-header">Geben Sie hier Ihren nur Ihnen bekannten Schlüssel ein</h1>
     <div class="col-lg-6 mx-auto">
         <div class="form-floating">
-            <input type="text" class="form-control" id="floatingKey" placeholder="Password">
-            <label for="floatingKey">Schlüssel</label>
+            <input [(ngModel)]="key" type="text" class="form-control" id="key" placeholder="Password">
+            <label for="key">Schlüssel</label>
         </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Gib mir mein Portfolio zurück!</button>
+        <button (click)="submitKey()" class="w-100 btn btn-lg btn-primary" type="submit">Gib mir mein Portfolio zurück!</button>
     </div>
 </div>

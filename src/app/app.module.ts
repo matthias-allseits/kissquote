@@ -13,6 +13,8 @@ import { UploadComponent } from './sites/upload/upload.component';
 import { UploadExplanationComponent } from './sites/upload-explanation/upload-explanation.component';
 import { FaqComponent } from './sites/faq/faq.component';
 import { UploadAlternativeComponent } from './sites/upload-alternative/upload-alternative.component';
+import { MyDashboardComponent } from './sites/my-dashboard/my-dashboard.component';
+import {FormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -26,12 +28,14 @@ import { UploadAlternativeComponent } from './sites/upload-alternative/upload-al
         UploadComponent,
         UploadExplanationComponent,
         FaqComponent,
-        UploadAlternativeComponent
+        UploadAlternativeComponent,
+        MyDashboardComponent
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
+        FormsModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

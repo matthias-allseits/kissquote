@@ -1,13 +1,17 @@
 <body>
     <nav class="navbar navbar-expand-md fixed-top border-bottom bg-white">
-        <a id="home-icon" routerLink="/" class="me-3 text-dark text-decoration-none">
+        <a (click)="handleHomeClick()" id="home-icon" class="me-3 text-dark text-decoration-none head-anchor">
             <img src="assets/kissquote.svg" width="35" title="{{ tranService.trans('GLOB_TITLE') }}">
         </a>
         <div class="container-fluid">
+            <span *ngIf="myKey !== null">Mein Schlüssel: <a routerLink="/my-dashboard" id="dashboard-anchor">{{ myKey }}</a></span>
         </div>
-        <a (click)="changeLanguage('de')" class="me-3 py-2 text-dark text-decoration-none lang-anchor" [class.active]="language == 'de'">de</a>
-        <a (click)="changeLanguage('en')" class="me-3 py-2 text-dark text-decoration-none lang-anchor" [class.active]="language == 'en'">en</a>
-        <a (click)="changeLanguage('fr')" class="me-3 py-2 text-dark text-decoration-none lang-anchor" [class.active]="language == 'fr'">fr</a>
+        <a *ngIf="myKey !== null" (click)="logout()" class="me-3 py-2 text-dark text-decoration-none head-anchor">logout</a>
+        <a (click)="changeLanguage('de')" class="me-3 py-2 text-dark text-decoration-none head-anchor" [class.active]="language == 'de'">de</a>
+        <a (click)="changeLanguage('en')" class="me-3 py-2 text-dark text-decoration-none head-anchor" [class.active]="language == 'en'">en</a>
+        <a (click)="changeLanguage('fr')" class="me-3 py-2 text-dark text-decoration-none head-anchor" [class.active]="language == 'fr'">fr</a>
     </nav>
+
     <router-outlet></router-outlet>
+
 </body>
