@@ -25,7 +25,7 @@ export class UploadAlternativeComponent implements OnInit {
 
     createPortfolio(): void
     {
-        const portfolio = new Portfolio(null, null, null, null);
+        const portfolio = new Portfolio(null, null, null, null, []);
         this.portfolioService.create(portfolio)
             .subscribe(returnedPortfolio => {
                 console.log(returnedPortfolio);

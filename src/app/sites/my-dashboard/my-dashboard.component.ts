@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {Portfolio} from '../../models/portfolio';
+import {PortfolioService} from '../../services/portfolio.service';
 
 
 @Component({
@@ -9,13 +11,31 @@ import {Component, OnInit} from '@angular/core';
 export class MyDashboardComponent implements OnInit {
 
     public myKey: string;
+    public portfolio: Portfolio;
 
-    constructor() {
+    constructor(
+        private portfolioService: PortfolioService,
+    ) {
     }
 
     ngOnInit(): void {
         this.myKey = localStorage.getItem('my-key');
-        document.getElementById('dashboard-anchor').innerHTML = this.myKey;
+        if (null !== this.myKey) {
+            document.getElementById('dashboard-anchor').innerHTML = this.myKey;
+
+            // let us get the portfolio again with all its interesting data
+            this.portfolioService.portfolioByKey(this.myKey)
+                .subscribe(returnedPortfolio => {
+                    console.log(returnedPortfolio);
+                    if (returnedPortfolio instanceof Portfolio) {
+                        this.portfolio = returnedPortfolio;
+                    } else {
+                        alert('Something went wrong!');
+                    }
+                });
+        } else {
+            // todo: redirect back to landingpage
+        }
     }
 
 }

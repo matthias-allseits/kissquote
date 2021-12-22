@@ -1,3 +1,5 @@
+import {Position} from './position';
+
 export class Portfolio {
 
     constructor(
@@ -5,6 +7,7 @@ export class Portfolio {
         public userName: string,
         public hashKey: string,
         public startDate: Date,
+        public positions: Position[],
     ) {}
 
 
@@ -16,6 +19,7 @@ export class Portfolio {
                 apiArray.userName,
                 apiArray.hashKey,
                 new Date(apiArray.startDate),
+                Position.fromApiArray(apiArray.positions),
             );
         } else {
             return null;
