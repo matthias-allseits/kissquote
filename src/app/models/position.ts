@@ -1,9 +1,11 @@
 import {Currency} from './currency';
+import {Share} from './share';
 
 export class Position {
 
     constructor(
         public id: number,
+        public share: Share,
         public currency: Currency,
         public active: boolean,
     ) {}
@@ -26,6 +28,7 @@ export class Position {
         if (apiArray !== undefined) {
             return new Position(
                 apiArray.id,
+                Share.oneFromApiArray(apiArray.share),
                 Currency.oneFromApiArray(apiArray.currency),
                 apiArray.active,
             );

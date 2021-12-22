@@ -11,6 +11,7 @@ import {PortfolioService} from '../../services/portfolio.service';
 export class MyDashboardComponent implements OnInit {
 
     public myKey: string;
+    // todo: the portfolio has to be ready at this time. probably the solution: a ng-mecano i forgot the name
     public portfolio: Portfolio;
 
     constructor(
@@ -31,10 +32,11 @@ export class MyDashboardComponent implements OnInit {
                         this.portfolio = returnedPortfolio;
                     } else {
                         alert('Something went wrong!');
+                        // todo: redirect back to landingpage. probably the solution: implement guards
                     }
                 });
         } else {
-            // todo: redirect back to landingpage
+            // todo: redirect back to landingpage. probably the solution: implement guards
         }
     }
 
