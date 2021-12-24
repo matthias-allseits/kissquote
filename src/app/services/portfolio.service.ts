@@ -40,8 +40,10 @@ export class PortfolioService {
 
     public portfolioByKey(key: string): Observable<Portfolio>
     {
-        // return this.http.get<Translation[]>(this.baseUrl + '/' + this.language);
-        return this.http.get<Portfolio>(this.baseUrl + '/restore/' + key)
+        const body = {
+            hashKey: key
+        };
+        return this.http.post<Portfolio>(this.baseUrl + '/restore', JSON.stringify(body), httpOptions )
             .pipe(
                 map(res => Portfolio.oneFromApiArray(res))
                 // map(this.extractData),
