@@ -10,6 +10,14 @@
                 <input id="shareName" type="text" class="form-control" formControlName="shareName">
             </div>
             <div class="mb-3">
+                <select class="form-select form-select mb-3">
+                    <option selected>Select share</option>
+                    <ng-container *ngFor="let share of shares">
+                        <option value="1">{{ share.name }}</option>
+                    </ng-container>
+                </select>
+            </div>
+            <div class="mb-3">
                 <label for="currencyName" class="form-label">Currency Name: </label>
                 <input id="currencyName" type="text" class="form-control" formControlName="currencyName">
             </div>

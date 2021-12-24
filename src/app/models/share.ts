@@ -9,6 +9,18 @@ export class Share {
     ) {}
 
 
+    public static fromApiArray(apiArray: Share[]): Share[] {
+        const array: Share[] = [];
+
+        for (const shareList of apiArray) {
+            const share = this.oneFromApiArray(shareList);
+            array.push(share);
+        }
+
+        return array;
+    }
+
+
     public static oneFromApiArray(apiArray: Share): Share
     {
         if (apiArray !== undefined) {
