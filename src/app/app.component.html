@@ -6,6 +6,11 @@
         <div class="container-fluid">
             <span *ngIf="myKey !== null">Mein Schlüssel: <a routerLink="/my-dashboard" id="dashboard-anchor">{{ myKey }}</a></span>
         </div>
+
+        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            <span data-feather="calendar"></span>
+            This week
+        </button>
         <a *ngIf="myKey !== null" (click)="logout()" class="me-3 py-2 text-dark text-decoration-none head-anchor">logout</a>
         <a (click)="changeLanguage('de')" class="me-3 py-2 text-dark text-decoration-none head-anchor" [class.active]="language == 'de'">de</a>
         <a (click)="changeLanguage('en')" class="me-3 py-2 text-dark text-decoration-none head-anchor" [class.active]="language == 'en'">en</a>
