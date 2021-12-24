@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Portfolio} from '../../models/portfolio';
 import {PortfolioService} from '../../services/portfolio.service';
+import {faEdit} from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -9,6 +10,8 @@ import {PortfolioService} from '../../services/portfolio.service';
     styleUrls: ['./my-dashboard.component.scss']
 })
 export class MyDashboardComponent implements OnInit {
+
+    editIcon = faEdit;
 
     public myKey: string;
     // todo: the portfolio has to be ready at this time. probably the solution: a ng-mecano i forgot the name

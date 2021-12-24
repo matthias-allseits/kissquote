@@ -16,6 +16,7 @@ import { UploadAlternativeComponent } from './sites/upload-alternative/upload-al
 import { MyDashboardComponent } from './sites/my-dashboard/my-dashboard.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { PositionFormComponent } from './sites/position-form/position-form.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { PositionFormComponent } from './sites/position-form/position-form.compo
         HttpClientModule,
         FormsModule,
         ReactiveFormsModule,
+        FontAwesomeModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

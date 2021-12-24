@@ -31,7 +31,7 @@
                     <td>{{ position.currency.name }}</td>
                     <td>data</td>
                     <td>placeholder</td>
-                    <td><button type="button" class="btn btn-sm btn-outline-secondary">icon Show</button></td>
+                    <td><button [routerLink]="['/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
                 </tr>
             </tbody>
         </table>

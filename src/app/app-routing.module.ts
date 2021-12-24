@@ -24,6 +24,7 @@ const routes: Routes = [
     { path: 'upload-explanation', component: UploadExplanationComponent },
     { path: 'upload-alternative', component: UploadAlternativeComponent },
     { path: 'faq', component: FaqComponent },
+    { path: 'position-form/:id', component: PositionFormComponent },
     { path: 'position-form', component: PositionFormComponent },
     { path: 'feedback', component: FeedbackComponent }
 ];
