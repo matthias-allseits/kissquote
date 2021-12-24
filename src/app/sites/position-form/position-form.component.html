@@ -1,0 +1,19 @@
+<main>
+    <div class="container px-4 py-5" id="featured-3">
+        <h1 class="pb-2">Neue Position</h1>
+        <p class="lead mb-4">
+            Füllen Sie das Formular aus.
+        </p>
+        <form [formGroup]="positionForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <label for="shareName" class="form-label">Share Name: </label>
+                <input id="shareName" type="text" class="form-control" formControlName="shareName">
+            </div>
+            <div class="mb-3">
+                <label for="currencyName" class="form-label">Currency Name: </label>
+                <input id="currencyName" type="text" class="form-control" formControlName="currencyName">
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="!positionForm.valid">Submit</button>
+        </form>
+    </div>
+</main>

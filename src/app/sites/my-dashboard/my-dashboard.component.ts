@@ -27,7 +27,6 @@ export class MyDashboardComponent implements OnInit {
             // let us get the portfolio again with all its interesting data
             this.portfolioService.portfolioByKey(this.myKey)
                 .subscribe(returnedPortfolio => {
-                    console.log(returnedPortfolio);
                     if (returnedPortfolio instanceof Portfolio) {
                         this.portfolio = returnedPortfolio;
                     } else {

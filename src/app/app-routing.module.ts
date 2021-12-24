@@ -10,6 +10,7 @@ import {UploadExplanationComponent} from './sites/upload-explanation/upload-expl
 import {FaqComponent} from './sites/faq/faq.component';
 import {UploadAlternativeComponent} from './sites/upload-alternative/upload-alternative.component';
 import {MyDashboardComponent} from './sites/my-dashboard/my-dashboard.component';
+import {PositionFormComponent} from './sites/position-form/position-form.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
     { path: 'upload-explanation', component: UploadExplanationComponent },
     { path: 'upload-alternative', component: UploadAlternativeComponent },
     { path: 'faq', component: FaqComponent },
+    { path: 'position-form', component: PositionFormComponent },
     { path: 'feedback', component: FeedbackComponent }
 ];
 

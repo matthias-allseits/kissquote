@@ -14,7 +14,8 @@ import { UploadExplanationComponent } from './sites/upload-explanation/upload-ex
 import { FaqComponent } from './sites/faq/faq.component';
 import { UploadAlternativeComponent } from './sites/upload-alternative/upload-alternative.component';
 import { MyDashboardComponent } from './sites/my-dashboard/my-dashboard.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { PositionFormComponent } from './sites/position-form/position-form.component';
 
 
 @NgModule({
@@ -29,13 +30,15 @@ import {FormsModule} from '@angular/forms';
         UploadExplanationComponent,
         FaqComponent,
         UploadAlternativeComponent,
-        MyDashboardComponent
+        MyDashboardComponent,
+        PositionFormComponent,
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
         FormsModule,
+        ReactiveFormsModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

@@ -3,7 +3,7 @@
         <h1 class="h2">Meine Positionen</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
-                <button type="button" class="btn btn-sm btn-outline-secondary">Add Position</button>
+                <button routerLink="/position-form" type="button" class="btn btn-sm btn-outline-secondary">Add Position</button>
                 <button type="button" class="btn btn-sm btn-outline-secondary">Add Transaction</button>
             </div>
             <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
@@ -21,7 +21,7 @@
                     <th scope="col">Share</th>
                     <th scope="col">Currency</th>
                     <th scope="col">Header</th>
-                    <th scope="col">Header</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -31,7 +31,7 @@
                     <td>{{ position.currency.name }}</td>
                     <td>data</td>
                     <td>placeholder</td>
-                    <td>text</td>
+                    <td><button type="button" class="btn btn-sm btn-outline-secondary">icon Show</button></td>
                 </tr>
             </tbody>
         </table>

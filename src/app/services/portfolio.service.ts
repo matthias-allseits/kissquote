@@ -4,14 +4,13 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Portfolio} from '../models/portfolio';
 import { HttpHeaders } from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
-import {Translation} from '../models/translation';
+
 
 const httpOptions = {
     headers: new HttpHeaders({
         'Content-Type':  'application/json',
     })
 };
-
 
 @Injectable({
     providedIn: 'root'
@@ -45,7 +44,8 @@ export class PortfolioService {
         };
         return this.http.post<Portfolio>(this.baseUrl + '/restore', JSON.stringify(body), httpOptions )
             .pipe(
-                map(res => Portfolio.oneFromApiArray(res))
+                map(res => Portfolio.oneFromApiArray(res)),
+                catchError(this.handleError)
                 // map(this.extractData),
                 // catchError(this.handleError('addHero', portfolio))
                 // catchError(this.handleError('addHero', portfolio))
@@ -57,6 +57,7 @@ export class PortfolioService {
     }
 
     private handleError(error: HttpErrorResponse) {
+        console.log(error);
         if (error.status === 0) {
             // A client-side or network error occurred. Handle it accordingly.
             console.error('An error occurred:', error.error);
