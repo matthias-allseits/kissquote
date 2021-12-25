@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Portfolio} from '../../models/portfolio';
 import {PortfolioService} from '../../services/portfolio.service';
 import {faEdit} from '@fortawesome/free-solid-svg-icons';
+import {faEye} from '@fortawesome/pro-solid-svg-icons';
 
 
 @Component({
@@ -12,6 +13,7 @@ import {faEdit} from '@fortawesome/free-solid-svg-icons';
 export class MyDashboardComponent implements OnInit {
 
     editIcon = faEdit;
+    eyeIcon = faEye;
 
     public myKey: string;
     // todo: the portfolio has to be ready at this time. probably the solution: a ng-mecano i forgot the name
@@ -30,6 +32,7 @@ export class MyDashboardComponent implements OnInit {
             // let us get the portfolio again with all its interesting data
             this.portfolioService.portfolioByKey(this.myKey)
                 .subscribe(returnedPortfolio => {
+                    console.log(returnedPortfolio);
                     if (returnedPortfolio instanceof Portfolio) {
                         this.portfolio = returnedPortfolio;
                     } else {

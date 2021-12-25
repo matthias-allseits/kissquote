@@ -13,30 +13,35 @@
         </div>
     </div>
 
-    <div *ngIf="portfolio && portfolio.positions.length > 0" class="table-responsive">
-        <table class="table table-striped table-sm">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Share</th>
-                    <th scope="col">Currency</th>
-                    <th scope="col">Header</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let position of portfolio.positions">
-                    <td>1,001</td>
-                    <td>{{ position.share.name }}</td>
-                    <td>{{ position.currency.name }}</td>
-                    <td>data</td>
-                    <td>placeholder</td>
-                    <td><button [routerLink]="['/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
-                </tr>
-            </tbody>
-        </table>
+    <div *ngIf="portfolio && portfolio.bankAccounts.length > 0" class="table-responsive">
+        <ng-container *ngFor="let bankAccount of portfolio.bankAccounts">
+            <h3>{{ bankAccount.name }}</h3>
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Share</th>
+                        <th scope="col">Currency</th>
+                        <th scope="col">Header</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let position of bankAccount.positions">
+                        <td>1,001</td>
+                        <td>{{ position.share.name }}</td>
+                        <td>{{ position.currency.name }}</td>
+                        <td>data</td>
+                        <td>placeholder</td>
+                        <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                        <td><button [routerLink]="['/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
     </div>
-    <p *ngIf="portfolio && portfolio.positions.length === 0">
+    <p *ngIf="portfolio && portfolio.bankAccounts.length === 0">
         Ohne Positionen wird es hier sehr schnell sehr langweilig...
     </p>
 </main>

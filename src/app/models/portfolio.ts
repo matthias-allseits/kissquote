@@ -1,4 +1,4 @@
-import {Position} from './position';
+import {BankAccount} from './bank-account';
 
 
 export class Portfolio {
@@ -8,7 +8,7 @@ export class Portfolio {
         public userName: string,
         public hashKey: string,
         public startDate: Date,
-        public positions: Position[],
+        public bankAccounts: BankAccount[],
     ) {}
 
 
@@ -20,7 +20,7 @@ export class Portfolio {
                 apiArray.userName,
                 apiArray.hashKey,
                 new Date(apiArray.startDate),
-                apiArray.positions ? Position.fromApiArray(apiArray.positions) : [],
+                apiArray.bankAccounts ? BankAccount.fromApiArray(apiArray.bankAccounts) : [],
             );
         } else {
             return null;

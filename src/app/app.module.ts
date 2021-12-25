@@ -17,6 +17,7 @@ import { MyDashboardComponent } from './sites/my-dashboard/my-dashboard.componen
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { PositionFormComponent } from './sites/position-form/position-form.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PositionDetailComponent } from './sites/position-detail/position-detail.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         UploadAlternativeComponent,
         MyDashboardComponent,
         PositionFormComponent,
+        PositionDetailComponent,
     ],
     imports: [
         BrowserModule,

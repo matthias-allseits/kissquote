@@ -7,6 +7,7 @@ import {ShareService} from '../../services/share.service';
 import {Share} from '../../models/share';
 import {CurrencyService} from '../../services/currency.service';
 import {Currency} from '../../models/currency';
+import {ShareheadService} from '../../services/sharehead.service';
 
 
 @Component({
@@ -30,6 +31,7 @@ export class PositionFormComponent implements OnInit {
         private positionService: PositionService,
         private shareService: ShareService,
         private currencyService: CurrencyService,
+        private shareheadService: ShareheadService,
     ) {
     }
 
@@ -41,13 +43,12 @@ export class PositionFormComponent implements OnInit {
             if (positionId) {
                 this.positionService.getPosition(positionId)
                     .subscribe(position => {
-                            console.log(position);
-                            this.position = position;
-                            this.positionForm.patchValue(position, { onlySelf: true });
-                            // this.positionForm.get('shareName').setValue(position.share.name);
-                            // this.positionForm.get('currencyName').setValue(position.currency.name);
-                        }
-                    );
+                        console.log(position);
+                        this.position = position;
+                        this.positionForm.patchValue(position, { onlySelf: true });
+                        // this.positionForm.get('shareName').setValue(position.share.name);
+                        // this.positionForm.get('currencyName').setValue(position.currency.name);
+                    });
             } else {
                 this.position = new Position(null, null, null, false);
             }
@@ -56,24 +57,45 @@ export class PositionFormComponent implements OnInit {
 
 
     onSubmit(): void {
+        this.patchValuesBack(this.positionForm, this.position);
         // TODO: Use EventEmitter with form value
-        console.warn(this.positionForm.value);
+        // console.warn(this.positionForm.value);
+        console.warn(this.position);
     }
 
 
     private loadData(): void {
         this.shareService.getAllShares()
             .subscribe(shares => {
-                    console.log(shares);
-                    this.shares = shares;
-                }
-            );
+                console.log(shares);
+                this.shares = shares;
+            });
+        this.shareheadService.getAllShares()
+            .subscribe(shares => {
+                console.log(shares);
+                this.shares = shares;
+            });
         this.currencyService.getAllCurrencies()
             .subscribe(currencies => {
-                    console.log(currencies);
-                    this.currencies = currencies;
+                console.log(currencies);
+                this.currencies = currencies;
+            });
+    }
+
+
+    patchValuesBack(form: FormGroup, model: any): void {
+        Object.keys(form.controls).map((field) => {
+            const control = form.get(field);
+            if (control instanceof FormControl) {
+                if (typeof model[field] === 'number' && typeof control.value === 'string' && control.value.length > 0) {
+                    model[field] = +control.value;
+                } else {
+                    model[field] = control.value;
                 }
-            );
+            } else if (control instanceof FormGroup) {
+                this.patchValuesBack(control, model);
+            }
+        });
     }
 
 }
