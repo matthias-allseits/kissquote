@@ -16,7 +16,7 @@ export class MyDashboardComponent implements OnInit {
     eyeIcon = faEye;
 
     public myKey: string;
-    // todo: the portfolio has to be ready at this time. probably the solution: a ng-mecano i forgot the name
+    // todo: the portfolio has to be ready at this time. probably the solution: resolvers!
     public portfolio: Portfolio;
 
     constructor(

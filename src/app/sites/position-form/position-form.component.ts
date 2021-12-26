@@ -20,6 +20,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
 
     public position: Position;
     public shares: Share[];
+    public shareHeadShares: Share[];
     public currencies: Currency[];
 
     positionForm = new FormGroup({
@@ -75,7 +76,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         this.shareheadService.getAllShares()
             .subscribe(shares => {
                 console.log(shares);
-                this.shares = shares;
+                this.shareHeadShares = shares;
             });
         this.currencyService.getAllCurrencies()
             .subscribe(currencies => {
