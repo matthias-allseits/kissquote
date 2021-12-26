@@ -1,18 +1,18 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
-import {LandingpageComponent} from './sites/landingpage/landingpage.component';
-import {MoreInfoComponent} from './sites/more-info/more-info.component';
-import {FeedbackComponent} from './sites/feedback/feedback.component';
-import {SessionRestoreComponent} from './sites/session-restore/session-restore.component';
-import {DemoComponent} from './sites/demo/demo.component';
-import {UploadComponent} from './sites/upload/upload.component';
-import {UploadExplanationComponent} from './sites/upload-explanation/upload-explanation.component';
-import {FaqComponent} from './sites/faq/faq.component';
-import {UploadAlternativeComponent} from './sites/upload-alternative/upload-alternative.component';
-import {MyDashboardComponent} from './sites/my-dashboard/my-dashboard.component';
-import {PositionFormComponent} from './sites/position-form/position-form.component';
-import {PositionDetailComponent} from './sites/position-detail/position-detail.component';
-import {BankAccountFormComponent} from './sites/bank-account-form/bank-account-form.component';
+import {RouterModule, Routes} from '@angular/router';
+import {LandingpageComponent} from "./sites/landingpage/landingpage.component";
+import {MyDashboardComponent} from "./sites/my-dashboard/my-dashboard.component";
+import {MoreInfoComponent} from "./sites/more-info/more-info.component";
+import {SessionRestoreComponent} from "./sites/session-restore/session-restore.component";
+import {UploadComponent} from "./sites/upload/upload.component";
+import {DemoComponent} from "./sites/demo/demo.component";
+import {UploadExplanationComponent} from "./sites/upload-explanation/upload-explanation.component";
+import {UploadAlternativeComponent} from "./sites/upload-alternative/upload-alternative.component";
+import {FaqComponent} from "./sites/faq/faq.component";
+import {PositionDetailComponent} from "./sites/position-detail/position-detail.component";
+import {PositionFormComponent} from "./sites/position-form/position-form.component";
+import {BankAccountFormComponent} from "./sites/bank-account-form/bank-account-form.component";
+import {FeedbackComponent} from "./sites/feedback/feedback.component";
 
 
 const routes: Routes = [
@@ -34,10 +34,10 @@ const routes: Routes = [
     { path: 'feedback', component: FeedbackComponent }
 ];
 
+
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
 })
-
 export class AppRoutingModule {
 }

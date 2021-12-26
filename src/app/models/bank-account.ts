@@ -15,14 +15,16 @@ export class BankAccount {
 
         for (const accountList of apiArray) {
             const bankAccount = this.oneFromApiArray(accountList);
-            array.push(bankAccount);
+            if (null !== bankAccount) {
+                array.push(bankAccount);
+            }
         }
 
         return array;
     }
 
 
-    public static oneFromApiArray(apiArray: BankAccount): BankAccount
+    public static oneFromApiArray(apiArray: BankAccount): BankAccount|null
     {
         if (apiArray !== undefined) {
             return new BankAccount(

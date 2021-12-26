@@ -37,7 +37,7 @@ export class FaqComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    toggleAccordion(entry): void {
+    toggleAccordion(entry: any): void {
         this.questions.forEach((question) => {
             question.show = false;
             if (entry === question) {

@@ -8,7 +8,7 @@ import {TranslationService} from '../../services/translation.service';
 })
 export class FeedbackComponent implements OnInit {
 
-    public activeMood: string;
+    public activeMood = 'bad';
     public placeholder = '';
     public submitText = '';
 

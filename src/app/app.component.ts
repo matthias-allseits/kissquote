@@ -11,8 +11,8 @@ import {Router} from '@angular/router';
 export class AppComponent implements OnInit {
 
     title = 'Kissquote';
-    language = 'de';
-    myKey: string = null;
+    language: string | null = 'de';
+    myKey: string | null = null;
 
     constructor(
         public tranService: TranslationService,

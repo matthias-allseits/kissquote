@@ -11,13 +11,16 @@ import {HttpClient} from '@angular/common/http';
 export class TranslationService {
 
     private baseUrl = 'http://api.kissquote.local/api/translations';
-    private translations: Translation[];
-    private language = 'de';
+    private translations: Translation[] = [];
+    private language: string = 'de';
 
     constructor(
         private http: HttpClient,
     ) {
-        this.language = localStorage.getItem('lang');
+        const lang = localStorage.getItem('lang');
+        if (null !== lang) {
+            this.language = lang;
+        }
         this.getTranslations()
             .subscribe(translations => {
                 this.translations = translations;
@@ -35,12 +38,26 @@ export class TranslationService {
         if (this.translations) {
             this.translations.forEach((translation) => {
                 if (translation.key === key) {
-                    hit = translation[this.language];
+                    const trnslatn = this.translationByLang(translation, this.language);
+                    if (null !== trnslatn) {
+                        hit = trnslatn;
+                    }
                 }
             });
         }
 
         return hit;
+    }
+
+    private translationByLang(translation: Translation, lang: string): string|null {
+        switch(lang) {
+            case 'de':
+                return translation.de;
+            case 'en':
+                return translation.en;
+        }
+
+        return null;
     }
 
 }

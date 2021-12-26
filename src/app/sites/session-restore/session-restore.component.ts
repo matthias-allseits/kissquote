@@ -10,7 +10,7 @@ import {Portfolio} from '../../models/portfolio';
 })
 export class SessionRestoreComponent implements OnInit {
 
-    public key;
+    public key: string|null = null;
 
     constructor(
         public tranService: TranslationService,
@@ -27,7 +27,9 @@ export class SessionRestoreComponent implements OnInit {
             .subscribe(returnedPortfolio => {
                 console.log(returnedPortfolio);
                 if (returnedPortfolio instanceof Portfolio) {
-                    localStorage.setItem('my-key', returnedPortfolio.hashKey);
+                    if (null !== returnedPortfolio.hashKey) {
+                        localStorage.setItem('my-key', returnedPortfolio.hashKey);
+                    }
                     document.location.href = '/my-dashboard';
                 } else {
                     alert('Something went wrong!');

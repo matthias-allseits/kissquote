@@ -26,7 +26,7 @@ export class PortfolioService {
     ) {}
 
 
-    public create(portfolio: Portfolio): Observable<Portfolio>
+    public create(portfolio: Portfolio): Observable<Portfolio|null>
     {
         return this.http.post<Portfolio>(this.baseUrl, portfolio, httpOptions)
             .pipe(
@@ -38,7 +38,7 @@ export class PortfolioService {
     }
 
 
-    public portfolioByKey(key: string): Observable<Portfolio>
+    public portfolioByKey(key: string|null): Observable<Portfolio|null>
     {
         const body = {
             hashKey: key
@@ -60,19 +60,21 @@ export class PortfolioService {
             const myKey = localStorage.getItem('my-key');
             this.portfolioByKey(myKey)
                 .subscribe(portfolio => {
-                    portfolio.bankAccounts.forEach(account => {
-                        if (account.id === bankAccountId) {
-                            bankAccount.next(account);
-                        }
-                    });
+                    if (null !== portfolio) {
+                        portfolio.bankAccounts.forEach(account => {
+                            if (account.id === bankAccountId) {
+                                bankAccount.next(account);
+                            }
+                        });
+                    }
                 });
         });
     }
 
 
-    protected extractData(res: Response) {
-        return res['data'] || {};
-    }
+    // protected extractData(res: Response) {
+    //     return res['data'] || {};
+    // }
 
     private handleError(error: HttpErrorResponse) {
         console.log(error);

@@ -18,10 +18,10 @@ import {MotherFormComponent} from '../mother-form.component';
 })
 export class PositionFormComponent extends MotherFormComponent implements OnInit {
 
-    public position: Position;
-    public shares: Share[];
-    public shareHeadShares: Share[];
-    public currencies: Currency[];
+    public position: Position|null = null;
+    public shares: Share[] = [];
+    public shareHeadShares: Share[] = [];
+    public currencies: Currency[] = [];
 
     positionForm = new FormGroup({
         share: new FormControl(''),
@@ -48,12 +48,10 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                     .subscribe(position => {
                         console.log(position);
                         this.position = position;
-                        this.positionForm.patchValue(position, { onlySelf: true });
-                        // this.positionForm.get('shareName').setValue(position.share.name);
-                        // this.positionForm.get('currencyName').setValue(position.currency.name);
+                        // this.positionForm.patchValue(position, { onlySelf: true });
                     });
             } else {
-                this.position = new Position(null, null, null, false);
+                this.position = new Position(0, null, null, false);
             }
         });
     }

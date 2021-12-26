@@ -25,7 +25,7 @@ export class PositionService {
     ) {}
 
 
-    public getPosition(id: number): Observable<Position>
+    public getPosition(id: number): Observable<Position|null>
     {
         return this.http.get<Position>(this.baseUrl + '/' + id)
             .pipe(

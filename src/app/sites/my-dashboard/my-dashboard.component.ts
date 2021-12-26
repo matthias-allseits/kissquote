@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Portfolio} from '../../models/portfolio';
 import {PortfolioService} from '../../services/portfolio.service';
 import {faEdit} from '@fortawesome/free-solid-svg-icons';
-import {faEye} from '@fortawesome/pro-solid-svg-icons';
+import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 
 
 @Component({
@@ -15,9 +15,9 @@ export class MyDashboardComponent implements OnInit {
     editIcon = faEdit;
     eyeIcon = faEye;
 
-    public myKey: string;
+    public myKey: string|null = null;
     // todo: the portfolio has to be ready at this time. probably the solution: resolvers!
-    public portfolio: Portfolio;
+    public portfolio: Portfolio|null = null;
 
     constructor(
         private portfolioService: PortfolioService,
@@ -27,7 +27,7 @@ export class MyDashboardComponent implements OnInit {
     ngOnInit(): void {
         this.myKey = localStorage.getItem('my-key');
         if (null !== this.myKey) {
-            document.getElementById('dashboard-anchor').innerHTML = this.myKey;
+            // document.getElementById('dashboard-anchor').innerHTML = this.myKey;
 
             // let us get the portfolio again with all its interesting data
             this.portfolioService.portfolioByKey(this.myKey)

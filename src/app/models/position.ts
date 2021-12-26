@@ -5,8 +5,8 @@ export class Position {
 
     constructor(
         public id: number,
-        public share: Share,
-        public currency: Currency,
+        public share: Share|null,
+        public currency: Currency|null,
         public active: boolean,
     ) {}
 
@@ -16,14 +16,16 @@ export class Position {
 
         for (const PositionList of apiArray) {
             const position = this.oneFromApiArray(PositionList);
-            array.push(position);
+            if (null !== position) {
+                array.push(position);
+            }
         }
 
         return array;
     }
 
 
-    public static oneFromApiArray(apiArray: Position): Position
+    public static oneFromApiArray(apiArray: Position): Position|null
     {
         if (apiArray !== undefined) {
             return new Position(

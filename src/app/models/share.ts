@@ -14,16 +14,18 @@ export class Share {
 
         for (const shareList of apiArray) {
             const share = this.oneFromApiArray(shareList);
-            array.push(share);
+            if (share instanceof Share) {
+                array.push(share);
+            }
         }
 
         return array;
     }
 
 
-    public static oneFromApiArray(apiArray: Share): Share
+    public static oneFromApiArray(apiArray: Share|null): Share|null
     {
-        if (apiArray !== undefined) {
+        if (apiArray !== undefined && apiArray !== null) {
             return new Share(
                 apiArray.id,
                 apiArray.name,

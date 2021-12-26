@@ -12,16 +12,18 @@ export class Currency {
 
         for (const currencyList of apiArray) {
             const currency = this.oneFromApiArray(currencyList);
-            array.push(currency);
+            if (null !== currency) {
+                array.push(currency);
+            }
         }
 
         return array;
     }
 
 
-    public static oneFromApiArray(apiArray: Currency): Currency
+    public static oneFromApiArray(apiArray: Currency|null): Currency|null
     {
-        if (apiArray !== undefined) {
+        if (apiArray !== undefined && apiArray !== null) {
             return new Currency(
                 apiArray.id,
                 apiArray.name,

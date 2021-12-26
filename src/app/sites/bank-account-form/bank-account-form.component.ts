@@ -14,7 +14,7 @@ import {BankAccountService} from '../../services/bank-account.service';
 })
 export class BankAccountFormComponent extends MotherFormComponent implements OnInit {
 
-    public bankAccount: BankAccount;
+    public bankAccount: BankAccount|null = null;
     bankAccountForm = new FormGroup({
         name: new FormControl(''),
     });
@@ -39,7 +39,7 @@ export class BankAccountFormComponent extends MotherFormComponent implements OnI
                         this.bankAccountForm.patchValue(account, { onlySelf: true });
                     });
             } else {
-                this.bankAccount = new BankAccount(null, '', []);
+                this.bankAccount = new BankAccount(0, '', []);
             }
         });
     }
@@ -48,12 +48,12 @@ export class BankAccountFormComponent extends MotherFormComponent implements OnI
     onSubmit(): void {
         this.patchValuesBack(this.bankAccountForm, this.bankAccount);
         console.log(this.bankAccount);
-        if (this.bankAccount.id > 0) {
+        if (this.bankAccount !== null && this.bankAccount.id > 0) {
             this.bankAccountService.update(this.bankAccount)
                 .subscribe(account => {
                     this.router.navigate(['my-dashboard']);
                 });
-        } else {
+        } else if (this.bankAccount !== null && this.bankAccount.id === 0) {
             this.bankAccountService.create(this.bankAccount)
                 .subscribe(account => {
                     this.router.navigate(['my-dashboard']);

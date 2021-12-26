@@ -7,11 +7,11 @@
         <div class="accordion" id="faqAccordion">
             <div *ngFor="let entry of questions; index as i;" class="accordion-item">
                 <h2 (click)="toggleAccordion(entry)" class="accordion-header" id="heading{{ i }}">
-                    <button class="accordion-button" [class.collapsed]="!entry.show" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ i }}" aria-expanded="false" aria-controls="collapseTwo">
+                    <button class="accordion-button" [class.collapsed]="!entry.show" type="button" aria-expanded="false" aria-controls="collapseTwo">
                         {{ entry.question }}
                     </button>
                 </h2>
-                <div id="collapse{{ i }}" class="accordion-collapse collapse" [class.show]="entry.show" aria-labelledby="heading{{ i }}" data-bs-parent="#faqAccordion">
+                <div id="collapse{{ i }}" class="accordion-collapse collapse" [class.show]="entry.show">
                     <div class="accordion-body">
                         {{ entry.answer }}
                     </div>

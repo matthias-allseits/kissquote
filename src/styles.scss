@@ -1,53 +1,53 @@
-@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~bootstrap/scss/bootstrap';
 
 body {
-    padding-top: 40px;
-    background-color: rgba(245, 245, 245, 0.22);
+  padding-top: 40px;
+  background-color: rgba(245, 245, 245, 0.22);
 }
 
 h1.centered-header {
-    margin-top: 2.5rem;
-    margin-bottom: 2.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
 }
 
 a, a:hover {
-    color: #ff6633;
+  color: #ff6633;
 }
 
 a:hover {
-    color: #c9461a;
+  color: #c9461a;
 }
 
 //primary btn
 .btn-primary {
-    background-color: #ff6633;
-    border-color: #ff6633;
+  background-color: #ff6633;
+  border-color: #ff6633;
 }
 
 .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
-    background-color: #c9461a;
-    border-color: #c9461a;
+  background-color: #c9461a;
+  border-color: #c9461a;
 }
 
 .btn-primary:focus, .btn-primary:active:focus {
-    box-shadow: 0 0 0 0.25rem rgb(255 102 51 / 50%);
+  box-shadow: 0 0 0 0.25rem rgb(255 102 51 / 50%);
 }
 
 //outline primary btn
 .btn-outline-primary {
-    color: #ff6633;
-    border-color: #ff6633;
+  color: #ff6633;
+  border-color: #ff6633;
 }
 
 .btn-outline-primary:hover, .btn-outline-primary:active, .btn-outline-primary:focus {
-    background-color: #ff6633;
-    border-color: #ff6633;
+  background-color: #ff6633;
+  border-color: #ff6633;
 }
 
 .btn-outline-primary:focus, .btn-outline-primary:active:focus {
-    box-shadow: 0 0 0 0.25rem rgb(255 102 51 / 50%);
+  box-shadow: 0 0 0 0.25rem rgb(255 102 51 / 50%);
 }
 
 .bg-primary {
-    background-color: #ff6633 !important;
+  background-color: #ff6633 !important;
 }

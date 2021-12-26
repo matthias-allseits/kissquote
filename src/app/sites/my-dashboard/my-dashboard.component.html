@@ -38,8 +38,8 @@
                 <tbody>
                     <tr *ngFor="let position of bankAccount.positions">
                         <td>1,001</td>
-                        <td>{{ position.share.name }}</td>
-                        <td>{{ position.currency.name }}</td>
+                        <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
+                        <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
                         <td>data</td>
                         <td>placeholder</td>
                         <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>

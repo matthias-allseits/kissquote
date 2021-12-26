@@ -11,7 +11,7 @@ import {PositionService} from '../../services/position.service';
 })
 export class PositionDetailComponent implements OnInit {
 
-    public position: Position;
+    public position: Position|null = null;
 
     constructor(
         private route: ActivatedRoute,
