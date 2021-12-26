@@ -3,6 +3,7 @@
         <h1 class="h2">Meine Positionen</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
+                <button routerLink="/bank-account-form" type="button" class="btn btn-sm btn-outline-secondary">Add Bank-Account</button>
                 <button routerLink="/position-form" type="button" class="btn btn-sm btn-outline-secondary">Add Position</button>
                 <button type="button" class="btn btn-sm btn-outline-secondary">Add Transaction</button>
             </div>
@@ -15,7 +16,7 @@
 
     <div *ngIf="portfolio && portfolio.bankAccounts.length > 0" class="table-responsive">
         <ng-container *ngFor="let bankAccount of portfolio.bankAccounts">
-            <h3>{{ bankAccount.name }}</h3>
+            <h3>{{ bankAccount.name }} <button [routerLink]="['/bank-account-form/' + bankAccount.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></h3>
             <table class="table table-striped table-sm">
                 <thead>
                     <tr>

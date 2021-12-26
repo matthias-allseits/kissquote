@@ -4,7 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {LandingpageComponent} from './sites/landingpage/landingpage.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { MoreInfoComponent } from './sites/more-info/more-info.component';
 import { FeedbackComponent } from './sites/feedback/feedback.component';
 import { SessionRestoreComponent } from './sites/session-restore/session-restore.component';
@@ -18,6 +18,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { PositionFormComponent } from './sites/position-form/position-form.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PositionDetailComponent } from './sites/position-detail/position-detail.component';
+import { BankAccountFormComponent } from './sites/bank-account-form/bank-account-form.component';
+import {JsonWebTokenInterceptor} from './interceptor/json-web-token.interceptor';
 
 
 @NgModule({
@@ -35,6 +37,7 @@ import { PositionDetailComponent } from './sites/position-detail/position-detail
         MyDashboardComponent,
         PositionFormComponent,
         PositionDetailComponent,
+        BankAccountFormComponent,
     ],
     imports: [
         BrowserModule,
@@ -44,7 +47,13 @@ import { PositionDetailComponent } from './sites/position-detail/position-detail
         ReactiveFormsModule,
         FontAwesomeModule,
     ],
-    providers: [],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: JsonWebTokenInterceptor,
+            multi: true,
+        },
+    ],
     bootstrap: [AppComponent]
 })
 

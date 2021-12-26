@@ -4,6 +4,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Portfolio} from '../models/portfolio';
 import { HttpHeaders } from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
+import {BankAccount} from '../models/bank-account';
 
 
 const httpOptions = {
@@ -51,6 +52,23 @@ export class PortfolioService {
                 // catchError(this.handleError('addHero', portfolio))
             );
     }
+
+
+    public getBankAccountById(bankAccountId: number): Observable<BankAccount>
+    {
+        return new Observable(bankAccount => {
+            const myKey = localStorage.getItem('my-key');
+            this.portfolioByKey(myKey)
+                .subscribe(portfolio => {
+                    portfolio.bankAccounts.forEach(account => {
+                        if (account.id === bankAccountId) {
+                            bankAccount.next(account);
+                        }
+                    });
+                });
+        });
+    }
+
 
     protected extractData(res: Response) {
         return res['data'] || {};

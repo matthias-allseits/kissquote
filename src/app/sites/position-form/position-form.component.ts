@@ -8,6 +8,7 @@ import {Share} from '../../models/share';
 import {CurrencyService} from '../../services/currency.service';
 import {Currency} from '../../models/currency';
 import {ShareheadService} from '../../services/sharehead.service';
+import {MotherFormComponent} from '../mother-form.component';
 
 
 @Component({
@@ -15,7 +16,7 @@ import {ShareheadService} from '../../services/sharehead.service';
     templateUrl: './position-form.component.html',
     styleUrls: ['./position-form.component.scss']
 })
-export class PositionFormComponent implements OnInit {
+export class PositionFormComponent extends MotherFormComponent implements OnInit {
 
     public position: Position;
     public shares: Share[];
@@ -33,6 +34,7 @@ export class PositionFormComponent implements OnInit {
         private currencyService: CurrencyService,
         private shareheadService: ShareheadService,
     ) {
+        super();
     }
 
 
@@ -80,22 +82,6 @@ export class PositionFormComponent implements OnInit {
                 console.log(currencies);
                 this.currencies = currencies;
             });
-    }
-
-
-    patchValuesBack(form: FormGroup, model: any): void {
-        Object.keys(form.controls).map((field) => {
-            const control = form.get(field);
-            if (control instanceof FormControl) {
-                if (typeof model[field] === 'number' && typeof control.value === 'string' && control.value.length > 0) {
-                    model[field] = +control.value;
-                } else {
-                    model[field] = control.value;
-                }
-            } else if (control instanceof FormGroup) {
-                this.patchValuesBack(control, model);
-            }
-        });
     }
 
 }
