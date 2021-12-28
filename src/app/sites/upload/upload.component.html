@@ -1,18 +1,45 @@
 <div class="px-4 py-5 my-5 text-center">
     <img src="assets/kissquote.svg" width="65" title="{{ tranService.trans('GLOB_TITLE') }}">
-    <h1 class="display-5 fw-bold centered-header">{{ tranService.trans('UPLO_TITLE') }}</h1>
-    <div class="col-lg-6 mx-auto">
-        <p class="lead mb-4">
-            {{ tranService.trans('UPLO_LEAD') }}
-        </p>
-        <p class="lead mb-4">
-            <a routerLink="/upload-explanation">Sie haben Ihre Transaktionen nicht zur Hand und wissen nicht wie Sie dazu kommen?</a>
-        </p>
-        <div class="input-group">
-            <input type="file" class="form-control" id="inputGroupFile02">
+    <ng-container *ngIf="parsedTransactions.length === 0">
+        <h1 class="display-5 fw-bold centered-header">{{ tranService.trans('UPLO_TITLE') }}</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">
+                {{ tranService.trans('UPLO_LEAD') }}
+            </p>
+            <p class="lead mb-4">
+                <a routerLink="/upload-explanation">Sie haben Ihre Transaktionen nicht zur Hand und wissen nicht wie Sie dazu kommen?</a>
+            </p>
+            <div class="input-group">
+                <input type="file" (change)="fileChanged($event)" class="form-control" id="inputGroupFile02">
+            </div>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
+                <button (click)="onSubmit()" type="button" class="btn btn-primary btn-lg px-4 gap-3">{{ tranService.trans('GLOB_SUBMIT') }}</button>
+            </div>
         </div>
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
-            <button type="button" class="btn btn-primary btn-lg px-4 gap-3">{{ tranService.trans('GLOB_SUBMIT') }}</button>
-        </div>
+    </ng-container>
+    <div *ngIf="parsedTransactions.length > 0" class=" text-start">
+        <h3>Found positions ({{ positions.length }})</h3>
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Share</th>
+                <th scope="col">ISIN</th>
+                <th scope="col">Currency</th>
+                <th scope="col">Active From</th>
+                <th scope="col">Active Until</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let position of positions; index as i;">
+                <td>{{ i + 1 }}</td>
+                <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
+                <td><span *ngIf="position.share">{{ position.share.isin }}</span></td>
+                <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
+                <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
+                <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>

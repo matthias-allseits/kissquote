@@ -30,8 +30,8 @@
                         <th scope="col">#</th>
                         <th scope="col">Share</th>
                         <th scope="col">Currency</th>
-                        <th scope="col">Header</th>
-                        <th scope="col"></th>
+                        <th scope="col">Active From</th>
+                        <th scope="col">Active Until</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -40,8 +40,8 @@
                         <td>1,001</td>
                         <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
                         <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
-                        <td>data</td>
-                        <td>placeholder</td>
+                        <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
+                        <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
                         <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
                         <td><button [routerLink]="['/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
                     </tr>

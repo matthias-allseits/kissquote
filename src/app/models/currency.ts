@@ -2,9 +2,14 @@ export class Currency {
 
     constructor(
         public id: number,
-        public name: string,
-        public rate: number,
+        public name: string|null,
+        public rate: number|null,
     ) {}
+
+
+    public static createNewCurrency(): Currency {
+        return new Currency(0, null, null);
+    }
 
 
     public static fromApiArray(apiArray: Currency[]): Currency[] {

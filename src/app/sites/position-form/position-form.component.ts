@@ -51,7 +51,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                         // this.positionForm.patchValue(position, { onlySelf: true });
                     });
             } else {
-                this.position = new Position(0, null, null, false);
+                this.position = Position.createNewPosition();
             }
         });
     }

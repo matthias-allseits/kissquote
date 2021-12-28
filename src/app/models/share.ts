@@ -2,11 +2,16 @@ export class Share {
 
     constructor(
         public id: number,
-        public name: string,
-        public shortname: string,
-        public isin: string,
-        public type: string,
-    ) {}
+        public name: string|null,
+        public shortname: string|null,
+        public isin: string|null,
+        public type: string|null,
+    ) { }
+
+
+    public static createNewShare(): Share {
+        return new Share(0, null, null, null, null);
+    }
 
 
     public static fromApiArray(apiArray: Share[]): Share[] {
