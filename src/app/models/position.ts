@@ -1,5 +1,6 @@
 import {Currency} from './currency';
 import {Share} from './share';
+import {Transaction} from "./transaction";
 
 export class Position {
 
@@ -10,11 +11,12 @@ export class Position {
         public active: boolean,
         public activeFrom: Date|null,
         public activeUntil: Date|null,
+        public transactions: Transaction[],
     ) {}
 
 
     public static createNewPosition(): Position {
-        return new Position(0, null, null, true, null, null);
+        return new Position(0, null, null, true, null, null, []);
     }
 
     public static fromApiArray(apiArray: Position[]): Position[] {
@@ -41,6 +43,7 @@ export class Position {
                 apiArray.active,
                 apiArray.activeFrom,
                 apiArray.activeUntil,
+                apiArray.transactions ? Transaction.fromApiArray(apiArray.transactions) : [],
             );
         } else {
             return null;

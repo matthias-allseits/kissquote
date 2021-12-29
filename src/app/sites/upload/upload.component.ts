@@ -3,6 +3,7 @@ import {TranslationService} from '../../services/translation.service';
 import {Position} from "../../models/position";
 import {Currency} from "../../models/currency";
 import {Share} from "../../models/share";
+import {Transaction} from "../../models/transaction";
 
 
 export interface ParsedTransaction {
@@ -12,7 +13,7 @@ export interface ParsedTransaction {
     name: string;
     isin: string;
     quantity: number;
-    price: number;
+    rate: number;
     fee: number;
     zinsen: number;
     nettoTotal: number;
@@ -32,6 +33,7 @@ export class UploadComponent implements OnInit {
     private file: File|null = null;
     public parsedTransactions: ParsedTransaction[] = [];
     public positions: Position[] = [];
+    public unresolvedActions: ParsedTransaction[] = [];
 
     constructor(
         public tranService: TranslationService
@@ -84,7 +86,7 @@ export class UploadComponent implements OnInit {
             name: cells[4],
             isin: cells[5],
             quantity: +cells[6],
-            price: +cells[7],
+            rate: +cells[7],
             fee: +cells[8],
             zinsen: +cells[9],
             nettoTotal: +cells[10],
@@ -95,28 +97,54 @@ export class UploadComponent implements OnInit {
         }
     }
 
+
     private convertTransactionsToPositions(transactions: ParsedTransaction[]): Position[] {
         const positions: Position[] = [];
-        transactions.forEach(transaction => {
-            if (transaction.title === 'Kauf') {
+        transactions.forEach(parsedAction => {
+            if (parsedAction.title === 'Kauf') {
                 const currency = Currency.createNewCurrency();
-                currency.name = transaction.currencyName;
+                currency.name = parsedAction.currencyName;
 
                 const share = Share.createNewShare();
-                share.name = transaction.name;
-                share.isin = transaction.isin;
-                share.shortname = transaction.symbol;
+                share.name = parsedAction.name;
+                share.isin = parsedAction.isin;
+                share.shortname = parsedAction.symbol;
 
-                const position = Position.createNewPosition();
-                position.share = share;
-                position.currency = currency;
-                position.activeFrom = transaction.date;
+                const transaction = Transaction.createNewTransaction();
+                transaction.date = parsedAction.date;
+                transaction.quantity = parsedAction.quantity;
+                transaction.fee = parsedAction.fee;
+                transaction.rate = parsedAction.rate;
 
-                positions.push(position);
+                let position = this.getPositonFromPositionsByIsin(parsedAction.isin, positions);
+                if (null === position) {
+                    position = Position.createNewPosition();
+                    position.share = share;
+                    position.currency = currency;
+                    position.activeFrom = parsedAction.date;
+                    position.transactions.push(transaction);
+                    positions.push(position);
+                } else {
+                    position.transactions.push(transaction);
+                }
+            } else {
+                this.unresolvedActions.push(parsedAction);
             }
         })
 
         return positions;
+    }
+
+
+    private getPositonFromPositionsByIsin(isin: string, positions: Position[]): Position|null {
+        let hit = null;
+        positions.forEach(position => {
+            if (position.share?.isin == isin) {
+                hit = position;
+            }
+        });
+
+        return hit;
     }
 
 }
