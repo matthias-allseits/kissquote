@@ -19,6 +19,8 @@
     </ng-container>
     <div *ngIf="parsedTransactions.length > 0" class=" text-start">
         <h4>Unresolved actions ({{ unresolvedActions.length }})</h4>
+        <h4>Resolved actions ({{ resolvedActions }})</h4>
+        <h4>Very bad things happend ({{ veryBadThingsHappend }})</h4>
         <h3>Positions found ({{ positions.length }})</h3>
         <table class="table table-striped table-sm">
             <thead>

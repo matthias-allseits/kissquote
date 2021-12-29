@@ -33,6 +33,8 @@ export class UploadComponent implements OnInit {
     private file: File|null = null;
     public parsedTransactions: ParsedTransaction[] = [];
     public positions: Position[] = [];
+    public resolvedActions = 0;
+    public veryBadThingsHappend = 0;
     public unresolvedActions: ParsedTransaction[] = [];
 
     constructor(
@@ -101,34 +103,54 @@ export class UploadComponent implements OnInit {
     private convertTransactionsToPositions(transactions: ParsedTransaction[]): Position[] {
         const positions: Position[] = [];
         transactions.forEach(parsedAction => {
-            if (parsedAction.title === 'Kauf') {
-                const currency = Currency.createNewCurrency();
-                currency.name = parsedAction.currencyName;
+            let position = null;
+            let transaction = null;
+            switch(parsedAction.title) {
+                case 'Kauf':
+                    const currency = Currency.createNewCurrency();
+                    currency.name = parsedAction.currencyName;
 
-                const share = Share.createNewShare();
-                share.name = parsedAction.name;
-                share.isin = parsedAction.isin;
-                share.shortname = parsedAction.symbol;
+                    const share = Share.createNewShare();
+                    share.name = parsedAction.name;
+                    share.isin = parsedAction.isin;
+                    share.shortname = parsedAction.symbol;
 
-                const transaction = Transaction.createNewTransaction();
-                transaction.date = parsedAction.date;
-                transaction.quantity = parsedAction.quantity;
-                transaction.fee = parsedAction.fee;
-                transaction.rate = parsedAction.rate;
+                    transaction = Transaction.createNewTransaction();
+                    transaction.date = parsedAction.date;
+                    transaction.quantity = parsedAction.quantity;
+                    transaction.fee = parsedAction.fee;
+                    transaction.rate = parsedAction.rate;
 
-                let position = this.getPositonFromPositionsByIsin(parsedAction.isin, positions);
-                if (null === position) {
-                    position = Position.createNewPosition();
-                    position.share = share;
-                    position.currency = currency;
-                    position.activeFrom = parsedAction.date;
-                    position.transactions.push(transaction);
-                    positions.push(position);
-                } else {
-                    position.transactions.push(transaction);
-                }
-            } else {
-                this.unresolvedActions.push(parsedAction);
+                    position = this.getPositonFromPositionsByIsin(parsedAction.isin, positions);
+                    if (null === position) {
+                        position = Position.createNewPosition();
+                        position.share = share;
+                        position.currency = currency;
+                        position.activeFrom = parsedAction.date;
+                        position.transactions.push(transaction);
+                        positions.push(position);
+                    } else {
+                        position.transactions.push(transaction);
+                    }
+                    this.resolvedActions++;
+                    break;
+                case 'Verkauf':
+                    position = this.getPositonFromPositionsByIsin(parsedAction.isin, positions);
+                    if (null === position) {
+                        console.warn('das ist aber gar nicht gut...');
+                        this.veryBadThingsHappend++;
+                    } else {
+                        transaction = Transaction.createNewTransaction();
+                        transaction.date = parsedAction.date;
+                        transaction.quantity = parsedAction.quantity * -1;
+                        transaction.fee = parsedAction.fee;
+                        transaction.rate = parsedAction.rate;
+                        position.transactions.push(transaction);
+                        this.resolvedActions++;
+                    }
+                    break;
+                default:
+                    this.unresolvedActions.push(parsedAction);
             }
         })
 
