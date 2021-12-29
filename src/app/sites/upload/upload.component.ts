@@ -137,7 +137,7 @@ export class UploadComponent implements OnInit {
                 case 'Verkauf':
                     position = this.getPositonFromPositionsByIsin(parsedAction.isin, positions);
                     if (null === position) {
-                        console.warn('das ist aber gar nicht gut...');
+                        console.warn('das ist aber gar nicht gut: ' + parsedAction.title + ' ' + parsedAction.name);
                         this.veryBadThingsHappend++;
                     } else {
                         transaction = Transaction.createNewTransaction();
