@@ -11,20 +11,4 @@ export class Portfolio {
         public bankAccounts: BankAccount[],
     ) {}
 
-
-    public static oneFromApiArray(apiArray: Portfolio): Portfolio|null
-    {
-        if (apiArray !== undefined) {
-            return new Portfolio(
-                apiArray.id,
-                apiArray.userName,
-                apiArray.hashKey,
-                apiArray.startDate ? new Date(apiArray.startDate) : null,
-                apiArray.bankAccounts ? BankAccount.fromApiArray(apiArray.bankAccounts) : [],
-            );
-        } else {
-            return null;
-        }
-    }
-
 }

@@ -5,6 +5,7 @@ import {Portfolio} from '../models/portfolio';
 import { HttpHeaders } from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {BankAccount} from '../models/bank-account';
+import {PortfolioCreator} from "../creators/portfolio-creator";
 
 
 const httpOptions = {
@@ -30,7 +31,7 @@ export class PortfolioService {
     {
         return this.http.post<Portfolio>(this.baseUrl, portfolio, httpOptions)
             .pipe(
-                map(res => Portfolio.oneFromApiArray(res))
+                map(res => PortfolioCreator.oneFromApiArray(res))
                 // map(this.extractData),
                 // catchError(this.handleError('addHero', portfolio))
                 // catchError(this.handleError('addHero', portfolio))
@@ -45,7 +46,7 @@ export class PortfolioService {
         };
         return this.http.post<Portfolio>(this.baseUrl + '/restore', JSON.stringify(body), httpOptions )
             .pipe(
-                map(res => Portfolio.oneFromApiArray(res)),
+                map(res => PortfolioCreator.oneFromApiArray(res)),
                 catchError(this.handleError)
                 // map(this.extractData),
                 // catchError(this.handleError('addHero', portfolio))

@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {TranslationService} from '../../services/translation.service';
 import {Position} from "../../models/position";
-import {Currency} from "../../models/currency";
-import {Share} from "../../models/share";
-import {Transaction} from "../../models/transaction";
+import {CurrencyCreator} from "../../creators/currency-creator";
+import {PositionCreator} from "../../creators/position-creator";
+import {ShareCreator} from "../../creators/share-creator";
+import {TransactionCreator} from "../../creators/transaction-creator";
 
 
 export interface ParsedTransaction {
@@ -107,15 +108,15 @@ export class UploadComponent implements OnInit {
             let transaction = null;
             switch(parsedAction.title) {
                 case 'Kauf':
-                    const currency = Currency.createNewCurrency();
+                    const currency = CurrencyCreator.createNewCurrency();
                     currency.name = parsedAction.currencyName;
 
-                    const share = Share.createNewShare();
+                    const share = ShareCreator.createNewShare();
                     share.name = parsedAction.name;
                     share.isin = parsedAction.isin;
                     share.shortname = parsedAction.symbol;
 
-                    transaction = Transaction.createNewTransaction();
+                    transaction = TransactionCreator.createNewTransaction();
                     transaction.date = parsedAction.date;
                     transaction.quantity = parsedAction.quantity;
                     transaction.fee = parsedAction.fee;
@@ -123,7 +124,7 @@ export class UploadComponent implements OnInit {
 
                     position = this.getPositonFromPositionsByIsin(parsedAction.isin, positions);
                     if (null === position) {
-                        position = Position.createNewPosition();
+                        position = PositionCreator.createNewPosition();
                         position.share = share;
                         position.currency = currency;
                         position.activeFrom = parsedAction.date;
@@ -140,7 +141,7 @@ export class UploadComponent implements OnInit {
                         console.warn('das ist aber gar nicht gut: ' + parsedAction.title + ' ' + parsedAction.name);
                         this.veryBadThingsHappend++;
                     } else {
-                        transaction = Transaction.createNewTransaction();
+                        transaction = TransactionCreator.createNewTransaction();
                         transaction.date = parsedAction.date;
                         transaction.quantity = parsedAction.quantity * -1;
                         transaction.fee = parsedAction.fee;

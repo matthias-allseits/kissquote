@@ -5,6 +5,6 @@ export class Translation {
         public key: string,
         public de: string,
         public en: string,
-    ) {}
+    ) { }
 
 }

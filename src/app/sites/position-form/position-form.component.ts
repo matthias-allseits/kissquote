@@ -9,6 +9,7 @@ import {CurrencyService} from '../../services/currency.service';
 import {Currency} from '../../models/currency';
 import {ShareheadService} from '../../services/sharehead.service';
 import {MotherFormComponent} from '../mother-form.component';
+import {PositionCreator} from "../../creators/position-creator";
 
 
 @Component({
@@ -51,7 +52,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                         // this.positionForm.patchValue(position, { onlySelf: true });
                     });
             } else {
-                this.position = Position.createNewPosition();
+                this.position = PositionCreator.createNewPosition();
             }
         });
     }
