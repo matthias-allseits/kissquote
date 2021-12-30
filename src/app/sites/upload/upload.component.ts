@@ -8,6 +8,7 @@ import {TransactionCreator} from "../../creators/transaction-creator";
 import {Dividend} from "../../models/dividend";
 import {DividendCreator} from "../../creators/dividend-creator";
 import {Currency} from "../../models/currency";
+import {Share} from "../../models/share";
 
 
 export interface ParsedTransaction {
@@ -39,6 +40,7 @@ export class UploadComponent implements OnInit {
     public badTransactions: ParsedTransaction[] = [];
     public allPositions: Position[] = [];
     public allCurrencies: Currency[] = [];
+    public allShares: Share[] = [];
     public cashPositions: Position[] = [];
     public openPositions: Position[] = [];
     public closedPositions: Position[] = [];
@@ -125,8 +127,6 @@ export class UploadComponent implements OnInit {
 
 
     private convertTransactionsToPositions(transactions: ParsedTransaction[]): void {
-        // const positions: Position[] = [];
-        // const currencies: Currency[] = [];
         transactions.forEach(parsedAction => {
             let position = null;
             let transaction = null;
@@ -141,7 +141,7 @@ export class UploadComponent implements OnInit {
                     currency = this.getCurrencyByName(parsedAction.currencyName);
                     currency.name = parsedAction.currencyName;
 
-                    share = ShareCreator.createNewShare();
+                    share = this.getShareByParsedTransaction(parsedAction);
                     share.name = currency.name;
 
                     transaction = TransactionCreator.createNewTransaction();
@@ -153,18 +153,17 @@ export class UploadComponent implements OnInit {
                         transaction.isInterest;
                     }
 
-                    position = this.getCashPositionFromPositionsByName(share.name);
+                    position = this.getCashPositionByName(share.name);
                     if (null === position) {
                         position = PositionCreator.createNewPosition();
                         position.share = share;
                         position.currency = currency;
                         position.activeFrom = parsedAction.date;
                         position.isCash = true;
-                        position.transactions.push(transaction);
                         this.allPositions.push(position);
-                    } else {
-                        position.transactions.push(transaction);
                     }
+
+                    position.transactions.push(transaction);
                     this.resolvedActions++;
                     break;
                 case 'Titeleingang':
@@ -174,10 +173,7 @@ export class UploadComponent implements OnInit {
                 case 'Kapitalerhöhung':
                     currency = this.getCurrencyByName(parsedAction.currencyName);
 
-                    share = ShareCreator.createNewShare();
-                    share.name = parsedAction.name;
-                    share.isin = parsedAction.isin;
-                    share.shortname = parsedAction.symbol;
+                    share = this.getShareByParsedTransaction(parsedAction);
 
                     transaction = TransactionCreator.createNewTransaction();
                     transaction.date = parsedAction.date;
@@ -185,24 +181,24 @@ export class UploadComponent implements OnInit {
                     transaction.fee = parsedAction.fee;
                     transaction.rate = parsedAction.rate;
 
-                    position = this.getPositonFromPositionsByIsin(parsedAction.isin);
+                    position = this.getPositionByIsin(parsedAction.isin);
                     if (null === position) {
                         position = PositionCreator.createNewPosition();
                         position.share = share;
                         position.currency = currency;
                         position.activeFrom = parsedAction.date;
-                        position.transactions.push(transaction);
                         this.allPositions.push(position);
-                    } else {
-                        position.transactions.push(transaction);
                     }
+
+                    position.transactions.push(transaction);
                     this.resolvedActions++;
                     break;
                 case 'Auszahlung':
                 case 'Fx-Belastung Comp.':
                 case 'Forex-Belastung':
                 case 'Depotgebühren':
-                    position = this.getCashPositionFromPositionsByName(parsedAction.currencyName);
+                    position = this.getCashPositionByName(parsedAction.currencyName);
+
                     if (null === position) {
                         console.warn('das ist aber gar nicht gut weil beim Verkauf Position tot: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
                         this.veryBadThingsHappend++;
@@ -220,7 +216,8 @@ export class UploadComponent implements OnInit {
                 case 'Verkauf':
                 case 'Titelausgang':
                 case 'Verfall von Anrechten':
-                    position = this.getPositonFromPositionsByIsin(parsedAction.isin);
+                    position = this.getPositionByIsin(parsedAction.isin);
+
                     if (null === position) {
                         console.warn('das ist aber gar nicht gut weil beim Verkauf Position tot: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
                         this.veryBadThingsHappend++;
@@ -243,7 +240,8 @@ export class UploadComponent implements OnInit {
                 case 'Kapitalrückzahlung':
                     currency = this.getCurrencyByName(parsedAction.currencyName);
 
-                    position = this.getPositonFromPositionsByIsin(parsedAction.isin, false);
+                    position = this.getPositionByIsin(parsedAction.isin, false);
+
                     if (null === position) {
                         console.warn('das ist aber gar nicht gut weil die Dividende keiner Position zugewiesen werden kann: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
                         this.veryBadThingsHappend++;
@@ -257,23 +255,18 @@ export class UploadComponent implements OnInit {
                         this.resolvedActions++;
                     }
                     break;
-                // case 'Interne Titelumbuchung':
-                // case 'Capital Gain (Storniert)':
-                // case 'Dividende (Storniert)':
-                // case 'Storno (Capital Gain)':
-                // case 'Storno (Dividende)':
-                //     no action needed?
-                    // this.resolvedActions++;
-                    // break;
                 default:
                     console.log(parsedAction);
                     this.badTransactions.push(parsedAction);
             }
         })
+
+        console.log(this.allCurrencies);
+        console.log(this.allShares);
     }
 
 
-    private getPositonFromPositionsByIsin(isin: string, mustBeActive = true): Position|null {
+    private getPositionByIsin(isin: string, mustBeActive = true): Position|null {
         let hit = null;
         this.allPositions.forEach(position => {
             if (mustBeActive) {
@@ -291,7 +284,7 @@ export class UploadComponent implements OnInit {
     }
 
 
-    private getCashPositionFromPositionsByName(name: string): Position|null {
+    private getCashPositionByName(name: string): Position|null {
         let hit = null;
         this.allPositions.forEach(position => {
             if (position.share?.isin === null && position.isCash && position.share?.name == name) {
@@ -317,6 +310,25 @@ export class UploadComponent implements OnInit {
             hit = CurrencyCreator.createNewCurrency();
             hit.name = name;
             this.allCurrencies.push(hit);
+        }
+
+        return hit;
+    }
+
+
+    private getShareByParsedTransaction(parsedTransaction: ParsedTransaction): Share {
+        let hit = null;
+        this.allShares.forEach(share => {
+            if (share.isin === parsedTransaction.isin) {
+                hit = share;
+            }
+        });
+        if (null === hit) {
+            hit = ShareCreator.createNewShare();
+            hit.name = parsedTransaction.name;
+            hit.isin = parsedTransaction.isin.length > 0 ? parsedTransaction.isin : null;
+            hit.shortname = parsedTransaction.symbol;
+            this.allShares.push(hit);
         }
 
         return hit;
