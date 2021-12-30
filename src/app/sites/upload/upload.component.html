@@ -19,11 +19,11 @@
 <div *ngIf="parsedTransactions.length > 0" class="px-4 text-center">
     <img src="assets/kissquote.svg" width="65" title="{{ tranService.trans('GLOB_TITLE') }}">
     <p class="lead mb-4 py-4">
-        Ihr Upload wurde ausgelesen und das Resultat können Sie unten begutachten.<br>
-        Wenn Sie der Meinung sind, dass dieses Resultat gut genug ist für den Start Ihres Portfolios, können Sie dies bestätigen und es geht los.<br>
-        Sie haben später immer die Möglichkeit, ihr Portfolio manuell zu ändern und zu korrigieren.
+        Ihr Upload wurde ausgelesen und wir bitten Sie, das Resultat zu begutachten.<br>
+        Wenn Sie der Meinung sind, dass das Resultat gut genug ist für den Start Ihres Portfolios, können Sie dies bestätigen und wir erstellen damit ein Portfolio für Sie.<br>
+        Sie werden immer die Möglichkeit haben, ihr Portfolio zu ändern, zu korrigieren oder zu erweitern.
     </p>
-    <button (click)="submitResult()" class="btn btn-lg btn-primary" type="submit">Let's go buffalo!</button>
+    <button (click)="submitResult()" class="btn btn-lg btn-primary" type="submit">Portfolio erstellen</button>
     <div class="text-start">
         <h6>Transactions found: {{ parsedTransactions.length }}</h6>
         <h6>Resolved transactions: {{ resolvedActions }}</h6>
@@ -32,7 +32,7 @@
         <h6>Very bad things happend: {{ veryBadThingsHappend }}</h6>
 
         <h3>Cash positions</h3>
-        <app-position-list [positions]="cashPositions"></app-position-list>
+        <app-position-list [positions]="cashPositions" [cash]="true"></app-position-list>
         <h3>Open positions</h3>
         <app-position-list [positions]="openPositions"></app-position-list>
         <h3>Closed positions</h3>

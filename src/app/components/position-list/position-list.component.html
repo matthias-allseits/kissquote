@@ -3,11 +3,11 @@
     <tr>
         <th scope="col">#</th>
         <th scope="col">Share</th>
-        <th scope="col">ISIN</th>
+        <th *ngIf="!cash" scope="col">ISIN</th>
         <th scope="col">Currency</th>
-        <th scope="col">Anzahl</th>
+        <th *ngIf="!cash" scope="col">Anzahl</th>
         <th scope="col">Active From</th>
-        <th scope="col">Active Until</th>
+        <th *ngIf="!cash" scope="col">Active Until</th>
         <th scope="col">Transactions</th>
         <th scope="col">Value</th>
     </tr>
@@ -16,11 +16,11 @@
     <tr *ngFor="let position of positions; index as i;">
         <td>{{ i + 1 }}</td>
         <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
-        <td><span *ngIf="position.share">{{ position.share.isin }}</span></td>
+        <td *ngIf="!cash"><span *ngIf="position.share">{{ position.share.isin }}</span></td>
         <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
-        <td><span *ngIf="!position.isCash">{{ position.quantityTotal() }}</span></td>
+        <td *ngIf="!cash">{{ position.quantityTotal() }}</td>
         <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
-        <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
+        <td *ngIf="!cash"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
         <td>{{ position.transactions.length }}</td>
         <td><span *ngIf="position.isCash">{{ position.valuation()|number: '1.0-2' }}</span></td>
     </tr>

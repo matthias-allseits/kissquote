@@ -10,6 +10,7 @@ import {Position} from "../../models/position";
 export class PositionListComponent implements OnInit {
 
     @Input() positions: Position[] = [];
+    @Input() cash = false;
 
     constructor() {
     }

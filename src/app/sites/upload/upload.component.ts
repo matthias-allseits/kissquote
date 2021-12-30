@@ -138,32 +138,7 @@ export class UploadComponent implements OnInit {
                 case 'Forex-Gutschrift':
                 case 'Zins':
                 case 'Einzahlung':
-                    currency = this.getCurrencyByName(parsedAction.currencyName);
-                    currency.name = parsedAction.currencyName;
-
-                    share = this.getShareByParsedTransaction(parsedAction);
-                    share.name = currency.name;
-
-                    transaction = TransactionCreator.createNewTransaction();
-                    transaction.date = parsedAction.date;
-                    transaction.quantity = parsedAction.quantity;
-                    transaction.fee = parsedAction.fee;
-                    transaction.rate = parsedAction.rate;
-                    if (parsedAction.title === 'Zins') {
-                        transaction.isInterest;
-                    }
-
-                    position = this.getCashPositionByName(share.name);
-                    if (null === position) {
-                        position = PositionCreator.createNewPosition();
-                        position.share = share;
-                        position.currency = currency;
-                        position.activeFrom = parsedAction.date;
-                        position.isCash = true;
-                        this.allPositions.push(position);
-                    }
-
-                    position.transactions.push(transaction);
+                    this.addCashTransaction(parsedAction);
                     this.resolvedActions++;
                     break;
                 case 'Titeleingang':
@@ -188,6 +163,14 @@ export class UploadComponent implements OnInit {
                         position.currency = currency;
                         position.activeFrom = parsedAction.date;
                         this.allPositions.push(position);
+                    }
+
+                    if (parsedAction.title === 'Kauf') {
+                        parsedAction.quantity = -1;
+                        parsedAction.isin = '';
+                        parsedAction.rate = parsedAction.accountTotal * -1;
+                        console.log(parsedAction);
+                        this.addCashTransaction(parsedAction);
                     }
 
                     position.transactions.push(transaction);
@@ -234,6 +217,15 @@ export class UploadComponent implements OnInit {
                         position.transactions.push(transaction);
                         this.resolvedActions++;
                     }
+
+                    if (parsedAction.title === 'Verkauf') {
+                        parsedAction.quantity = 1;
+                        parsedAction.isin = '';
+                        parsedAction.rate = parsedAction.accountTotal;
+                        console.log(parsedAction);
+                        this.addCashTransaction(parsedAction);
+                    }
+
                     break;
                 case 'Dividende':
                 case 'Capital Gain':
@@ -254,6 +246,13 @@ export class UploadComponent implements OnInit {
                         dividend.valueGross = parsedAction.fee;
                         this.resolvedActions++;
                     }
+
+                    parsedAction.quantity = 1;
+                    parsedAction.isin = '';
+                    parsedAction.rate = parsedAction.accountTotal;
+                    console.log(parsedAction);
+                    this.addCashTransaction(parsedAction);
+
                     break;
                 default:
                     console.log(parsedAction);
@@ -332,6 +331,36 @@ export class UploadComponent implements OnInit {
         }
 
         return hit;
+    }
+
+
+    private addCashTransaction(parsedAction: ParsedTransaction): void {
+        const currency = this.getCurrencyByName(parsedAction.accountCurrencyName);
+        currency.name = parsedAction.accountCurrencyName;
+
+        const share = this.getShareByParsedTransaction(parsedAction);
+        share.name = currency.name;
+
+        const transaction = TransactionCreator.createNewTransaction();
+        transaction.date = parsedAction.date;
+        transaction.quantity = parsedAction.quantity;
+        transaction.fee = parsedAction.fee;
+        transaction.rate = parsedAction.rate;
+        if (parsedAction.title === 'Zins') {
+            transaction.isInterest = true;
+        }
+
+        let position = this.getCashPositionByName(share.name);
+        if (null === position) {
+            position = PositionCreator.createNewPosition();
+            position.share = share;
+            position.currency = currency;
+            position.activeFrom = parsedAction.date;
+            position.isCash = true;
+            this.allPositions.push(position);
+        }
+
+        position.transactions.push(transaction);
     }
 
 }
