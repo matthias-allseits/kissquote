@@ -38,6 +38,7 @@ export class UploadComponent implements OnInit {
     public parsedTransactions: ParsedTransaction[] = [];
     public badTransactions: ParsedTransaction[] = [];
     public allPositions: Position[] = [];
+    public allCurrencies: Currency[] = [];
     public cashPositions: Position[] = [];
     public openPositions: Position[] = [];
     public closedPositions: Position[] = [];
@@ -70,7 +71,7 @@ export class UploadComponent implements OnInit {
     }
 
     submitResult(): void {
-        // todo: send result to the api
+        // todo: send resulting positions and dividends to the api
     }
 
     private parseContent(content: any): void {
@@ -88,7 +89,7 @@ export class UploadComponent implements OnInit {
         });
         this.parsedTransactions.reverse();
         console.log(this.parsedTransactions);
-        this.allPositions = this.convertTransactionsToPositions(this.parsedTransactions);
+        this.convertTransactionsToPositions(this.parsedTransactions);
         this.allPositions.forEach(position => {
             if (position.active) {
                 if (position.isCash) {
@@ -123,9 +124,9 @@ export class UploadComponent implements OnInit {
     }
 
 
-    private convertTransactionsToPositions(transactions: ParsedTransaction[]): Position[] {
-        const positions: Position[] = [];
-        const currencies: Currency[] = [];
+    private convertTransactionsToPositions(transactions: ParsedTransaction[]): void {
+        // const positions: Position[] = [];
+        // const currencies: Currency[] = [];
         transactions.forEach(parsedAction => {
             let position = null;
             let transaction = null;
@@ -137,7 +138,7 @@ export class UploadComponent implements OnInit {
                 case 'Forex-Gutschrift':
                 case 'Zins':
                 case 'Einzahlung':
-                    currency = this.getCurrencyByName(parsedAction.currencyName, currencies);
+                    currency = this.getCurrencyByName(parsedAction.currencyName);
                     currency.name = parsedAction.currencyName;
 
                     share = ShareCreator.createNewShare();
@@ -152,7 +153,7 @@ export class UploadComponent implements OnInit {
                         transaction.isInterest;
                     }
 
-                    position = this.getCashPositionFromPositionsByName(share.name, positions);
+                    position = this.getCashPositionFromPositionsByName(share.name);
                     if (null === position) {
                         position = PositionCreator.createNewPosition();
                         position.share = share;
@@ -160,7 +161,7 @@ export class UploadComponent implements OnInit {
                         position.activeFrom = parsedAction.date;
                         position.isCash = true;
                         position.transactions.push(transaction);
-                        positions.push(position);
+                        this.allPositions.push(position);
                     } else {
                         position.transactions.push(transaction);
                     }
@@ -171,7 +172,7 @@ export class UploadComponent implements OnInit {
                 case 'Ausgabe von Anrechten':
                 case 'Kauf':
                 case 'Kapitalerhöhung':
-                    currency = this.getCurrencyByName(parsedAction.currencyName, currencies);
+                    currency = this.getCurrencyByName(parsedAction.currencyName);
 
                     share = ShareCreator.createNewShare();
                     share.name = parsedAction.name;
@@ -184,14 +185,14 @@ export class UploadComponent implements OnInit {
                     transaction.fee = parsedAction.fee;
                     transaction.rate = parsedAction.rate;
 
-                    position = this.getPositonFromPositionsByIsin(parsedAction.isin, positions);
+                    position = this.getPositonFromPositionsByIsin(parsedAction.isin);
                     if (null === position) {
                         position = PositionCreator.createNewPosition();
                         position.share = share;
                         position.currency = currency;
                         position.activeFrom = parsedAction.date;
                         position.transactions.push(transaction);
-                        positions.push(position);
+                        this.allPositions.push(position);
                     } else {
                         position.transactions.push(transaction);
                     }
@@ -201,7 +202,7 @@ export class UploadComponent implements OnInit {
                 case 'Fx-Belastung Comp.':
                 case 'Forex-Belastung':
                 case 'Depotgebühren':
-                    position = this.getCashPositionFromPositionsByName(parsedAction.currencyName, positions);
+                    position = this.getCashPositionFromPositionsByName(parsedAction.currencyName);
                     if (null === position) {
                         console.warn('das ist aber gar nicht gut weil beim Verkauf Position tot: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
                         this.veryBadThingsHappend++;
@@ -219,7 +220,7 @@ export class UploadComponent implements OnInit {
                 case 'Verkauf':
                 case 'Titelausgang':
                 case 'Verfall von Anrechten':
-                    position = this.getPositonFromPositionsByIsin(parsedAction.isin, positions);
+                    position = this.getPositonFromPositionsByIsin(parsedAction.isin);
                     if (null === position) {
                         console.warn('das ist aber gar nicht gut weil beim Verkauf Position tot: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
                         this.veryBadThingsHappend++;
@@ -240,9 +241,9 @@ export class UploadComponent implements OnInit {
                 case 'Dividende':
                 case 'Capital Gain':
                 case 'Kapitalrückzahlung':
-                    currency = this.getCurrencyByName(parsedAction.currencyName, currencies);
+                    currency = this.getCurrencyByName(parsedAction.currencyName);
 
-                    position = this.getPositonFromPositionsByIsin(parsedAction.isin, positions, false);
+                    position = this.getPositonFromPositionsByIsin(parsedAction.isin, false);
                     if (null === position) {
                         console.warn('das ist aber gar nicht gut weil die Dividende keiner Position zugewiesen werden kann: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
                         this.veryBadThingsHappend++;
@@ -269,15 +270,12 @@ export class UploadComponent implements OnInit {
                     this.badTransactions.push(parsedAction);
             }
         })
-        console.log(currencies);
-
-        return positions;
     }
 
 
-    private getPositonFromPositionsByIsin(isin: string, positions: Position[], mustBeActive = true): Position|null {
+    private getPositonFromPositionsByIsin(isin: string, mustBeActive = true): Position|null {
         let hit = null;
-        positions.forEach(position => {
+        this.allPositions.forEach(position => {
             if (mustBeActive) {
                 if (position.share?.isin == isin && position.active) {
                     hit = position;
@@ -293,9 +291,9 @@ export class UploadComponent implements OnInit {
     }
 
 
-    private getCashPositionFromPositionsByName(name: string, positions: Position[]): Position|null {
+    private getCashPositionFromPositionsByName(name: string): Position|null {
         let hit = null;
-        positions.forEach(position => {
+        this.allPositions.forEach(position => {
             if (position.share?.isin === null && position.isCash && position.share?.name == name) {
                 hit = position;
             }
@@ -305,12 +303,12 @@ export class UploadComponent implements OnInit {
     }
 
 
-    private getCurrencyByName(name: string, currencies: Currency[]): Currency {
+    private getCurrencyByName(name: string): Currency {
         if (name === '') {
             name = 'not defined';
         }
         let hit = null;
-        currencies.forEach(currency => {
+        this.allCurrencies.forEach(currency => {
             if (currency.name === name) {
                 hit = currency;
             }
@@ -318,7 +316,7 @@ export class UploadComponent implements OnInit {
         if (null === hit) {
             hit = CurrencyCreator.createNewCurrency();
             hit.name = name;
-            currencies.push(hit);
+            this.allCurrencies.push(hit);
         }
 
         return hit;
