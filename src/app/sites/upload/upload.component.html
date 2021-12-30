@@ -1,27 +1,36 @@
-<div class="px-4 py-5 my-5 text-center">
+<div *ngIf="parsedTransactions.length === 0" class="px-4 py-5 my-5 text-center">
     <img src="assets/kissquote.svg" width="65" title="{{ tranService.trans('GLOB_TITLE') }}">
-    <ng-container *ngIf="parsedTransactions.length === 0">
-        <h1 class="display-5 fw-bold centered-header">{{ tranService.trans('UPLO_TITLE') }}</h1>
-        <div class="col-lg-6 mx-auto">
-            <p class="lead mb-4">
-                {{ tranService.trans('UPLO_LEAD') }}
-            </p>
-            <p class="lead mb-4">
-                <a routerLink="/upload-explanation">Sie haben Ihre Transaktionen nicht zur Hand und wissen nicht wie Sie dazu kommen?</a>
-            </p>
-            <div class="input-group">
-                <input type="file" (change)="fileChanged($event)" encoding="ISO-8859-1" class="form-control" id="inputGroupFile02">
-            </div>
-            <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
-                <button (click)="onSubmit()" type="button" class="btn btn-primary btn-lg px-4 gap-3">{{ tranService.trans('GLOB_SUBMIT') }}</button>
-            </div>
+    <h1 class="display-5 fw-bold centered-header">{{ tranService.trans('UPLO_TITLE') }}</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">
+            {{ tranService.trans('UPLO_LEAD') }}
+        </p>
+        <p class="lead mb-4">
+            <a routerLink="/upload-explanation">Sie haben Ihre Transaktionen nicht zur Hand und wissen nicht wie Sie dazu kommen?</a>
+        </p>
+        <div class="input-group">
+            <input type="file" (change)="fileChanged($event)" class="form-control" id="inputGroupFile02">
         </div>
-    </ng-container>
-    <div *ngIf="parsedTransactions.length > 0" class=" text-start">
-        <h4>Unresolved actions ({{ unresolvedActions.length }})</h4>
-        <h4>Resolved actions ({{ resolvedActions }})</h4>
-        <h4>Very bad things happend ({{ veryBadThingsHappend }})</h4>
-        <h4>Positions found ({{ allPositions.length }})</h4>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
+            <button (click)="onSubmit()" type="button" class="btn btn-primary btn-lg px-4 gap-3">{{ tranService.trans('GLOB_SUBMIT') }}</button>
+        </div>
+    </div>
+</div>
+<div *ngIf="parsedTransactions.length > 0" class="px-4 text-center">
+    <img src="assets/kissquote.svg" width="65" title="{{ tranService.trans('GLOB_TITLE') }}">
+    <p class="lead mb-4 py-4">
+        Ihr Upload wurde ausgelesen und das Resultat können Sie unten begutachten.<br>
+        Wenn Sie der Meinung sind, dass dieses Resultat gut genug ist für den Start Ihres Portfolios, können Sie dies bestätigen und es geht los.<br>
+        Sie haben später immer die Möglichkeit, ihr Portfolio manuell zu ändern und zu korrigieren.
+    </p>
+    <button (click)="submitResult()" class="btn btn-lg btn-primary" type="submit">Let's go buffalo!</button>
+    <div class="text-start">
+        <h6>Transactions found: {{ parsedTransactions.length }}</h6>
+        <h6>Resolved transactions: {{ resolvedActions }}</h6>
+        <h6>Positions found and created: {{ allPositions.length }}</h6>
+        <h6>Unresolved transactions: {{ badTransactions.length }}</h6>
+        <h6>Very bad things happend: {{ veryBadThingsHappend }}</h6>
+
         <h3>Cash positions</h3>
         <app-position-list [positions]="cashPositions"></app-position-list>
         <h3>Open positions</h3>
