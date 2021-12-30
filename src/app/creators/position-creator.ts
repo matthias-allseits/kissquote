@@ -35,6 +35,7 @@ export class PositionCreator {
                 apiArray.activeFrom,
                 apiArray.activeUntil,
                 apiArray.transactions ? TransactionCreator.fromApiArray(apiArray.transactions) : [],
+                apiArray.isCash
             );
         } else {
             return null;

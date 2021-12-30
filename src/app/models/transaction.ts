@@ -6,6 +6,8 @@ export class Transaction {
         public quantity: number,
         public rate: number|null,
         public fee: number|null,
+        public isFee: boolean = false,
+        public isInterest: boolean = false,
     ) {}
 
 }

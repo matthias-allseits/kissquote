@@ -5,6 +5,8 @@ import {CurrencyCreator} from "../../creators/currency-creator";
 import {PositionCreator} from "../../creators/position-creator";
 import {ShareCreator} from "../../creators/share-creator";
 import {TransactionCreator} from "../../creators/transaction-creator";
+import {Dividend} from "../../models/dividend";
+import {DividendCreator} from "../../creators/dividend-creator";
 
 
 export interface ParsedTransaction {
@@ -33,7 +35,11 @@ export class UploadComponent implements OnInit {
 
     private file: File|null = null;
     public parsedTransactions: ParsedTransaction[] = [];
-    public positions: Position[] = [];
+    public allPositions: Position[] = [];
+    public cashPositions: Position[] = [];
+    public openPositions: Position[] = [];
+    public closedPositions: Position[] = [];
+    public dividends: Dividend[] = [];
     public resolvedActions = 0;
     public veryBadThingsHappend = 0;
     public unresolvedActions: ParsedTransaction[] = [];
@@ -77,7 +83,18 @@ export class UploadComponent implements OnInit {
         });
         this.parsedTransactions.reverse();
         console.log(this.parsedTransactions);
-        this.positions = this.convertTransactionsToPositions(this.parsedTransactions);
+        this.allPositions = this.convertTransactionsToPositions(this.parsedTransactions);
+        this.allPositions.forEach(position => {
+            if (position.active) {
+                if (position.isCash) {
+                    this.cashPositions.push(position);
+                } else {
+                    this.openPositions.push(position);
+                }
+            } else {
+                this.closedPositions.push(position);
+            }
+        });
     }
 
     private parseTransaction(cells: string[]): ParsedTransaction {
@@ -108,9 +125,12 @@ export class UploadComponent implements OnInit {
             let transaction = null;
             let currency = null;
             let share = null;
-            console.log(parsedAction.title);
             switch(parsedAction.title) {
                 case 'Verg�tung':
+                case 'Fx-Gutschrift Comp.':
+                case 'Forex-Gutschrift':
+                case 'Zins':
+                case 'Einzahlung':
                     currency = CurrencyCreator.createNewCurrency();
                     currency.name = parsedAction.currencyName;
 
@@ -122,9 +142,11 @@ export class UploadComponent implements OnInit {
                     transaction.quantity = parsedAction.quantity;
                     transaction.fee = parsedAction.fee;
                     transaction.rate = parsedAction.rate;
+                    if (parsedAction.title === 'Zins') {
+                        transaction.isInterest;
+                    }
 
                     position = this.getPositonFromPositionsByName(share.name, positions);
-                    console.log(position);
                     if (null === position) {
                         position = PositionCreator.createNewPosition();
                         position.share = share;
@@ -139,7 +161,10 @@ export class UploadComponent implements OnInit {
                     this.resolvedActions++;
                     break;
                 case 'Titeleingang':
+                case 'Corporate Action':
+                case 'Ausgabe von Anrechten':
                 case 'Kauf':
+                case 'Kapitalerh�hung':
                     currency = CurrencyCreator.createNewCurrency();
                     currency.name = parsedAction.currencyName;
 
@@ -168,9 +193,12 @@ export class UploadComponent implements OnInit {
                     this.resolvedActions++;
                     break;
                 case 'Auszahlung':
+                case 'Fx-Belastung Comp.':
+                case 'Forex-Belastung':
+                case 'Depotgeb�hren':
                     position = this.getPositonFromPositionsByName(parsedAction.currencyName, positions);
                     if (null === position) {
-                        console.warn('das ist aber gar nicht gut weil beim Verkauf Position tot: ' + parsedAction.title + ' ' + parsedAction.name);
+                        console.warn('das ist aber gar nicht gut weil beim Verkauf Position tot: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
                         this.veryBadThingsHappend++;
                     } else {
                         transaction = TransactionCreator.createNewTransaction();
@@ -178,14 +206,17 @@ export class UploadComponent implements OnInit {
                         transaction.quantity = parsedAction.quantity * -1;
                         transaction.fee = parsedAction.fee;
                         transaction.rate = parsedAction.rate;
+                        transaction.isFee = parsedAction.title === 'Depotgeb�hren';
                         position.transactions.push(transaction);
                         this.resolvedActions++;
                     }
                     break;
                 case 'Verkauf':
+                case 'Titelausgang':
+                case 'Verfall von Anrechten':
                     position = this.getPositonFromPositionsByIsin(parsedAction.isin, positions);
                     if (null === position) {
-                        console.warn('das ist aber gar nicht gut weil beim Verkauf Position tot: ' + parsedAction.title + ' ' + parsedAction.name);
+                        console.warn('das ist aber gar nicht gut weil beim Verkauf Position tot: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
                         this.veryBadThingsHappend++;
                     } else {
                         if (parsedAction.quantity === position.quantityTotal()) {
@@ -201,7 +232,35 @@ export class UploadComponent implements OnInit {
                         this.resolvedActions++;
                     }
                     break;
+                case 'Dividende':
+                case 'Capital Gain':
+                case 'Kapitalr�ckzahlung':
+                    currency = CurrencyCreator.createNewCurrency();
+                    currency.name = parsedAction.currencyName;
+
+                    position = this.getPositonFromPositionsByIsin(parsedAction.isin, positions);
+                    if (null === position) {
+                        console.warn('das ist aber gar nicht gut weil die Dividende keiner Position zugewiesen werden kann: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
+                        this.veryBadThingsHappend++;
+                    } else {
+                        const dividend = DividendCreator.createNewDividend();
+                        dividend.share = position.share;
+                        dividend.date = parsedAction.date;
+                        // todo: calculate values-per-share
+                        dividend.valueNet = parsedAction.rate;
+                        dividend.valueGross = parsedAction.fee;
+                    }
+                    break;
+                case 'Interne Titelumbuchung':
+                case 'Capital Gain (Storniert)':
+                case 'Dividende (Storniert)':
+                case 'Storno (Capital Gain)':
+                case 'Storno (Dividende)':
+                    // no action needed?
+                    this.resolvedActions++;
+                    break;
                 default:
+                    console.log(parsedAction.title);
                     this.unresolvedActions.push(parsedAction);
             }
         })
@@ -213,7 +272,7 @@ export class UploadComponent implements OnInit {
     private getPositonFromPositionsByIsin(isin: string, positions: Position[]): Position|null {
         let hit = null;
         positions.forEach(position => {
-            if (position.share?.isin == isin && position.active) {
+            if (position.share?.isin == isin) {
                 hit = position;
             }
         });

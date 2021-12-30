@@ -30,6 +30,7 @@ export class TransactionCreator {
                 apiArray.quantity,
                 apiArray.rate,
                 apiArray.fee,
+                apiArray.isFee,
             );
         } else {
             return null;

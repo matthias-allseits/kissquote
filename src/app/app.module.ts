@@ -23,6 +23,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 import { registerLocaleData } from '@angular/common';
 import localeCH from '@angular/common/locales/de-CH';
+import { PositionListComponent } from './components/position-list/position-list.component';
 registerLocaleData(localeCH);
 
 
@@ -42,6 +43,7 @@ registerLocaleData(localeCH);
         PositionFormComponent,
         PositionDetailComponent,
         BankAccountFormComponent,
+        PositionListComponent,
     ],
     imports: [
         BrowserModule,
