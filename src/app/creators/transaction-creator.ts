@@ -4,7 +4,7 @@ import {Transaction} from "../models/transaction";
 export class TransactionCreator {
 
     public static createNewTransaction(): Transaction {
-        return new Transaction(0, null, null, null, null);
+        return new Transaction(0, null, 0, null, null);
     }
 
     public static fromApiArray(apiArray: Transaction[]): Transaction[] {

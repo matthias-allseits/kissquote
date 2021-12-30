@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
@@ -20,6 +20,10 @@ import {PositionDetailComponent} from "./sites/position-detail/position-detail.c
 import {BankAccountFormComponent} from "./sites/bank-account-form/bank-account-form.component";
 import {FaqComponent} from "./sites/faq/faq.component";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+
+import { registerLocaleData } from '@angular/common';
+import localeCH from '@angular/common/locales/de-CH';
+registerLocaleData(localeCH);
 
 
 @NgModule({
@@ -48,7 +52,9 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
         NgbModule,
         FontAwesomeModule,
     ],
-    providers: [],
+    providers: [
+        { provide: LOCALE_ID, useValue: "de-CH" }
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
