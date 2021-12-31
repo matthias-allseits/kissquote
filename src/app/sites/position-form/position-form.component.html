@@ -6,7 +6,7 @@
         </p>
         <form [formGroup]="positionForm" (ngSubmit)="onSubmit()">
             <div class="mb-3">
-                <label for="share" class="form-label">Share: </label>
+                <label for="share" class="form-label">{{ tranService.trans('GLOB_SHARE') }}: </label>
                 <select id="share" name="share" class="form-select form-select mb-3">
                     <option selected></option>
                     <ng-container *ngFor="let share of shareHeadShares">
@@ -15,7 +15,7 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label for="currency" class="form-label">Currency: </label>
+                <label for="currency" class="form-label">{{ tranService.trans('GLOB_CURRENCY') }}: </label>
                 <select id="currency" name="currency" class="form-select form-select mb-3">
                     <option selected></option>
                     <ng-container *ngFor="let currency of currencies">

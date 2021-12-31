@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Position} from "../../models/position";
+import {TranslationService} from "../../services/translation.service";
 
 
 @Component({
@@ -12,8 +13,9 @@ export class PositionListComponent implements OnInit {
     @Input() positions: Position[] = [];
     @Input() cash = false;
 
-    constructor() {
-    }
+    constructor(
+        public tranService: TranslationService,
+    ) { }
 
     ngOnInit(): void {
     }

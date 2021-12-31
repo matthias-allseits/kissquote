@@ -10,6 +10,7 @@ import {Currency} from '../../models/currency';
 import {ShareheadService} from '../../services/sharehead.service';
 import {MotherFormComponent} from '../mother-form.component';
 import {PositionCreator} from "../../creators/position-creator";
+import {TranslationService} from "../../services/translation.service";
 
 
 @Component({
@@ -35,6 +36,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         private shareService: ShareService,
         private currencyService: CurrencyService,
         private shareheadService: ShareheadService,
+        public tranService: TranslationService,
     ) {
         super();
     }

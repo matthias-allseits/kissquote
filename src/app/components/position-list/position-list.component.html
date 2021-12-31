@@ -2,9 +2,9 @@
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col">Share</th>
+        <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
         <th *ngIf="!cash" scope="col">ISIN</th>
-        <th scope="col">Currency</th>
+        <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
         <th *ngIf="!cash" scope="col">Anzahl</th>
         <th scope="col">Active From</th>
         <th *ngIf="!cash" scope="col">Active Until</th>
