@@ -30,4 +30,16 @@ export class PositionService {
             );
     }
 
+
+    public getPositions(): Observable<Position[]>
+    {
+        return this.http.get<Position[]>(this.baseUrl)
+            .pipe(
+                map(res => PositionCreator.fromApiArray(res))
+                // map(this.extractData),
+                // catchError(this.handleError('addHero', portfolio))
+                // catchError(this.handleError('addHero', portfolio))
+            );
+    }
+
 }

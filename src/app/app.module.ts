@@ -3,7 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {LandingpageComponent} from "./sites/landingpage/landingpage.component";
@@ -24,6 +24,8 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import { registerLocaleData } from '@angular/common';
 import localeCH from '@angular/common/locales/de-CH';
 import { PositionListComponent } from './components/position-list/position-list.component';
+import { TransactionFormComponent } from './sites/transaction-form/transaction-form.component';
+import {JsonWebTokenInterceptor} from "./interceptor/json-web-token.interceptor";
 registerLocaleData(localeCH);
 
 
@@ -44,6 +46,7 @@ registerLocaleData(localeCH);
         PositionDetailComponent,
         BankAccountFormComponent,
         PositionListComponent,
+        TransactionFormComponent,
     ],
     imports: [
         BrowserModule,
@@ -55,7 +58,14 @@ registerLocaleData(localeCH);
         FontAwesomeModule,
     ],
     providers: [
-        { provide: LOCALE_ID, useValue: "de-CH" }
+        {
+            provide: LOCALE_ID, useValue: "de-CH"
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: JsonWebTokenInterceptor,
+            multi: true,
+        }
     ],
     bootstrap: [AppComponent]
 })

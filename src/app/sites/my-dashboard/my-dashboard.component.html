@@ -14,13 +14,13 @@
 
     <div *ngIf="portfolio && portfolio.bankAccounts.length > 0" class="table-responsive">
         <ng-container *ngFor="let bankAccount of portfolio.bankAccounts">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2">
-                <h4>{{ bankAccount.name }}</h4>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
+                <h4 class="pt-2">{{ bankAccount.name }}</h4>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
                         <button [routerLink]="['/bank-account-form/' + bankAccount.id]" type="button" class="btn btn-sm btn-outline-secondary">Edit Bank-Account</button>
                         <button routerLink="/position-form" type="button" class="btn btn-sm btn-outline-secondary">Add Position</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Add Transaction</button>
+                        <button routerLink="/transaction-form" type="button" class="btn btn-sm btn-outline-secondary">Add Transaction</button>
                     </div>
                 </div>
             </div>

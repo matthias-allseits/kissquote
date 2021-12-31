@@ -1,0 +1,26 @@
+<main>
+    <div class="container px-4 py-5" id="featured-3">
+        <h1 class="pb-2">Transaction</h1>
+        <p class="lead mb-4">
+            Füllen Sie das Formular aus.
+        </p>
+        <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <label for="position" class="form-label">Position: </label>
+                <select id="position" name="position" formControlName="position" class="form-select form-select mb-3">
+                    <option selected></option>
+                    <ng-container *ngFor="let position of positions">
+                        <ng-container *ngIf="position.share">
+                            <option [selected]="transaction && transaction.position && transaction.position.id == position.id" [value]="position">{{ position.share.name }}</option>
+                        </ng-container>
+                    </ng-container>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="title" class="form-label">Title: </label>
+                <input id="title" type="text" class="form-control" formControlName="title">
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="!transactionForm.valid">Submit</button>
+        </form>
+    </div>
+</main>

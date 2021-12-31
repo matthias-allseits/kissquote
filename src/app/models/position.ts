@@ -2,6 +2,7 @@ import {Currency} from './currency';
 import {Share} from './share';
 import {Transaction} from "./transaction";
 
+
 export class Position {
 
     constructor(

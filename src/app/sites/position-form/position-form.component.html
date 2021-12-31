@@ -9,7 +9,7 @@
                 <label for="share" class="form-label">Share: </label>
                 <select id="share" name="share" class="form-select form-select mb-3">
                     <option selected></option>
-                    <ng-container *ngFor="let share of shares">
+                    <ng-container *ngFor="let share of shareHeadShares">
                         <option [selected]="position && position.share && share.id == position.share.id">{{ share.name }}</option>
                     </ng-container>
                 </select>

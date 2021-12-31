@@ -1,7 +1,10 @@
+import {Position} from "./position";
+
 export class Transaction {
 
     constructor(
         public id: number,
+        public position: Position|null,
         public title: string = '',
         public date: Date|null,
         public quantity: number,

@@ -1,10 +1,11 @@
 import {Transaction} from "../models/transaction";
+import {PositionCreator} from "./position-creator";
 
 
 export class TransactionCreator {
 
     public static createNewTransaction(): Transaction {
-        return new Transaction(0, '', null, 0, null, null);
+        return new Transaction(0, null, '', null, 0, null, null);
     }
 
     public static fromApiArray(apiArray: Transaction[]): Transaction[] {
@@ -26,6 +27,7 @@ export class TransactionCreator {
         if (apiArray !== undefined) {
             return new Transaction(
                 apiArray.id,
+                apiArray.position ? PositionCreator.oneFromApiArray(apiArray.position) : null,
                 apiArray.title,
                 apiArray.date,
                 apiArray.quantity,
