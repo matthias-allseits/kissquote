@@ -107,21 +107,40 @@ export class UploadComponent implements OnInit {
 
     private parseTransaction(cells: string[]): ParsedTransaction {
         const dateSplit = cells[0].substring(0, 10).split('-');
-        return {
-            date: new Date(+dateSplit[2], +dateSplit[1]-1, +dateSplit[0]),
-            title: cells[2],
-            symbol: cells[3],
-            name: cells[4],
-            isin: cells[5],
-            quantity: +cells[6],
-            rate: +cells[7],
-            fee: +cells[8],
-            zinsen: +cells[9],
-            nettoTotal: +cells[10],
-            currencyName: cells[11],
-            accountTotal: +cells[12],
-            saldo: +cells[13],
-            accountCurrencyName: cells[14],
+        if (dateSplit.length > 13) {
+            return {
+                date: new Date(+dateSplit[2], +dateSplit[1] - 1, +dateSplit[0]),
+                title: cells[2],
+                symbol: cells[3],
+                name: cells[4],
+                isin: cells[5],
+                quantity: +cells[6],
+                rate: +cells[7],
+                fee: +cells[8],
+                zinsen: +cells[9],
+                nettoTotal: +cells[10],
+                currencyName: cells[11],
+                accountTotal: +cells[12],
+                saldo: +cells[13],
+                accountCurrencyName: cells[14],
+            }
+        } else {
+            return {
+                date: new Date(+dateSplit[2], +dateSplit[1] - 1, +dateSplit[0]),
+                title: cells[2],
+                symbol: cells[3],
+                name: cells[4],
+                isin: cells[5],
+                quantity: +cells[6],
+                rate: +cells[7],
+                fee: +cells[8],
+                zinsen: +cells[9],
+                nettoTotal: +cells[10],
+                currencyName: cells[12],
+                accountTotal: +cells[10],
+                saldo: +cells[11],
+                accountCurrencyName: cells[12],
+            }
         }
     }
 
@@ -141,6 +160,28 @@ export class UploadComponent implements OnInit {
                     this.addCashTransaction(parsedAction);
                     this.resolvedActions++;
                     break;
+                case 'Split':
+                    position = this.getPositionByIsin(parsedAction.isin);
+                    if (null === position) {
+                        position = this.getPositionBySymbol(parsedAction.symbol);
+                        if (null !== position && position.share) {
+                            position.share.isin = parsedAction.isin;
+                        }
+                    }
+
+                    if (null === position) {
+                        console.warn('das ist aber gar nicht gut weil beim Split Position tot: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
+                        console.log(parsedAction);
+                        this.veryBadThingsHappend++;
+                    } else {
+                        transaction = TransactionCreator.createNewTransaction();
+                        transaction.title = 'Split';
+                        transaction.date = parsedAction.date;
+                        transaction.quantity = parsedAction.quantity;
+                        position.transactions.push(transaction);
+                        this.resolvedActions++;
+                    }
+                    break;
                 case 'Titeleingang':
                 case 'Corporate Action':
                 case 'Ausgabe von Anrechten':
@@ -151,6 +192,7 @@ export class UploadComponent implements OnInit {
                     share = this.getShareByParsedTransaction(parsedAction);
 
                     transaction = TransactionCreator.createNewTransaction();
+                    transaction.title = parsedAction.title;
                     transaction.date = parsedAction.date;
                     transaction.quantity = parsedAction.quantity;
                     transaction.fee = parsedAction.fee;
@@ -169,7 +211,6 @@ export class UploadComponent implements OnInit {
                         parsedAction.quantity = -1;
                         parsedAction.isin = '';
                         parsedAction.rate = parsedAction.accountTotal * -1;
-                        console.log(parsedAction);
                         this.addCashTransaction(parsedAction);
                     }
 
@@ -183,10 +224,11 @@ export class UploadComponent implements OnInit {
                     position = this.getCashPositionByName(parsedAction.currencyName);
 
                     if (null === position) {
-                        console.warn('das ist aber gar nicht gut weil beim Verkauf Position tot: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
+                        console.warn('das ist aber gar nicht gut weil bei Transaktion Position tot: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
                         this.veryBadThingsHappend++;
                     } else {
                         transaction = TransactionCreator.createNewTransaction();
+                        transaction.title = parsedAction.title;
                         transaction.date = parsedAction.date;
                         transaction.quantity = parsedAction.quantity * -1;
                         transaction.fee = parsedAction.fee;
@@ -210,6 +252,7 @@ export class UploadComponent implements OnInit {
                             position.active = false;
                         }
                         transaction = TransactionCreator.createNewTransaction();
+                        transaction.title = parsedAction.title;
                         transaction.date = parsedAction.date;
                         transaction.quantity = parsedAction.quantity * -1;
                         transaction.fee = parsedAction.fee;
@@ -222,7 +265,6 @@ export class UploadComponent implements OnInit {
                         parsedAction.quantity = 1;
                         parsedAction.isin = '';
                         parsedAction.rate = parsedAction.accountTotal;
-                        console.log(parsedAction);
                         this.addCashTransaction(parsedAction);
                     }
 
@@ -235,6 +277,7 @@ export class UploadComponent implements OnInit {
                     position = this.getPositionByIsin(parsedAction.isin, false);
 
                     if (null === position) {
+                        console.log(parsedAction);
                         console.warn('das ist aber gar nicht gut weil die Dividende keiner Position zugewiesen werden kann: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
                         this.veryBadThingsHappend++;
                     } else {
@@ -250,7 +293,6 @@ export class UploadComponent implements OnInit {
                     parsedAction.quantity = 1;
                     parsedAction.isin = '';
                     parsedAction.rate = parsedAction.accountTotal;
-                    console.log(parsedAction);
                     this.addCashTransaction(parsedAction);
 
                     break;
@@ -276,6 +318,18 @@ export class UploadComponent implements OnInit {
                 if (position.share?.isin == isin) {
                     hit = position;
                 }
+            }
+        });
+
+        return hit;
+    }
+
+
+    private getPositionBySymbol(symbol: string): Position|null {
+        let hit = null;
+        this.allPositions.forEach(position => {
+            if (position.share?.shortname == symbol) {
+                hit = position;
             }
         });
 
@@ -342,6 +396,7 @@ export class UploadComponent implements OnInit {
         share.name = currency.name;
 
         const transaction = TransactionCreator.createNewTransaction();
+        transaction.title = parsedAction.title;
         transaction.date = parsedAction.date;
         transaction.quantity = parsedAction.quantity;
         transaction.fee = parsedAction.fee;
