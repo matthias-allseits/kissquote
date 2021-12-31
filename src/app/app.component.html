@@ -1,25 +1,30 @@
 <body>
-<nav class="navbar navbar-expand-md fixed-top border-bottom bg-white">
-    <a (click)="handleHomeClick()" id="home-icon" class="me-3 text-dark text-decoration-none head-anchor">
-        <img src="assets/kissquote.svg" width="35" title="{{ tranService.trans('GLOB_TITLE') }}">
-    </a>
-    <div class="container-fluid">
-        <span *ngIf="myKey !== null">Mein Schlüssel: <a routerLink="/my-dashboard" id="dashboard-anchor">{{ myKey }}</a></span>
-    </div>
+    <nav class="navbar navbar-expand-md fixed-top border-bottom bg-white">
+        <a (click)="handleHomeClick()" id="home-icon" class="me-3 text-dark text-decoration-none head-anchor">
+            <img src="assets/kissquote.svg" width="35" title="{{ tranService.trans('GLOB_TITLE') }}">
+        </a>
+        <div class="container-fluid">
+            <span *ngIf="myKey !== null">Mein Schlüssel: <a routerLink="/my-dashboard" id="dashboard-anchor">{{ myKey }}</a></span>
+        </div>
 
-    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-        <span data-feather="calendar"></span>
-        This week
-    </button>
-    <a *ngIf="myKey !== null" (click)="logout()" class="me-3 py-2 text-dark text-decoration-none head-anchor">logout</a>
-    <a (click)="changeLanguage('de')" class="me-3 py-2 text-dark text-decoration-none head-anchor"
-       [class.active]="language == 'de'">de</a>
-    <a (click)="changeLanguage('en')" class="me-3 py-2 text-dark text-decoration-none head-anchor"
-       [class.active]="language == 'en'">en</a>
-    <a (click)="changeLanguage('fr')" class="me-3 py-2 text-dark text-decoration-none head-anchor"
-       [class.active]="language == 'fr'">fr</a>
-</nav>
+        <div *ngIf="myKey !== null" class="dropdown" style="margin-right: 15px;">
+            <button (click)="toggleUsersMenu()" [class.show]="showUsersMenu" class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Users dropdown
+            </button>
+            <ul [class.show]="showUsersMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a (click)="logout()" class="dropdown-item" href="#">Logout</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+        </div>
+        <a (click)="changeLanguage('de')" class="me-3 py-2 text-dark text-decoration-none head-anchor"
+           [class.active]="language == 'de'">de</a>
+        <a (click)="changeLanguage('en')" class="me-3 py-2 text-dark text-decoration-none head-anchor"
+           [class.active]="language == 'en'">en</a>
+        <a (click)="changeLanguage('fr')" class="me-3 py-2 text-dark text-decoration-none head-anchor"
+           [class.active]="language == 'fr'">fr</a>
+    </nav>
 
-<router-outlet></router-outlet>
+    <router-outlet></router-outlet>
 
 </body>

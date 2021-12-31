@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {TranslationService} from './services/translation.service';
 import {Router} from '@angular/router';
 
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -13,6 +14,7 @@ export class AppComponent implements OnInit {
     title = 'Kissquote';
     language: string | null = 'de';
     myKey: string | null = null;
+    public showUsersMenu = false;
 
     constructor(
         public tranService: TranslationService,
@@ -47,6 +49,10 @@ export class AppComponent implements OnInit {
         } else {
             this.router.navigate([`my-dashboard`]);
         }
+    }
+
+    public toggleUsersMenu(): void {
+        this.showUsersMenu = !this.showUsersMenu;
     }
 
 }
