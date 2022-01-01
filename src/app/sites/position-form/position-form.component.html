@@ -1,10 +1,18 @@
-<main *ngIf="position">
+<main *ngIf="position && portfolio">
     <div class="container px-4 py-5" id="featured-3">
         <h1 class="pb-2">Position</h1>
         <p class="lead mb-4">
             Wählen Sie einen Share aus dem Kissquote Universum oder erweitern Sie dieses erbärmlich kleine Universum.
         </p>
         <form [formGroup]="positionForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <label for="bankAccount" class="form-label">Bank-Account: </label>
+                <select formControlName="bankAccount" [ngModel]="position.share" id="bankAccount" name="bankAccount" class="form-select form-select mb-3">
+                    <ng-container *ngFor="let account of portfolio.getBankAccountsWithoutPositions()">
+                        <option [ngValue]="account">{{ account.name }}</option>
+                    </ng-container>
+                </select>
+            </div>
             <div class="mb-3">
                 <label for="share" class="form-label">{{ tranService.trans('GLOB_SHARE') }}: </label>
                 <select formControlName="share" [ngModel]="position.share" id="share" name="share" class="form-select form-select mb-3">

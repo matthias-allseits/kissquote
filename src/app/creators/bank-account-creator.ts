@@ -4,6 +4,10 @@ import {PositionCreator} from "./position-creator";
 
 export class BankAccountCreator {
 
+    public static createNewBankAccount(): BankAccount {
+        return new BankAccount(0, '', []);
+    }
+
     public static fromApiArray(apiArray: BankAccount[]): BankAccount[] {
         const array: BankAccount[] = [];
 

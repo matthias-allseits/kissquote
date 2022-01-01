@@ -11,6 +11,8 @@ import {ShareheadService} from '../../services/sharehead.service';
 import {MotherFormComponent} from '../mother-form.component';
 import {PositionCreator} from "../../creators/position-creator";
 import {TranslationService} from "../../services/translation.service";
+import {PortfolioService} from "../../services/portfolio.service";
+import {Portfolio} from "../../models/portfolio";
 
 
 @Component({
@@ -21,11 +23,13 @@ import {TranslationService} from "../../services/translation.service";
 export class PositionFormComponent extends MotherFormComponent implements OnInit {
 
     public position: Position;
+    public portfolio: Portfolio|null = null;
     public shares: Share[] = [];
     public shareHeadShares: Share[] = [];
     public currencies: Currency[] = [];
 
     positionForm = new FormGroup({
+        bankAccount: new FormControl(''),
         share: new FormControl(''),
         currency: new FormControl(''),
     });
@@ -34,6 +38,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         private route: ActivatedRoute,
         private router: Router,
         private positionService: PositionService,
+        private portfolioService: PortfolioService,
         private shareService: ShareService,
         private currencyService: CurrencyService,
         private shareheadService: ShareheadService,
@@ -81,6 +86,11 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
 
 
     private loadData(): void {
+        const myKey = localStorage.getItem('my-key');
+        this.portfolioService.portfolioByKey(myKey)
+            .subscribe(returnedPortfolio => {
+                this.portfolio = returnedPortfolio;
+            });
         this.shareService.getAllShares()
             .subscribe(shares => {
                 console.log(shares);

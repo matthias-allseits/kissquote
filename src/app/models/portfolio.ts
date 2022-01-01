@@ -1,4 +1,5 @@
 import {BankAccount} from './bank-account';
+import {BankAccountCreator} from "../creators/bank-account-creator";
 
 
 export class Portfolio {
@@ -10,5 +11,18 @@ export class Portfolio {
         public startDate: Date|null,
         public bankAccounts: BankAccount[],
     ) {}
+
+
+    getBankAccountsWithoutPositions(): BankAccount[] {
+        const copy: BankAccount[] = [];
+        this.bankAccounts.forEach(account => {
+            const cp = BankAccountCreator.createNewBankAccount();
+            cp.id = account.id;
+            cp.name = account.name;
+            copy.push(cp);
+        });
+
+        return copy;
+    }
 
 }
