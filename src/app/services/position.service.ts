@@ -1,10 +1,16 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Position} from '../models/position';
 import {PositionCreator} from "../creators/position-creator";
 
+
+const httpOptions = {
+    headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+    })
+};
 
 @Injectable({
     providedIn: 'root'
@@ -39,6 +45,28 @@ export class PositionService {
                 // map(this.extractData),
                 // catchError(this.handleError('addHero', portfolio))
                 // catchError(this.handleError('addHero', portfolio))
+            );
+    }
+
+
+    create(position: Position): Observable<Position> {
+        const url = `${this.baseUrl}`;
+        return this.http
+            .post(url, JSON.stringify(position), httpOptions)
+            .pipe(
+                map(() => position),
+                // catchError(this.handleError)
+            );
+    }
+
+
+    update(position: Position): Observable<Position> {
+        const url = `${this.baseUrl}/${position.id}`;
+        return this.http
+            .put(url, JSON.stringify(position), httpOptions)
+            .pipe(
+                map(() => position),
+                // catchError(this.handleError)
             );
     }
 

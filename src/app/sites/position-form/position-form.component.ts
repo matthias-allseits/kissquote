@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {ActivatedRoute, Params} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {PositionService} from '../../services/position.service';
 import {Position} from '../../models/position';
 import {ShareService} from '../../services/share.service';
@@ -20,7 +20,7 @@ import {TranslationService} from "../../services/translation.service";
 })
 export class PositionFormComponent extends MotherFormComponent implements OnInit {
 
-    public position: Position|null = null;
+    public position: Position;
     public shares: Share[] = [];
     public shareHeadShares: Share[] = [];
     public currencies: Currency[] = [];
@@ -32,6 +32,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private positionService: PositionService,
         private shareService: ShareService,
         private currencyService: CurrencyService,
@@ -39,6 +40,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         public tranService: TranslationService,
     ) {
         super();
+        this.position = PositionCreator.createNewPosition();
     }
 
 
@@ -50,7 +52,9 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                 this.positionService.getPosition(positionId)
                     .subscribe(position => {
                         console.log(position);
-                        this.position = position;
+                        if (position instanceof Position) {
+                            this.position = position;
+                        }
                         // this.positionForm.patchValue(position, { onlySelf: true });
                     });
             } else {
@@ -59,12 +63,20 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         });
     }
 
-
     onSubmit(): void {
         this.patchValuesBack(this.positionForm, this.position);
-        // TODO: Use EventEmitter with form value
-        // console.warn(this.positionForm.value);
-        console.warn(this.position);
+        console.log(this.position);
+        if (this.position.id > 0) {
+            this.positionService.update(this.position)
+                .subscribe(account => {
+                    this.router.navigate(['my-dashboard']);
+                });
+        } else {
+            this.positionService.create(this.position)
+                .subscribe(account => {
+                    this.router.navigate(['my-dashboard']);
+                });
+        }
     }
 
 

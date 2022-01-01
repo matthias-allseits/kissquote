@@ -7,7 +7,7 @@ import {TransactionCreator} from "./transaction-creator";
 export class PositionCreator {
 
     public static createNewPosition(): Position {
-        return new Position(0, null, null, true, null, null, []);
+        return new Position(0, null, null, true, new Date(), null, []);
     }
 
     public static fromApiArray(apiArray: Position[]): Position[] {

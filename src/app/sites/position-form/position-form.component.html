@@ -1,25 +1,25 @@
-<main>
+<main *ngIf="position">
     <div class="container px-4 py-5" id="featured-3">
         <h1 class="pb-2">Position</h1>
         <p class="lead mb-4">
-            Füllen Sie das Formular aus.
+            Wählen Sie einen Share aus dem Kissquote Universum oder erweitern Sie dieses erbärmlich kleine Universum.
         </p>
         <form [formGroup]="positionForm" (ngSubmit)="onSubmit()">
             <div class="mb-3">
                 <label for="share" class="form-label">{{ tranService.trans('GLOB_SHARE') }}: </label>
-                <select id="share" name="share" class="form-select form-select mb-3">
-                    <option selected></option>
+                <select formControlName="share" [ngModel]="position.share" id="share" name="share" class="form-select form-select mb-3">
+                    <option disabled selected></option>
                     <ng-container *ngFor="let share of shareHeadShares">
-                        <option [selected]="position && position.share && share.id == position.share.id">{{ share.name }}</option>
+                        <option [ngValue]="share">{{ share.name }}</option>
                     </ng-container>
                 </select>
             </div>
             <div class="mb-3">
                 <label for="currency" class="form-label">{{ tranService.trans('GLOB_CURRENCY') }}: </label>
-                <select id="currency" name="currency" class="form-select form-select mb-3">
-                    <option selected></option>
+                <select formControlName="currency" [ngModel]="position.currency" id="currency" name="currency" class="form-select form-select mb-3">
+                    <option disabled selected></option>
                     <ng-container *ngFor="let currency of currencies">
-                        <option [selected]="position && position.currency && currency.id == position.currency.id">{{ currency.name }}</option>
+                        <option [ngValue]="currency">{{ currency.name }}</option>
                     </ng-container>
                 </select>
             </div>

@@ -17,6 +17,15 @@ export class Position {
     ) {}
 
 
+    public getName(): string {
+        if (this.share && this.share.name) {
+            return this.share.name;
+        } else {
+            return 'undefined';
+        }
+    }
+
+
     public quantityTotal(): number {
         let quantity = 0;
         this.transactions.forEach(transaction => {
