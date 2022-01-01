@@ -13,6 +13,7 @@ import {PositionCreator} from "../../creators/position-creator";
 import {TranslationService} from "../../services/translation.service";
 import {PortfolioService} from "../../services/portfolio.service";
 import {Portfolio} from "../../models/portfolio";
+import {BankAccount} from "../../models/bank-account";
 
 
 @Component({
@@ -24,6 +25,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
 
     public position: Position;
     public portfolio: Portfolio|null = null;
+    public bankAccounts: BankAccount[] = [];
     public shares: Share[] = [];
     public shareHeadShares: Share[] = [];
     public currencies: Currency[] = [];
@@ -90,6 +92,10 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         this.portfolioService.portfolioByKey(myKey)
             .subscribe(returnedPortfolio => {
                 this.portfolio = returnedPortfolio;
+                if (this.portfolio instanceof Portfolio) {
+                    this.bankAccounts = this.portfolio.getBankAccountsWithoutPositions();
+                    this.positionForm.get('bankAccount')?.setValue(this.bankAccounts[0]);
+                }
             });
         this.shareService.getAllShares()
             .subscribe(shares => {
@@ -101,7 +107,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                 console.log(shares);
                 this.shareHeadShares = shares;
             });
-        this.currencyService.getAllCurrencies()
+        this.shareheadService.getAllCurrencies()
             .subscribe(currencies => {
                 console.log(currencies);
                 this.currencies = currencies;

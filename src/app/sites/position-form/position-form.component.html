@@ -8,7 +8,7 @@
             <div class="mb-3">
                 <label for="bankAccount" class="form-label">Bank-Account: </label>
                 <select formControlName="bankAccount" [ngModel]="position.share" id="bankAccount" name="bankAccount" class="form-select form-select mb-3">
-                    <ng-container *ngFor="let account of portfolio.getBankAccountsWithoutPositions()">
+                    <ng-container *ngFor="let account of bankAccounts">
                         <option [ngValue]="account">{{ account.name }}</option>
                     </ng-container>
                 </select>

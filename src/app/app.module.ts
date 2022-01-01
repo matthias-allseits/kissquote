@@ -26,6 +26,7 @@ import localeCH from '@angular/common/locales/de-CH';
 import { PositionListComponent } from './components/position-list/position-list.component';
 import { TransactionFormComponent } from './sites/transaction-form/transaction-form.component';
 import {JsonWebTokenInterceptor} from "./interceptor/json-web-token.interceptor";
+import {ErrorInterceptor} from "./interceptor/error-interceptor";
 registerLocaleData(localeCH);
 
 
@@ -65,7 +66,12 @@ registerLocaleData(localeCH);
             provide: HTTP_INTERCEPTORS,
             useClass: JsonWebTokenInterceptor,
             multi: true,
-        }
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ErrorInterceptor,
+            multi: true,
+        },
     ],
     bootstrap: [AppComponent]
 })
