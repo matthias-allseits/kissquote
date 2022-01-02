@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import {Position} from '../../models/position';
 import {PositionService} from '../../services/position.service';
+import {faEdit} from "@fortawesome/free-solid-svg-icons";
 
 
 @Component({
@@ -10,6 +11,8 @@ import {PositionService} from '../../services/position.service';
     styleUrls: ['./position-detail.component.scss']
 })
 export class PositionDetailComponent implements OnInit {
+
+    editIcon = faEdit;
 
     public position: Position|null = null;
 

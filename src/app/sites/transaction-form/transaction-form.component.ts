@@ -7,6 +7,7 @@ import {Position} from "../../models/position";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {TransactionService} from "../../services/transaction.service";
 import {TransactionCreator} from "../../creators/transaction-creator";
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
     constructor(
         private route: ActivatedRoute,
         private router: Router,
+        private location: Location,
         private positionService: PositionService,
         private transactionService: TransactionService,
     ) {
@@ -48,8 +50,8 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
                         console.log(transaction);
                         if (transaction instanceof Transaction) {
                             this.transaction = transaction;
+                            this.transactionForm.patchValue(transaction, { onlySelf: true });
                         }
-                        // this.positionForm.patchValue(transaction, { onlySelf: true });
                     });
             } else {
                 this.transaction = TransactionCreator.createNewTransaction();
@@ -64,7 +66,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
         if (this.transaction.id > 0) {
             this.transactionService.update(this.transaction)
                 .subscribe(transaction => {
-                    this.router.navigate(['my-dashboard']);
+                    this.location.back();
                 });
         } else {
             this.transactionService.create(this.transaction)

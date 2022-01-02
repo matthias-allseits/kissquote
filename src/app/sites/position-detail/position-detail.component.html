@@ -12,6 +12,7 @@
                     <th scope="col">Quantity</th>
                     <th scope="col">Rate</th>
                     <th scope="col">Fee</th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -21,6 +22,7 @@
                         <td>{{ transaction.quantity }}</td>
                         <td>{{ transaction.rate }}</td>
                         <td>{{ transaction.fee }}</td>
+                        <td><button [routerLink]="['/transaction-form/' + transaction.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
                     </tr>
                 </tbody>
             </table>
