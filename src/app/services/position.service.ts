@@ -50,7 +50,7 @@ export class PositionService {
     }
 
 
-    create(position: Position): Observable<Position> {
+    create(position: Position): Observable<Position|null> {
         const url = `${this.baseUrl}`;
         return this.http
             .post(url, JSON.stringify(position), httpOptions)

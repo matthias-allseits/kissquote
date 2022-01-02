@@ -4,7 +4,7 @@ import {Transaction} from "../../models/transaction";
 import {FormControl, FormGroup} from "@angular/forms";
 import {PositionService} from "../../services/position.service";
 import {Position} from "../../models/position";
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {TransactionService} from "../../services/transaction.service";
 import {TransactionCreator} from "../../creators/transaction-creator";
 
@@ -16,7 +16,7 @@ import {TransactionCreator} from "../../creators/transaction-creator";
 })
 export class TransactionFormComponent extends MotherFormComponent  implements OnInit {
 
-    public transaction: Transaction|null = null;
+    public transaction: Transaction;
     public positions: Position[] = [];
 
     transactionForm = new FormGroup({
@@ -26,16 +26,16 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
         quantity: new FormControl(0),
         rate: new FormControl(0),
         fee: new FormControl(0),
-        isFee: new FormControl(false),
-        isInterest: new FormControl(false),
     });
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private positionService: PositionService,
         private transactionService: TransactionService,
     ) {
         super();
+        this.transaction = TransactionCreator.createNewTransaction();
     }
 
     ngOnInit(): void {
@@ -46,7 +46,9 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
                 this.transactionService.getTransaction(transactionId)
                     .subscribe(transaction => {
                         console.log(transaction);
-                        this.transaction = transaction;
+                        if (transaction instanceof Transaction) {
+                            this.transaction = transaction;
+                        }
                         // this.positionForm.patchValue(transaction, { onlySelf: true });
                     });
             } else {
@@ -58,9 +60,18 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
 
     onSubmit(): void {
         this.patchValuesBack(this.transactionForm, this.transaction);
-        // TODO: Use EventEmitter with form value
-        // console.warn(this.positionForm.value);
-        console.warn(this.transaction);
+        console.log(this.transaction);
+        if (this.transaction.id > 0) {
+            this.transactionService.update(this.transaction)
+                .subscribe(transaction => {
+                    this.router.navigate(['my-dashboard']);
+                });
+        } else {
+            this.transactionService.create(this.transaction)
+                .subscribe(transaction => {
+                    this.router.navigate(['my-dashboard']);
+                });
+        }
     }
 
 

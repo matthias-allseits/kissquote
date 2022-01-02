@@ -70,17 +70,18 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         });
     }
 
+
     onSubmit(): void {
         this.patchValuesBack(this.positionForm, this.position);
         console.log(this.position);
         if (this.position.id > 0) {
             this.positionService.update(this.position)
-                .subscribe(account => {
+                .subscribe(position => {
                     this.router.navigate(['my-dashboard']);
                 });
         } else {
             this.positionService.create(this.position)
-                .subscribe(account => {
+                .subscribe(position => {
                     this.router.navigate(['my-dashboard']);
                 });
         }

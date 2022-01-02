@@ -1,4 +1,4 @@
-<main>
+<main *ngIf="transaction">
     <div class="container px-4 py-5" id="featured-3">
         <h1 class="pb-2">Transaction</h1>
         <p class="lead mb-4">
@@ -11,7 +11,7 @@
                     <option selected></option>
                     <ng-container *ngFor="let position of positions">
                         <ng-container *ngIf="position.share">
-                            <option [selected]="transaction && transaction.position && transaction.position.id == position.id" [value]="position">{{ position.share.name }}</option>
+                            <option [selected]="transaction.position && transaction.position.id == position.id" [ngValue]="position">{{ position.share.name }}</option>
                         </ng-container>
                     </ng-container>
                 </select>
@@ -19,6 +19,22 @@
             <div class="mb-3">
                 <label for="title" class="form-label">Title: </label>
                 <input id="title" type="text" class="form-control" formControlName="title">
+            </div>
+            <div class="mb-3">
+                <label for="date" class="form-label">Date: </label>
+                <input id="date" type="date" class="form-control" formControlName="date">
+            </div>
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity: </label>
+                <input id="quantity" type="number" class="form-control" formControlName="quantity">
+            </div>
+            <div class="mb-3">
+                <label for="rate" class="form-label">Rate: </label>
+                <input id="rate" type="number" class="form-control" formControlName="rate">
+            </div>
+            <div class="mb-3">
+                <label for="fee" class="form-label">Fee: </label>
+                <input id="fee" type="number" class="form-control" formControlName="fee">
             </div>
             <button type="submit" class="btn btn-primary" [disabled]="!transactionForm.valid">Submit</button>
         </form>

@@ -1,5 +1,6 @@
 import {BankAccount} from './bank-account';
 import {BankAccountCreator} from "../creators/bank-account-creator";
+import {Share} from "./share";
 
 
 export class Portfolio {
@@ -23,6 +24,20 @@ export class Portfolio {
         });
 
         return copy;
+    }
+
+
+    getAllShares(): Share[] {
+        const shares: Share[] = [];
+        this.bankAccounts.forEach(account => {
+            account.positions.forEach(position => {
+                if (position.share) {
+                    shares.push(position.share);
+                }
+            });
+        });
+
+        return shares;
     }
 
 }

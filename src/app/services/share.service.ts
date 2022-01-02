@@ -19,6 +19,7 @@ export class ShareService {
     ) {}
 
 
+    // todo: this is crap since it gets all shares from swissquote...
     public getAllShares(): Observable<Share[]>
     {
         return this.http.get<Share[]>(this.baseUrl)
