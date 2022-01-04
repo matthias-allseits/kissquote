@@ -1,8 +1,14 @@
 <main *ngIf="position">
     <div class="container px-4 py-5" id="featured-3">
         <h1 class="pb-2">Position {{ position.getName() }}</h1>
-
-        <h3>Transactions</h3>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
+            <h4 class="pt-2">Transactions</h4>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-secondary">Add Transaction</button>
+                </div>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-striped table-sm">
                 <thead>
@@ -13,6 +19,7 @@
                     <th scope="col">Rate</th>
                     <th scope="col">Fee</th>
                     <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -22,7 +29,8 @@
                         <td>{{ transaction.quantity }}</td>
                         <td>{{ transaction.rate }}</td>
                         <td>{{ transaction.fee }}</td>
-                        <td><button [routerLink]="['/transaction-form/' + transaction.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
+                        <td><button [routerLink]="'/position/' + position.id + '/transaction-form/' + transaction.id" type="button" class="btn btn-sm btn-outline-secondary" title="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
+                        <td><button (click)="deleteTransaction(transaction)" type="button" class="btn btn-sm btn-outline-secondary" title="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                     </tr>
                 </tbody>
             </table>

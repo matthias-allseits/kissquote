@@ -30,8 +30,8 @@ const routes: Routes = [
     { path: 'position-detail/:id', component: PositionDetailComponent },
     { path: 'position-form/:id', component: PositionFormComponent },
     { path: 'position-form', component: PositionFormComponent },
-    { path: 'transaction-form/:id', component: TransactionFormComponent },
-    { path: 'transaction-form', component: TransactionFormComponent },
+    { path: 'position/:pid/transaction-form/:id', component: TransactionFormComponent },
+    { path: 'position/:pid/transaction-form', component: TransactionFormComponent },
     { path: 'bank-account-form/:id', component: BankAccountFormComponent },
     { path: 'bank-account-form', component: BankAccountFormComponent },
     { path: 'feedback', component: FeedbackComponent }

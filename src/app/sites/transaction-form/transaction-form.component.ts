@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MotherFormComponent} from "../mother-form.component";
 import {Transaction} from "../../models/transaction";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {PositionService} from "../../services/position.service";
 import {Position} from "../../models/position";
 import {ActivatedRoute, Params, Router} from "@angular/router";
@@ -18,15 +18,16 @@ import { Location } from '@angular/common';
 export class TransactionFormComponent extends MotherFormComponent  implements OnInit {
 
     public transaction: Transaction;
+    public position: Position|null = null;
     public positions: Position[] = [];
 
     transactionForm = new FormGroup({
-        position: new FormControl(null),
+        // position: new FormControl(null, Validators.required),
         title: new FormControl(''),
-        date: new FormControl(new Date()),
-        quantity: new FormControl(0),
-        rate: new FormControl(0),
-        fee: new FormControl(0),
+        date: new FormControl(),
+        quantity: new FormControl('', Validators.required),
+        rate: new FormControl('', Validators.required),
+        fee: new FormControl(''),
     });
 
     constructor(
@@ -42,26 +43,44 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
 
     ngOnInit(): void {
         this.loadData();
+        const now = new Date();
+        const dateString = now.getFullYear() + '-' + now.getMonth()+1 + '-0' + now.getDate();
+        console.log(dateString);
+        this.transactionForm.get('date')?.setValue(dateString);
         this.route.params.subscribe((params: Params) => {
+            const positionId = +params['pid'];
             const transactionId = +params['id'];
-            if (transactionId) {
-                this.transactionService.getTransaction(transactionId)
-                    .subscribe(transaction => {
-                        console.log(transaction);
-                        if (transaction instanceof Transaction) {
-                            this.transaction = transaction;
-                            this.transactionForm.patchValue(transaction, { onlySelf: true });
+            if (positionId > 0) {
+                this.positionService.getPosition(positionId)
+                    .subscribe(position => {
+                        console.log(position);
+                        if (position instanceof Position) {
+                            this.position = position;
                         }
                     });
+                if (transactionId > 0) {
+                    this.transactionService.getTransaction(transactionId)
+                        .subscribe(transaction => {
+                            console.log(transaction);
+                            if (transaction instanceof Transaction) {
+                                this.transaction = transaction;
+                                this.transactionForm.patchValue(transaction, { onlySelf: true });
+                            }
+                        });
+                } else {
+                    this.transaction = TransactionCreator.createNewTransaction();
+                }
             } else {
-                this.transaction = TransactionCreator.createNewTransaction();
+                throw Error;
             }
         });
     }
 
+    get quantity() { return this.transactionForm.get('quantity'); }
 
     onSubmit(): void {
         this.patchValuesBack(this.transactionForm, this.transaction);
+        this.transaction.position = this.position;
         console.log(this.transaction);
         if (this.transaction.id > 0) {
             this.transactionService.update(this.transaction)
@@ -71,7 +90,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
         } else {
             this.transactionService.create(this.transaction)
                 .subscribe(transaction => {
-                    this.router.navigate(['my-dashboard']);
+                    this.location.back();
                 });
         }
     }
