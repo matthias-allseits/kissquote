@@ -27,6 +27,7 @@ import { PositionListComponent } from './components/position-list/position-list.
 import { TransactionFormComponent } from './sites/transaction-form/transaction-form.component';
 import {JsonWebTokenInterceptor} from "./interceptor/json-web-token.interceptor";
 import {ErrorInterceptor} from "./interceptor/error-interceptor";
+import {TooltipModule} from "ngx-bootstrap/tooltip";
 registerLocaleData(localeCH);
 
 
@@ -57,6 +58,7 @@ registerLocaleData(localeCH);
         ReactiveFormsModule,
         NgbModule,
         FontAwesomeModule,
+        TooltipModule.forRoot(),
     ],
     providers: [
         {
