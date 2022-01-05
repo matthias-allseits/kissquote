@@ -20,35 +20,37 @@
                     </div>
                 </div>
             </div>
-            <table class="table table-striped table-sm">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
-                        <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
-                        <th scope="col">Active From</th>
-                        <th scope="col">Active Until</th>
-                        <th scope="col">Transactions</th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let position of bankAccount.positions">
-                        <td>1,001</td>
-                        <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
-                        <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
-                        <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
-                        <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
-                        <td>{{ position.transactions.length }}</td>
-                        <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                        <td><button [routerLink]="['/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
-                    </tr>
-                </tbody>
-            </table>
+            <ng-container *ngIf="bankAccount.positions.length > 0" class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+                            <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
+                            <th scope="col">Active From</th>
+                            <th scope="col">Active Until</th>
+                            <th scope="col">Transactions</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let position of bankAccount.positions">
+                            <td>1,001</td>
+                            <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
+                            <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
+                            <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
+                            <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
+                            <td>{{ position.transactions.length }}</td>
+                            <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                            <td><button [routerLink]="['/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" title="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-container>
+            <p *ngIf="bankAccount.positions.length === 0">
+                Ohne Positionen wird es hier sehr schnell sehr langweilig...
+            </p>
         </ng-container>
     </div>
-    <p *ngIf="portfolio && portfolio.bankAccounts.length === 0">
-        Ohne Positionen wird es hier sehr schnell sehr langweilig...
-    </p>
 </main>
