@@ -14,6 +14,8 @@ import {TranslationService} from "../../services/translation.service";
 import {PortfolioService} from "../../services/portfolio.service";
 import {Portfolio} from "../../models/portfolio";
 import {BankAccount} from "../../models/bank-account";
+import {TypeaheadMatch} from "ngx-bootstrap/typeahead";
+import {ShareCreator} from "../../creators/share-creator";
 
 
 @Component({
@@ -31,8 +33,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
     public currencies: Currency[] = [];
 
     positionForm = new FormGroup({
-        bankAccount: new FormControl(''),
-        share: new FormControl(''),
+        shareName: new FormControl(''),
         currency: new FormControl(''),
     });
 
@@ -62,7 +63,6 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                         if (position instanceof Position) {
                             this.position = position;
                         }
-                        // this.positionForm.patchValue(position, { onlySelf: true });
                     });
             } else {
                 this.position = PositionCreator.createNewPosition();
@@ -70,6 +70,14 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         });
     }
 
+    onSelect(event: TypeaheadMatch): void {
+        console.log(event);
+        console.log(event.item);
+        this.position.share = event.item;
+        // this.positionForm.get('shareName')?.setValue(event.item.name);
+        console.log(this.position);
+        // this.position.share.name = event.name;
+    }
 
     onSubmit(): void {
         this.patchValuesBack(this.positionForm, this.position);
@@ -95,7 +103,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                 this.portfolio = returnedPortfolio;
                 if (this.portfolio instanceof Portfolio) {
                     this.bankAccounts = this.portfolio.getBankAccountsWithoutPositions();
-                    this.positionForm.get('bankAccount')?.setValue(this.bankAccounts[0]);
+                    this.position.bankAccount = this.bankAccounts[0];
                 }
             });
         this.shareService.getAllShares()

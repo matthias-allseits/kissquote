@@ -6,31 +6,27 @@
         </p>
         <form [formGroup]="positionForm" (ngSubmit)="onSubmit()">
             <div class="mb-3">
-                <label for="bankAccount" class="form-label">Bank-Account: </label>
-                <select formControlName="bankAccount" [ngModel]="position.share" id="bankAccount" name="bankAccount" class="form-select form-select mb-3">
-                    <ng-container *ngFor="let account of bankAccounts">
-                        <option [ngValue]="account">{{ account.name }}</option>
-                    </ng-container>
-                </select>
+                <label for="shareName" class="form-label">{{ tranService.trans('GLOB_SHARE') }}: </label>
+                <input formControlName="shareName" id="shareName"
+                       [typeahead]="shareHeadShares"
+                       typeaheadOptionField="name"
+                       (typeaheadOnSelect)="onSelect($event)"
+                       [typeaheadOptionsLimit]="7"
+                       [typeaheadMinLength]="0"
+                       placeholder="Typeahead inside a form"
+                       class="form-control">
             </div>
-            <div class="mb-3">
-                <label for="share" class="form-label">{{ tranService.trans('GLOB_SHARE') }}: </label>
-                <select formControlName="share" [ngModel]="position.share" id="share" name="share" class="form-select form-select mb-3">
-                    <option disabled selected></option>
-                    <ng-container *ngFor="let share of shareHeadShares">
-                        <option [ngValue]="share">{{ share.name }}</option>
-                    </ng-container>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="currency" class="form-label">{{ tranService.trans('GLOB_CURRENCY') }}: </label>
-                <select formControlName="currency" [ngModel]="position.currency" id="currency" name="currency" class="form-select form-select mb-3">
-                    <option disabled selected></option>
-                    <ng-container *ngFor="let currency of currencies">
-                        <option [ngValue]="currency">{{ currency.name }}</option>
-                    </ng-container>
-                </select>
-            </div>
+            <ng-container *ngIf="position.share">
+                <div class="mb-3">
+                    <label for="currency" class="form-label">{{ tranService.trans('GLOB_CURRENCY') }}: </label>
+                    <select formControlName="currency" [ngModel]="position.currency" id="currency" name="currency" class="form-select form-select mb-3">
+                        <option disabled selected></option>
+                        <ng-container *ngFor="let currency of currencies">
+                            <option [ngValue]="currency">{{ currency.name }}</option>
+                        </ng-container>
+                    </select>
+                </div>
+            </ng-container>
             <button type="submit" class="btn btn-primary" [disabled]="!positionForm.valid">Submit</button>
         </form>
     </div>

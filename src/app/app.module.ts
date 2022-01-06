@@ -28,6 +28,8 @@ import { TransactionFormComponent } from './sites/transaction-form/transaction-f
 import {JsonWebTokenInterceptor} from "./interceptor/json-web-token.interceptor";
 import {ErrorInterceptor} from "./interceptor/error-interceptor";
 import {TooltipModule} from "ngx-bootstrap/tooltip";
+import {TypeaheadModule} from "ngx-bootstrap/typeahead";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 registerLocaleData(localeCH);
 
 
@@ -58,7 +60,9 @@ registerLocaleData(localeCH);
         ReactiveFormsModule,
         NgbModule,
         FontAwesomeModule,
+        BrowserAnimationsModule,
         TooltipModule.forRoot(),
+        TypeaheadModule.forRoot(),
     ],
     providers: [
         {
