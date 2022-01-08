@@ -30,10 +30,18 @@
                         <td>{{ transaction.rate }}</td>
                         <td>{{ transaction.fee }}</td>
                         <td><button [routerLink]="'/position/' + position.id + '/transaction-form/' + transaction.id" type="button" class="btn btn-sm btn-outline-secondary" tooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
-                        <td><button (click)="deleteTransaction(transaction)" type="button" class="btn btn-sm btn-outline-secondary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                        <td><button (click)="openModal(template, transaction)" type="button" class="btn btn-sm btn-outline-secondary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </main>
+
+<ng-template #template>
+    <div class="modal-body text-center">
+        <p>Wollen Sie diese Transaktion wirklich löschen?</p>
+        <button type="button" class="btn btn-default" (click)="confirm()">Ja</button>
+        <button type="button" class="btn btn-primary" (click)="decline()">Nein</button>
+    </div>
+</ng-template>

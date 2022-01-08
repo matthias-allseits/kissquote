@@ -30,6 +30,7 @@ import {ErrorInterceptor} from "./interceptor/error-interceptor";
 import {TooltipModule} from "ngx-bootstrap/tooltip";
 import {TypeaheadModule} from "ngx-bootstrap/typeahead";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ModalModule} from "ngx-bootstrap/modal";
 registerLocaleData(localeCH);
 
 
@@ -63,6 +64,7 @@ registerLocaleData(localeCH);
         BrowserAnimationsModule,
         TooltipModule.forRoot(),
         TypeaheadModule.forRoot(),
+        ModalModule.forRoot(),
     ],
     providers: [
         {
