@@ -16,7 +16,10 @@
                     <div class="btn-group me-2">
                         <button [routerLink]="['/bank-account-form/' + bankAccount.id]" type="button" class="btn btn-sm btn-outline-primary">Edit Bank-Account</button>
                         <button [routerLink]="['/bank-account/' + accountIndex + '/position-form']" type="button" class="btn btn-sm btn-outline-primary">Add Position</button>
-                        <button *ngIf="bankAccount.positions.length === 0" type="button" class="btn btn-sm btn-outline-primary">Import Transactions</button>
+                        <ng-container *ngIf="bankAccount.positions.length === 0">
+                            <button type="button" class="btn btn-sm btn-outline-primary">Import Transactions</button>
+                            <button (click)="openAccountConfirmModal(baTemplate, bankAccount)" type="button" class="btn btn-sm btn-outline-primary">Delete Bankaccount</button>
+                        </ng-container>
                     </div>
                 </div>
             </div>
@@ -32,6 +35,7 @@
                             <th scope="col">Transactions</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,6 +48,7 @@
                             <td>{{ position.transactions.length }}</td>
                             <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
                             <td><button [routerLink]="['/bank-account/' + accountIndex + '/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
+                            <td><button (click)="openPositionConfirmModal(template, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -54,3 +59,19 @@
         </ng-container>
     </div>
 </main>
+
+<ng-template #template>
+    <div class="modal-body text-center">
+        <p>Wollen Sie diese Position wirklich löschen?</p>
+        <button type="button" class="btn btn-default" (click)="confirmPosition()">Ja</button>
+        <button type="button" class="btn btn-primary" (click)="declinePosition()">Nein</button>
+    </div>
+</ng-template>
+
+<ng-template #baTemplate>
+    <div class="modal-body text-center">
+        <p>Wollen Sie dieses Bankkonto wirklich löschen?</p>
+        <button type="button" class="btn btn-default" (click)="confirmAccount()">Ja</button>
+        <button type="button" class="btn btn-primary" (click)="declineAccount()">Nein</button>
+    </div>
+</ng-template>

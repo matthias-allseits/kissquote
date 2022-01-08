@@ -29,11 +29,6 @@ export class PositionDetailComponent implements OnInit {
         private modalService: BsModalService,
     ) { }
 
-    openModal(template: TemplateRef<any>, transaction: Transaction) {
-        this.selectedTransaction = transaction;
-        this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
-    }
-
     ngOnInit(): void {
         this.route.params.subscribe((params: Params) => {
             const positionId = +params['id'];
@@ -41,6 +36,11 @@ export class PositionDetailComponent implements OnInit {
                 this.loadData(positionId);
             }
         });
+    }
+
+    openModal(template: TemplateRef<any>, transaction: Transaction) {
+        this.selectedTransaction = transaction;
+        this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
     }
 
 

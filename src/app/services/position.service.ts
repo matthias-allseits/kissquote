@@ -61,4 +61,13 @@ export class PositionService {
             );
     }
 
+
+    delete(id: number): Observable<Object> {
+        const url = `${this.baseUrl}/${id}`;
+        return this.http.delete(url, httpOptions)
+            .pipe(
+                // catchError(this.handleError)
+            );
+    }
+
 }
