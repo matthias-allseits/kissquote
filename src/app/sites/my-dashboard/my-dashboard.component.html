@@ -9,13 +9,13 @@
     </div>
 
     <div *ngIf="portfolio && portfolio.bankAccounts.length > 0" class="table-responsive">
-        <ng-container *ngFor="let bankAccount of portfolio.bankAccounts">
+        <ng-container *ngFor="let bankAccount of portfolio.bankAccounts index as accountIndex;">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                 <h4 class="pt-2">{{ bankAccount.name }}</h4>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
                         <button [routerLink]="['/bank-account-form/' + bankAccount.id]" type="button" class="btn btn-sm btn-outline-secondary">Edit Bank-Account</button>
-                        <button routerLink="/position-form" type="button" class="btn btn-sm btn-outline-secondary">Add Position</button>
+                        <button [routerLink]="['/bank-account/' + accountIndex + '/position-form']" type="button" class="btn btn-sm btn-outline-secondary">Add Position</button>
                         <button *ngIf="bankAccount.positions.length === 0" type="button" class="btn btn-sm btn-outline-secondary">Import Transactions</button>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                             <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
                             <td>{{ position.transactions.length }}</td>
                             <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                            <td><button [routerLink]="['/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" tooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
+                            <td><button [routerLink]="['/bank-account/' + accountIndex + '/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" tooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
                         </tr>
                     </tbody>
                 </table>

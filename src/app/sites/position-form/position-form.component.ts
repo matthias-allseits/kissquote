@@ -28,6 +28,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
     public position: Position;
     public portfolio: Portfolio|null = null;
     public bankAccounts: BankAccount[] = [];
+    private bankAccountIndex: number = 0;
     public shares: Share[] = [];
     public shareHeadShares: Share[] = [];
     public currencies: Currency[] = [];
@@ -55,6 +56,8 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
     ngOnInit(): void {
         this.loadData();
         this.route.params.subscribe((params: Params) => {
+            const accountIndex = +params['aid'];
+            this.bankAccountIndex = accountIndex;
             const positionId = +params['id'];
             if (positionId) {
                 this.positionService.getPosition(positionId)
@@ -81,12 +84,13 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
 
     onSubmit(): void {
         this.patchValuesBack(this.positionForm, this.position);
+        this.position.bankAccount = this.bankAccounts[this.bankAccountIndex];
         console.log(this.position);
         if (this.position.id > 0) {
-            this.positionService.update(this.position)
-                .subscribe(position => {
-                    this.router.navigate(['my-dashboard']);
-                });
+            // this.positionService.update(this.position)
+            //     .subscribe(position => {
+            //         this.router.navigate(['my-dashboard']);
+            //     });
         } else {
             this.positionService.create(this.position)
                 .subscribe(position => {
@@ -103,7 +107,6 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                 this.portfolio = returnedPortfolio;
                 if (this.portfolio instanceof Portfolio) {
                     this.bankAccounts = this.portfolio.getBankAccountsWithoutPositions();
-                    this.position.bankAccount = this.bankAccounts[0];
                 }
             });
         this.shareService.getAllShares()

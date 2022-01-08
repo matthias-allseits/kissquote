@@ -51,20 +51,10 @@ export class PositionService {
 
 
     create(position: Position): Observable<Position|null> {
+        position.activeFrom = DateHelper.convertDateToMysql(position.activeFrom);
         const url = `${this.baseUrl}`;
         return this.http
             .post(url, JSON.stringify(position), httpOptions)
-            .pipe(
-                map(() => position),
-                // catchError(this.handleError)
-            );
-    }
-
-
-    update(position: Position): Observable<Position> {
-        const url = `${this.baseUrl}/${position.id}`;
-        return this.http
-            .put(url, JSON.stringify(position), httpOptions)
             .pipe(
                 map(() => position),
                 // catchError(this.handleError)
