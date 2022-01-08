@@ -33,6 +33,11 @@ a:hover {
   box-shadow: 0 0 0 0.25rem rgb(255 102 51 / 50%);
 }
 
+.btn-primary:disabled, .btn-primary.disabled {
+  background-color: #c9461a;
+  border-color: #c9461a;
+}
+
 //outline primary btn
 .btn-outline-primary {
   color: #ff6633;
