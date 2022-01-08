@@ -15,7 +15,6 @@ import {PortfolioService} from "../../services/portfolio.service";
 import {Portfolio} from "../../models/portfolio";
 import {BankAccount} from "../../models/bank-account";
 import {TypeaheadMatch} from "ngx-bootstrap/typeahead";
-import {ShareCreator} from "../../creators/share-creator";
 
 
 @Component({

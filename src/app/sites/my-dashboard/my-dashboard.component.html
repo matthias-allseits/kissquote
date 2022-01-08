@@ -3,7 +3,7 @@
         <h1 class="h2">{{ tranService.trans('MYDA_TITLE') }}</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
-                <button routerLink="/bank-account-form" type="button" class="btn btn-sm btn-outline-secondary">{{ tranService.trans('MYDA_ADD_BANK') }}</button>
+                <button routerLink="/bank-account-form" type="button" class="btn btn-sm btn-outline-primary">{{ tranService.trans('MYDA_ADD_BANK') }}</button>
             </div>
         </div>
     </div>
@@ -14,9 +14,9 @@
                 <h4 class="pt-2">{{ bankAccount.name }}</h4>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
-                        <button [routerLink]="['/bank-account-form/' + bankAccount.id]" type="button" class="btn btn-sm btn-outline-secondary">Edit Bank-Account</button>
-                        <button [routerLink]="['/bank-account/' + accountIndex + '/position-form']" type="button" class="btn btn-sm btn-outline-secondary">Add Position</button>
-                        <button *ngIf="bankAccount.positions.length === 0" type="button" class="btn btn-sm btn-outline-secondary">Import Transactions</button>
+                        <button [routerLink]="['/bank-account-form/' + bankAccount.id]" type="button" class="btn btn-sm btn-outline-primary">Edit Bank-Account</button>
+                        <button [routerLink]="['/bank-account/' + accountIndex + '/position-form']" type="button" class="btn btn-sm btn-outline-primary">Add Position</button>
+                        <button *ngIf="bankAccount.positions.length === 0" type="button" class="btn btn-sm btn-outline-primary">Import Transactions</button>
                     </div>
                 </div>
             </div>
@@ -42,8 +42,8 @@
                             <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
                             <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
                             <td>{{ position.transactions.length }}</td>
-                            <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                            <td><button [routerLink]="['/bank-account/' + accountIndex + '/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-secondary" tooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
+                            <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                            <td><button [routerLink]="['/bank-account/' + accountIndex + '/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
                         </tr>
                     </tbody>
                 </table>

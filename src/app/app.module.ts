@@ -31,6 +31,7 @@ import {TooltipModule} from "ngx-bootstrap/tooltip";
 import {TypeaheadModule} from "ngx-bootstrap/typeahead";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ModalModule} from "ngx-bootstrap/modal";
+import {TabsModule} from "ngx-bootstrap/tabs";
 registerLocaleData(localeCH);
 
 
@@ -65,6 +66,7 @@ registerLocaleData(localeCH);
         TooltipModule.forRoot(),
         TypeaheadModule.forRoot(),
         ModalModule.forRoot(),
+        TabsModule.forRoot(),
     ],
     providers: [
         {
