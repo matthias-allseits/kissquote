@@ -107,7 +107,7 @@ export class UploadComponent implements OnInit {
 
     private parseTransaction(cells: string[]): ParsedTransaction {
         const dateSplit = cells[0].substring(0, 10).split('-');
-        if (dateSplit.length > 13) {
+        if (cells.length > 13) {
             return {
                 date: new Date(+dateSplit[2], +dateSplit[1] - 1, +dateSplit[0]),
                 title: cells[2],

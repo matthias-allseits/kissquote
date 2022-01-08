@@ -26,7 +26,7 @@ export class FeedbackComponent implements OnInit {
         this.activeMood = mood;
         switch (mood) {
             case 'bad':
-                this.placeholder = 'Der Programmator dieser bunten Webseiten möge an seinem Kot ersticken!';
+                this.placeholder = 'Der Programmator dieser bunten Webseiten möge an seinem Code ersticken!';
                 this.submitText = 'Take that!';
                 break;
             case 'medium':
