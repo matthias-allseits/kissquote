@@ -5,7 +5,7 @@ import {PositionCreator} from "./position-creator";
 export class TransactionCreator {
 
     public static createNewTransaction(): Transaction {
-        return new Transaction(0, null, '', null, 0, null, null);
+        return new Transaction(0, null, '', new Date(), 0, null, null);
     }
 
     public static fromApiArray(apiArray: Transaction[]): Transaction[] {
@@ -17,6 +17,7 @@ export class TransactionCreator {
                 array.push(transaction);
             }
         }
+        array.sort((a,b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0))
 
         return array;
     }
