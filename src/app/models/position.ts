@@ -2,6 +2,7 @@ import {Currency} from './currency';
 import {Share} from './share';
 import {Transaction} from "./transaction";
 import {BankAccount} from "./bank-account";
+import {Balance} from "./balance";
 
 
 export class Position {
@@ -16,6 +17,7 @@ export class Position {
         public transactions: Transaction[],
         public isCash: boolean = false,
         public bankAccount?: BankAccount,
+        public balance?: Balance,
     ) {}
 
 

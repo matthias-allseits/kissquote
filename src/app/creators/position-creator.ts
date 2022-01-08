@@ -2,6 +2,8 @@ import {Position} from "../models/position";
 import {CurrencyCreator} from "./currency-creator";
 import {ShareCreator} from "./share-creator";
 import {TransactionCreator} from "./transaction-creator";
+import {BalanceCreator} from "./balance-creator";
+import {BankAccountCreator} from "./bank-account-creator";
 
 
 export class PositionCreator {
@@ -35,7 +37,9 @@ export class PositionCreator {
                 apiArray.activeFrom,
                 apiArray.activeUntil,
                 apiArray.transactions ? TransactionCreator.fromApiArray(apiArray.transactions) : [],
-                apiArray.isCash
+                apiArray.isCash,
+                apiArray.bankAccount ? BankAccountCreator.oneFromApiArray(apiArray.bankAccount) : undefined,
+                apiArray.balance ? BalanceCreator.oneFromApiArray(apiArray.balance) : undefined,
             );
         } else {
             return null;

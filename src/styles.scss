@@ -56,3 +56,15 @@ a:hover {
 .bg-primary {
   background-color: #ff6633 !important;
 }
+
+// info-box
+.info-box {
+  display: inline-block;
+  vertical-align: top;
+  border: solid 1px #ddd;
+  background-color: #F9F9F9;
+  width: 350px;
+  padding: 8px;
+  margin-right: 25px;
+  margin-bottom: 20px;
+}
