@@ -81,6 +81,9 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
     onSubmit(): void {
         this.patchValuesBack(this.transactionForm, this.transaction);
         this.transaction.position = this.position;
+        if (this.transaction.position) {
+            this.transaction.position.balance = undefined;
+        }
         console.log(this.transaction);
         if (this.transaction.id > 0) {
             this.transactionService.update(this.transaction)

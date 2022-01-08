@@ -13,7 +13,7 @@ export class BankAccountCreator {
 
         for (const accountList of apiArray) {
             const bankAccount = this.oneFromApiArray(accountList);
-            if (null !== bankAccount) {
+            if (undefined !== bankAccount) {
                 array.push(bankAccount);
             }
         }
@@ -22,7 +22,7 @@ export class BankAccountCreator {
     }
 
 
-    public static oneFromApiArray(apiArray: BankAccount): BankAccount|null
+    public static oneFromApiArray(apiArray: BankAccount): BankAccount|undefined
     {
         if (apiArray !== undefined) {
             return new BankAccount(
@@ -31,7 +31,7 @@ export class BankAccountCreator {
                 apiArray.positions ? PositionCreator.fromApiArray(apiArray.positions) : [],
             );
         } else {
-            return null;
+            return undefined;
         }
     }
 

@@ -8,6 +8,48 @@
                     <div class="btn-toolbar mb-2 mb-md-0">
                     </div>
                 </div>
+                <div *ngIf="position.balance" class="info-box">
+                    <div class="row">
+                        <div class="col-8">Anzahl:</div>
+                        <div class="col-4">{{ position.balance.amount }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">Erster Kurs:</div>
+                        <div class="col-4">{{ position.balance.firstRate }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">Bezahlter Durchschnittskurs:</div>
+                        <div class="col-4">{{ position.balance.averageBuyPrice }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">Investition:</div>
+                        <div class="col-4">{{ position.balance.investment }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">Höchster Kurs:</div>
+                        <div class="col-4"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">Akt. Wert:</div>
+                        <div class="col-4"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">Bilanz:</div>
+                        <div class="col-4"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">ROI on Dividends:</div>
+                        <div class="col-4"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">Nächste Auszahlung:</div>
+                        <div class="col-4"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">Dividendenrendite on investment:</div>
+                        <div class="col-4"></div>
+                    </div>
+                </div>
             </tab>
             <tab heading="Transactions">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
