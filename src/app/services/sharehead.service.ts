@@ -6,7 +6,7 @@ import {Share} from '../models/share';
 import {ShareCreator} from "../creators/share-creator";
 import {Currency} from "../models/currency";
 import {CurrencyCreator} from "../creators/currency-creator";
-import {ShareheadShare} from "../models/shareheadShare";
+import {ShareheadShare} from "../models/sharehead-share";
 import {ShareheadShareCreator} from "../creators/sharehead-share-creator";
 
 

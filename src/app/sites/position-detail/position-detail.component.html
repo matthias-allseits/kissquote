@@ -74,6 +74,78 @@
                     </div>
                 </div>
             </tab>
+            <tab heading="Sharehead Infos">
+                <ng-container *ngIf="shareheadShare">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
+                        <h4 class="pt-2">Sharehead Infos</h4>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <div class="btn-group me-2">
+                                    <a href="{{ shareheadShare.urlWikipedia }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary">Wikipedia</a>
+                                </div>
+                                <div class="btn-group me-2">
+                                    <a href="{{ shareheadShare.urlFinanznet }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary">finanzen.net</a>
+                                </div>
+                                <div class="btn-group me-2">
+                                    <a href="{{ shareheadShare.urlInvesting }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary">investing.com</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <div class="row">
+                            <div class="col-9">Last Rate:</div>
+                            <div class="col-3"><span class="float-end"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">KGV:</div>
+                            <div class="col-3"><span class="float-end"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Yield:</div>
+                            <div class="col-3"><span class="float-end"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Xtrapoltn (5yrs):</div>
+                            <div class="col-3"><span class="float-end"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Avg Divid. Ratio:</div>
+                            <div class="col-3"><span class="float-end"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Return on sales:</div>
+                            <div class="col-3"><span class="float-end"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Country:</div>
+                            <div class="col-3"><span class="float-end">{{ shareheadShare.country }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Sector:</div>
+                            <div class="col-3"><span class="float-end"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Market cap:</div>
+                            <div class="col-3"><span class="float-end"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Fin. year ends:</div>
+                            <div class="col-3"><span class="float-end"></span></div>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <h5>Analyst Ratings</h5>
+                        <div class="row">
+                            <div class="col-9">Last Rate:</div>
+                            <div class="col-3"><span class="float-end"></span></div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="!shareheadShare">
+                    Verbinden Sie Ihre Position mit einem Sharehead-Share
+                </ng-container>
+            </tab>
             <tab heading="Transactions">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                     <h4 class="pt-2">Transactions</h4>
@@ -108,23 +180,6 @@
                         </tr>
                         </tbody>
                     </table>
-                </div>
-            </tab>
-            <tab heading="Sharehead Infos">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-                    <ng-container *ngIf="shareheadShare">
-                        <h4 class="pt-2">Sharehead Infos</h4>
-                        <div class="btn-toolbar mb-2 mb-md-0">
-                            <div class="btn-toolbar mb-2 mb-md-0">
-                                <div class="btn-group me-2">
-                                    <a href="{{ shareheadShare.urlWikipedia }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary">Wikipedia</a>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="!shareheadShare">
-                        Verbinden Sie Ihre Position mit einem Sharehead-Share
-                    </ng-container>
                 </div>
             </tab>
         </tabset>

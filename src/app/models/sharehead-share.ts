@@ -1,4 +1,5 @@
 import {Currency} from "./currency";
+import {ShareheadBalance} from "./sharehead-balance";
 
 
 export class ShareheadShare {
@@ -10,10 +11,12 @@ export class ShareheadShare {
         public shortname: string|null,
         public isin: string|null,
         public symbol?: string,
+        public country?: string,
         public urlFinanznet?: string,
         public urlWikipedia?: string,
         public urlInvesting?: string,
         public urlFinanztreff?: string,
+        public balances?: ShareheadBalance[],
     ) { }
 
 }

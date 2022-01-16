@@ -7,7 +7,7 @@ import {Transaction} from "../../models/transaction";
 import {TransactionService} from "../../services/transaction.service";
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {ShareheadService} from "../../services/sharehead.service";
-import {ShareheadShare} from "../../models/shareheadShare";
+import {ShareheadShare} from "../../models/sharehead-share";
 import {ChartDataset} from "chart.js";
 
 

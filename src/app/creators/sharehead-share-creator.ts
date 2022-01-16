@@ -1,5 +1,6 @@
-import {ShareheadShare} from "../models/shareheadShare";
+import {ShareheadShare} from "../models/sharehead-share";
 import {CurrencyCreator} from "./currency-creator";
+import {ShareheadBalanceCreator} from "./sharehead-balance-creator";
 
 
 export class ShareheadShareCreator {
@@ -15,10 +16,12 @@ export class ShareheadShareCreator {
                 apiArray.shortname,
                 apiArray.isin,
                 apiArray.symbol,
+                apiArray.country,
                 apiArray.urlFinanznet,
                 apiArray.urlWikipedia,
                 apiArray.urlInvesting,
                 apiArray.urlFinanztreff,
+                apiArray.balances ? ShareheadBalanceCreator.fromApiArray(apiArray.balances) : [],
             );
         } else {
             return null;
