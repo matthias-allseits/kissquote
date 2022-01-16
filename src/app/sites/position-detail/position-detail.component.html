@@ -10,54 +10,64 @@
                 </div>
                 <div *ngIf="position.balance" class="info-box">
                     <div class="row">
-                        <div class="col-8">Anzahl:</div>
-                        <div class="col-4">{{ position.balance.amount }}</div>
+                        <div class="col-9">Anzahl:</div>
+                        <div class="col-3"><span class="float-end">{{ position.balance.amount }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-8">Erster Kurs:</div>
-                        <div class="col-4">{{ position.balance.firstRate }}</div>
+                        <div class="col-9">Erster Kurs:</div>
+                        <div class="col-3"><span class="float-end">{{ position.balance.firstRate }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-8">Bez. Kurs Brutto:</div>
-                        <div class="col-4">{{ position.balance.averagePayedPriceGross }}</div>
+                        <div class="col-9">Höchster Kurs:</div>
+                        <div class="col-3"><span class="float-end"></span></div>
                     </div>
                     <div class="row">
-                        <div class="col-8">Bez. Kurs Netto:</div>
-                        <div class="col-4">{{ position.balance.averagePayedPriceNet }}</div>
+                        <div class="col-9">Letzter Kurs:</div>
+                        <div class="col-3"><span class="float-end"></span></div>
                     </div>
                     <div class="row">
-                        <div class="col-8">Investition:</div>
-                        <div class="col-4">{{ position.balance.investment|number: '1.0' }}</div>
+                        <div class="col-9">Bez. Kurs Brutto:</div>
+                        <div class="col-3"><span class="float-end">{{ position.balance.averagePayedPriceGross }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-8">Höchster Kurs:</div>
-                        <div class="col-4"></div>
+                        <div class="col-9">Bez. Kurs Netto:</div>
+                        <div class="col-3"><span class="float-end">{{ position.balance.averagePayedPriceNet }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-8">Akt. Wert:</div>
-                        <div class="col-4"></div>
+                        <div class="col-9">Investition:</div>
+                        <div class="col-3"><span class="float-end">{{ position.balance.investment|number: '1.0' }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-8">Bilanz:</div>
-                        <div class="col-4"></div>
+                        <div class="col-9">Akt. Wert:</div>
+                        <div class="col-3"><span class="float-end"></span></div>
                     </div>
                     <div class="row">
-                        <div class="col-8">ROI on Dividends:</div>
-                        <div class="col-4"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-8">Nächste Auszahlung:</div>
-                        <div class="col-4"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-8">Dividendenrendite on investment:</div>
-                        <div class="col-4"></div>
+                        <div class="col-9">Bilanz:</div>
+                        <div class="col-3"><span class="float-end"></span></div>
                     </div>
                 </div>
                 <div *ngIf="position.balance" class="info-box">
                     <div class="row">
-                        <div class="col-8">Total Transaktionsgebühren:</div>
-                        <div class="col-4">{{ position.balance.transactionFeesTotal }}</div>
+                        <div class="col-9">Collected Dividends:</div>
+                        <div class="col-3"><span class="float-end">{{ position.balance.collectedDividends }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">ROI by Dividends:</div>
+                        <div class="col-3"><span class="float-end">{{ position.balance.returnOnInvestentByDividends() }}%</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Nächste Auszahlung:</div>
+                        <div class="col-3"><span class="float-end">{{ position.balance.projectedNextDividendPayment }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Rendite on investment:</div>
+                        <div class="col-3"><span class="float-end"></span></div>
+                    </div>
+                </div>
+                <div *ngIf="position.balance" class="info-box">
+                    <div class="row">
+                        <div class="col-9">Total Transaktionsgebühren:</div>
+                        <div class="col-3"><span class="float-end">{{ position.balance.transactionFeesTotal }}</span></div>
                     </div>
                 </div>
             </tab>
@@ -76,9 +86,9 @@
                         <tr>
                             <th scope="col">Date</th>
                             <th scope="col">Title</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Rate</th>
-                            <th scope="col">Fee</th>
+                            <th scope="col"><span class="float-end">Quantity</span></th>
+                            <th scope="col"><span class="float-end">Rate</span></th>
+                            <th scope="col"><span class="float-end">Fee</span></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                         </tr>
@@ -87,11 +97,11 @@
                         <tr *ngFor="let transaction of position.transactions">
                             <td>{{ transaction.date|date:'dd.MM.Y' }}</td>
                             <td>{{ transaction.title }}</td>
-                            <td>{{ transaction.quantity }}</td>
-                            <td>{{ transaction.rate }}</td>
-                            <td>{{ transaction.fee }}</td>
-                            <td><button [routerLink]="'/position/' + position.id + '/transaction-form/' + transaction.id" type="button" class="btn btn-sm btn-outline-primary" tooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></td>
-                            <td><button (click)="openModal(template, transaction)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                            <td><span class="float-end">{{ transaction.quantity }}</span></td>
+                            <td><span class="float-end">{{ transaction.rate }}</span></td>
+                            <td><span class="float-end">{{ transaction.fee }}</span></td>
+                            <td><span class="float-end"><button [routerLink]="'/position/' + position.id + '/transaction-form/' + transaction.id" type="button" class="btn btn-sm btn-outline-primary" tooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
+                            <td><span class="float-end"><button (click)="openModal(template, transaction)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></span></td>
                         </tr>
                         </tbody>
                     </table>

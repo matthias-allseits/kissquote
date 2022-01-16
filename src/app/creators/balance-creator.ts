@@ -13,6 +13,8 @@ export class BalanceCreator {
                 apiArray.averagePayedPriceNet,
                 apiArray.investment,
                 apiArray.transactionFeesTotal,
+                apiArray.collectedDividends,
+                apiArray.projectedNextDividendPayment,
             );
         } else {
             return undefined;

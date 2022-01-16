@@ -9,6 +9,14 @@ export class Balance {
     public averagePayedPriceNet: number,
     public investment: number,
     public transactionFeesTotal: number,
+    public collectedDividends: number,
+    public projectedNextDividendPayment: number,
     ) {}
+
+
+    returnOnInvestentByDividends(): string
+    {
+        return (100 / this.investment * this.collectedDividends).toFixed(1);
+    }
 
 }
