@@ -97,11 +97,21 @@
                     </table>
                 </div>
             </tab>
-            <tab heading="Sharehead infos">
+            <tab heading="Sharehead Infos">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-                    <h4 class="pt-2">Sharehead infos</h4>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                    </div>
+                    <ng-container *ngIf="shareheadShare">
+                        <h4 class="pt-2">Sharehead Infos</h4>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <div class="btn-group me-2">
+                                    <a href="{{ shareheadShare.urlWikipedia }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary">Wikipedia</a>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!shareheadShare">
+                        Verbinden Sie Ihre Position mit einem Sharehead-Share
+                    </ng-container>
                 </div>
             </tab>
         </tabset>

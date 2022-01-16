@@ -18,6 +18,7 @@ export class Position {
         public isCash: boolean = false,
         public bankAccount?: BankAccount,
         public balance?: Balance,
+        public shareheadId?: number,
     ) {}
 
 

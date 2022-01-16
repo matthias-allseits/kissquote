@@ -6,6 +6,9 @@ import {faEdit, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 import {Transaction} from "../../models/transaction";
 import {TransactionService} from "../../services/transaction.service";
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
+import {Share} from "../../models/share";
+import {ShareheadService} from "../../services/sharehead.service";
+import {ShareheadShare} from "../../models/shareheadShare";
 
 
 @Component({
@@ -20,12 +23,14 @@ export class PositionDetailComponent implements OnInit {
 
     public position: Position|null = null;
     public selectedTransaction?: Transaction;
+    public shareheadShare?: ShareheadShare;
     modalRef?: BsModalRef;
 
     constructor(
         private route: ActivatedRoute,
         private positionService: PositionService,
         private transactionService: TransactionService,
+        private shareheadService: ShareheadService,
         private modalService: BsModalService,
     ) { }
 
@@ -71,6 +76,15 @@ export class PositionDetailComponent implements OnInit {
             .subscribe(position => {
                 console.log(position);
                 this.position = position;
+                if (this.position && this.position.shareheadId && this.position.shareheadId > 0) {
+                    this.shareheadService.getShare(this.position.shareheadId)
+                        .subscribe(share => {
+                            if (share) {
+                                this.shareheadShare = share;
+                                console.log(this.shareheadShare);
+                            }
+                        })
+                }
             });
     }
 

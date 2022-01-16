@@ -27,25 +27,23 @@
                 <table class="table table-striped table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+                            <th scope="col" style="width: 40%;">{{ tranService.trans('GLOB_SHARE') }}</th>
                             <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
-                            <th scope="col">Active From</th>
-                            <th scope="col">Active Until</th>
-                            <th scope="col">Transactions</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
+                            <th scope="col" style="width: 105px;">Active From</th>
+                            <th scope="col" style="width: 105px;">Active Until</th>
+                            <th scope="col" style="width: 105px;">Transactions</th>
+                            <th scope="col" style="width: 35px;"></th>
+                            <th scope="col" style="width: 35px;"></th>
+                            <th scope="col" style="width: 35px;"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let position of bankAccount.positions">
-                            <td>1,001</td>
                             <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
                             <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
                             <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
                             <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
-                            <td>{{ position.transactions.length }}</td>
+                            <td class="text-center">{{ position.transactions.length }}</td>
                             <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
                             <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>
                             <td><button (click)="openPositionConfirmModal(template, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>

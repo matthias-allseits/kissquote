@@ -40,6 +40,7 @@ export class PositionCreator {
                 apiArray.isCash,
                 apiArray.bankAccount ? BankAccountCreator.oneFromApiArray(apiArray.bankAccount) : undefined,
                 apiArray.balance ? BalanceCreator.oneFromApiArray(apiArray.balance) : undefined,
+                apiArray.shareheadId,
             );
         } else {
             return null;
