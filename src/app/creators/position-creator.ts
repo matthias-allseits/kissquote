@@ -21,6 +21,7 @@ export class PositionCreator {
                 array.push(position);
             }
         }
+        array.sort((a,b) => (a.activeFrom > b.activeFrom) ? 1 : ((b.activeFrom > a.activeFrom) ? -1 : 0))
 
         return array;
     }

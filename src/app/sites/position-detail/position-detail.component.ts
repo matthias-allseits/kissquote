@@ -6,10 +6,15 @@ import {faEdit, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 import {Transaction} from "../../models/transaction";
 import {TransactionService} from "../../services/transaction.service";
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
-import {Share} from "../../models/share";
 import {ShareheadService} from "../../services/sharehead.service";
 import {ShareheadShare} from "../../models/shareheadShare";
+import {ChartDataset} from "chart.js";
 
+
+export interface BarChartData {
+    label: string;
+    data: number[];
+}
 
 @Component({
     selector: 'app-position-detail',
@@ -25,6 +30,8 @@ export class PositionDetailComponent implements OnInit {
     public selectedTransaction?: Transaction;
     public shareheadShare?: ShareheadShare;
     modalRef?: BsModalRef;
+
+    public chartData?: ChartDataset[];
 
     constructor(
         private route: ActivatedRoute,
@@ -76,6 +83,18 @@ export class PositionDetailComponent implements OnInit {
             .subscribe(position => {
                 console.log(position);
                 this.position = position;
+                if (this.position && this.position.balance) {
+                    this.chartData = [
+                        {
+                            label: 'Kosten',
+                            data: [this.position.balance.transactionFeesTotal]
+                        },
+                        {
+                            label: 'Einnahmen',
+                            data: [this.position.balance.collectedDividends]
+                        },
+                    ];
+                }
                 if (this.position && this.position.shareheadId && this.position.shareheadId > 0) {
                     this.shareheadService.getShare(this.position.shareheadId)
                         .subscribe(share => {

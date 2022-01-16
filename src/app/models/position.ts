@@ -12,7 +12,7 @@ export class Position {
         public share: Share|null,
         public currency: Currency|null,
         public active: boolean,
-        public activeFrom: Date|string|null,
+        public activeFrom: Date|string,
         public activeUntil: Date|null,
         public transactions: Transaction[],
         public isCash: boolean = false,

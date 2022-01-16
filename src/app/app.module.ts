@@ -32,7 +32,10 @@ import {TypeaheadModule} from "ngx-bootstrap/typeahead";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ModalModule} from "ngx-bootstrap/modal";
 import {TabsModule} from "ngx-bootstrap/tabs";
+import {NgChartsModule} from "ng2-charts";
+import { BarChartComponent } from './components/bar-chart/bar-chart.component';
 registerLocaleData(localeCH);
+
 
 
 @NgModule({
@@ -53,6 +56,7 @@ registerLocaleData(localeCH);
         BankAccountFormComponent,
         PositionListComponent,
         TransactionFormComponent,
+        BarChartComponent,
     ],
     imports: [
         BrowserModule,
@@ -63,6 +67,7 @@ registerLocaleData(localeCH);
         NgbModule,
         FontAwesomeModule,
         BrowserAnimationsModule,
+        NgChartsModule,
         TooltipModule.forRoot(),
         TypeaheadModule.forRoot(),
         ModalModule.forRoot(),
