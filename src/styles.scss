@@ -10,11 +10,11 @@ h1.centered-header {
   margin-bottom: 2.5rem;
 }
 
-a, a:hover {
+a, a:hover, .nav-link {
   color: #ff6633;
 }
 
-a:hover {
+a:hover, .nav-link:hover {
   color: #c9461a;
 }
 

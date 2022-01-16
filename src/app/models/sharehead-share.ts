@@ -12,6 +12,8 @@ export class ShareheadShare {
         public isin: string|null,
         public symbol?: string,
         public country?: string,
+        public sector?: string,
+        public financialYearEndDate?: Date|null,
         public urlFinanznet?: string,
         public urlWikipedia?: string,
         public urlInvesting?: string,
