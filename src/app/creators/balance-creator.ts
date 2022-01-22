@@ -1,4 +1,5 @@
 import {Balance} from "../models/balance";
+import {StockRateCreator} from "./stock-rate-creator";
 
 
 export class BalanceCreator {
@@ -15,6 +16,7 @@ export class BalanceCreator {
                 apiArray.transactionFeesTotal,
                 apiArray.collectedDividends,
                 apiArray.projectedNextDividendPayment,
+                apiArray.lastRate ? StockRateCreator.oneFromApiArray(apiArray.lastRate) : undefined,
             );
         } else {
             return undefined;

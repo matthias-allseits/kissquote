@@ -26,7 +26,7 @@
                     </div>
                     <div class="row">
                         <div class="col-9">Letzter Kurs:</div>
-                        <div class="col-3"><span class="float-end"></span></div>
+                        <div class="col-3"><span *ngIf="position.balance.lastRate" class="float-end">{{ position.balance.lastRate.rate }}</span></div>
                     </div>
                     <div class="row">
                         <div class="col-9">Bez. Kurs Brutto:</div>
@@ -42,7 +42,7 @@
                     </div>
                     <div class="row">
                         <div class="col-9">Akt. Wert:</div>
-                        <div class="col-3"><span class="float-end"></span></div>
+                        <div class="col-3"><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></div>
                     </div>
                     <div class="row">
                         <div class="col-9">Bilanz:</div>

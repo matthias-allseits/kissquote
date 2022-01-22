@@ -31,6 +31,7 @@ export class Position {
     }
 
 
+    // todo: this is crap
     public quantityTotal(): number {
         let quantity = 0;
         this.transactions.forEach(transaction => {
@@ -50,6 +51,15 @@ export class Position {
         });
 
         return value;
+    }
+
+
+    public actualValue(): string|null {
+        if (this.balance && this.balance.lastRate) {
+            return (this.balance.amount * this.balance.lastRate.rate).toFixed(0)
+        }
+
+        return null;
     }
 
 }

@@ -1,3 +1,4 @@
+import {StockRate} from "./stock-rate";
 
 
 export class Balance {
@@ -11,6 +12,7 @@ export class Balance {
     public transactionFeesTotal: number,
     public collectedDividends: number,
     public projectedNextDividendPayment: number,
+    public lastRate?: StockRate,
     ) {}
 
 
