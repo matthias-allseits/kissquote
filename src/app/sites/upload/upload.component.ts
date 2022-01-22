@@ -73,7 +73,7 @@ export class UploadComponent implements OnInit {
     }
 
     submitResult(): void {
-        // todo: send resulting positions and dividends to the api
+        // todo: send resulting positions and dividends to the backend
     }
 
     private parseContent(content: any): void {

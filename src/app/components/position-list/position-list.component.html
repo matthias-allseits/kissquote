@@ -1,15 +1,15 @@
 <table class="table table-striped table-sm">
     <thead>
     <tr>
-        <th scope="col">#</th>
+        <th scope="col" style="width: 35px;">#</th>
         <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
         <th *ngIf="!cash" scope="col">ISIN</th>
         <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
-        <th *ngIf="!cash" scope="col">Anzahl</th>
+        <th *ngIf="!cash" scope="col" class="text-center" style="width: 105px;">Anzahl</th>
         <th scope="col">Active From</th>
         <th *ngIf="!cash" scope="col">Active Until</th>
-        <th scope="col">Transactions</th>
-        <th scope="col">Value</th>
+        <th scope="col" style="width: 105px;">Transactions</th>
+        <th scope="col" style="width: 60px;"><span class="float-end">Value</span></th>
     </tr>
     </thead>
     <tbody>
@@ -18,11 +18,11 @@
         <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
         <td *ngIf="!cash"><span *ngIf="position.share">{{ position.share.isin }}</span></td>
         <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
-        <td *ngIf="!cash">{{ position.quantityTotal() }}</td>
+        <td *ngIf="!cash" class="text-center">{{ position.quantityTotal() }}</td>
         <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
         <td *ngIf="!cash"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
-        <td>{{ position.transactions.length }}</td>
-        <td><span *ngIf="position.isCash">{{ position.valuation()|number: '1.0-2' }}</span></td>
+        <td class="text-center">{{ position.transactions.length }}</td>
+        <td><span *ngIf="position.isCash" class="float-end">{{ position.valuation()|number: '1.0-2' }}</span></td>
     </tr>
     </tbody>
 </table>
