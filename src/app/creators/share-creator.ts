@@ -1,4 +1,5 @@
 import {Share} from "../models/share";
+import {MarketplaceCreator} from "./marketplace-creator";
 
 
 export class ShareCreator {
@@ -31,6 +32,7 @@ export class ShareCreator {
                 apiArray.shortname,
                 apiArray.isin,
                 apiArray.type,
+                apiArray.marketplace ? MarketplaceCreator.oneFromApiArray(apiArray.marketplace): undefined,
             );
         } else {
             return null;

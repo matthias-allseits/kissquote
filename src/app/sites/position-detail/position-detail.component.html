@@ -17,6 +17,14 @@
                         <div class="col-3"><span class="float-end">{{ position.balance.amount }}</span></div>
                     </div>
                     <div class="row">
+                        <div class="col-9">Currency:</div>
+                        <div class="col-3"><span *ngIf="position.currency" class="float-end">{{ position.currency.name }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">Marketplace:</div>
+                        <div class="col-4"><span *ngIf="position.share && position.share.marketplace" class="float-end">{{ position.share.marketplace.getName() }}</span></div>
+                    </div>
+                    <div class="row">
                         <div class="col-9">Erster Kurs:</div>
                         <div class="col-3"><span class="float-end">{{ position.balance.firstRate }}</span></div>
                     </div>

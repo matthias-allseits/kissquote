@@ -1,3 +1,6 @@
+import {Marketplace} from "./marketplace";
+
+
 export class Share {
 
     constructor(
@@ -6,6 +9,7 @@ export class Share {
         public shortname: string|null,
         public isin: string|null,
         public type: string|null,
+        public marketplace?: Marketplace,
     ) { }
 
 }
