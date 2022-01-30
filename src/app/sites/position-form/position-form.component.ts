@@ -15,6 +15,10 @@ import {PortfolioService} from "../../services/portfolio.service";
 import {Portfolio} from "../../models/portfolio";
 import {BankAccount} from "../../models/bank-account";
 import {TypeaheadMatch} from "ngx-bootstrap/typeahead";
+import {MarketplaceService} from "../../services/marketplace.service";
+import {Marketplace} from "../../models/marketplace";
+import {ShareCreator} from "../../creators/share-creator";
+import {ShareheadShare} from "../../models/sharehead-share";
 
 
 @Component({
@@ -28,12 +32,15 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
     public portfolio: Portfolio|null = null;
     public bankAccounts: BankAccount[] = [];
     private bankAccountIndex: number = 0;
-    public shares: Share[] = [];
-    public shareHeadShares: Share[] = [];
+    public swissquoteShares: Share[] = [];
+    public marketplaces: Marketplace[] = [];
     public currencies: Currency[] = [];
+    public shareheadShares?: ShareheadShare[];
 
     positionForm = new FormGroup({
         shareName: new FormControl(''),
+        isin: new FormControl(''),
+        marketplace: new FormControl(''),
         currency: new FormControl(''),
     });
 
@@ -45,6 +52,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         private shareService: ShareService,
         private currencyService: CurrencyService,
         private shareheadService: ShareheadService,
+        private marketplaceService: MarketplaceService,
         public tranService: TranslationService,
     ) {
         super();
@@ -72,18 +80,29 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         });
     }
 
-    onSelect(event: TypeaheadMatch): void {
-        console.log(event);
-        console.log(event.item);
-        this.position.share = event.item;
-        // this.positionForm.get('shareName')?.setValue(event.item.name);
-        console.log(this.position);
-        // this.position.share.name = event.name;
-    }
+    // onSelect(event: TypeaheadMatch): void {
+    //     console.log(event);
+    //     console.log(event.item);
+    //     this.position.share = event.item;
+    //     // this.positionForm.get('shareName')?.setValue(event.item.name);
+    //     console.log(this.position);
+    //     // this.position.share.name = event.name;
+    // }
 
     onSubmit(): void {
         this.patchValuesBack(this.positionForm, this.position);
         this.position.bankAccount = this.bankAccounts[this.bankAccountIndex];
+        const newShare = ShareCreator.createNewShare();
+        newShare.name = this.positionForm.get('shareName')?.value;
+        newShare.marketplace = this.positionForm.get('marketplace')?.value;
+        newShare.isin = this.positionForm.get('isin')?.value;
+        if (this.shareheadShares && newShare.isin) {
+            const shareheadShare = this.shareheadService.getShareByIsin(this.shareheadShares, newShare.isin);
+            if (shareheadShare) {
+                this.position.shareheadId = shareheadShare.id;
+            }
+        }
+        this.position.share = newShare;
         console.log(this.position);
         if (this.position.id > 0) {
             // this.positionService.update(this.position)
@@ -108,20 +127,24 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                     this.bankAccounts = this.portfolio.getBankAccountsWithoutPositions();
                 }
             });
-        this.shareService.getAllShares()
+        this.shareService.getAllSwissquoteShares()
             .subscribe(shares => {
                 console.log(shares);
-                this.shares = shares;
-            });
-        this.shareheadService.getAllShares()
-            .subscribe(shares => {
-                console.log(shares);
-                this.shareHeadShares = shares;
+                this.swissquoteShares = shares;
             });
         this.shareheadService.getAllCurrencies()
             .subscribe(currencies => {
                 console.log(currencies);
                 this.currencies = currencies;
+            });
+        this.shareheadService.getAllShares()
+            .subscribe(shares => {
+                console.log(shares);
+                this.shareheadShares = shares;
+            });
+        this.marketplaceService.getAllMarketplaces()
+            .subscribe(places => {
+                this.marketplaces = places;
             });
     }
 

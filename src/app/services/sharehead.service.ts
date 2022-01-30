@@ -2,8 +2,6 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
-import {Share} from '../models/share';
-import {ShareCreator} from "../creators/share-creator";
 import {Currency} from "../models/currency";
 import {CurrencyCreator} from "../creators/currency-creator";
 import {ShareheadShare} from "../models/sharehead-share";
@@ -35,11 +33,11 @@ export class ShareheadService {
     }
 
 
-    public getAllShares(): Observable<Share[]>
+    public getAllShares(): Observable<ShareheadShare[]>
     {
-        return this.http.get<Share[]>(this.baseUrl + '/share')
+        return this.http.get<ShareheadShare[]>(this.baseUrl + '/share')
             .pipe(
-                map(res => ShareCreator.fromApiArray(res))
+                map(res => ShareheadShareCreator.fromApiArray(res))
             );
     }
 
@@ -50,6 +48,18 @@ export class ShareheadService {
             .pipe(
                 map(res => CurrencyCreator.fromApiArray(res))
             );
+    }
+
+    public getShareByIsin(allShares: ShareheadShare[], isin: string): ShareheadShare|null
+    {
+        let hit = null;
+        allShares.forEach(share => {
+            if (share.isin == isin) {
+                hit = share;
+            }
+        });
+
+        return hit;
     }
 
 }

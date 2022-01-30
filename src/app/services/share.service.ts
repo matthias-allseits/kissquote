@@ -19,10 +19,21 @@ export class ShareService {
     ) {}
 
 
-    // todo: this is crap since it gets all shares from swissquote...
-    public getAllShares(): Observable<Share[]>
+    public getAllUsersShares(): Observable<Share[]>
     {
         return this.http.get<Share[]>(this.baseUrl)
+            .pipe(
+                map(res => ShareCreator.fromApiArray(res))
+                // map(this.extractData),
+                // catchError(this.handleError('addHero', portfolio))
+                // catchError(this.handleError('addHero', portfolio))
+            );
+    }
+
+
+    public getAllSwissquoteShares(): Observable<Share[]>
+    {
+        return this.http.get<Share[]>(this.baseUrl + '/swissquote')
             .pipe(
                 map(res => ShareCreator.fromApiArray(res))
                 // map(this.extractData),

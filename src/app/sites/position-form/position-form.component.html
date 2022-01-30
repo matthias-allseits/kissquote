@@ -5,28 +5,43 @@
             Wählen Sie einen Share aus dem Kissquote Universum oder erweitern Sie dieses erbärmlich kleine Universum.
         </p>
         <form [formGroup]="positionForm" (ngSubmit)="onSubmit()">
+<!--            <div class="mb-3">-->
+<!--                <label for="shareName" class="form-label">{{ tranService.trans('GLOB_SHARE') }}: </label>-->
+<!--                <input formControlName="shareName" id="shareName"-->
+<!--                       [typeahead]="swissquoteShares"-->
+<!--                       typeaheadOptionField="name"-->
+<!--                       (typeaheadOnSelect)="onSelect($event)"-->
+<!--                       [typeaheadOptionsLimit]="7"-->
+<!--                       [typeaheadMinLength]="0"-->
+<!--                       placeholder="Typeahead inside a form"-->
+<!--                       class="form-control">-->
+<!--            </div>-->
             <div class="mb-3">
-                <label for="shareName" class="form-label">{{ tranService.trans('GLOB_SHARE') }}: </label>
-                <input formControlName="shareName" id="shareName"
-                       [typeahead]="shareHeadShares"
-                       typeaheadOptionField="name"
-                       (typeaheadOnSelect)="onSelect($event)"
-                       [typeaheadOptionsLimit]="7"
-                       [typeaheadMinLength]="0"
-                       placeholder="Typeahead inside a form"
-                       class="form-control">
+                <label for="shareName" class="form-label">Name: </label>
+                <input id="shareName" type="text" class="form-control" formControlName="shareName">
             </div>
-            <ng-container *ngIf="position.share">
-                <div class="mb-3">
-                    <label for="currency" class="form-label">{{ tranService.trans('GLOB_CURRENCY') }}: </label>
-                    <select formControlName="currency" [ngModel]="position.currency" id="currency" name="currency" class="form-select form-select mb-3">
-                        <option disabled selected></option>
-                        <ng-container *ngFor="let currency of currencies">
-                            <option [ngValue]="currency">{{ currency.name }}</option>
-                        </ng-container>
-                    </select>
-                </div>
-            </ng-container>
+            <div class="mb-3">
+                <label for="isin" class="form-label">ISIN: </label>
+                <input id="isin" type="text" class="form-control" formControlName="isin">
+            </div>
+            <div class="mb-3">
+                <label for="marketplace" class="form-label">Marketplace: </label>
+                <select formControlName="marketplace" id="marketplace" name="marketplace" class="form-select form-select mb-3">
+                    <option disabled selected></option>
+                    <ng-container *ngFor="let place of marketplaces">
+                        <option [ngValue]="place">{{ place.getName() }}</option>
+                    </ng-container>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="currency" class="form-label">{{ tranService.trans('GLOB_CURRENCY') }}: </label>
+                <select formControlName="currency" [ngModel]="position.currency" id="currency" name="currency" class="form-select form-select mb-3">
+                    <option disabled selected></option>
+                    <ng-container *ngFor="let currency of currencies">
+                        <option [ngValue]="currency">{{ currency.name }}</option>
+                    </ng-container>
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary" [disabled]="!positionForm.valid">Submit</button>
         </form>
     </div>

@@ -5,6 +5,19 @@ import {ShareheadBalanceCreator} from "./sharehead-balance-creator";
 
 export class ShareheadShareCreator {
 
+    public static fromApiArray(apiArray: ShareheadShare[]): ShareheadShare[] {
+        const array: ShareheadShare[] = [];
+
+        for (const shareList of apiArray) {
+            const share = this.oneFromApiArray(shareList);
+            if (share instanceof ShareheadShare) {
+                array.push(share);
+            }
+        }
+
+        return array;
+    }
+
 
     public static oneFromApiArray(apiArray: ShareheadShare|null): ShareheadShare|null
     {

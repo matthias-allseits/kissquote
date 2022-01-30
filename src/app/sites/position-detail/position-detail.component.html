@@ -6,6 +6,11 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                     <h4 class="pt-2">Balance</h4>
                     <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div *ngIf="position.urlSwissquote()" class="btn-group me-2">
+                                <a href="{{ position.urlSwissquote() }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary">Swissquote</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div>
@@ -21,8 +26,12 @@
                         <div class="col-3"><span *ngIf="position.currency" class="float-end">{{ position.currency.name }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-8">Marketplace:</div>
-                        <div class="col-4"><span *ngIf="position.share && position.share.marketplace" class="float-end">{{ position.share.marketplace.getName() }}</span></div>
+                        <div class="col-9">ISIN:</div>
+                        <div class="col-3"><span *ngIf="position.share" class="float-end">{{ position.share.isin }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Marketplace:</div>
+                        <div class="col-6"><span *ngIf="position.share && position.share.marketplace" class="float-end">{{ position.share.marketplace.getName() }}</span></div>
                     </div>
                     <div class="row">
                         <div class="col-9">Erster Kurs:</div>
@@ -33,7 +42,7 @@
                         <div class="col-3"><span class="float-end"></span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Letzter Kurs:</div>
+                        <div class="col-9">Letzter Kurs<span *ngIf="position.balance.lastRate"> ({{ position.balance.lastRate.date|date: 'dd.MM.Y' }})</span>:</div>
                         <div class="col-3"><span *ngIf="position.balance.lastRate" class="float-end">{{ position.balance.lastRate.rate }}</span></div>
                     </div>
                     <div class="row">

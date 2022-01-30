@@ -62,4 +62,13 @@ export class Position {
         return null;
     }
 
+
+    public urlSwissquote(): string|null {
+        if (this.share) {
+            return `https://www.swissquote.ch/sq_mi/market/Detail.action?s=${this.share.isin}_${this.share.marketplace?.urlKey}_${this.currency?.name}`;
+        }
+
+        return null;
+    }
+
 }
