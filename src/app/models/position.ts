@@ -3,6 +3,10 @@ import {Share} from './share';
 import {Transaction} from "./transaction";
 import {BankAccount} from "./bank-account";
 import {Balance} from "./balance";
+import {ChartData} from "chart.js";
+import {StockRate} from "./stock-rate";
+import {StockRateCreator} from "../creators/stock-rate-creator";
+import {DateHelper} from "../core/datehelper";
 
 
 export class Position {
@@ -69,6 +73,78 @@ export class Position {
         }
 
         return null;
+    }
+
+
+    public getRatesChartData(): ChartData {
+        const historicRates: number[] = [];
+        const historicLabels: string[] = [];
+        if (this.share) {
+            let request = new XMLHttpRequest();
+            const ratesUrl = `https://www.swissquote.ch/sqi_ws/HistoFromServlet?format=pipe&key=${this.share.isin}_${this.share.marketplace?.urlKey}_${this.currency?.name}&ftype=day&fvalue=1&ptype=a&pvalue=1`;
+            request.open("GET", ratesUrl, false);
+            request.send(null);
+            let content = request.responseText;
+            // console.log(content);
+            const rates = this.parseRates(content);
+
+            rates.forEach(rate => {
+                if (rate.date) {
+                    historicRates.push(rate.rate);
+                    historicLabels.push(DateHelper.convertDateToGerman(rate.date));
+                }
+            });
+        }
+
+        const data = {
+            datasets: [
+                {
+                    data: historicRates,
+                    label: 'Kurs seit Start',
+                    backgroundColor: 'rgba(255,102,51,0)',
+                    borderColor: '#ff6633',
+                    pointBackgroundColor: '#c9461a',
+                    pointBorderColor: '#ff6633',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#ff6633',
+                    fill: 'origin'
+                }
+            ],
+            labels: historicLabels
+        };
+
+        return data;
+    }
+
+
+    private parseRates(content: any): StockRate[] {
+        const rates: StockRate[] = [];
+        const lines = content.split("\n");
+        lines.forEach((line: any, index: number) => {
+            line = line.replaceAll("'", '');
+            line = line.replaceAll("\r", '');
+            const cells = line.split('|');
+            if (cells.length > 3) {
+                const rawDate = cells[0];
+                const year = +rawDate.substr(0, 4);
+                const monthIndex = +rawDate.substr(4, 2) - 1;
+                // console.log(rawDate);
+                // console.log(rawDate.substr(4, 2));
+                // console.log(monthIndex);
+                const day = +rawDate.substr(6, 2);
+                const date = new Date(year, monthIndex, day);
+                const tempDate = new Date(this.activeFrom);
+                if (date >= tempDate) {
+                    // console.log(date);
+                    const rate = StockRateCreator.createNewStockRate();
+                    rate.date = date;
+                    rate.rate = cells[4];
+                    rates.push(rate);
+                }
+            }
+        });
+
+        return rates;
     }
 
 }

@@ -25,4 +25,21 @@ export class DateHelper {
         return ret;
     }
 
+
+    public static convertDateToGerman(date: Date): string {
+        let year, month, day;
+
+        year = String(date.getFullYear());
+        month = String(date.getMonth() + 1);
+        if (month.length === 1) {
+            month = '0' + month;
+        }
+        day = String(date.getDate());
+        if (day.length === 1) {
+            day = '0' + day;
+        }
+
+        return day + '.' + month + '.' + year;
+    }
+
 }

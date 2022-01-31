@@ -1,7 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {BaseChartDirective} from "ng2-charts";
 import {ChartConfiguration, ChartData, ChartDataset, ChartEvent, ChartType} from "chart.js";
-import {BarChartData} from "../../sites/position-detail/position-detail.component";
 
 
 @Component({
@@ -13,15 +12,6 @@ export class BarChartComponent implements OnInit {
 
     @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
     @Input() data?: ChartDataset[];
-
-    constructor() {
-    }
-
-    ngOnInit(): void {
-        if (this.data) {
-            this.barChartData.datasets = this.data;
-        }
-    }
 
 
     public barChartOptions: ChartConfiguration['options'] = {
@@ -52,6 +42,15 @@ export class BarChartComponent implements OnInit {
         labels: [ 'Kosten vs Einnahmen' ],
         datasets: []
     };
+
+    constructor() {
+    }
+
+    ngOnInit(): void {
+        if (this.data) {
+            this.barChartData.datasets = this.data;
+        }
+    }
 
     // events
     public chartClicked({ event, active }: { event?: ChartEvent, active?: {}[] }): void {

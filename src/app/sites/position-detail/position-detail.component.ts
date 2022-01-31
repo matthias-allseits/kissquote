@@ -8,13 +8,8 @@ import {TransactionService} from "../../services/transaction.service";
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {ShareheadService} from "../../services/sharehead.service";
 import {ShareheadShare} from "../../models/sharehead-share";
-import {ChartDataset} from "chart.js";
+import {ChartData, ChartDataset} from "chart.js";
 
-
-export interface BarChartData {
-    label: string;
-    data: number[];
-}
 
 @Component({
     selector: 'app-position-detail',
@@ -32,6 +27,7 @@ export class PositionDetailComponent implements OnInit {
     modalRef?: BsModalRef;
 
     public chartData?: ChartDataset[];
+    public lineChartData?: ChartData;
 
     constructor(
         private route: ActivatedRoute,
@@ -104,6 +100,8 @@ export class PositionDetailComponent implements OnInit {
                             }
                         })
                 }
+
+                this.lineChartData = this.position?.getRatesChartData();
             });
     }
 
