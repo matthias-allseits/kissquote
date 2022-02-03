@@ -1,6 +1,6 @@
 <main *ngIf="position">
     <div class="container px-4 py-2">
-        <h1 class="pb-2">Position {{ position.getName() }}</h1>
+        <h1>Position {{ position.getName() }}</h1>
         <tabset [justified]="true">
             <tab heading="Balance">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
@@ -18,9 +18,14 @@
                     <app-line-chart [data]="lineChartData"></app-line-chart>
                 </div>
                 <div *ngIf="position.balance" class="info-box">
+                    <h5>State</h5>
                     <div class="row">
                         <div class="col-9">Anzahl:</div>
                         <div class="col-3"><span class="float-end">{{ position.balance.amount }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Start:</div>
+                        <div class="col-3"><span class="float-end">{{ position.activeFrom|date:'dd.MM.YY' }}</span></div>
                     </div>
                     <div class="row">
                         <div class="col-9">Currency:</div>
@@ -68,6 +73,7 @@
                     </div>
                 </div>
                 <div *ngIf="position.balance" class="info-box">
+                    <h5>Dividends</h5>
                     <div class="row">
                         <div class="col-9">Collected Dividends:</div>
                         <div class="col-3"><span class="float-end">{{ position.balance.collectedDividends }}</span></div>
@@ -77,17 +83,39 @@
                         <div class="col-3"><span class="float-end">{{ position.balance.returnOnInvestentByDividends() }}%</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Nächste Auszahlung:</div>
+                        <div class="col-9">Next Dividend:</div>
                         <div class="col-3"><span class="float-end">{{ position.balance.projectedNextDividendPayment }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Rendite on investment:</div>
+                        <div class="col-9">Yield on investment:</div>
+                        <div class="col-3"><span class="float-end"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Days since start:</div>
+                        <div class="col-3"><span class="float-end"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Profit per day:</div>
+                        <div class="col-3"><span class="float-end"></span></div>
+                    </div>
+                    <h5 style="margin-top: 15px;">Dividend projections</h5>
+                    <div class="row">
+                        <div class="col-9">2023:</div>
+                        <div class="col-3"><span class="float-end"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">2024:</div>
+                        <div class="col-3"><span class="float-end"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">2025:</div>
                         <div class="col-3"><span class="float-end"></span></div>
                     </div>
                 </div>
                 <div *ngIf="position.balance" class="info-box">
+                    <h5>Costs</h5>
                     <div class="row">
-                        <div class="col-9">Total Transaktionsgebühren:</div>
+                        <div class="col-9">Transaction fees total:</div>
                         <div class="col-3"><span class="float-end">{{ position.balance.transactionFeesTotal }}</span></div>
                     </div>
                 </div>

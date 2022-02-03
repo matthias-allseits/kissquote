@@ -35,6 +35,7 @@ import {TabsModule} from "ngx-bootstrap/tabs";
 import {NgChartsModule} from "ng2-charts";
 import { BarChartComponent } from './components/bar-chart/bar-chart.component';
 import { LineChartComponent } from './components/line-chart/line-chart.component';
+import { CashPositionFormComponent } from './sites/cash-position-form/cash-position-form.component';
 registerLocaleData(localeCH);
 
 
@@ -59,6 +60,7 @@ registerLocaleData(localeCH);
         TransactionFormComponent,
         BarChartComponent,
         LineChartComponent,
+        CashPositionFormComponent,
     ],
     imports: [
         BrowserModule,

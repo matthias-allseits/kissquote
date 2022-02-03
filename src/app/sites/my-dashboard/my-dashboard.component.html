@@ -16,6 +16,7 @@
                     <div class="btn-group me-2">
                         <button [routerLink]="['/bank-account-form/' + bankAccount.id]" type="button" class="btn btn-sm btn-outline-primary">Edit Bank-Account</button>
                         <button [routerLink]="['/bank-account/' + accountIndex + '/position-form']" type="button" class="btn btn-sm btn-outline-primary">Add Position</button>
+                        <button [routerLink]="['/bank-account/' + accountIndex + '/cash-position-form']" type="button" class="btn btn-sm btn-outline-primary">Add Cash-Position</button>
                         <ng-container *ngIf="bankAccount.positions.length === 0">
                             <button type="button" class="btn btn-sm btn-outline-primary">Import Transactions</button>
                             <button (click)="openAccountConfirmModal(baTemplate, bankAccount)" type="button" class="btn btn-sm btn-outline-primary">Delete Bankaccount</button>
