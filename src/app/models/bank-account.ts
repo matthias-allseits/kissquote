@@ -9,4 +9,30 @@ export class BankAccount {
         public positions: Position[],
     ) {}
 
+
+    getNonCashPositions(): Position[]
+    {
+        const positions: Position[] = [];
+        this.positions.forEach(position => {
+            if (!position.isCash) {
+                positions.push(position);
+            }
+        });
+
+        return positions;
+    }
+
+
+    getCashPositions(): Position[]
+    {
+        const positions: Position[] = [];
+        this.positions.forEach(position => {
+            if (position.isCash) {
+                positions.push(position);
+            }
+        });
+
+        return positions;
+    }
+
 }
