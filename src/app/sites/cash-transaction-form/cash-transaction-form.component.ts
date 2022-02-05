@@ -1,21 +1,21 @@
 import {Component, OnInit} from '@angular/core';
-import {MotherFormComponent} from "../mother-form.component";
 import {Transaction} from "../../models/transaction";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {PositionService} from "../../services/position.service";
 import {Position} from "../../models/position";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Params, Router} from "@angular/router";
+import {Location} from "@angular/common";
+import {PositionService} from "../../services/position.service";
 import {TransactionService} from "../../services/transaction.service";
 import {TransactionCreator} from "../../creators/transaction-creator";
-import { Location } from '@angular/common';
+import {MotherFormComponent} from "../mother-form.component";
 
 
 @Component({
-    selector: 'app-transaction-form',
-    templateUrl: './transaction-form.component.html',
-    styleUrls: ['./transaction-form.component.scss']
+    selector: 'app-cash-transaction-form',
+    templateUrl: './cash-transaction-form.component.html',
+    styleUrls: ['./cash-transaction-form.component.scss']
 })
-export class TransactionFormComponent extends MotherFormComponent  implements OnInit {
+export class CashTransactionFormComponent extends MotherFormComponent implements OnInit {
 
     public transaction: Transaction;
     public position: Position|null = null;
@@ -24,9 +24,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
     transactionForm = new FormGroup({
         title: new FormControl(''),
         date: new FormControl(),
-        quantity: new FormControl('', Validators.required),
         rate: new FormControl('', Validators.required),
-        fee: new FormControl(''),
     });
 
     constructor(
@@ -80,6 +78,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
     onSubmit(): void {
         this.patchValuesBack(this.transactionForm, this.transaction);
         this.transaction.position = this.position;
+        this.transaction.quantity = 1;
         if (this.transaction.position) {
             this.transaction.position.balance = undefined;
         }

@@ -221,7 +221,8 @@
                             <td><span class="float-end">{{ transaction.quantity }}</span></td>
                             <td><span class="float-end">{{ transaction.rate }}</span></td>
                             <td><span class="float-end">{{ transaction.fee }}</span></td>
-                            <td><span class="float-end"><button [routerLink]="'/position/' + position.id + '/transaction-form/' + transaction.id" type="button" class="btn btn-sm btn-outline-primary" tooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
+                            <td *ngIf="!position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/transaction-form/' + transaction.id" type="button" class="btn btn-sm btn-outline-primary" tooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
+                            <td *ngIf="position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/cash-transaction-form/' + transaction.id" type="button" class="btn btn-sm btn-outline-primary" tooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
                             <td><span class="float-end"><button (click)="openModal(template, transaction)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></span></td>
                         </tr>
                         </tbody>

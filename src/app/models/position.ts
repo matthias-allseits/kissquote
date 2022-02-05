@@ -29,6 +29,8 @@ export class Position {
     public getName(): string {
         if (this.share && this.share.name) {
             return this.share.name;
+        } else if (this.currency && this.currency.name) {
+            return this.currency.name;
         } else {
             return 'undefined';
         }
@@ -59,8 +61,14 @@ export class Position {
 
 
     public actualValue(): string|null {
-        if (this.balance && this.balance.lastRate) {
-            return (this.balance.amount * this.balance.lastRate.rate).toFixed(0)
+        if (!this.isCash) {
+            if (this.balance && this.balance.lastRate) {
+                return (this.balance.amount * this.balance.lastRate.rate).toFixed(0)
+            }
+        } else {
+            if (this.balance && this.balance.cashValue) {
+                return this.balance?.cashValue.toString();
+            }
         }
 
         return null;

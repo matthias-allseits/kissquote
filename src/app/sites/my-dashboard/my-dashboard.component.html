@@ -15,11 +15,11 @@
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
                         <button [routerLink]="['/bank-account-form/' + bankAccount.id]" type="button" class="btn btn-sm btn-outline-primary">Edit Bank-Account</button>
-                        <button [routerLink]="['/bank-account/' + accountIndex + '/position-form']" type="button" class="btn btn-sm btn-outline-primary">Add Position</button>
+                        <button *ngIf="bankAccount.positions.length > 0" [routerLink]="['/bank-account/' + accountIndex + '/position-form']" type="button" class="btn btn-sm btn-outline-primary">Add Position</button>
                         <button [routerLink]="['/bank-account/' + accountIndex + '/cash-position-form']" type="button" class="btn btn-sm btn-outline-primary">Add Cash-Position</button>
                         <ng-container *ngIf="bankAccount.positions.length === 0">
                             <button type="button" class="btn btn-sm btn-outline-primary">Import Transactions</button>
-                            <button (click)="openAccountConfirmModal(baTemplate, bankAccount)" type="button" class="btn btn-sm btn-outline-primary">Delete Bankaccount</button>
+                            <button *ngIf="portfolio.bankAccounts.length > 1" (click)="openAccountConfirmModal(baTemplate, bankAccount)" type="button" class="btn btn-sm btn-outline-primary">Delete Bankaccount</button>
                         </ng-container>
                     </div>
                 </div>
@@ -29,6 +29,7 @@
                     <thead>
                         <tr>
                             <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
+                            <th scope="col" style="width: 105px;"><span class="float-end">Value</span></th>
                             <th scope="col" style="width: 105px;">Active From</th>
                             <th scope="col" style="width: 105px;">Active Until</th>
                             <th scope="col" style="width: 105px;">Transactions</th>
@@ -40,11 +41,12 @@
                     <tbody>
                         <tr *ngFor="let position of bankAccount.getCashPositions()">
                             <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
+                            <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>
                             <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
                             <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
                             <td class="text-center">{{ position.transactions.length }}</td>
                             <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                            <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>
+                            <td><button [routerLink]="'/position/' + position.id + '/cash-transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>
                             <td><button (click)="openPositionConfirmModal(template, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                         </tr>
                     </tbody>
@@ -55,6 +57,7 @@
                     <thead>
                         <tr>
                             <th scope="col" style="width: 40%;">{{ tranService.trans('GLOB_SHARE') }}</th>
+                            <th scope="col" style="width: 105px;"><span class="float-end">Value</span></th>
                             <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
                             <th scope="col" style="width: 105px;">Active From</th>
                             <th scope="col" style="width: 105px;">Active Until</th>
@@ -67,6 +70,7 @@
                     <tbody>
                         <tr *ngFor="let position of bankAccount.getNonCashPositions()">
                             <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
+                            <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>
                             <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
                             <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
                             <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>

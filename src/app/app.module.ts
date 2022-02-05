@@ -36,6 +36,7 @@ import {NgChartsModule} from "ng2-charts";
 import { BarChartComponent } from './components/bar-chart/bar-chart.component';
 import { LineChartComponent } from './components/line-chart/line-chart.component';
 import { CashPositionFormComponent } from './sites/cash-position-form/cash-position-form.component';
+import { CashTransactionFormComponent } from './sites/cash-transaction-form/cash-transaction-form.component';
 registerLocaleData(localeCH);
 
 
@@ -61,6 +62,7 @@ registerLocaleData(localeCH);
         BarChartComponent,
         LineChartComponent,
         CashPositionFormComponent,
+        CashTransactionFormComponent,
     ],
     imports: [
         BrowserModule,

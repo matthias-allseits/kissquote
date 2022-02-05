@@ -15,6 +15,7 @@ import {BankAccountFormComponent} from "./sites/bank-account-form/bank-account-f
 import {FeedbackComponent} from "./sites/feedback/feedback.component";
 import {TransactionFormComponent} from "./sites/transaction-form/transaction-form.component";
 import {CashPositionFormComponent} from "./sites/cash-position-form/cash-position-form.component";
+import {CashTransactionFormComponent} from "./sites/cash-transaction-form/cash-transaction-form.component";
 
 
 const routes: Routes = [
@@ -34,6 +35,8 @@ const routes: Routes = [
     { path: 'bank-account/:aid/cash-position-form', component: CashPositionFormComponent },
     { path: 'position/:pid/transaction-form/:id', component: TransactionFormComponent },
     { path: 'position/:pid/transaction-form', component: TransactionFormComponent },
+    { path: 'position/:pid/cash-transaction-form/:id', component: CashTransactionFormComponent },
+    { path: 'position/:pid/cash-transaction-form', component: CashTransactionFormComponent },
     { path: 'bank-account-form/:id', component: BankAccountFormComponent },
     { path: 'bank-account-form', component: BankAccountFormComponent },
     { path: 'feedback', component: FeedbackComponent }
