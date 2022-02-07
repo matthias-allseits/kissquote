@@ -6,7 +6,7 @@ export class Transaction {
         public id: number,
         public position: Position|null,
         public title: string = '',
-        public date: Date,
+        public date: Date|string,
         public quantity: number,
         public rate: number|null,
         public fee: number|null,

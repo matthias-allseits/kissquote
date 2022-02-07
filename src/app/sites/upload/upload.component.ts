@@ -9,6 +9,11 @@ import {Dividend} from "../../models/dividend";
 import {DividendCreator} from "../../creators/dividend-creator";
 import {Currency} from "../../models/currency";
 import {Share} from "../../models/share";
+import {ShareheadService} from "../../services/sharehead.service";
+import {ShareheadShare} from "../../models/sharehead-share";
+import {PortfolioService} from "../../services/portfolio.service";
+import {Portfolio} from "../../models/portfolio";
+import {PositionService} from "../../services/position.service";
 
 
 export interface ParsedTransaction {
@@ -26,6 +31,7 @@ export interface ParsedTransaction {
     accountTotal: number;
     saldo: number;
     accountCurrencyName: string;
+    shareheadId: number;
 }
 
 @Component({
@@ -47,13 +53,22 @@ export class UploadComponent implements OnInit {
     public dividends: Dividend[] = [];
     public resolvedActions = 0;
     public veryBadThingsHappend = 0;
+    private shareheadShares: ShareheadShare[] = [];
 
     constructor(
-        public tranService: TranslationService
+        public tranService: TranslationService,
+        private shareheadService: ShareheadService,
+        private portfolioService: PortfolioService,
+        private positionService: PositionService,
     ) {
     }
 
     ngOnInit(): void {
+        this.shareheadService.getAllShares()
+            .subscribe(shares => {
+                console.log(shares);
+                this.shareheadShares = shares;
+            });
     }
 
 
@@ -73,8 +88,31 @@ export class UploadComponent implements OnInit {
     }
 
     submitResult(): void {
-        // todo: send resulting positions and dividends to the backend
+        console.log(this.cashPositions);
+        console.log(this.openPositions);
+        console.log(this.closedPositions);
+
+        const portfolio = new Portfolio(0, null, null, null, []);
+        this.portfolioService.create(portfolio)
+            .subscribe(returnedPortfolio => {
+                console.log(returnedPortfolio);
+                if (null !== returnedPortfolio && null !== returnedPortfolio.hashKey) {
+                    localStorage.setItem('my-key', returnedPortfolio.hashKey);
+                    this.cashPositions.forEach(position => {
+                        position.bankAccount = returnedPortfolio.bankAccounts[0];
+                        this.positionService.createCashPosition(position)
+                            .subscribe(position => {
+
+                            });
+                    });
+                }
+            });
+
+
+
+        // todo: send user to his dashboard!
     }
+
 
     private parseContent(content: any): void {
         // todo: implement a validation of the content
@@ -123,6 +161,7 @@ export class UploadComponent implements OnInit {
                 accountTotal: +cells[12],
                 saldo: +cells[13],
                 accountCurrencyName: cells[14],
+                shareheadId: 0,
             }
         } else {
             return {
@@ -140,6 +179,7 @@ export class UploadComponent implements OnInit {
                 accountTotal: +cells[10],
                 saldo: +cells[11],
                 accountCurrencyName: cells[12],
+                shareheadId: 0,
             }
         }
     }
@@ -204,6 +244,9 @@ export class UploadComponent implements OnInit {
                         position.share = share;
                         position.currency = currency;
                         position.activeFrom = parsedAction.date;
+                        if (share.isin) {
+                            position.shareheadId = this.getShareheadIdByIsin(share.isin);
+                        }
                         this.allPositions.push(position);
                     }
 
@@ -308,7 +351,7 @@ export class UploadComponent implements OnInit {
 
 
     private getPositionByIsin(isin: string, mustBeActive = true): Position|null {
-        let hit = null;
+        let hit: Position|null = null;
         this.allPositions.forEach(position => {
             if (mustBeActive) {
                 if (position.share?.isin == isin && position.active) {
@@ -362,6 +405,7 @@ export class UploadComponent implements OnInit {
         if (null === hit) {
             hit = CurrencyCreator.createNewCurrency();
             hit.name = name;
+            hit.rate = 1;
             this.allCurrencies.push(hit);
         }
 
@@ -416,6 +460,18 @@ export class UploadComponent implements OnInit {
         }
 
         position.transactions.push(transaction);
+    }
+
+
+    private getShareheadIdByIsin(isin: string): number {
+        let id = 0;
+        this.shareheadShares.forEach(share => {
+            if (isin === share.isin) {
+                id = share.id;
+            }
+        });
+
+        return id;
     }
 
 }
