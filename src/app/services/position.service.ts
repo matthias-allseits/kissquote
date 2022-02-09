@@ -52,6 +52,9 @@ export class PositionService {
 
     create(position: Position): Observable<Position|null> {
         position.activeFrom = DateHelper.convertDateToMysql(position.activeFrom);
+        position.transactions.forEach(transaction => {
+            transaction.date = DateHelper.convertDateToMysql(transaction.date);
+        });
         const url = `${this.baseUrl}`;
         return this.http
             .post(url, JSON.stringify(position), httpOptions)

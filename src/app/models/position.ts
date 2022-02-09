@@ -48,7 +48,7 @@ export class Position {
     }
 
 
-    public valuation(): number {
+    public cashValuation(): number {
         let value = 0;
         this.transactions.forEach(transaction => {
             if (transaction.rate) {

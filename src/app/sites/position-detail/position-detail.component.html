@@ -197,7 +197,8 @@
                     <h4 class="pt-2">Transactions</h4>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group me-2">
-                            <button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary">Add Transaction</button>
+                            <button *ngIf="!position.isCash" [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary">Add Transaction</button>
+                            <button *ngIf="position.isCash" [routerLink]="'/position/' + position.id + '/cash-transaction-form'" type="button" class="btn btn-sm btn-outline-primary">Add Transaction</button>
                         </div>
                     </div>
                 </div>

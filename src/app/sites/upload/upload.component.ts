@@ -105,6 +105,13 @@ export class UploadComponent implements OnInit {
 
                             });
                     });
+                    // this.openPositions.forEach(position => {
+                    //     position.bankAccount = returnedPortfolio.bankAccounts[0];
+                    //     this.positionService.create(position)
+                    //         .subscribe(position => {
+                    //
+                    //         });
+                    // });
                 }
             });
 
@@ -195,7 +202,7 @@ export class UploadComponent implements OnInit {
                 case 'Vergütung':
                 case 'Fx-Gutschrift Comp.':
                 case 'Forex-Gutschrift':
-                case 'Zins':
+                // case 'Zins':
                 case 'Einzahlung':
                     this.addCashTransaction(parsedAction);
                     this.resolvedActions++;
@@ -253,6 +260,7 @@ export class UploadComponent implements OnInit {
                     if (parsedAction.title === 'Kauf') {
                         parsedAction.quantity = -1;
                         parsedAction.isin = '';
+                        parsedAction.fee = 0;
                         parsedAction.rate = parsedAction.accountTotal * -1;
                         this.addCashTransaction(parsedAction);
                     }
@@ -263,6 +271,7 @@ export class UploadComponent implements OnInit {
                 case 'Auszahlung':
                 case 'Fx-Belastung Comp.':
                 case 'Forex-Belastung':
+                case 'Zins':
                 case 'Depotgebühren':
                     position = this.getCashPositionByName(parsedAction.currencyName);
 
@@ -307,6 +316,7 @@ export class UploadComponent implements OnInit {
                     if (parsedAction.title === 'Verkauf') {
                         parsedAction.quantity = 1;
                         parsedAction.isin = '';
+                        parsedAction.fee = 0;
                         parsedAction.rate = parsedAction.accountTotal;
                         this.addCashTransaction(parsedAction);
                     }
@@ -335,6 +345,7 @@ export class UploadComponent implements OnInit {
 
                     parsedAction.quantity = 1;
                     parsedAction.isin = '';
+                    parsedAction.fee = 0;
                     parsedAction.rate = parsedAction.accountTotal;
                     this.addCashTransaction(parsedAction);
 

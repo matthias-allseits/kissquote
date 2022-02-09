@@ -24,7 +24,7 @@
         <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
         <td *ngIf="!cash"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
         <td class="text-center">{{ position.transactions.length }}</td>
-        <td><span *ngIf="position.isCash" class="float-end">{{ position.valuation()|number: '1.0-2' }}</span></td>
+        <td><span *ngIf="position.isCash" class="float-end">{{ position.cashValuation()|number: '1.0-2' }}</span></td>
     </tr>
     </tbody>
 </table>
