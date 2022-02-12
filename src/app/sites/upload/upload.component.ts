@@ -14,6 +14,9 @@ import {ShareheadShare} from "../../models/sharehead-share";
 import {PortfolioService} from "../../services/portfolio.service";
 import {Portfolio} from "../../models/portfolio";
 import {PositionService} from "../../services/position.service";
+import {MarketplaceService} from "../../services/marketplace.service";
+import {Marketplace} from "../../models/marketplace";
+import {Transaction} from "../../models/transaction";
 
 
 export interface ParsedTransaction {
@@ -54,12 +57,14 @@ export class UploadComponent implements OnInit {
     public resolvedActions = 0;
     public veryBadThingsHappend = 0;
     private shareheadShares: ShareheadShare[] = [];
+    private marketplaces: Marketplace[] = [];
 
     constructor(
         public tranService: TranslationService,
         private shareheadService: ShareheadService,
         private portfolioService: PortfolioService,
         private positionService: PositionService,
+        private marketplaceService: MarketplaceService,
     ) {
     }
 
@@ -68,6 +73,11 @@ export class UploadComponent implements OnInit {
             .subscribe(shares => {
                 console.log(shares);
                 this.shareheadShares = shares;
+            });
+        this.marketplaceService.getAllMarketplaces()
+            .subscribe(marketplaces => {
+                console.log(marketplaces);
+                this.marketplaces = marketplaces.reverse();
             });
     }
 
@@ -105,13 +115,13 @@ export class UploadComponent implements OnInit {
 
                             });
                     });
-                    // this.openPositions.forEach(position => {
-                    //     position.bankAccount = returnedPortfolio.bankAccounts[0];
-                    //     this.positionService.create(position)
-                    //         .subscribe(position => {
-                    //
-                    //         });
-                    // });
+                    this.openPositions.forEach(position => {
+                        position.bankAccount = returnedPortfolio.bankAccounts[0];
+                        this.positionService.create(position)
+                            .subscribe(position => {
+
+                            });
+                    });
                 }
             });
 
@@ -224,6 +234,7 @@ export class UploadComponent implements OnInit {
                         transaction = TransactionCreator.createNewTransaction();
                         transaction.title = 'Split';
                         transaction.date = parsedAction.date;
+                        transaction.rate = parsedAction.rate;
                         transaction.quantity = parsedAction.quantity;
                         position.transactions.push(transaction);
                         this.resolvedActions++;
@@ -436,6 +447,7 @@ export class UploadComponent implements OnInit {
             hit.name = parsedTransaction.name;
             hit.isin = parsedTransaction.isin.length > 0 ? parsedTransaction.isin : null;
             hit.shortname = parsedTransaction.symbol;
+            hit.marketplace = this.getMarketplaceByTransaction(parsedTransaction);
             this.allShares.push(hit);
         }
 
@@ -483,6 +495,20 @@ export class UploadComponent implements OnInit {
         });
 
         return id;
+    }
+
+
+    private getMarketplaceByTransaction(transaction: ParsedTransaction): Marketplace {
+        let hit = this.marketplaces[this.marketplaces.length -1];
+        const currencyName = transaction.currencyName
+        const isinKey = transaction.isin.substring(0, 2);
+        this.marketplaces.forEach(marketplace => {
+            if (marketplace.isinKey == isinKey && marketplace.currency == currencyName) {
+                hit = marketplace;
+            }
+        });
+
+        return hit;
     }
 
 }

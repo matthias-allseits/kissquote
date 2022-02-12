@@ -4,6 +4,7 @@
         <th scope="col" style="width: 35px;">#</th>
         <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
         <th *ngIf="!cash" scope="col">Sharehead-ID</th>
+        <th *ngIf="!cash" scope="col">Marketplace</th>
         <th *ngIf="!cash" scope="col">ISIN</th>
         <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
         <th *ngIf="!cash" scope="col" class="text-center" style="width: 105px;">Anzahl</th>
@@ -18,6 +19,7 @@
         <td>{{ i + 1 }}</td>
         <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
         <td *ngIf="!cash">{{ position.shareheadId }}</td>
+        <td *ngIf="!cash"><span *ngIf="position.share">{{ position.share.marketplace?.getName() }}</span></td>
         <td *ngIf="!cash"><span *ngIf="position.share">{{ position.share.isin }}</span></td>
         <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
         <td *ngIf="!cash" class="text-center">{{ position.quantityTotal() }}</td>
