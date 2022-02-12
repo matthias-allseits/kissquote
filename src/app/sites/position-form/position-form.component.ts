@@ -72,6 +72,14 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                         console.log(position);
                         if (position instanceof Position) {
                             this.position = position;
+                            this.positionForm.get('shareName')?.setValue(position.share?.name);
+                            this.positionForm.get('isin')?.setValue(position.share?.isin);
+                            this.marketplaces.forEach(marketplace => {
+                                if (position.share?.marketplace && position.share?.marketplace.id === marketplace.id) {
+                                    this.positionForm.get('marketplace')?.setValue(marketplace);
+                                }
+                            });
+                            this.setCurrency();
                         }
                     });
             } else {
@@ -105,10 +113,10 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         this.position.share = newShare;
         console.log(this.position);
         if (this.position.id > 0) {
-            // this.positionService.update(this.position)
-            //     .subscribe(position => {
-            //         this.router.navigate(['my-dashboard']);
-            //     });
+            this.positionService.update(this.position)
+                .subscribe(position => {
+                    this.router.navigate(['my-dashboard']);
+                });
         } else {
             this.positionService.create(this.position)
                 .subscribe(position => {
@@ -136,6 +144,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
             .subscribe(currencies => {
                 console.log(currencies);
                 this.currencies = currencies;
+                this.setCurrency();
             });
         this.shareheadService.getAllShares()
             .subscribe(shares => {
@@ -146,6 +155,19 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
             .subscribe(places => {
                 this.marketplaces = places;
             });
+    }
+
+
+    private setCurrency(): void {
+        console.log('set currency');
+        this.currencies.forEach(currency => {
+            // console.log(position.currency?.name);
+            // console.log(currency.name);
+            if (this.position.currency?.name === currency.name) {
+                console.log('hit');
+                this.positionForm.get('currency')?.setValue(currency);
+            }
+        });
     }
 
 }

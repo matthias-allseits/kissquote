@@ -1,7 +1,7 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
 import {Portfolio} from '../../models/portfolio';
 import {PortfolioService} from '../../services/portfolio.service';
-import {faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
+import {faEdit, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {TranslationService} from "../../services/translation.service";
 import {Position} from "../../models/position";
@@ -21,6 +21,7 @@ export class MyDashboardComponent implements OnInit {
     eyeIcon = faEye;
     deleteIcon = faTrashAlt;
     addIcon = faPlus;
+    editIcon = faEdit;
 
     public myKey: string|null = null;
     // todo: the portfolio has to be ready at this time. probably the solution: resolvers!

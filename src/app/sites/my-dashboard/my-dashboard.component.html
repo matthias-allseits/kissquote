@@ -76,7 +76,8 @@
                             <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
                             <td class="text-center">{{ position.transactions.length }}</td>
                             <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                            <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>
+<!--                            <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>-->
+                            <td><button [routerLink]="['/bank-account/' + accountIndex + '/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Edit Position"><fa-icon [icon]="editIcon"></fa-icon></button></td>
                             <td><button (click)="openPositionConfirmModal(template, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                         </tr>
                     </tbody>

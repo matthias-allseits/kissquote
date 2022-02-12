@@ -80,6 +80,18 @@ export class PositionService {
     }
 
 
+    update(position: Position): Observable<Position|null> {
+        position.activeFrom = DateHelper.convertDateToMysql(position.activeFrom);
+        const url = `${this.baseUrl}/${position.id}`;
+        return this.http
+            .put(url, JSON.stringify(position), httpOptions)
+            .pipe(
+                map(() => position),
+                // catchError(this.handleError)
+            );
+    }
+
+
     delete(id: number): Observable<Object> {
         const url = `${this.baseUrl}/${id}`;
         return this.http.delete(url, httpOptions)

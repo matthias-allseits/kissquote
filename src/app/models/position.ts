@@ -40,8 +40,19 @@ export class Position {
     // todo: this is crap
     public quantityTotal(): number {
         let quantity = 0;
-        this.transactions.forEach(transaction => {
-            quantity += transaction.quantity;
+        let ignoreNext = false;
+        this.transactions.forEach((transaction, i) => {
+            if (!ignoreNext) {
+                if (transaction.title === 'Kauf' || transaction.title === 'Verkauf') {
+                    quantity += transaction.quantity;
+                } else if (transaction.title === 'Split') {
+                    const splitRatio = transaction.quantity / this.transactions[i + 1].quantity;
+                    quantity *= splitRatio;
+                    ignoreNext = true;
+                }
+            } else {
+                ignoreNext = false;
+            }
         });
 
         return quantity;
@@ -108,7 +119,7 @@ export class Position {
             datasets: [
                 {
                     data: historicRates,
-                    label: 'Kurs seit Start',
+                    label: 'Kurs seit Start der Position',
                     backgroundColor: 'rgba(255,102,51,0)',
                     borderColor: '#ff6633',
                     pointBackgroundColor: '#c9461a',

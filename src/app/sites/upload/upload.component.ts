@@ -345,6 +345,7 @@ export class UploadComponent implements OnInit {
                         console.warn('das ist aber gar nicht gut weil die Dividende keiner Position zugewiesen werden kann: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
                         this.veryBadThingsHappend++;
                     } else {
+                        // todo: dividends obsolete?
                         const dividend = DividendCreator.createNewDividend();
                         dividend.share = position.share;
                         dividend.date = parsedAction.date;
@@ -352,6 +353,14 @@ export class UploadComponent implements OnInit {
                         dividend.valueNet = parsedAction.rate;
                         dividend.valueGross = parsedAction.fee;
                         this.resolvedActions++;
+
+                        transaction = TransactionCreator.createNewTransaction();
+                        transaction.title = parsedAction.title;
+                        transaction.date = parsedAction.date;
+                        transaction.quantity = parsedAction.quantity;
+                        transaction.fee = parsedAction.fee;
+                        transaction.rate = parsedAction.rate;
+                        position.transactions.push(transaction);
                     }
 
                     parsedAction.quantity = 1;
