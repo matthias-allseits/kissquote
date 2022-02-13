@@ -43,6 +43,10 @@ export class AppComponent implements OnInit {
         document.location.href = '/';
     }
 
+    public gotoFeedback(): void {
+        this.showUsersMenu = false;
+    }
+
     public handleHomeClick(): void {
         if (this.myKey === null) {
             document.location.href = '/';

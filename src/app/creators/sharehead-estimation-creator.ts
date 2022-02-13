@@ -1,15 +1,15 @@
-import {ShareheadBalance} from "../models/sharehead-balance";
 import {CurrencyCreator} from "./currency-creator";
+import {ShareheadEstimation} from "../models/sharehead-estimation";
 
 
-export class ShareheadBalanceCreator {
+export class ShareheadEstimationCreator {
 
-    public static fromApiArray(apiArray: ShareheadBalance[]): ShareheadBalance[] {
-        const array: ShareheadBalance[] = [];
+    public static fromApiArray(apiArray: ShareheadEstimation[]): ShareheadEstimation[] {
+        const array: ShareheadEstimation[] = [];
 
         for (const balanceList of apiArray) {
             const balance = this.oneFromApiArray(balanceList);
-            if (balance instanceof ShareheadBalance) {
+            if (balance instanceof ShareheadEstimation) {
                 array.push(balance);
             }
         }
@@ -19,10 +19,10 @@ export class ShareheadBalanceCreator {
     }
 
 
-    public static oneFromApiArray(apiArray: ShareheadBalance|null): ShareheadBalance|null
+    public static oneFromApiArray(apiArray: ShareheadEstimation|null): ShareheadEstimation|null
     {
         if (apiArray !== undefined && apiArray !== null) {
-            return new ShareheadBalance(
+            return new ShareheadEstimation(
                 new Date(apiArray.date),
                 apiArray.year,
                 CurrencyCreator.oneFromApiArray(apiArray.currency),

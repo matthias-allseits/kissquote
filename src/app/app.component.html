@@ -9,11 +9,11 @@
 
         <div *ngIf="myKey !== null" class="dropdown" style="margin-right: 15px;">
             <button (click)="toggleUsersMenu()" [class.show]="showUsersMenu" class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                Global dropdown
+                Mein Menu
             </button>
             <ul [class.show]="showUsersMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li><a (click)="logout()" class="dropdown-item" href="#">Logout</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a (click)="gotoFeedback()" routerLink="feedback" class="dropdown-item" href="#">Feedback</a></li>
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
         </div>

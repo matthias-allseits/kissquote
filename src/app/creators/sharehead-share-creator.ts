@@ -37,6 +37,7 @@ export class ShareheadShareCreator {
                 apiArray.urlInvesting,
                 apiArray.urlFinanztreff,
                 apiArray.balances ? ShareheadBalanceCreator.fromApiArray(apiArray.balances) : [],
+                apiArray.estimations ? ShareheadBalanceCreator.fromApiArray(apiArray.estimations) : [],
             );
         } else {
             return null;

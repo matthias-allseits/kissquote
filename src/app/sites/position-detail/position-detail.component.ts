@@ -11,6 +11,11 @@ import {ShareheadShare} from "../../models/sharehead-share";
 import {ChartData, ChartDataset} from "chart.js";
 
 
+export interface DividendProjection {
+    year: Date;
+    projection: string;
+}
+
 @Component({
     selector: 'app-position-detail',
     templateUrl: './position-detail.component.html',
@@ -24,6 +29,7 @@ export class PositionDetailComponent implements OnInit {
     public position: Position|null = null;
     public selectedTransaction?: Transaction;
     public shareheadShare?: ShareheadShare;
+    public diviProjectionYears: DividendProjection[] = [];
     modalRef?: BsModalRef;
 
     public chartData?: ChartDataset[];
@@ -97,6 +103,28 @@ export class PositionDetailComponent implements OnInit {
                             if (share) {
                                 this.shareheadShare = share;
                                 console.log(this.shareheadShare);
+                                if (this.position?.balance) {
+                                    const nextYear = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
+                                    const nextYearDiviProjection = share.dividendProjectionForYear(nextYear);
+                                    const nextYearP1 = new Date(new Date().setFullYear(new Date().getFullYear() + 2));
+                                    const nextYearDiviProjectionP1 = share.dividendProjectionForYear(nextYearP1);
+                                    const nextYearP2 = new Date(new Date().setFullYear(new Date().getFullYear() + 3));
+                                    const nextYearDiviProjectionP2 = share.dividendProjectionForYear(nextYearP2);
+                                    this.diviProjectionYears = [
+                                        {
+                                            year: nextYear,
+                                            projection: 'by analyst-estimations: ' + ((nextYearDiviProjection * this.position?.balance?.amount).toFixed()).toString()
+                                        },
+                                        {
+                                            year: nextYearP1,
+                                            projection: 'by analyst-estimations: ' + ((nextYearDiviProjectionP1 * this.position?.balance?.amount).toFixed()).toString()
+                                        },
+                                        {
+                                            year: nextYearP2,
+                                            projection: 'by analyst-estimations: ' + ((nextYearDiviProjectionP2 * this.position?.balance?.amount).toFixed()).toString()
+                                        },
+                                    ];
+                                }
                             }
                         })
                 }

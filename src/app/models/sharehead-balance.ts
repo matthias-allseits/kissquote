@@ -4,6 +4,7 @@ import {Currency} from "./currency";
 export class ShareheadBalance {
 
     constructor(
+    public date: Date,
     public year: number,
     public currency: Currency|null,
     public sales: number,

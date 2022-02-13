@@ -37,6 +37,29 @@ export class Position {
     }
 
 
+    daysSinceStart(): number
+    {
+        let currentDate = new Date();
+
+        if (this.activeFrom instanceof Date) {
+            // yes i know, not every day has 24 hours. i do not care...
+            return Math.floor((Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) - Date.UTC(this.activeFrom.getFullYear(), this.activeFrom.getMonth(), this.activeFrom.getDate()) ) /(1000 * 60 * 60 * 24));
+        }
+
+        return 1;
+    }
+
+
+    profitPerDay(): string
+    {
+        if (this.balance && this.balance.lastRate) {
+            return ((((this.balance.amount * this.balance.lastRate.rate) - this.balance.investment) + this.balance?.collectedDividends) / this.daysSinceStart()).toFixed(1);
+        }
+
+        return 'n.v.';
+    }
+
+
     // todo: this is crap
     public quantityTotal(): number {
         let quantity = 0;

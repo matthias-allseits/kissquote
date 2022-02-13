@@ -1,5 +1,6 @@
 import {Currency} from "./currency";
 import {ShareheadBalance} from "./sharehead-balance";
+import {ShareheadEstimation} from "./sharehead-estimation";
 
 
 export class ShareheadShare {
@@ -19,6 +20,33 @@ export class ShareheadShare {
         public urlInvesting?: string,
         public urlFinanztreff?: string,
         public balances?: ShareheadBalance[],
+        public estimations?: ShareheadEstimation[],
     ) { }
+
+
+    dividendProjectionForYear(year: Date): number
+    {
+        const estimation = this.lastEstimationForYear(year);
+        if (estimation) {
+            return estimation.dividend;
+        }
+
+        return 0;
+    }
+
+
+    lastEstimationForYear(year: Date): ShareheadEstimation|null
+    {
+        let hit = null;
+        if (this.estimations) {
+            this.estimations.forEach(estimation => {
+                if (estimation.year === year.getFullYear()) {
+                    hit = estimation;
+                }
+            });
+        }
+
+        return hit;
+    }
 
 }
