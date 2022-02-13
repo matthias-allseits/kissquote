@@ -18,7 +18,12 @@
 <!--            </div>-->
             <div class="mb-3">
                 <label for="shareName" class="form-label">Name: </label>
-                <input id="shareName" type="text" class="form-control" formControlName="shareName">
+                <input (keyup)="searchShare($event)" id="shareName" type="text" class="form-control" formControlName="shareName">
+                <div *ngIf="selectableShares && selectableShares.length > 0" class="dropdown">
+                    <ul class="dropdown-menu show">
+                        <li *ngFor="let share of selectableShares"><a (click)="selectShare(share)" class="dropdown-item">{{ share.name }}</a></li>
+                    </ul>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="isin" class="form-label">ISIN: </label>

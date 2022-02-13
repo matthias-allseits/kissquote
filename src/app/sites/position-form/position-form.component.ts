@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {PositionService} from '../../services/position.service';
 import {Position} from '../../models/position';
@@ -14,7 +14,6 @@ import {TranslationService} from "../../services/translation.service";
 import {PortfolioService} from "../../services/portfolio.service";
 import {Portfolio} from "../../models/portfolio";
 import {BankAccount} from "../../models/bank-account";
-import {TypeaheadMatch} from "ngx-bootstrap/typeahead";
 import {MarketplaceService} from "../../services/marketplace.service";
 import {Marketplace} from "../../models/marketplace";
 import {ShareCreator} from "../../creators/share-creator";
@@ -36,12 +35,13 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
     public marketplaces: Marketplace[] = [];
     public currencies: Currency[] = [];
     public shareheadShares?: ShareheadShare[];
+    public selectableShares?: Share[];
 
     positionForm = new FormGroup({
-        shareName: new FormControl(''),
-        isin: new FormControl(''),
-        marketplace: new FormControl(''),
-        currency: new FormControl(''),
+        shareName: new FormControl('', Validators.required),
+        isin: new FormControl('', Validators.required),
+        marketplace: new FormControl('', Validators.required),
+        currency: new FormControl('', Validators.required),
     });
 
     constructor(
@@ -74,11 +74,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                             this.position = position;
                             this.positionForm.get('shareName')?.setValue(position.share?.name);
                             this.positionForm.get('isin')?.setValue(position.share?.isin);
-                            this.marketplaces.forEach(marketplace => {
-                                if (position.share?.marketplace && position.share?.marketplace.id === marketplace.id) {
-                                    this.positionForm.get('marketplace')?.setValue(marketplace);
-                                }
-                            });
+                            this.setMarketplace();
                             this.setCurrency();
                         }
                     });
@@ -86,6 +82,35 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                 this.position = PositionCreator.createNewPosition();
             }
         });
+    }
+
+
+    searchShare(event: any): void {
+        console.log(event.target.value);
+        this.selectableShares = [];
+        if (event.target.value) {
+            this.swissquoteShares?.forEach(share => {
+                if (share.name && share.name.toLowerCase().indexOf(event.target.value) > -1) {
+                    this.selectableShares?.push(share);
+                }
+            });
+        }
+        console.log(this.selectableShares.length);
+    }
+
+
+    selectShare(share: Share): void {
+        console.log(share);
+        this.selectableShares = [];
+        this.positionForm.get('shareName')?.setValue(share.name);
+        this.positionForm.get('isin')?.setValue(share.isin);
+        this.position.share = share;
+        if (share.marketplace?.currency) {
+            const currency = this.currencyService.getCurrencyByName(this.currencies, share.marketplace.currency);
+            this.position.currency = currency;
+        }
+        this.setMarketplace();
+        this.setCurrency();
     }
 
     // onSelect(event: TypeaheadMatch): void {
@@ -146,11 +171,11 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                 this.currencies = currencies;
                 this.setCurrency();
             });
-        this.shareheadService.getAllShares()
-            .subscribe(shares => {
-                console.log(shares);
-                this.shareheadShares = shares;
-            });
+        // this.shareheadService.getAllShares()
+        //     .subscribe(shares => {
+        //         console.log(shares);
+        //         this.shareheadShares = shares;
+        //     });
         this.marketplaceService.getAllMarketplaces()
             .subscribe(places => {
                 this.marketplaces = places;
@@ -170,4 +195,11 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         });
     }
 
+    private setMarketplace(): void {
+        this.marketplaces.forEach(marketplace => {
+            if (this.position.share?.marketplace && this.position.share?.marketplace.id === marketplace.id) {
+                this.positionForm.get('marketplace')?.setValue(marketplace);
+            }
+        });
+    }
 }

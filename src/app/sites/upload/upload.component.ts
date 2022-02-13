@@ -116,11 +116,13 @@ export class UploadComponent implements OnInit {
                             });
                     });
                     this.openPositions.forEach(position => {
-                        position.bankAccount = returnedPortfolio.bankAccounts[0];
-                        this.positionService.create(position)
-                            .subscribe(position => {
+                        if (position.share?.isin) {
+                            position.bankAccount = returnedPortfolio.bankAccounts[0];
+                            this.positionService.create(position)
+                                .subscribe(position => {
 
-                            });
+                                });
+                        }
                     });
                 }
             });
