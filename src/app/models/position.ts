@@ -126,7 +126,7 @@ export class Position {
                     pointBorderColor: '#ff6633',
                     pointHoverBackgroundColor: '#fff',
                     pointHoverBorderColor: '#ff6633',
-                    fill: 'origin'
+                    fill: 'origin',
                 }
             ],
             labels: historicLabels
