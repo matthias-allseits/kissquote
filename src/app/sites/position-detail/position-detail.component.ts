@@ -32,7 +32,7 @@ export class PositionDetailComponent implements OnInit {
     public diviProjectionYears: DividendProjection[] = [];
     modalRef?: BsModalRef;
 
-    public chartData?: ChartDataset[];
+    public chartData?: ChartData;
     public lineChartData?: ChartData;
 
     constructor(
@@ -86,16 +86,19 @@ export class PositionDetailComponent implements OnInit {
                 console.log(position);
                 this.position = position;
                 if (this.position && this.position.balance) {
-                    this.chartData = [
-                        {
-                            label: 'Kosten',
-                            data: [this.position.balance.transactionFeesTotal]
-                        },
-                        {
-                            label: 'Einnahmen',
-                            data: [this.position.balance.collectedDividends]
-                        },
-                    ];
+                    this.chartData = {
+                        labels: [ 'Kosten vs Einnahmen' ],
+                        datasets: [
+                            {
+                                label: 'Kosten',
+                                data: [this.position.balance.transactionFeesTotal]
+                            },
+                            {
+                                label: 'Einnahmen',
+                                data: [this.position.balance.collectedDividends]
+                            },
+                        ]
+                    };
                 }
                 if (this.position && this.position.shareheadId && this.position.shareheadId > 0) {
                     this.shareheadService.getShare(this.position.shareheadId)
@@ -113,15 +116,15 @@ export class PositionDetailComponent implements OnInit {
                                     this.diviProjectionYears = [
                                         {
                                             year: nextYear,
-                                            projection: 'by analyst-estimations: ' + ((nextYearDiviProjection * this.position?.balance?.amount).toFixed()).toString()
+                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjection * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency()
                                         },
                                         {
                                             year: nextYearP1,
-                                            projection: 'by analyst-estimations: ' + ((nextYearDiviProjectionP1 * this.position?.balance?.amount).toFixed()).toString()
+                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP1 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency()
                                         },
                                         {
                                             year: nextYearP2,
-                                            projection: 'by analyst-estimations: ' + ((nextYearDiviProjectionP2 * this.position?.balance?.amount).toFixed()).toString()
+                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP2 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency()
                                         },
                                     ];
                                 }

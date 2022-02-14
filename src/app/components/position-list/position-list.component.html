@@ -23,8 +23,8 @@
         <td *ngIf="!cash"><span *ngIf="position.share">{{ position.share.isin }}</span></td>
         <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
         <td *ngIf="!cash" class="text-center">{{ position.quantityTotal() }}</td>
-        <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
-        <td *ngIf="!cash"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
+        <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
+        <td *ngIf="!cash"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
         <td class="text-center">{{ position.transactions.length }}</td>
         <td><span *ngIf="position.isCash" class="float-end">{{ position.cashValuation()|number: '1.0-2' }}</span></td>
     </tr>

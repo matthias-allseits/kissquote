@@ -2,7 +2,7 @@
     <div class="container px-4 py-2">
         <h1>Position {{ position.getName() }}</h1>
         <tabset [justified]="true">
-            <tab heading="Balance">
+            <tab heading="Balance" class="shadow-sm p-3 mb-5 bg-body rounded">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                     <h4 class="pt-2">Balance</h4>
                     <div class="btn-toolbar mb-2 mb-md-0">
@@ -14,7 +14,9 @@
                     </div>
                 </div>
                 <div>
-                    <app-bar-chart [data]="chartData"></app-bar-chart>
+                    <div class="info-box">
+                        <app-bar-chart [data]="chartData"></app-bar-chart>
+                    </div>
                     <app-line-chart [data]="lineChartData"></app-line-chart>
                 </div>
                 <div *ngIf="position.balance" class="info-box">
@@ -25,7 +27,7 @@
                     </div>
                     <div class="row">
                         <div class="col-9">Start:</div>
-                        <div class="col-3"><span class="float-end">{{ position.activeFrom|date:'dd.MM.YY' }}</span></div>
+                        <div class="col-3"><span class="float-end">{{ position.activeFrom|date:'dd.MM.y' }}</span></div>
                     </div>
                     <div class="row">
                         <div class="col-9">Currency:</div>
@@ -48,7 +50,7 @@
                         <div class="col-3"><span class="float-end"></span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Letzter Kurs<span *ngIf="position.balance.lastRate"> ({{ position.balance.lastRate.date|date: 'dd.MM.Y' }})</span>:</div>
+                        <div class="col-9">Letzter Kurs<span *ngIf="position.balance.lastRate"> ({{ position.balance.lastRate.date|date: 'dd.MM.y' }})</span>:</div>
                         <div class="col-3"><span *ngIf="position.balance.lastRate" class="float-end">{{ position.balance.lastRate.rate }}</span></div>
                     </div>
                     <div class="row">
@@ -83,7 +85,7 @@
                         <div class="col-3"><span class="float-end">{{ position.balance.returnOnInvestentByDividends() }}%</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Next Dividend:</div>
+                        <div class="col-9">Last Payment:</div>
                         <div class="col-3"><span class="float-end">{{ position.balance.projectedNextDividendPayment }}</span></div>
                     </div>
                     <div class="row">
@@ -101,8 +103,8 @@
                     </div>
                     <h5 style="margin-top: 15px;">Dividend projections</h5>
                     <div *ngFor="let projection of diviProjectionYears" class="row">
-                        <div class="col-3">{{ projection.year|date:'YYYY' }}:</div>
-                        <div class="col-9"><span class="float-end">{{ projection.projection }}</span></div>
+                        <div class="col-2">{{ projection.year|date:'y' }}:</div>
+                        <div class="col-10"><span class="float-end">{{ projection.projection }}</span></div>
                     </div>
                 </div>
                 <div *ngIf="position.balance" class="info-box">
@@ -113,7 +115,7 @@
                     </div>
                 </div>
             </tab>
-            <tab heading="Sharehead Infos">
+            <tab heading="Sharehead Infos" class="shadow-sm p-3 mb-5 bg-body rounded">
                 <ng-container *ngIf="shareheadShare">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                         <h4 class="pt-2">Sharehead Infos</h4>
@@ -129,6 +131,12 @@
                                     <a href="{{ shareheadShare.urlInvesting }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary">investing.com</a>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-box info-box-lg">
+                            <h5>Sales (in Mio. {{ shareheadShare.balancesCurrency() }})</h5>
+                            <app-bar-chart [data]="shareheadShare.salesChartData()" [height]="150"></app-bar-chart>
                         </div>
                     </div>
                     <div class="info-box">
@@ -170,7 +178,7 @@
                         </div>
                         <div class="row">
                             <div class="col-9">Fin. year ends:</div>
-                            <div class="col-3"><span class="float-end">{{ shareheadShare.financialYearEndDate|date:'dd.MM.YY' }}</span></div>
+                            <div class="col-3"><span class="float-end">{{ shareheadShare.financialYearEndDate|date:'dd.MM.y' }}</span></div>
                         </div>
                     </div>
                     <div class="info-box">
@@ -185,7 +193,7 @@
                     Verbinden Sie Ihre Position mit einem Sharehead-Share
                 </ng-container>
             </tab>
-            <tab heading="Transactions">
+            <tab heading="Transactions" class="shadow-sm p-3 mb-5 bg-body rounded">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                     <h4 class="pt-2">Transactions</h4>
                     <div class="btn-toolbar mb-2 mb-md-0">
@@ -210,7 +218,7 @@
                         </thead>
                         <tbody>
                         <tr *ngFor="let transaction of position.transactions">
-                            <td>{{ transaction.date|date:'dd.MM.Y' }}</td>
+                            <td>{{ transaction.date|date:'dd.MM.y' }}</td>
                             <td>{{ transaction.title }}</td>
                             <td><span class="float-end">{{ transaction.quantity }}</span></td>
                             <td><span class="float-end">{{ transaction.rate }}</span></td>

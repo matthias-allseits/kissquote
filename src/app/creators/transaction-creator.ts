@@ -30,7 +30,7 @@ export class TransactionCreator {
                 apiArray.id,
                 apiArray.position ? PositionCreator.oneFromApiArray(apiArray.position) : null,
                 apiArray.title,
-                apiArray.date,
+                new Date(apiArray.date),
                 apiArray.quantity,
                 apiArray.rate,
                 apiArray.fee,

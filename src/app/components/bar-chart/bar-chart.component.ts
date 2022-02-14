@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {BaseChartDirective} from "ng2-charts";
-import {ChartConfiguration, ChartData, ChartDataset, ChartEvent, ChartType} from "chart.js";
+import {ChartConfiguration, ChartData, ChartEvent, ChartType} from "chart.js";
 
 
 @Component({
@@ -11,7 +11,8 @@ import {ChartConfiguration, ChartData, ChartDataset, ChartEvent, ChartType} from
 export class BarChartComponent implements OnInit {
 
     @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
-    @Input() data?: ChartDataset[];
+    @Input() data?: ChartData;
+    @Input() height = 300;
 
 
     public barChartOptions: ChartConfiguration['options'] = {
@@ -25,30 +26,19 @@ export class BarChartComponent implements OnInit {
         },
         plugins: {
             legend: {
-                display: true,
+                display: false,
             },
-            // datalabels: {
-            //     anchor: 'end',
-            //     align: 'end'
-            // }
         }
     };
     public barChartType: ChartType = 'bar';
-    // public barChartPlugins = [
-    //     DataLabelsPlugin
-    // ];
-
-    public barChartData: ChartData = {
-        labels: [ 'Kosten vs Einnahmen' ],
-        datasets: []
-    };
+    public barChartData?: ChartData;
 
     constructor() {
     }
 
     ngOnInit(): void {
         if (this.data) {
-            this.barChartData.datasets = this.data;
+            this.barChartData = this.data;
         }
     }
 

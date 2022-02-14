@@ -45,8 +45,8 @@
                             <tr *ngFor="let position of bankAccount.getCashPositions()">
                                 <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
                                 <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>
-                                <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
-                                <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
+                                <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
+                                <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
                                 <td class="text-center">{{ position.transactions.length }}</td>
                                 <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
                                 <td><button [routerLink]="'/position/' + position.id + '/cash-transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>
@@ -77,8 +77,8 @@
                                 <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
                                 <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>
                                 <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
-                                <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.Y' }}</span></td>
-                                <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.Y' }}</span></td>
+                                <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
+                                <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
                                 <td class="text-center">{{ position.transactions.length }}</td>
                                 <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
     <!--                            <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>-->
