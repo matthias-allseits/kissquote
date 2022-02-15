@@ -23,6 +23,9 @@ export class LineChartComponent implements OnInit {
         elements: {
             line: {
                 // tension: 0.5
+            },
+            point: {
+                radius: 0
             }
         },
         scales: {
