@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Transaction} from "../models/transaction";
 import {TransactionCreator} from "../creators/transaction-creator";
+import {ApiService} from "./api-service";
 
 
 const httpOptions = {
@@ -16,18 +17,18 @@ const httpOptions = {
     providedIn: 'root'
 })
 
-export class TransactionService {
-
-    private baseUrl = 'http://api.kissquote.local/api/transaction';
+export class TransactionService extends ApiService {
 
     constructor(
-        private http: HttpClient,
-    ) {}
+        public override http: HttpClient,
+    ) {
+        super('/transaction', http);
+    }
 
 
     public getTransaction(id: number): Observable<Transaction|null>
     {
-        return this.http.get<Transaction>(this.baseUrl + '/' + id)
+        return this.http.get<Transaction>(this.apiUrl + '/' + id)
             .pipe(
                 map(res => TransactionCreator.oneFromApiArray(res))
                 // map(this.extractData),
@@ -38,7 +39,7 @@ export class TransactionService {
 
 
     create(transaction: Transaction): Observable<Transaction> {
-        const url = `${this.baseUrl}`;
+        const url = `${this.apiUrl}`;
         return this.http
             .post(url, JSON.stringify(transaction), httpOptions)
             .pipe(
@@ -49,7 +50,7 @@ export class TransactionService {
 
 
     update(transaction: Transaction): Observable<Transaction> {
-        const url = `${this.baseUrl}/${transaction.id}`;
+        const url = `${this.apiUrl}/${transaction.id}`;
         return this.http
             .put(url, JSON.stringify(transaction), httpOptions)
             .pipe(
@@ -60,7 +61,7 @@ export class TransactionService {
 
 
     delete(id: number): Observable<Object> {
-        const url = `${this.baseUrl}/${id}`;
+        const url = `${this.apiUrl}/${id}`;
         return this.http.delete(url, httpOptions)
             .pipe(
                 // catchError(this.handleError)

@@ -6,6 +6,7 @@ import { HttpHeaders } from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {BankAccount} from '../models/bank-account';
 import {PortfolioCreator} from "../creators/portfolio-creator";
+import {ApiService} from "./api-service";
 
 
 const httpOptions = {
@@ -18,18 +19,18 @@ const httpOptions = {
     providedIn: 'root'
 })
 
-export class PortfolioService {
-
-    private baseUrl = 'http://api.kissquote.local/api/portfolio';
+export class PortfolioService extends ApiService {
 
     constructor(
-        private http: HttpClient,
-    ) {}
+        public override http: HttpClient,
+    ) {
+        super('/portfolio', http);
+    }
 
 
     public create(portfolio: Portfolio): Observable<Portfolio|null>
     {
-        return this.http.post<Portfolio>(this.baseUrl, portfolio, httpOptions)
+        return this.http.post<Portfolio>(this.apiUrl, portfolio, httpOptions)
             .pipe(
                 map(res => PortfolioCreator.oneFromApiArray(res))
                 // map(this.extractData),
@@ -44,7 +45,7 @@ export class PortfolioService {
         const body = {
             hashKey: key
         };
-        return this.http.post<Portfolio>(this.baseUrl + '/restore', JSON.stringify(body), httpOptions )
+        return this.http.post<Portfolio>(this.apiUrl + '/restore', JSON.stringify(body), httpOptions )
             .pipe(
                 map(res => PortfolioCreator.oneFromApiArray(res)),
                 catchError(this.handleError)

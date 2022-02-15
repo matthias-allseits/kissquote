@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {BankAccount} from '../models/bank-account';
+import {ApiService} from "./api-service";
 
 
 const httpOptions = {
@@ -16,17 +17,17 @@ const httpOptions = {
     providedIn: 'root'
 })
 
-export class BankAccountService {
-
-    private baseUrl = 'http://api.kissquote.local/api/bank-account';
+export class BankAccountService extends ApiService {
 
     constructor(
-        private http: HttpClient,
-    ) {}
+        public override http: HttpClient,
+    ) {
+        super('/bank-account', http);
+    }
 
 
     create(bankAccount: BankAccount): Observable<BankAccount> {
-        const url = `${this.baseUrl}`;
+        const url = `${this.apiUrl}`;
         return this.http
             .post(url, JSON.stringify(bankAccount), httpOptions)
             .pipe(
@@ -37,7 +38,7 @@ export class BankAccountService {
 
 
     update(bankAccount: BankAccount): Observable<BankAccount> {
-        const url = `${this.baseUrl}/${bankAccount.id}`;
+        const url = `${this.apiUrl}/${bankAccount.id}`;
         return this.http
             .put(url, JSON.stringify(bankAccount), httpOptions)
             .pipe(
@@ -48,7 +49,7 @@ export class BankAccountService {
 
 
     delete(id: number): Observable<Object> {
-        const url = `${this.baseUrl}/${id}`;
+        const url = `${this.apiUrl}/${id}`;
         return this.http.delete(url, httpOptions)
             .pipe(
                 // catchError(this.handleError)

@@ -2,21 +2,22 @@ import {Injectable} from '@angular/core';
 import {Translation} from '../models/translation';
 import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {ApiService} from "./api-service";
 
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class TranslationService {
+export class TranslationService extends ApiService {
 
-    private baseUrl = 'http://api.kissquote.local/api/translations';
     private translations: Translation[] = [];
     private language: string = 'de';
 
     constructor(
-        private http: HttpClient,
+        public override http: HttpClient,
     ) {
+        super('/translations', http);
         const lang = localStorage.getItem('lang');
         if (null !== lang) {
             this.language = lang;
@@ -29,7 +30,7 @@ export class TranslationService {
 
     public getTranslations(): Observable<Translation[]>
     {
-        return this.http.get<Translation[]>(this.baseUrl + '/' + this.language);
+        return this.http.get<Translation[]>(this.apiUrl + '/' + this.language);
     }
 
     public trans(key: string): string

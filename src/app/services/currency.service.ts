@@ -5,24 +5,25 @@ import {map} from 'rxjs/operators';
 import {Currency} from '../models/currency';
 import {CurrencyCreator} from "../creators/currency-creator";
 import {ShareheadShare} from "../models/sharehead-share";
+import {ApiService} from "./api-service";
 
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class CurrencyService {
-
-    private baseUrl = 'http://api.kissquote.local/api/currency';
+export class CurrencyService extends ApiService {
 
     constructor(
-        private http: HttpClient,
-    ) {}
+        public override http: HttpClient,
+    ) {
+        super('/currency', http);
+    }
 
 
     public getAllCurrencies(): Observable<Currency[]>
     {
-        return this.http.get<Currency[]>(this.baseUrl)
+        return this.http.get<Currency[]>(this.apiUrl)
             .pipe(
                 map(res => CurrencyCreator.fromApiArray(res))
             );

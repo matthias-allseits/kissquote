@@ -5,6 +5,7 @@ import {map} from 'rxjs/operators';
 import {Position} from '../models/position';
 import {PositionCreator} from "../creators/position-creator";
 import {DateHelper} from "../core/datehelper";
+import {ApiService} from "./api-service";
 
 
 const httpOptions = {
@@ -17,18 +18,18 @@ const httpOptions = {
     providedIn: 'root'
 })
 
-export class PositionService {
-
-    private baseUrl = 'http://api.kissquote.local/api/position';
+export class PositionService extends ApiService {
 
     constructor(
-        private http: HttpClient,
-    ) {}
+        public override http: HttpClient,
+    ) {
+        super('/position', http);
+    }
 
 
     public getPosition(id: number): Observable<Position|null>
     {
-        return this.http.get<Position>(this.baseUrl + '/' + id)
+        return this.http.get<Position>(this.apiUrl + '/' + id)
             .pipe(
                 map(res => PositionCreator.oneFromApiArray(res))
                 // map(this.extractData),
@@ -40,7 +41,7 @@ export class PositionService {
 
     public getPositions(): Observable<Position[]>
     {
-        return this.http.get<Position[]>(this.baseUrl)
+        return this.http.get<Position[]>(this.apiUrl)
             .pipe(
                 map(res => PositionCreator.fromApiArray(res))
                 // map(this.extractData),
@@ -55,7 +56,7 @@ export class PositionService {
         position.transactions.forEach(transaction => {
             transaction.date = DateHelper.convertDateToMysql(transaction.date);
         });
-        const url = `${this.baseUrl}`;
+        const url = `${this.apiUrl}`;
         return this.http
             .post(url, JSON.stringify(position), httpOptions)
             .pipe(
@@ -70,7 +71,7 @@ export class PositionService {
         position.transactions.forEach(transaction => {
             transaction.date = DateHelper.convertDateToMysql(transaction.date);
         });
-        const url = `${this.baseUrl}/cash`;
+        const url = `${this.apiUrl}/cash`;
         return this.http
             .post(url, JSON.stringify(position), httpOptions)
             .pipe(
@@ -82,7 +83,7 @@ export class PositionService {
 
     update(position: Position): Observable<Position|null> {
         position.activeFrom = DateHelper.convertDateToMysql(position.activeFrom);
-        const url = `${this.baseUrl}/${position.id}`;
+        const url = `${this.apiUrl}/${position.id}`;
         return this.http
             .put(url, JSON.stringify(position), httpOptions)
             .pipe(
@@ -93,7 +94,7 @@ export class PositionService {
 
 
     delete(id: number): Observable<Object> {
-        const url = `${this.baseUrl}/${id}`;
+        const url = `${this.apiUrl}/${id}`;
         return this.http.delete(url, httpOptions)
             .pipe(
                 // catchError(this.handleError)

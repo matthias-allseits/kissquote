@@ -4,24 +4,25 @@ import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Marketplace} from "../models/marketplace";
 import {MarketplaceCreator} from "../creators/marketplace-creator";
+import {ApiService} from "./api-service";
 
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class MarketplaceService {
-
-    private baseUrl = 'http://api.kissquote.local/api/marketplace';
+export class MarketplaceService extends ApiService {
 
     constructor(
-        private http: HttpClient,
-    ) {}
+        public override http: HttpClient,
+    ) {
+        super('/marketplace', http);
+    }
 
 
     public getAllMarketplaces(): Observable<Marketplace[]>
     {
-        return this.http.get<Marketplace[]>(this.baseUrl)
+        return this.http.get<Marketplace[]>(this.apiUrl)
             .pipe(
                 map(res => MarketplaceCreator.fromApiArray(res))
             );
