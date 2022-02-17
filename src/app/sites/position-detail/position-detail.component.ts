@@ -9,6 +9,7 @@ import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {ShareheadService} from "../../services/sharehead.service";
 import {ShareheadShare} from "../../models/sharehead-share";
 import {ChartData, ChartDataset} from "chart.js";
+import {DateHelper} from "../../core/datehelper";
 
 
 export interface DividendProjection {
@@ -113,27 +114,50 @@ export class PositionDetailComponent implements OnInit {
                                     const nextYearDiviProjectionP1 = share.dividendProjectionForYear(nextYearP1);
                                     const nextYearP2 = new Date(new Date().setFullYear(new Date().getFullYear() + 3));
                                     const nextYearDiviProjectionP2 = share.dividendProjectionForYear(nextYearP2);
-                                    this.diviProjectionYears = [
-                                        {
+                                    this.diviProjectionYears = [];
+                                    if (nextYearDiviProjection > 0) {
+                                        this.diviProjectionYears.push({
                                             year: nextYear,
                                             projection: '(by analyst-estimations) ' + ((nextYearDiviProjection * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency()
-                                        },
-                                        {
+                                        });
+                                    }
+                                    if (nextYearDiviProjectionP1 > 0) {
+                                        this.diviProjectionYears.push({
                                             year: nextYearP1,
                                             projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP1 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency()
-                                        },
-                                        {
+                                        });
+                                    }
+                                    if (nextYearDiviProjectionP2 > 0) {
+                                        this.diviProjectionYears.push({
                                             year: nextYearP2,
                                             projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP2 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency()
-                                        },
-                                    ];
+                                        });
+                                    }
                                 }
                             }
                         })
                 }
 
                 this.lineChartData = this.position?.getRatesChartData();
+                this.addLatestRateToLineChart();
             });
+    }
+
+
+    private addLatestRateToLineChart(): void
+    {
+        if (this.lineChartData && this.position?.balance) {
+            if (this.lineChartData.labels && this.position.balance.lastRate?.date instanceof Date) {
+                const lastLabel = this.lineChartData.labels[this.lineChartData.labels?.length -1];
+                const labelFromLastRate = DateHelper.convertDateToGerman(this.position.balance.lastRate?.date);
+                const lastRate = this.position.balance.lastRate?.rate;
+                console.log(lastLabel);
+                if (lastLabel !== labelFromLastRate) {
+                    this.lineChartData.labels.push(labelFromLastRate);
+                    this.lineChartData.datasets[0].data.push(lastRate);
+                }
+            }
+        }
     }
 
 }
