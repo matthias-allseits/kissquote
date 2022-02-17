@@ -119,33 +119,24 @@ export class PositionDetailComponent implements OnInit {
                                     if (nextYearDiviProjection > 0) {
                                         this.diviProjectionYears.push({
                                             year: nextYear,
-                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjection * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency()
+                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjection * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
+                                            yield: (100 / this.position.balance.investment * (nextYearDiviProjection * this.position?.balance?.amount)).toFixed(1).toString() + '%',
                                         });
                                     }
                                     if (nextYearDiviProjectionP1 > 0) {
                                         this.diviProjectionYears.push({
-                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjection * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
-                                            yield: (100 / this.position.balance.investment * (nextYearDiviProjection * this.position?.balance?.amount)).toFixed(1).toString() + '%',
-                                        },
-                                        {
                                             year: nextYearP1,
-                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP1 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency()
+                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP1 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
+                                            yield: (100 / this.position.balance.investment * (nextYearDiviProjectionP1 * this.position?.balance?.amount)).toFixed(1).toString() + '%',
                                         });
                                     }
                                     if (nextYearDiviProjectionP2 > 0) {
                                         this.diviProjectionYears.push({
-                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP1 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
-                                            yield: (100 / this.position.balance.investment * (nextYearDiviProjectionP1 * this.position?.balance?.amount)).toFixed(1).toString() + '%',
-                                        },
-                                        {
                                             year: nextYearP2,
-                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP2 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency()
-                                        });
-                                    }
                                             projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP2 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
                                             yield: (100 / this.position.balance.investment * (nextYearDiviProjectionP2 * this.position?.balance?.amount)).toFixed(1).toString() + '%',
-                                        },
-                                    ];
+                                        });
+                                    }
                                 }
                             }
                         })
