@@ -102,10 +102,17 @@
                         <div class="col-3"><span class="float-end">{{ position.profitPerDay() }}</span></div>
                     </div>
                     <h5 style="margin-top: 15px;">Dividend projections</h5>
-                    <div *ngFor="let projection of diviProjectionYears" class="row">
-                        <div class="col-2">{{ projection.year|date:'y' }}:</div>
-                        <div class="col-10"><span class="float-end">{{ projection.projection }}</span></div>
-                    </div>
+                    <ng-container *ngFor="let projection of diviProjectionYears">
+                        <div class="row">
+                            <div class="col-2">{{ projection.year|date:'y' }}:</div>
+                            <div class="col-10"><span class="float-end">{{ projection.projection }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4"></div>
+                            <div class="col-6">Yield on investment: </div>
+                            <div class="col-2"><span class="float-end">{{ projection.yield }}</span></div>
+                        </div>
+                    </ng-container>
                 </div>
                 <div *ngIf="position.balance" class="info-box">
                     <h5>Costs</h5>

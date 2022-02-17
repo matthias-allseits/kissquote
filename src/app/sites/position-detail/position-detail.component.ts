@@ -15,6 +15,7 @@ import {DateHelper} from "../../core/datehelper";
 export interface DividendProjection {
     year: Date;
     projection: string;
+    yield: string;
 }
 
 @Component({
@@ -123,16 +124,28 @@ export class PositionDetailComponent implements OnInit {
                                     }
                                     if (nextYearDiviProjectionP1 > 0) {
                                         this.diviProjectionYears.push({
+                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjection * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
+                                            yield: (100 / this.position.balance.investment * (nextYearDiviProjection * this.position?.balance?.amount)).toFixed(1).toString() + '%',
+                                        },
+                                        {
                                             year: nextYearP1,
                                             projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP1 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency()
                                         });
                                     }
                                     if (nextYearDiviProjectionP2 > 0) {
                                         this.diviProjectionYears.push({
+                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP1 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
+                                            yield: (100 / this.position.balance.investment * (nextYearDiviProjectionP1 * this.position?.balance?.amount)).toFixed(1).toString() + '%',
+                                        },
+                                        {
                                             year: nextYearP2,
                                             projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP2 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency()
                                         });
                                     }
+                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP2 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
+                                            yield: (100 / this.position.balance.investment * (nextYearDiviProjectionP2 * this.position?.balance?.amount)).toFixed(1).toString() + '%',
+                                        },
+                                    ];
                                 }
                             }
                         })
