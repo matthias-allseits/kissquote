@@ -16,36 +16,54 @@
 <!--                       placeholder="Typeahead inside a form"-->
 <!--                       class="form-control">-->
 <!--            </div>-->
-            <div class="mb-3">
-                <label for="shareName" class="form-label">Name: </label>
-                <input (keyup)="searchShare($event)" id="shareName" type="text" class="form-control" formControlName="shareName">
-                <div *ngIf="selectableShares && selectableShares.length > 0" class="dropdown">
-                    <ul class="dropdown-menu show">
-                        <li *ngFor="let share of selectableShares"><a (click)="selectShare(share)" class="dropdown-item">{{ share.name }}</a></li>
-                    </ul>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="shareName" class="form-label">Name: </label>
+                        <input (keyup)="searchShare($event)" id="shareName" type="text" class="form-control" formControlName="shareName">
+                        <div *ngIf="selectableShares && selectableShares.length > 0" class="dropdown">
+                            <ul class="dropdown-menu show">
+                                <li *ngFor="let share of selectableShares"><a (click)="selectShare(share)" class="dropdown-item">{{ share.name }}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="isin" class="form-label">ISIN: </label>
+                        <input id="isin" type="text" class="form-control" formControlName="isin">
+                    </div>
+                    <div class="mb-3">
+                        <label for="marketplace" class="form-label">Marketplace: </label>
+                        <select formControlName="marketplace" id="marketplace" name="marketplace" class="form-select form-select mb-3">
+                            <option disabled selected></option>
+                            <ng-container *ngFor="let place of marketplaces">
+                                <option [ngValue]="place">{{ place.getName() }}</option>
+                            </ng-container>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="currency" class="form-label">{{ tranService.trans('GLOB_CURRENCY') }}: </label>
+                        <select formControlName="currency" id="currency" name="currency" class="form-select form-select mb-3">
+                            <option disabled selected></option>
+                            <ng-container *ngFor="let currency of currencies">
+                                <option [ngValue]="currency">{{ currency.name }}</option>
+                            </ng-container>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label for="isin" class="form-label">ISIN: </label>
-                <input id="isin" type="text" class="form-control" formControlName="isin">
-            </div>
-            <div class="mb-3">
-                <label for="marketplace" class="form-label">Marketplace: </label>
-                <select formControlName="marketplace" id="marketplace" name="marketplace" class="form-select form-select mb-3">
-                    <option disabled selected></option>
-                    <ng-container *ngFor="let place of marketplaces">
-                        <option [ngValue]="place">{{ place.getName() }}</option>
-                    </ng-container>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="currency" class="form-label">{{ tranService.trans('GLOB_CURRENCY') }}: </label>
-                <select formControlName="currency" id="currency" name="currency" class="form-select form-select mb-3">
-                    <option disabled selected></option>
-                    <ng-container *ngFor="let currency of currencies">
-                        <option [ngValue]="currency">{{ currency.name }}</option>
-                    </ng-container>
-                </select>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="dividendPeriodicity" class="form-label">Dividend Periodicity: </label>
+                        <select formControlName="dividendPeriodicity" id="dividendPeriodicity" name="dividendPeriodicity" class="form-select form-select mb-3">
+                            <option disabled selected></option>
+                            <ng-container *ngFor="let periodicy of periodicies">
+                                <option [ngValue]="periodicy">{{ periodicy }}</option>
+                            </ng-container>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+
+                </div>
             </div>
             <button type="submit" class="btn btn-primary" [disabled]="!positionForm.valid">Submit</button>
         </form>

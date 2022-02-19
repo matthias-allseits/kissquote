@@ -9,7 +9,7 @@ import {BankAccountCreator} from "./bank-account-creator";
 export class PositionCreator {
 
     public static createNewPosition(): Position {
-        return new Position(0, null, null, true, new Date(), null, []);
+        return new Position(0, null, null, true, new Date(), null, [], false, '');
     }
 
     public static fromApiArray(apiArray: Position[]): Position[] {
@@ -39,6 +39,7 @@ export class PositionCreator {
                 apiArray.activeUntil,
                 apiArray.transactions ? TransactionCreator.fromApiArray(apiArray.transactions) : [],
                 apiArray.isCash,
+                apiArray.dividendPeriodicity,
                 apiArray.bankAccount ? BankAccountCreator.oneFromApiArray(apiArray.bankAccount) : undefined,
                 apiArray.balance ? BalanceCreator.oneFromApiArray(apiArray.balance) : undefined,
                 apiArray.shareheadId,

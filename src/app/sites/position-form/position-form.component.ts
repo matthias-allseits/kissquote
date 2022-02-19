@@ -36,12 +36,18 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
     public currencies: Currency[] = [];
     public shareheadShares?: ShareheadShare[];
     public selectableShares?: Share[];
+    public periodicies = [
+        'yearly',
+        'half-yearly',
+        'quaterly',
+    ];
 
     positionForm = new FormGroup({
         shareName: new FormControl('', Validators.required),
         isin: new FormControl('', Validators.required),
         marketplace: new FormControl('', Validators.required),
         currency: new FormControl('', Validators.required),
+        dividendPeriodicity: new FormControl(''),
     });
 
     constructor(
@@ -74,6 +80,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                             this.position = position;
                             this.positionForm.get('shareName')?.setValue(position.share?.name);
                             this.positionForm.get('isin')?.setValue(position.share?.isin);
+                            this.positionForm.get('dividendPeriodicity')?.setValue(position.dividendPeriodicity);
                             this.setMarketplace();
                             this.setCurrency();
                         }
@@ -186,10 +193,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
     private setCurrency(): void {
         console.log('set currency');
         this.currencies.forEach(currency => {
-            // console.log(position.currency?.name);
-            // console.log(currency.name);
             if (this.position.currency?.name === currency.name) {
-                console.log('hit');
                 this.positionForm.get('currency')?.setValue(currency);
             }
         });

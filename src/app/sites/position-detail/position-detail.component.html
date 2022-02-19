@@ -89,8 +89,8 @@
                         <div class="col-3"><span class="float-end">{{ position.balance.projectedNextDividendPayment }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Yield on investment:</div>
-                        <div class="col-3"><span class="float-end"></span></div>
+                        <div class="col-6">Yield on investment:</div>
+                        <div class="col-6"><span class="float-end"><span *ngIf="position.dividendPeriodicity === 'quaterly'">(annualized) </span>{{ position.yieldOnInvestent() }}%</span></div>
                     </div>
                     <h5 style="margin-top: 15px;">Performance</h5>
                     <div class="row">
@@ -218,7 +218,7 @@
                             <th scope="col">Title</th>
                             <th scope="col"><span class="float-end">Quantity</span></th>
                             <th scope="col"><span class="float-end">Rate</span></th>
-                            <th scope="col"><span class="float-end">Fee</span></th>
+                            <th scope="col"><span class="float-end">Fee/Tax</span></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                         </tr>

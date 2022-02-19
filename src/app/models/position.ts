@@ -20,6 +20,7 @@ export class Position {
         public activeUntil: Date|null,
         public transactions: Transaction[],
         public isCash: boolean = false,
+        public dividendPeriodicity: string,
         public bankAccount?: BankAccount,
         public balance?: Balance,
         public shareheadId?: number,
@@ -34,6 +35,20 @@ export class Position {
         } else {
             return 'undefined';
         }
+    }
+
+
+    yieldOnInvestent(): string
+    {
+        let result = 0;
+        if (this.balance) {
+            result = (100 / this.balance.investment * this.balance.projectedNextDividendPayment);
+        }
+        if (this.dividendPeriodicity === 'quaterly') {
+            result *= 4;
+        }
+
+        return result.toFixed(1);
     }
 
 
