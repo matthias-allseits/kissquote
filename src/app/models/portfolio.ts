@@ -40,4 +40,16 @@ export class Portfolio {
         return shares;
     }
 
+
+    getEmptyBankAccount(): BankAccount|null {
+        let hit = null;
+        this.bankAccounts.forEach(account => {
+            if (account.positions.length === 0) {
+                hit = account;
+            }
+        });
+
+        return hit;
+    }
+
 }

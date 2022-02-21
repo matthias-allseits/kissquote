@@ -17,6 +17,7 @@ import {PositionService} from "../../services/position.service";
 import {MarketplaceService} from "../../services/marketplace.service";
 import {Marketplace} from "../../models/marketplace";
 import {Transaction} from "../../models/transaction";
+import {BankAccount} from "../../models/bank-account";
 
 
 export interface ParsedTransaction {
@@ -102,30 +103,53 @@ export class UploadComponent implements OnInit {
         console.log(this.openPositions);
         console.log(this.closedPositions);
 
-        const portfolio = new Portfolio(0, null, null, null, []);
-        this.portfolioService.create(portfolio)
-            .subscribe(returnedPortfolio => {
-                console.log(returnedPortfolio);
-                if (null !== returnedPortfolio && null !== returnedPortfolio.hashKey) {
-                    localStorage.setItem('my-key', returnedPortfolio.hashKey);
-                    this.cashPositions.forEach(position => {
-                        position.bankAccount = returnedPortfolio.bankAccounts[0];
-                        this.positionService.createCashPosition(position)
-                            .subscribe(position => {
-
-                            });
-                    });
-                    this.openPositions.forEach(position => {
-                        if (position.share?.isin) {
-                            position.bankAccount = returnedPortfolio.bankAccounts[0];
-                            this.positionService.create(position)
-                                .subscribe(position => {
-
-                                });
+        const myKey = localStorage.getItem('my-key');
+        if (null !== myKey) {
+            this.portfolioService.portfolioByKey(myKey)
+                .subscribe(returnedPortfolio => {
+                    console.log(returnedPortfolio);
+                    if (returnedPortfolio instanceof Portfolio) {
+                        const emptyAccount = returnedPortfolio.getEmptyBankAccount();
+                        if (emptyAccount) {
+                            this.persistPositions(emptyAccount);
+                        } else {
+                            alert('No empty account found!');
                         }
+                    } else {
+                        alert('Something went wrong!');
+                    }
+                });
+        } else {
+            const portfolio = new Portfolio(0, null, null, null, []);
+            this.portfolioService.create(portfolio)
+                .subscribe(returnedPortfolio => {
+                    console.log(returnedPortfolio);
+                    if (null !== returnedPortfolio && null !== returnedPortfolio.hashKey) {
+                        localStorage.setItem('my-key', returnedPortfolio.hashKey);
+                        this.persistPositions(returnedPortfolio.bankAccounts[0]);
+                    }
+                });
+        }
+    }
+
+
+    private persistPositions(bankAccount: BankAccount): void {
+        this.cashPositions.forEach(position => {
+            position.bankAccount = bankAccount;
+            this.positionService.createCashPosition(position)
+                .subscribe(position => {
+
+                });
+        });
+        this.openPositions.forEach(position => {
+            if (position.share?.isin) {
+                position.bankAccount = bankAccount;
+                this.positionService.create(position)
+                    .subscribe(position => {
+
                     });
-                }
-            });
+            }
+        });
 
 
 
