@@ -24,6 +24,7 @@ export class ShareheadShareCreator {
         if (apiArray !== undefined && apiArray !== null) {
             return new ShareheadShare(
                 apiArray.id,
+                apiArray.shareheadId,
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.name,
                 apiArray.shortname,

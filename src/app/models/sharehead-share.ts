@@ -8,6 +8,7 @@ export class ShareheadShare {
 
     constructor(
         public id: number,
+        public shareheadId: number,
         public currency: Currency|null,
         public name: string|null,
         public shortname: string|null,

@@ -31,11 +31,10 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
     public portfolio: Portfolio|null = null;
     public bankAccounts: BankAccount[] = [];
     private bankAccountIndex: number = 0;
-    public swissquoteShares: Share[] = [];
+    public shareheadShares: ShareheadShare[] = [];
     public marketplaces: Marketplace[] = [];
     public currencies: Currency[] = [];
-    public shareheadShares?: ShareheadShare[];
-    public selectableShares?: Share[];
+    public selectableShares?: ShareheadShare[];
     public periodicies = [
         'yearly',
         'half-yearly',
@@ -96,7 +95,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         console.log(event.target.value);
         this.selectableShares = [];
         if (event.target.value) {
-            this.swissquoteShares?.forEach(share => {
+            this.shareheadShares?.forEach(share => {
                 if (share.name && share.name.toLowerCase().indexOf(event.target.value) > -1) {
                     this.selectableShares?.push(share);
                 }
@@ -106,7 +105,10 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
     }
 
 
-    selectShare(share: Share): void {
+    selectShare(shareheadShare: ShareheadShare): void {
+        const share = ShareCreator.createNewShare();
+        share.isin = shareheadShare.isin;
+        share.name = shareheadShare.name;
         console.log(share);
         this.selectableShares = [];
         this.positionForm.get('shareName')?.setValue(share.name);
@@ -167,10 +169,10 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                     this.bankAccounts = this.portfolio.getBankAccountsWithoutPositions();
                 }
             });
-        this.shareService.getAllSwissquoteShares()
+        this.shareService.getAllShareheadShares()
             .subscribe(shares => {
                 console.log(shares);
-                this.swissquoteShares = shares;
+                this.shareheadShares = shares;
             });
         this.shareheadService.getAllCurrencies()
             .subscribe(currencies => {

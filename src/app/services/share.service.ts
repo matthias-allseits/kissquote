@@ -5,6 +5,8 @@ import {map} from 'rxjs/operators';
 import {Share} from '../models/share';
 import {ShareCreator} from "../creators/share-creator";
 import {ApiService} from "./api-service";
+import {ShareheadShareCreator} from "../creators/sharehead-share-creator";
+import {ShareheadShare} from "../models/sharehead-share";
 
 
 @Injectable({
@@ -32,11 +34,11 @@ export class ShareService extends ApiService {
     }
 
 
-    public getAllSwissquoteShares(): Observable<Share[]>
+    public getAllShareheadShares(): Observable<ShareheadShare[]>
     {
-        return this.http.get<Share[]>(this.apiUrl + '/swissquote')
+        return this.http.get<ShareheadShare[]>(this.apiUrl + '/sharehead')
             .pipe(
-                map(res => ShareCreator.fromApiArray(res))
+                map(res => ShareheadShareCreator.fromApiArray(res))
                 // map(this.extractData),
                 // catchError(this.handleError('addHero', portfolio))
                 // catchError(this.handleError('addHero', portfolio))

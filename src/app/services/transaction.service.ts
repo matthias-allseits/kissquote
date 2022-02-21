@@ -5,6 +5,7 @@ import {map} from 'rxjs/operators';
 import {Transaction} from "../models/transaction";
 import {TransactionCreator} from "../creators/transaction-creator";
 import {ApiService} from "./api-service";
+import {DateHelper} from "../core/datehelper";
 
 
 const httpOptions = {
@@ -39,6 +40,13 @@ export class TransactionService extends ApiService {
 
 
     create(transaction: Transaction): Observable<Transaction> {
+        transaction.date = DateHelper.convertDateToMysql(transaction.date);
+        if (transaction.position) {
+            transaction.position.activeFrom = DateHelper.convertDateToMysql(transaction.position.activeFrom);
+            transaction.position.transactions.forEach(trans => {
+                trans.date = DateHelper.convertDateToMysql(trans.date);
+            });
+        }
         const url = `${this.apiUrl}`;
         return this.http
             .post(url, JSON.stringify(transaction), httpOptions)
@@ -50,6 +58,13 @@ export class TransactionService extends ApiService {
 
 
     update(transaction: Transaction): Observable<Transaction> {
+        transaction.date = DateHelper.convertDateToMysql(transaction.date);
+        if (transaction.position) {
+            transaction.position.activeFrom = DateHelper.convertDateToMysql(transaction.position.activeFrom);
+            transaction.position.transactions.forEach(trans => {
+                trans.date = DateHelper.convertDateToMysql(trans.date);
+            });
+        }
         const url = `${this.apiUrl}/${transaction.id}`;
         return this.http
             .put(url, JSON.stringify(transaction), httpOptions)

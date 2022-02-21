@@ -9,15 +9,14 @@ import {Dividend} from "../../models/dividend";
 import {DividendCreator} from "../../creators/dividend-creator";
 import {Currency} from "../../models/currency";
 import {Share} from "../../models/share";
-import {ShareheadService} from "../../services/sharehead.service";
 import {ShareheadShare} from "../../models/sharehead-share";
 import {PortfolioService} from "../../services/portfolio.service";
 import {Portfolio} from "../../models/portfolio";
 import {PositionService} from "../../services/position.service";
 import {MarketplaceService} from "../../services/marketplace.service";
 import {Marketplace} from "../../models/marketplace";
-import {Transaction} from "../../models/transaction";
 import {BankAccount} from "../../models/bank-account";
+import {ShareService} from "../../services/share.service";
 
 
 export interface ParsedTransaction {
@@ -62,7 +61,7 @@ export class UploadComponent implements OnInit {
 
     constructor(
         public tranService: TranslationService,
-        private shareheadService: ShareheadService,
+        private shareService: ShareService,
         private portfolioService: PortfolioService,
         private positionService: PositionService,
         private marketplaceService: MarketplaceService,
@@ -70,7 +69,7 @@ export class UploadComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.shareheadService.getAllShares()
+        this.shareService.getAllShareheadShares()
             .subscribe(shares => {
                 console.log(shares);
                 this.shareheadShares = shares;
@@ -521,11 +520,14 @@ export class UploadComponent implements OnInit {
     }
 
 
-    private getShareheadIdByIsin(isin: string): number {
-        let id = 0;
+    private getShareheadIdByIsin(isin: string): number|undefined {
+        let id = undefined;
+        console.log('search for sharehead share by isin: ' + isin);
+        console.log(this.shareheadShares.length);
         this.shareheadShares.forEach(share => {
             if (isin === share.isin) {
-                id = share.id;
+                id = share.shareheadId;
+                console.log('sharehead hit: ' + id);
             }
         });
 
