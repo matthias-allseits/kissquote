@@ -32,6 +32,7 @@ export class PositionDetailComponent implements OnInit {
     public selectedTransaction?: Transaction;
     public shareheadShare?: ShareheadShare;
     public diviProjectionYears: DividendProjection[] = [];
+    public positionTab = 'balance';
     modalRef?: BsModalRef;
 
     public chartData?: ChartData;
@@ -52,6 +53,16 @@ export class PositionDetailComponent implements OnInit {
                 this.loadData(positionId);
             }
         });
+        const storedTab = localStorage.getItem('positionTab');
+        if (storedTab) {
+            this.positionTab = storedTab;
+        }
+    }
+
+    changeTab(selectedTab: string): void {
+        console.log(selectedTab);
+        this.positionTab = selectedTab;
+        localStorage.setItem('positionTab', selectedTab);
     }
 
     openModal(template: TemplateRef<any>, transaction: Transaction) {
