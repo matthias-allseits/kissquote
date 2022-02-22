@@ -9,7 +9,15 @@
     </div>
 
     <div *ngIf="portfolio && portfolio.bankAccounts.length > 0">
-        <ng-container *ngFor="let bankAccount of portfolio.bankAccounts index as accountIndex;">
+        <ul class="nav nav-tabs">
+            <li class="nav-item" *ngFor="let bankAccount of portfolio.bankAccounts index as accountIndex;">
+                <a class="nav-link" [class.active]="dashboardTab === accountIndex.toString()" (click)="changeTab(accountIndex.toString())" aria-current="page">{{ bankAccount.name }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="dashboardTab === 'balance'" (click)="changeTab('balance')">Balance</a>
+            </li>
+        </ul>
+        <div *ngFor="let bankAccount of portfolio.bankAccounts index as accountIndex;" class="shadow-sm p-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== accountIndex.toString()">
             <div class="shadow-sm p-3 mb-5 bg-body rounded">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                     <h4 class="pt-2">{{ bankAccount.name }}</h4>
@@ -92,7 +100,10 @@
             <p *ngIf="bankAccount.positions.length === 0">
                 Ohne Positionen wird es hier sehr schnell sehr langweilig...
             </p>
-        </ng-container>
+        </div>
+        <div class="shadow-sm p-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'balance'">
+            <h4 class="pt-2">Bilanz</h4>
+        </div>
     </div>
 </main>
 

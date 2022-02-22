@@ -28,6 +28,7 @@ export class MyDashboardComponent implements OnInit {
     public portfolio: Portfolio|null = null;
     private selectedPosition?: Position;
     private selectedBankAccount?: BankAccount;
+    public dashboardTab = '0';
     modalRef?: BsModalRef;
 
     constructor(
@@ -56,6 +57,16 @@ export class MyDashboardComponent implements OnInit {
         } else {
             // todo: redirect back to landingpage. probably the solution: implement guards
         }
+        const storedTab = localStorage.getItem('dashboardTab');
+        if (storedTab) {
+            this.dashboardTab = storedTab;
+        }
+    }
+
+    changeTab(selectedTab: string): void {
+        console.log(selectedTab);
+        this.dashboardTab = selectedTab;
+        localStorage.setItem('dashboardTab', selectedTab);
     }
 
     openPositionConfirmModal(template: TemplateRef<any>, position: Position) {
