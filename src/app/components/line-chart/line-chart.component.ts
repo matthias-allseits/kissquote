@@ -12,13 +12,9 @@ export class LineChartComponent implements OnInit {
 
     @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
     @Input() data?: ChartData;
+    @Input() height = 141;
+
     public lineChartType: ChartType = 'line';
-
-    public lineChartData: ChartConfiguration['data'] = {
-        datasets: [],
-        labels: [],
-    };
-
     public lineChartOptions: ChartConfiguration['options'] = {
         elements: {
             line: {
@@ -37,9 +33,12 @@ export class LineChartComponent implements OnInit {
                 },
         },
         plugins: {
-            legend: {display: true},
+            legend: {
+                display: false
+            },
         },
     };
+    public lineChartData?: ChartData;
 
     constructor() {
     }

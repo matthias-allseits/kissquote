@@ -2,6 +2,7 @@ import {Currency} from "./currency";
 import {ShareheadBalance} from "./sharehead-balance";
 import {ShareheadEstimation} from "./sharehead-estimation";
 import {ChartData, ChartDataset} from "chart.js";
+import {DateHelper} from "../core/datehelper";
 
 
 export class ShareheadShare {
@@ -52,8 +53,7 @@ export class ShareheadShare {
     }
 
 
-    salesChartData(): ChartData
-    {
+    salesChartData(): ChartData {
         const chartData: ChartData = {
             labels: [],
             datasets: [
@@ -69,6 +69,28 @@ export class ShareheadShare {
         this.balances?.forEach(balance => {
             chartData.labels?.push(balance.year);
             chartData.datasets[0].data.push(balance.sales);
+        });
+
+        return chartData;
+    }
+
+
+    profitChartData(): ChartData {
+        const chartData: ChartData = {
+            labels: [],
+            datasets: [
+                {
+                    data: [],
+                    borderColor: 'rgb(51, 102, 204, 1)',
+                    backgroundColor: 'rgb(51, 102, 204, 1)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)'
+                }
+            ]
+        };
+
+        this.balances?.forEach(balance => {
+            chartData.labels?.push(balance.year);
+            chartData.datasets[0].data.push(balance.profitPerShare);
         });
 
         return chartData;

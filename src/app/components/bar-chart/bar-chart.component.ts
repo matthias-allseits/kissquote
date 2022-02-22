@@ -14,7 +14,7 @@ export class BarChartComponent implements OnInit {
     @Input() data?: ChartData;
     @Input() height = 300;
 
-
+    public barChartType: ChartType = 'bar';
     public barChartOptions: ChartConfiguration['options'] = {
         responsive: true,
         // We use these empty structures as placeholders for dynamic theming.
@@ -30,7 +30,6 @@ export class BarChartComponent implements OnInit {
             },
         }
     };
-    public barChartType: ChartType = 'bar';
     public barChartData?: ChartData;
 
     constructor() {

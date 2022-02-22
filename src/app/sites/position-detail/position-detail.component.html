@@ -27,7 +27,13 @@
                 <div class="info-box">
                     <app-bar-chart [data]="chartData"></app-bar-chart>
                 </div>
-                <app-line-chart [data]="lineChartData"></app-line-chart>
+                <div class="info-box info-box-doubled">
+                    <div class="flex">
+                        <div class="flex-item">
+                            <app-line-chart [data]="lineChartData" [height]="141"></app-line-chart>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div *ngIf="position.balance" class="info-box">
                 <h5>State</h5>
@@ -154,6 +160,10 @@
                     <div class="info-box info-box-lg">
                         <h5>Sales (in Mio. {{ shareheadShare.balancesCurrency() }})</h5>
                         <app-bar-chart [data]="shareheadShare.salesChartData()" [height]="150"></app-bar-chart>
+                    </div>
+                    <div class="info-box info-box-lg">
+                        <h5>Profit + Dividend per Share</h5>
+                        <app-line-chart [data]="shareheadShare.profitChartData()" [height]="150"></app-line-chart>
                     </div>
                 </div>
                 <div class="info-box">
