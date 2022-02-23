@@ -9,6 +9,7 @@ import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {PositionService} from "../../services/position.service";
 import {BankAccount} from "../../models/bank-account";
 import {BankAccountService} from "../../services/bank-account.service";
+import {ChartData} from "chart.js";
 
 
 @Component({
@@ -61,6 +62,22 @@ export class MyDashboardComponent implements OnInit {
         if (storedTab) {
             this.dashboardTab = storedTab;
         }
+    }
+
+    getBalanceChartDataByAccount(account: BankAccount): ChartData {
+        return {
+            labels: [ 'Kontogebühren vs Einnahmen' ],
+            datasets: [
+                {
+                    label: 'Kontogebühren',
+                    data: [account.getAccountFeesTotal()]
+                },
+                {
+                    label: 'Einnahmen',
+                    data: [account.getEarningsTotal()]
+                },
+            ]
+        };
     }
 
     changeTab(selectedTab: string): void {

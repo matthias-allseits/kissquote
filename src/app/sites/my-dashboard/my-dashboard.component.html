@@ -99,6 +99,10 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                 <h4 class="pt-2">Bilanz</h4>
             </div>
+            <div *ngFor="let account of portfolio.bankAccounts" class="info-box">
+                <h5>{{ account.name }}</h5>
+                <app-bar-chart [data]="getBalanceChartDataByAccount(account)"></app-bar-chart>
+            </div>
         </div>
     </div>
 </main>
