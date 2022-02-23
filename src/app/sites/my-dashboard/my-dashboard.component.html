@@ -11,10 +11,10 @@
     <div *ngIf="portfolio && portfolio.bankAccounts.length > 0">
         <ul class="nav nav-tabs">
             <li class="nav-item" *ngFor="let bankAccount of portfolio.bankAccounts index as accountIndex;">
-                <a class="nav-link" [class.active]="dashboardTab === accountIndex.toString()" (click)="changeTab(accountIndex.toString())" aria-current="page">{{ bankAccount.name }}</a>
+                <a class="nav-link" [class.active]="dashboardTab === accountIndex.toString()" (click)="changeTab(accountIndex.toString())" aria-current="page">Bank-Account {{ bankAccount.name }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" [class.active]="dashboardTab === 'balance'" (click)="changeTab('balance')">Balance</a>
+                <a class="nav-link" [class.active]="dashboardTab === 'balance'" (click)="changeTab('balance')">Portfolio Balance</a>
             </li>
         </ul>
         <div *ngFor="let bankAccount of portfolio.bankAccounts index as accountIndex;" class="shadow-sm p-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== accountIndex.toString()">
