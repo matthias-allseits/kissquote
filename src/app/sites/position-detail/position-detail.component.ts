@@ -2,7 +2,10 @@ import {Component, OnInit, TemplateRef} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import {Position} from '../../models/position';
 import {PositionService} from '../../services/position.service';
-import {faEdit, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
+import {
+    faEdit, faExternalLinkAlt,
+    faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import {Transaction} from "../../models/transaction";
 import {TransactionService} from "../../services/transaction.service";
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
@@ -27,6 +30,7 @@ export class PositionDetailComponent implements OnInit {
 
     editIcon = faEdit;
     deleteIcon = faTrashAlt;
+    externalLinkIcon = faExternalLinkAlt;
 
     public position: Position|null = null;
     public selectedTransaction?: Transaction;
