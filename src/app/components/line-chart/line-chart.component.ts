@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {ChartConfiguration, ChartData, ChartEvent, ChartOptions, ChartType} from "chart.js";
 import {BaseChartDirective} from "ng2-charts";
 
@@ -46,6 +46,15 @@ export class LineChartComponent implements OnInit {
     ngOnInit(): void {
         if (this.data) {
             this.lineChartData = this.data;
+        }
+    }
+
+    updateData(data: ChartData): void {
+        console.log('let us update data');
+        console.log(data);
+        this.data = data;
+        if (this.chart) {
+            this.chart.update();
         }
     }
 

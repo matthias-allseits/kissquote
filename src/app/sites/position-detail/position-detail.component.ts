@@ -1,10 +1,12 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Position} from '../../models/position';
 import {PositionService} from '../../services/position.service';
 import {
-    faEdit, faExternalLinkAlt,
-    faTrashAlt,
+    faChevronLeft, faChevronRight,
+    faEdit,
+    faExternalLinkAlt,
+    faTrashAlt
 } from "@fortawesome/free-solid-svg-icons";
 import {Transaction} from "../../models/transaction";
 import {TransactionService} from "../../services/transaction.service";
@@ -13,6 +15,7 @@ import {ShareheadService} from "../../services/sharehead.service";
 import {ShareheadShare} from "../../models/sharehead-share";
 import {ChartData, ChartDataset} from "chart.js";
 import {DateHelper} from "../../core/datehelper";
+import {LineChartComponent} from "../../components/line-chart/line-chart.component";
 
 
 export interface DividendProjection {
@@ -28,11 +31,16 @@ export interface DividendProjection {
 })
 export class PositionDetailComponent implements OnInit {
 
+    @ViewChild(LineChartComponent)
+    private lineChartComponent!: LineChartComponent;
+
     editIcon = faEdit;
     deleteIcon = faTrashAlt;
     externalLinkIcon = faExternalLinkAlt;
+    naviForwardIcon = faChevronRight;
+    naviBackIcon = faChevronLeft;
 
-    public position: Position|null = null;
+    public position?: Position;
     public selectedTransaction?: Transaction;
     public shareheadShare?: ShareheadShare;
     public diviProjectionYears: DividendProjection[] = [];
@@ -44,6 +52,7 @@ export class PositionDetailComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private positionService: PositionService,
         private transactionService: TransactionService,
         private shareheadService: ShareheadService,
@@ -97,68 +106,107 @@ export class PositionDetailComponent implements OnInit {
     }
 
 
+    navigateCross(direction: string): void {
+        console.log(direction);
+        let positionIndex: number = -1;
+        this.positionService.getPositions()
+            .subscribe(positions => {
+                positions.forEach((position, index) => {
+                    if (this.position) {
+                        if (position.id === this.position.id) {
+                            positionIndex = index;
+                        }
+                    }
+                });
+                console.log(positionIndex);
+                let nextIndex = -1;
+                if (direction === 'forward') {
+                    nextIndex = positionIndex + 1;
+                    if (nextIndex > positions.length - 1) {
+                        nextIndex = 0;
+                    }
+                } else {
+                    nextIndex = positionIndex - 1;
+                    if (nextIndex < 0) {
+                        nextIndex = positions.length - 1;
+                    }
+                }
+                console.log(nextIndex);
+                const nextPosition = positions[nextIndex];
+                this.router.navigate(['/position-detail/' + nextPosition.id]);
+                this.loadData(nextPosition.id);
+            });
+    }
+
+
     private loadData(positionId: number): void {
         this.positionService.getPosition(positionId)
             .subscribe(position => {
                 console.log(position);
-                this.position = position;
-                if (this.position && this.position.balance) {
-                    this.chartData = {
-                        labels: [ 'Kosten vs Einnahmen' ],
-                        datasets: [
-                            {
-                                label: 'Kosten',
-                                data: [this.position.balance.transactionFeesTotal]
-                            },
-                            {
-                                label: 'Einnahmen',
-                                data: [this.position.balance.collectedDividends]
-                            },
-                        ]
-                    };
-                }
-                if (this.position && this.position.shareheadId && this.position.shareheadId > 0) {
-                    this.shareheadService.getShare(this.position.shareheadId)
-                        .subscribe(share => {
-                            if (share) {
-                                this.shareheadShare = share;
-                                console.log(this.shareheadShare);
-                                if (this.position?.balance) {
-                                    const nextYear = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
-                                    const nextYearDiviProjection = share.dividendProjectionForYear(nextYear);
-                                    const nextYearP1 = new Date(new Date().setFullYear(new Date().getFullYear() + 2));
-                                    const nextYearDiviProjectionP1 = share.dividendProjectionForYear(nextYearP1);
-                                    const nextYearP2 = new Date(new Date().setFullYear(new Date().getFullYear() + 3));
-                                    const nextYearDiviProjectionP2 = share.dividendProjectionForYear(nextYearP2);
-                                    this.diviProjectionYears = [];
-                                    if (nextYearDiviProjection > 0) {
-                                        this.diviProjectionYears.push({
-                                            year: nextYear,
-                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjection * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
-                                            yield: (100 / this.position.balance.investment * (nextYearDiviProjection * this.position?.balance?.amount)).toFixed(1).toString() + '%',
-                                        });
-                                    }
-                                    if (nextYearDiviProjectionP1 > 0) {
-                                        this.diviProjectionYears.push({
-                                            year: nextYearP1,
-                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP1 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
-                                            yield: (100 / this.position.balance.investment * (nextYearDiviProjectionP1 * this.position?.balance?.amount)).toFixed(1).toString() + '%',
-                                        });
-                                    }
-                                    if (nextYearDiviProjectionP2 > 0) {
-                                        this.diviProjectionYears.push({
-                                            year: nextYearP2,
-                                            projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP2 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
-                                            yield: (100 / this.position.balance.investment * (nextYearDiviProjectionP2 * this.position?.balance?.amount)).toFixed(1).toString() + '%',
-                                        });
+                if (position) {
+                    this.position = position;
+                    if (this.position && this.position.balance) {
+                        this.chartData = {
+                            labels: ['Kosten vs Einnahmen'],
+                            datasets: [
+                                {
+                                    label: 'Kosten',
+                                    data: [this.position.balance.transactionFeesTotal]
+                                },
+                                {
+                                    label: 'Einnahmen',
+                                    data: [this.position.balance.collectedDividends]
+                                },
+                            ]
+                        };
+                    }
+                    if (this.position && this.position.shareheadId && this.position.shareheadId > 0) {
+                        this.shareheadService.getShare(this.position.shareheadId)
+                            .subscribe(share => {
+                                if (share) {
+                                    this.shareheadShare = share;
+                                    console.log(this.shareheadShare);
+                                    if (this.position?.balance) {
+                                        const nextYear = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
+                                        const nextYearDiviProjection = share.dividendProjectionForYear(nextYear);
+                                        const nextYearP1 = new Date(new Date().setFullYear(new Date().getFullYear() + 2));
+                                        const nextYearDiviProjectionP1 = share.dividendProjectionForYear(nextYearP1);
+                                        const nextYearP2 = new Date(new Date().setFullYear(new Date().getFullYear() + 3));
+                                        const nextYearDiviProjectionP2 = share.dividendProjectionForYear(nextYearP2);
+                                        this.diviProjectionYears = [];
+                                        if (nextYearDiviProjection > 0) {
+                                            this.diviProjectionYears.push({
+                                                year: nextYear,
+                                                projection: '(by analyst-estimations) ' + ((nextYearDiviProjection * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
+                                                yield: (100 / this.position.balance.investment * (nextYearDiviProjection * this.position?.balance?.amount)).toFixed(1).toString() + '%',
+                                            });
+                                        }
+                                        if (nextYearDiviProjectionP1 > 0) {
+                                            this.diviProjectionYears.push({
+                                                year: nextYearP1,
+                                                projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP1 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
+                                                yield: (100 / this.position.balance.investment * (nextYearDiviProjectionP1 * this.position?.balance?.amount)).toFixed(1).toString() + '%',
+                                            });
+                                        }
+                                        if (nextYearDiviProjectionP2 > 0) {
+                                            this.diviProjectionYears.push({
+                                                year: nextYearP2,
+                                                projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP2 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
+                                                yield: (100 / this.position.balance.investment * (nextYearDiviProjectionP2 * this.position?.balance?.amount)).toFixed(1).toString() + '%',
+                                            });
+                                        }
                                     }
                                 }
-                            }
-                        })
-                }
+                            })
+                    }
 
-                this.lineChartData = this.position?.getRatesChartData();
-                this.addLatestRateToLineChart();
+                    this.lineChartData = this.position?.getRatesChartData();
+                    console.log('chartdata length: ' + this.lineChartData?.datasets[0].data.length);
+                    this.addLatestRateToLineChart();
+                    if (this.lineChartComponent) {
+                        this.lineChartComponent.updateData(this.lineChartData);
+                    }
+                }
             });
     }
 

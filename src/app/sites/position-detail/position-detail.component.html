@@ -1,6 +1,16 @@
 <main *ngIf="position">
     <div class="container px-4 py-2">
-        <h1>Position {{ position.getName() }}</h1>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Position {{ position.getName() }}</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <button (click)="navigateCross('backward')" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="naviBackIcon"></fa-icon></button>
+                </div>
+                <div class="btn-group me-2">
+                    <button (click)="navigateCross('forward')" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="naviForwardIcon"></fa-icon></button>
+                </div>
+            </div>
+        </div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link" [class.active]="positionTab === 'balance'" (click)="changeTab('balance')" aria-current="page">Balance</a>
