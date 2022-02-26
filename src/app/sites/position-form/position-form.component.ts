@@ -96,7 +96,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         this.selectableShares = [];
         if (event.target.value) {
             this.shareheadShares?.forEach(share => {
-                if (share.name && share.name.toLowerCase().indexOf(event.target.value) > -1) {
+                if (share.name && share.name.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1) {
                     this.selectableShares?.push(share);
                 }
             });
@@ -109,6 +109,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         const share = ShareCreator.createNewShare();
         share.isin = shareheadShare.isin;
         share.name = shareheadShare.name;
+        share.marketplace = shareheadShare.marketplace;
         console.log(share);
         this.selectableShares = [];
         this.positionForm.get('shareName')?.setValue(share.name);

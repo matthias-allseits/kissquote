@@ -27,6 +27,70 @@ export class Portfolio {
     }
 
 
+    investmentTotal(): number {
+        let total = 0;
+        this.bankAccounts.forEach(account => {
+            account.getNonCashPositions().forEach(position => {
+                if (position.balance) {
+                    total += position.balance?.investment;
+                }
+            });
+        });
+
+        return total;
+    }
+
+
+    valueTotal(): number {
+        let total = 0;
+        this.bankAccounts.forEach(account => {
+            account.getNonCashPositions().forEach(position => {
+                const actualValue = position.actualValue();
+                if (actualValue) {
+                    total += +actualValue;
+                }
+            });
+        });
+
+        return total;
+    }
+
+
+    cashTotal(): number {
+        let total = 0;
+        this.bankAccounts.forEach(account => {
+            account.getCashPositions().forEach(position => {
+                const actualValue = position.actualValue();
+                if (actualValue) {
+                    total += +actualValue;
+                }
+            });
+        });
+
+        return total;
+    }
+
+
+    dividendProjectionsTotal(): number {
+        let total = 0;
+        this.bankAccounts.forEach(account => {
+            account.getNonCashPositions().forEach(position => {
+                if (position.balance) {
+                    total += position.balance?.projectedNextDividendPayment;
+                }
+            });
+        });
+
+        return total;
+    }
+
+
+    openPositionsBalance(): number {
+
+        return this.valueTotal() - this.investmentTotal();
+    }
+
+
     getAllShares(): Share[] {
         const shares: Share[] = [];
         this.bankAccounts.forEach(account => {

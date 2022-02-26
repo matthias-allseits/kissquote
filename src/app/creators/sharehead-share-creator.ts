@@ -1,6 +1,7 @@
 import {ShareheadShare} from "../models/sharehead-share";
 import {CurrencyCreator} from "./currency-creator";
 import {ShareheadBalanceCreator} from "./sharehead-balance-creator";
+import {MarketplaceCreator} from "./marketplace-creator";
 
 
 export class ShareheadShareCreator {
@@ -22,9 +23,11 @@ export class ShareheadShareCreator {
     public static oneFromApiArray(apiArray: ShareheadShare|null): ShareheadShare|null
     {
         if (apiArray !== undefined && apiArray !== null) {
+            const marketplace = MarketplaceCreator.oneFromApiArray(apiArray.marketplace);
             return new ShareheadShare(
                 apiArray.id,
                 apiArray.shareheadId,
+                marketplace,
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.name,
                 apiArray.shortname,

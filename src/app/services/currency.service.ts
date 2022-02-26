@@ -4,7 +4,6 @@ import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Currency} from '../models/currency';
 import {CurrencyCreator} from "../creators/currency-creator";
-import {ShareheadShare} from "../models/sharehead-share";
 import {ApiService} from "./api-service";
 
 
@@ -31,6 +30,9 @@ export class CurrencyService extends ApiService {
 
     public getCurrencyByName(currencies: Currency[], name: string): Currency|null
     {
+        if (name === 'GBX') { // island apes...
+            name = 'GBP';
+        }
         let hit = null;
         currencies.forEach(currency => {
             if (currency.name == name) {

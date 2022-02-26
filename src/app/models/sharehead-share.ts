@@ -1,8 +1,8 @@
 import {Currency} from "./currency";
 import {ShareheadBalance} from "./sharehead-balance";
 import {ShareheadEstimation} from "./sharehead-estimation";
-import {ChartData, ChartDataset} from "chart.js";
-import {DateHelper} from "../core/datehelper";
+import {ChartData} from "chart.js";
+import {Marketplace} from "./marketplace";
 
 
 export class ShareheadShare {
@@ -10,6 +10,7 @@ export class ShareheadShare {
     constructor(
         public id: number,
         public shareheadId: number,
+        public marketplace: Marketplace|undefined,
         public currency: Currency|null,
         public name: string|null,
         public shortname: string|null,
