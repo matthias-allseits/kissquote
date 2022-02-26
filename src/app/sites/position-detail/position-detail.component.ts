@@ -168,10 +168,12 @@ export class PositionDetailComponent implements OnInit {
         if (this.lineChartData && this.position?.balance) {
             if (this.lineChartData.labels && this.position.balance.lastRate?.date instanceof Date) {
                 const lastLabel = this.lineChartData.labels[this.lineChartData.labels?.length -1];
+                const lastLabelString = lastLabel + '';
+                const lastLabelDate = DateHelper.convertGermanDateStringToDateObject(lastLabelString);
                 const labelFromLastRate = DateHelper.convertDateToGerman(this.position.balance.lastRate?.date);
                 const lastRate = this.position.balance.lastRate?.rate;
                 console.log(lastLabel);
-                if (lastLabel !== labelFromLastRate) {
+                if (lastLabel !== labelFromLastRate && this.position.balance.lastRate?.date > lastLabelDate) {
                     this.lineChartData.labels.push(labelFromLastRate);
                     this.lineChartData.datasets[0].data.push(lastRate);
                 }

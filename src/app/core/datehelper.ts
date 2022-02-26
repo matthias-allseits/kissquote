@@ -42,4 +42,19 @@ export class DateHelper {
         return day + '.' + month + '.' + year;
     }
 
+
+    public static convertGermanDateStringToDateObject(date: string): Date {
+        const year = +date.substr(6, 4);
+        const monthIndex = +date.substr(4, 2) - 1;
+        const day = +date.substr(0, 2);
+
+        // console.log(year);
+        // console.log(monthIndex);
+        // console.log(day);
+
+        const dateObject = new Date(year, monthIndex, day);
+
+        return dateObject;
+    }
+
 }

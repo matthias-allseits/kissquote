@@ -87,7 +87,7 @@
                 </div>
                 <div class="row">
                     <div class="col-9">Bilanz:</div>
-                    <div class="col-3"><span class="float-end"></span></div>
+                    <div class="col-3"><span class="float-end">{{ position.investmentBalance() }}%</span></div>
                 </div>
             </div>
             <div *ngIf="position.balance" class="info-box">

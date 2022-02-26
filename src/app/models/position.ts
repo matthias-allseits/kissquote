@@ -38,6 +38,18 @@ export class Position {
     }
 
 
+    investmentBalance(): string
+    {
+        let result = 0;
+        const actualValue = this.actualValue();
+        if (this.balance && actualValue) {
+            result = ((100 / this.balance.investment * +actualValue) - 100);
+        }
+
+        return result.toFixed(1);
+    }
+
+
     yieldOnInvestent(): string
     {
         let result = 0;
@@ -75,7 +87,6 @@ export class Position {
     }
 
 
-    // todo: this is crap
     public quantityTotal(): number {
         let quantity = 0;
         let ignoreNext = false;
