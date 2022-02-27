@@ -11,7 +11,6 @@ export class ShareheadShare {
         public id: number,
         public shareheadId: number,
         public marketplace: Marketplace|undefined,
-        public currency: Currency|null,
         public name: string|null,
         public shortname: string|null,
         public isin: string|null,
@@ -23,19 +22,20 @@ export class ShareheadShare {
         public urlWikipedia?: string,
         public urlInvesting?: string,
         public urlFinanztreff?: string,
+        public currency?: Currency,
         public balances?: ShareheadBalance[],
         public estimations?: ShareheadEstimation[],
     ) { }
 
 
-    dividendProjectionForYear(year: Date): number
+    dividendProjectionForYear(year: Date): ShareheadEstimation|null
     {
         const estimation = this.lastEstimationForYear(year);
         if (estimation) {
-            return estimation.dividend;
+            return estimation;
         }
 
-        return 0;
+        return null;
     }
 
 
@@ -133,6 +133,18 @@ export class ShareheadShare {
         const result = unique.join('/');
 
         return result;
+    }
+
+
+    estimationsByYear(year: number): ShareheadEstimation|null {
+        let hit = null;
+        this.estimations?.forEach(estimation => {
+            if (estimation.year === year) {
+                hit = estimation;
+            }
+        });
+
+        return hit;
     }
 
 }

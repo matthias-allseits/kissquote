@@ -28,7 +28,6 @@ export class ShareheadShareCreator {
                 apiArray.id,
                 apiArray.shareheadId,
                 marketplace,
-                CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.name,
                 apiArray.shortname,
                 apiArray.isin,
@@ -40,6 +39,7 @@ export class ShareheadShareCreator {
                 apiArray.urlWikipedia,
                 apiArray.urlInvesting,
                 apiArray.urlFinanztreff,
+                CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.balances ? ShareheadBalanceCreator.fromApiArray(apiArray.balances) : [],
                 apiArray.estimations ? ShareheadBalanceCreator.fromApiArray(apiArray.estimations) : [],
             );

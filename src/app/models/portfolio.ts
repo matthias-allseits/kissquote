@@ -1,6 +1,7 @@
 import {BankAccount} from './bank-account';
 import {BankAccountCreator} from "../creators/bank-account-creator";
 import {Share} from "./share";
+import {Currency} from "./currency";
 
 
 export class Portfolio {
@@ -88,6 +89,22 @@ export class Portfolio {
     openPositionsBalance(): number {
 
         return this.valueTotal() - this.investmentTotal();
+    }
+
+
+    getAllCurrencies(): Currency[] {
+        const currencies: Currency[] = [];
+        const currencyIds: number[] = [];
+        this.bankAccounts.forEach(account => {
+            account.getCashPositions().forEach(position => {
+                if (position.currency && currencyIds.indexOf(position.currency.id) === -1) {
+                    currencies.push(position.currency);
+                    currencyIds.push(position.currency.id);
+                }
+            });
+        });
+
+        return currencies;
     }
 
 

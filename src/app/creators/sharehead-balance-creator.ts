@@ -25,13 +25,13 @@ export class ShareheadBalanceCreator {
             return new ShareheadBalance(
                 new Date(apiArray.date),
                 apiArray.year,
-                CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.sales,
                 apiArray.profitPerShare,
                 apiArray.profit,
                 apiArray.equityRatio,
                 apiArray.dividend,
                 apiArray.avgRate,
+                CurrencyCreator.oneFromApiArray(apiArray.currency),
             );
         } else {
             return null;

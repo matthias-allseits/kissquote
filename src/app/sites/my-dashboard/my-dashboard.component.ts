@@ -10,6 +10,7 @@ import {PositionService} from "../../services/position.service";
 import {BankAccount} from "../../models/bank-account";
 import {BankAccountService} from "../../services/bank-account.service";
 import {ChartData} from "chart.js";
+import {Currency} from "../../models/currency";
 
 
 @Component({
@@ -27,6 +28,7 @@ export class MyDashboardComponent implements OnInit {
     public myKey: string|null = null;
     // todo: the portfolio has to be ready at this time. probably the solution: resolvers!
     public portfolio: Portfolio|null = null;
+    public currencies?: Currency[];
     private selectedPosition?: Position;
     private selectedBankAccount?: BankAccount;
     public dashboardTab = '0';
@@ -50,6 +52,7 @@ export class MyDashboardComponent implements OnInit {
                     console.log(returnedPortfolio);
                     if (returnedPortfolio instanceof Portfolio) {
                         this.portfolio = returnedPortfolio;
+                        this.currencies = this.portfolio.getAllCurrencies();
                     } else {
                         alert('Something went wrong!');
                         // todo: redirect back to landingpage. probably the solution: implement guards

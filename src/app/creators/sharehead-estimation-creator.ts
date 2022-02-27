@@ -22,16 +22,17 @@ export class ShareheadEstimationCreator {
     public static oneFromApiArray(apiArray: ShareheadEstimation|null): ShareheadEstimation|null
     {
         if (apiArray !== undefined && apiArray !== null) {
+            const currency = CurrencyCreator.oneFromApiArray(apiArray.currency);
             return new ShareheadEstimation(
                 new Date(apiArray.date),
                 apiArray.year,
-                CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.sales,
                 apiArray.profitPerShare,
                 apiArray.profit,
                 apiArray.equityRatio,
                 apiArray.dividend,
                 apiArray.avgRate,
+                currency,
             );
         } else {
             return null;

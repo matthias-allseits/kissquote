@@ -16,13 +16,9 @@ import {ShareheadShare} from "../../models/sharehead-share";
 import {ChartData, ChartDataset} from "chart.js";
 import {DateHelper} from "../../core/datehelper";
 import {LineChartComponent} from "../../components/line-chart/line-chart.component";
+import {DividendProjection} from "../../models/dividend-projection";
+import {DividendProjectionCreator} from "../../creators/dividend-projection-creator";
 
-
-export interface DividendProjection {
-    year: Date;
-    projection: string;
-    yield: string;
-}
 
 @Component({
     selector: 'app-position-detail',
@@ -168,32 +164,34 @@ export class PositionDetailComponent implements OnInit {
                                     console.log(this.shareheadShare);
                                     if (this.position?.balance) {
                                         const nextYear = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
-                                        const nextYearDiviProjection = share.dividendProjectionForYear(nextYear);
+                                        const nextYearEstimation = share.dividendProjectionForYear(nextYear);
+
                                         const nextYearP1 = new Date(new Date().setFullYear(new Date().getFullYear() + 2));
-                                        const nextYearDiviProjectionP1 = share.dividendProjectionForYear(nextYearP1);
+                                        const nextYearEstimationP1 = share.dividendProjectionForYear(nextYearP1);
+
                                         const nextYearP2 = new Date(new Date().setFullYear(new Date().getFullYear() + 3));
-                                        const nextYearDiviProjectionP2 = share.dividendProjectionForYear(nextYearP2);
+                                        const nextYearEstimationP2 = share.dividendProjectionForYear(nextYearP2);
                                         this.diviProjectionYears = [];
-                                        if (nextYearDiviProjection > 0) {
-                                            this.diviProjectionYears.push({
-                                                year: nextYear,
-                                                projection: '(by analyst-estimations) ' + ((nextYearDiviProjection * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
-                                                yield: (100 / this.position.balance.investment * (nextYearDiviProjection * this.position?.balance?.amount)).toFixed(1).toString() + '%',
-                                            });
+                                        if (nextYearEstimation) {
+                                            const projection = DividendProjectionCreator.createNewDividendProjection();
+                                            projection.year = nextYear;
+                                            projection.projection = '(by analyst-estimations) ' + ((nextYearEstimation.dividend * this.position?.balance?.amount).toFixed()).toString() + ' ' + nextYearEstimation.currency?.name;
+                                            projection.yieldFloat = (100 / this.position.balance.investment * (nextYearEstimation.dividend * this.position?.balance?.amount)).toFixed(1).toString() + '%';
+                                            this.diviProjectionYears.push(projection);
                                         }
-                                        if (nextYearDiviProjectionP1 > 0) {
-                                            this.diviProjectionYears.push({
-                                                year: nextYearP1,
-                                                projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP1 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
-                                                yield: (100 / this.position.balance.investment * (nextYearDiviProjectionP1 * this.position?.balance?.amount)).toFixed(1).toString() + '%',
-                                            });
+                                        if (nextYearEstimationP1) {
+                                            const projection = DividendProjectionCreator.createNewDividendProjection();
+                                            projection.year = nextYearP1;
+                                            projection.projection = '(by analyst-estimations) ' + ((nextYearEstimationP1.dividend * this.position?.balance?.amount).toFixed()).toString() + ' ' + nextYearEstimationP1.currency?.name;
+                                            projection.yieldFloat = (100 / this.position.balance.investment * (nextYearEstimationP1.dividend * this.position?.balance?.amount)).toFixed(1).toString() + '%';
+                                            this.diviProjectionYears.push(projection);
                                         }
-                                        if (nextYearDiviProjectionP2 > 0) {
-                                            this.diviProjectionYears.push({
-                                                year: nextYearP2,
-                                                projection: '(by analyst-estimations) ' + ((nextYearDiviProjectionP2 * this.position?.balance?.amount).toFixed()).toString() + ' ' + share.estimationsCurrency(),
-                                                yield: (100 / this.position.balance.investment * (nextYearDiviProjectionP2 * this.position?.balance?.amount)).toFixed(1).toString() + '%',
-                                            });
+                                        if (nextYearEstimationP2) {
+                                            const projection = DividendProjectionCreator.createNewDividendProjection();
+                                            projection.year = nextYearP2;
+                                            projection.projection = '(by analyst-estimations) ' + ((nextYearEstimationP2.dividend * this.position?.balance?.amount).toFixed()).toString() + ' ' + nextYearEstimationP2.currency?.name;
+                                            projection.yieldFloat = (100 / this.position.balance.investment * (nextYearEstimationP2.dividend * this.position?.balance?.amount)).toFixed(1).toString() + '%';
+                                            this.diviProjectionYears.push(projection);
                                         }
                                     }
                                 }

@@ -16,6 +16,9 @@
             <li class="nav-item">
                 <a class="nav-link" [class.active]="dashboardTab === 'balance'" (click)="changeTab('balance')">Portfolio Balances</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="dashboardTab === 'settings'" (click)="changeTab('settings')">Settings</a>
+            </li>
         </ul>
         <div *ngFor="let bankAccount of portfolio.bankAccounts index as accountIndex;" class="shadow-sm p-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== accountIndex.toString()">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
@@ -135,6 +138,18 @@
             <div *ngFor="let account of portfolio.bankAccounts" class="info-box">
                 <h5>{{ account.name }}</h5>
                 <app-bar-chart [data]="getBalanceChartDataByAccount(account)"></app-bar-chart>
+            </div>
+        </div>
+        <div class="shadow-sm p-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'settings'">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
+                <h4 class="pt-2">Settings</h4>
+            </div>
+            <div class="info-box">
+                <h5>Currencies</h5>
+                <div *ngFor="let currency of currencies" class="row">
+                    <div class="col-9">{{ currency.name }}</div>
+                    <div class="col-3"><span class="float-end">{{ currency.rate }}</span></div>
+                </div>
             </div>
         </div>
     </div>

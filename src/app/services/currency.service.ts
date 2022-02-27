@@ -28,12 +28,12 @@ export class CurrencyService extends ApiService {
             );
     }
 
-    public getCurrencyByName(currencies: Currency[], name: string): Currency|null
+    public getCurrencyByName(currencies: Currency[], name: string): Currency|undefined
     {
         if (name === 'GBX') { // island apes...
             name = 'GBP';
         }
-        let hit = null;
+        let hit = undefined;
         currencies.forEach(currency => {
             if (currency.name == name) {
                 hit = currency;

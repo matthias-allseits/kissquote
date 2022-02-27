@@ -14,7 +14,7 @@ import {ShareheadShareCreator} from "../creators/sharehead-share-creator";
 
 export class ShareheadService {
 
-    private baseUrl = 'http://sharehead.local/api';
+    private baseUrl = 'http://sharehead.dyn-o-saur.com/api';
 
     constructor(
         private http: HttpClient,

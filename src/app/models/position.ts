@@ -14,7 +14,6 @@ export class Position {
     constructor(
         public id: number,
         public share: Share|null,
-        public currency: Currency|null,
         public active: boolean,
         public activeFrom: Date|string,
         public activeUntil: Date|null,
@@ -22,6 +21,7 @@ export class Position {
         public isCash: boolean = false,
         public dividendPeriodicity: string,
         public bankAccount?: BankAccount,
+        public currency?: Currency,
         public balance?: Balance,
         public shareheadId?: number,
     ) {}

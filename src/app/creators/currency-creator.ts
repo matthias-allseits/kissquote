@@ -13,7 +13,7 @@ export class CurrencyCreator {
 
         for (const currencyList of apiArray) {
             const currency = this.oneFromApiArray(currencyList);
-            if (null !== currency) {
+            if (currency) {
                 array.push(currency);
             }
         }
@@ -22,7 +22,7 @@ export class CurrencyCreator {
     }
 
 
-    public static oneFromApiArray(apiArray: Currency|null): Currency|null
+    public static oneFromApiArray(apiArray: Currency|undefined): Currency|undefined
     {
         if (apiArray !== undefined && apiArray !== null) {
             return new Currency(
@@ -31,7 +31,7 @@ export class CurrencyCreator {
                 apiArray.rate,
             );
         } else {
-            return null;
+            return undefined;
         }
     }
 
