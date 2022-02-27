@@ -5,6 +5,7 @@ export class DividendProjection {
         public year: Date|null,
         public projection: string,
         public yieldFloat: string,
+        public currencyCorrectedProjection?: string
     ) {}
 
 }
