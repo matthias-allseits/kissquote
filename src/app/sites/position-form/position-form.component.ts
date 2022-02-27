@@ -93,15 +93,17 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
 
     searchShare(event: any): void {
         console.log(event.target.value);
-        this.selectableShares = [];
-        if (event.target.value) {
-            this.shareheadShares?.forEach(share => {
-                if (share.name && share.name.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1) {
-                    this.selectableShares?.push(share);
-                }
-            });
+        if (this.position.id === 0) {
+            this.selectableShares = [];
+            if (event.target.value) {
+                this.shareheadShares?.forEach(share => {
+                    if (share.name && share.name.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1) {
+                        this.selectableShares?.push(share);
+                    }
+                });
+            }
+            console.log(this.selectableShares.length);
         }
-        console.log(this.selectableShares.length);
     }
 
 

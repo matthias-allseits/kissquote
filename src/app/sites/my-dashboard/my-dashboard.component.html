@@ -146,9 +146,17 @@
             </div>
             <div class="info-box">
                 <h5>Currencies</h5>
+                <div class="row">
+                    <div class="col-7"><strong>Name</strong></div>
+                    <div class="col-5"><strong class="float-end">Exchange rate</strong></div>
+                </div>
                 <div *ngFor="let currency of currencies" class="row">
                     <div class="col-9">{{ currency.name }}</div>
-                    <div class="col-3"><span class="float-end">{{ currency.rate }}</span></div>
+                    <div class="col-3">
+                        <span class="float-end">{{ currency.rate }}
+                            <fa-icon [icon]="editIcon" (click)="openExchangeRateModal(exchangeRate, currency)" class="icon-as-btn" title="Edit rate"></fa-icon>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -159,7 +167,7 @@
     <div class="modal-body text-center">
         <p>Wollen Sie diese Position wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirmPosition()">Ja</button>
-        <button type="button" class="btn btn-primary" (click)="declinePosition()">Nein</button>
+        <button type="button" class="btn btn-primary" (click)="cancelModal()">Nein</button>
     </div>
 </ng-template>
 
@@ -167,6 +175,26 @@
     <div class="modal-body text-center">
         <p>Wollen Sie dieses Bankkonto wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirmAccount()">Ja</button>
-        <button type="button" class="btn btn-primary" (click)="declineAccount()">Nein</button>
+        <button type="button" class="btn btn-primary" (click)="cancelModal()">Nein</button>
+    </div>
+</ng-template>
+
+<ng-template #exchangeRate>
+    <div *ngIf="selectedCurrency" class="modal-body">
+        <p *ngIf="selectedCurrency">Geben Sie Ihre Exchange-Rate für Ihre Währung &laquo;{{ selectedCurrency.name }}&raquo; ein:</p>
+        <form [formGroup]="exchangeRateForm">
+            <div class="mb-3">
+                <label for="exchange-rate-input" class="form-label"></label>
+                <input formControlName="rate" id="exchange-rate-input" class="form-control" type="text" name="rate" value="">
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button type="button" class="btn btn-default" (click)="cancelModal()">Abbrechen</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="btn btn-primary float-end" (click)="persistExchangeRate()">Speichern</button>
+                </div>
+            </div>
+        </form>
     </div>
 </ng-template>

@@ -11,6 +11,8 @@ import {BankAccount} from "../../models/bank-account";
 import {BankAccountService} from "../../services/bank-account.service";
 import {ChartData} from "chart.js";
 import {Currency} from "../../models/currency";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {CurrencyService} from "../../services/currency.service";
 
 
 @Component({
@@ -31,13 +33,19 @@ export class MyDashboardComponent implements OnInit {
     public currencies?: Currency[];
     private selectedPosition?: Position;
     private selectedBankAccount?: BankAccount;
+    public selectedCurrency?: Currency;
     public dashboardTab = '0';
     modalRef?: BsModalRef;
+
+    exchangeRateForm = new FormGroup({
+        rate: new FormControl('', Validators.required),
+    });
 
     constructor(
         public tranService: TranslationService,
         private portfolioService: PortfolioService,
         private positionService: PositionService,
+        private currencyService: CurrencyService,
         private bankAccountService: BankAccountService,
         private modalService: BsModalService,
     ) {
@@ -102,31 +110,45 @@ export class MyDashboardComponent implements OnInit {
         this.modalRef?.hide();
     }
 
-    declinePosition(): void {
+    cancelModal(): void {
         this.modalRef?.hide();
     }
 
     deletePosition(position: Position): void {
-        console.log(position);
         this.positionService.delete(position.id).subscribe(() => {
+            // todo: implement a data updater
             document.location.reload();
         });
     }
-
 
     openAccountConfirmModal(template: TemplateRef<any>, account: BankAccount) {
         this.selectedBankAccount = account;
         this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
     }
 
-    confirmAccount(): void {
-        if (this.selectedBankAccount) {
-            this.deleteBankAccount(this.selectedBankAccount);
+    openExchangeRateModal(template: TemplateRef<any>, currency: Currency) {
+        console.log(template);
+        this.selectedCurrency = currency;
+        this.exchangeRateForm.get('rate')?.setValue(currency.rate);
+        this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+    }
+
+    persistExchangeRate(): void {
+        if (this.selectedCurrency) {
+            this.selectedCurrency.rate = this.exchangeRateForm.get('rate')?.value;
+            this.currencyService.update(this.selectedCurrency)
+                .subscribe(currency => {
+                    // todo: implement a data updater
+                    document.location.reload();
+                });
         }
         this.modalRef?.hide();
     }
 
-    declineAccount(): void {
+    confirmAccount(): void {
+        if (this.selectedBankAccount) {
+            this.deleteBankAccount(this.selectedBankAccount);
+        }
         this.modalRef?.hide();
     }
 

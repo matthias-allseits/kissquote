@@ -1,11 +1,17 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Currency} from '../models/currency';
 import {CurrencyCreator} from "../creators/currency-creator";
 import {ApiService} from "./api-service";
 
+
+const httpOptions = {
+    headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+    })
+};
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +23,17 @@ export class CurrencyService extends ApiService {
         public override http: HttpClient,
     ) {
         super('/currency', http);
+    }
+
+
+    update(currency: Currency): Observable<Currency|null> {
+        const url = `${this.apiUrl}/${currency.id}`;
+        return this.http
+            .put(url, JSON.stringify(currency), httpOptions)
+            .pipe(
+                map(() => currency),
+                // catchError(this.handleError)
+            );
     }
 
 
