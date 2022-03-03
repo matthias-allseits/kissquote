@@ -176,7 +176,7 @@
                     </div>
                     <div class="info-box info-box-lg">
                         <h5>Profit + Dividend per Share</h5>
-                        <app-line-chart [data]="shareheadShare.profitChartData()" [height]="150"></app-line-chart>
+                        <app-line-chart [data]="shareheadShare.profitChartData()" [height]="150" [forceBeginAtZero]="!shareheadShare.hadNegativeBalances()"></app-line-chart>
                     </div>
                 </div>
                 <div class="info-box">

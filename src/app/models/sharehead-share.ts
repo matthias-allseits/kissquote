@@ -98,6 +98,18 @@ export class ShareheadShare {
     }
 
 
+    hadNegativeBalances(): boolean {
+        let result = false;
+        this.balances?.forEach(balance => {
+            if (balance.profitPerShare < 0) {
+                result = true;
+            }
+        });
+
+        return result;
+    }
+
+
     balancesCurrency(): string
     {
         const currencies = [];

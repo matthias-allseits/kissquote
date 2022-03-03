@@ -1,5 +1,5 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {ChartConfiguration, ChartData, ChartEvent, ChartOptions, ChartType} from "chart.js";
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {ChartConfiguration, ChartData, ChartEvent, ChartType} from "chart.js";
 import {BaseChartDirective} from "ng2-charts";
 
 
@@ -13,6 +13,8 @@ export class LineChartComponent implements OnInit {
     @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
     @Input() data?: ChartData;
     @Input() height = 141;
+    // @Input() beginAtZero = false;
+    @Input() forceBeginAtZero = false;
 
     public lineChartType: ChartType = 'line';
     public lineChartOptions: ChartConfiguration['options'] = {
@@ -27,10 +29,23 @@ export class LineChartComponent implements OnInit {
         scales: {
             // We use this empty structure as a placeholder for dynamic theming.
             x: {},
-            'y-axis-0':
-                {
-                    position: 'left',
+            y: {
+                min: undefined,
+                grid: {
+                    drawBorder: false,
+                    color: function(context) {
+                        if (context.tick.value === 0) {
+                            return '#000000';
+                        } else {
+                            return 'rgb(201, 203, 207)';
+                        }
+                    },
                 },
+            },
+            // 'y-axis-0': {
+            //     // position: 'left',
+            //     beginAtZero: this.beginAtZero
+            // },
         },
         plugins: {
             legend: {
@@ -46,6 +61,11 @@ export class LineChartComponent implements OnInit {
     ngOnInit(): void {
         if (this.data) {
             this.lineChartData = this.data;
+        }
+        if (this.forceBeginAtZero) {
+            if (this.lineChartOptions && this.lineChartOptions.scales && this.lineChartOptions.scales['y']) {
+                this.lineChartOptions.scales['y'].min = 0;
+            }
         }
     }
 
