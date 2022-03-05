@@ -15,6 +15,8 @@ export class LineChartComponent implements OnInit {
     @Input() height = 141;
     // @Input() beginAtZero = false;
     @Input() forceBeginAtZero = false;
+    @Input() percentageChart = false;
+    @Input() pointRadius?: number;
 
     public lineChartType: ChartType = 'line';
     public lineChartOptions: ChartConfiguration['options'] = {
@@ -65,6 +67,16 @@ export class LineChartComponent implements OnInit {
         if (this.forceBeginAtZero) {
             if (this.lineChartOptions && this.lineChartOptions.scales && this.lineChartOptions.scales['y']) {
                 this.lineChartOptions.scales['y'].min = 0;
+            }
+        }
+        if (this.percentageChart) {
+            if (this.lineChartOptions && this.lineChartOptions.scales && this.lineChartOptions.scales['y']) {
+                this.lineChartOptions.scales['y'].max = 100;
+            }
+        }
+        if (this.pointRadius) {
+            if (this.lineChartOptions && this.lineChartOptions.elements && this.lineChartOptions.elements.point) {
+                this.lineChartOptions.elements.point.radius = this.pointRadius;
             }
         }
     }
