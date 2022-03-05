@@ -39,6 +39,16 @@ export class ShareheadShare {
     }
 
 
+    lastBalance(): ShareheadBalance|null
+    {
+        if (this.balances) {
+            return this.balances[this.balances.length - 1];
+        }
+
+        return null;
+    }
+
+
     lastEstimationForYear(year: Date): ShareheadEstimation|null
     {
         let hit = null;

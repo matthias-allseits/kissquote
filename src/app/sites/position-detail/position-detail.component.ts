@@ -19,6 +19,8 @@ import {LineChartComponent} from "../../components/line-chart/line-chart.compone
 import {DividendProjection} from "../../models/dividend-projection";
 import {DividendProjectionCreator} from "../../creators/dividend-projection-creator";
 import {ShareheadEstimation} from "../../models/sharehead-estimation";
+import {ShareheadBalance} from "../../models/sharehead-balance";
+import {formatNumber} from "@angular/common";
 
 
 @Component({
@@ -42,6 +44,7 @@ export class PositionDetailComponent implements OnInit {
     public shareheadShare?: ShareheadShare;
     public diviProjectionYears: DividendProjection[] = [];
     public positionTab = 'balance';
+    public shareheadDividendPayment?: string;
     modalRef?: BsModalRef;
 
     public chartData?: ChartData;
@@ -186,6 +189,12 @@ export class PositionDetailComponent implements OnInit {
                                             this.diviProjectionYears.push(projection);
                                         }
                                     }
+                                    if (this.shareheadShare.lastBalance() && this.position?.balance) {
+                                        const lastBalance = this.shareheadShare.lastBalance();
+                                        if (lastBalance) {
+                                            this.shareheadDividendPayment = (lastBalance?.dividend * this.position.balance.amount).toFixed(0);
+                                        }
+                                    }
                                 }
                             })
                     }
@@ -225,13 +234,13 @@ export class PositionDetailComponent implements OnInit {
         projection.year = nextYear;
         if (this.position?.balance && this.position?.currency?.rate) {
             let projectedValue = nextYearEstimation.dividend * this.position?.balance?.amount;
-            projection.projection = '(by analyst-estimations) ' + (projectedValue.toFixed()).toString() + ' ' + nextYearEstimation.currency?.name;
+            projection.projection = '(by analyst-estimations) ' + formatNumber(projectedValue, 'de-CH', '0.0-0') + ' ' + nextYearEstimation.currency?.name;
             if (nextYearEstimation.currency && nextYearEstimation.currency.rate && this.position.currency?.name !== nextYearEstimation.currency?.name) {
                 projectedValue = nextYearEstimation.dividend * nextYearEstimation.currency.rate * this.position?.balance?.amount;
                 if (this.position.currency?.name !== 'CHF') {
                     projectedValue = projectedValue / this.position.currency.rate;
                 }
-                projection.currencyCorrectedProjection = 'currency-corrected: ' + projectedValue?.toFixed().toString() + ' ' + this.position.currency?.name;
+                projection.currencyCorrectedProjection = 'currency-corrected: ' + formatNumber(projectedValue, 'de-CH', '0.0-0') + ' ' + this.position.currency?.name;
             }
             projection.yieldFloat = (100 / this.position.balance.investment * projectedValue).toFixed(1).toString() + '%';
         }

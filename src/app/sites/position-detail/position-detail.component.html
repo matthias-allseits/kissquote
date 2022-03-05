@@ -104,7 +104,7 @@
                 <h5>Dividends</h5>
                 <div class="row">
                     <div class="col-9">Collected dividends:</div>
-                    <div class="col-3"><span class="float-end">{{ position.balance.collectedDividends }}</span></div>
+                    <div class="col-3"><span class="float-end">{{ position.balance.collectedDividends|number: '1.0' }}</span></div>
                 </div>
                 <div class="row">
                     <div class="col-9">ROI by dividends:</div>
@@ -112,16 +112,26 @@
                 </div>
                 <div class="row">
                     <div class="col-10">Next projected payment from last:</div>
-                    <div class="col-2"><span class="float-end">{{ position.balance.projectedNextDividendPayment }}</span></div>
+                    <div class="col-2"><span class="float-end">{{ position.balance.projectedNextDividendPayment|number: '1.0' }}</span></div>
                 </div>
                 <div class="row">
                     <div class="col-6">Yield on investment:</div>
                     <div class="col-6"><span class="float-end"><span *ngIf="position.dividendPeriodicity === 'quaterly'">(annualized) </span>{{ position.yieldOnInvestent() }}%</span></div>
                 </div>
+                <ng-container *ngIf="shareheadShare && shareheadDividendPayment">
+                    <div class="row">
+                        <div class="col-6">Next payment:</div>
+                        <div class="col-6"><span class="float-end">{{ shareheadDividendPayment|number: '1.0' }} {{ shareheadShare.currency?.name }}</span></div>
+                    </div>
+                    <div class="row" *ngIf="position.currency?.name === shareheadShare.currency?.name">
+                        <div class="col-6">Yield on investment:</div>
+                        <div class="col-6"><span class="float-end">{{ (100 / position.balance.investment * +shareheadDividendPayment).toFixed(1) }}%</span></div>
+                    </div>
+                </ng-container>
                 <h5 style="margin-top: 15px;">Performance</h5>
                 <div class="row">
                     <div class="col-9">Days since start:</div>
-                    <div class="col-3"><span class="float-end">{{ position.daysSinceStart() }}</span></div>
+                    <div class="col-3"><span class="float-end">{{ position.daysSinceStart()|number: '1.0' }}</span></div>
                 </div>
                 <div class="row">
                     <div class="col-9">Profit per day:</div>
@@ -147,7 +157,7 @@
                 <h5>Costs</h5>
                 <div class="row">
                     <div class="col-9">Transaction fees total:</div>
-                    <div class="col-3"><span class="float-end">{{ position.balance.transactionFeesTotal }}</span></div>
+                    <div class="col-3"><span class="float-end">{{ position.balance.transactionFeesTotal|number: '1.0' }}</span></div>
                 </div>
             </div>
         </div>
