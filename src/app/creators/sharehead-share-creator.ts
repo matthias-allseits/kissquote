@@ -2,6 +2,7 @@ import {ShareheadShare} from "../models/sharehead-share";
 import {CurrencyCreator} from "./currency-creator";
 import {ShareheadBalanceCreator} from "./sharehead-balance-creator";
 import {MarketplaceCreator} from "./marketplace-creator";
+import {ShareheadShareAnalysisResultsCreator} from "./sharehead-share-analysis-results-creator";
 
 
 export class ShareheadShareCreator {
@@ -42,6 +43,7 @@ export class ShareheadShareCreator {
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.balances ? ShareheadBalanceCreator.fromApiArray(apiArray.balances) : [],
                 apiArray.estimations ? ShareheadBalanceCreator.fromApiArray(apiArray.estimations) : [],
+                apiArray.analysisResults ? ShareheadShareAnalysisResultsCreator.oneFromApiArray(apiArray.analysisResults) : undefined,
             );
         } else {
             return null;

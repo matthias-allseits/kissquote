@@ -3,6 +3,8 @@ import {ShareheadBalance} from "./sharehead-balance";
 import {ShareheadEstimation} from "./sharehead-estimation";
 import {ChartData} from "chart.js";
 import {Marketplace} from "./marketplace";
+import {ShareheadAnalysisResults} from "./sharehead-analysis-results";
+import {DateHelper} from "../core/datehelper";
 
 
 export class ShareheadShare {
@@ -25,6 +27,7 @@ export class ShareheadShare {
         public currency?: Currency,
         public balances?: ShareheadBalance[],
         public estimations?: ShareheadEstimation[],
+        public analysisResults?: ShareheadAnalysisResults,
     ) { }
 
 
@@ -171,6 +174,43 @@ export class ShareheadShare {
                 chartData.labels?.push(balance.year);
                 chartData.datasets[0].data.push(balance.equityRatio);
             }
+        });
+
+        return chartData;
+    }
+
+
+    estimationChangesChartData(): ChartData {
+        const chartData: ChartData = {
+            labels: [],
+            datasets: [
+                {
+                    data: [],
+                    label: 'Profit per Share',
+                    borderColor: 'rgb(51, 102, 204, 1)',
+                    backgroundColor: 'rgb(51, 102, 204, 1)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)',
+                    pointBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBorderColor: 'rgba(51, 102, 204, 1)',
+                },
+                {
+                    data: [],
+                    label: 'Dividend per Share',
+                    borderColor: 'rgb(220, 57, 18, 1)',
+                    backgroundColor: 'rgb(220, 57, 18, 1)',
+                    hoverBackgroundColor: 'rgb(220, 57, 18, 0.5)',
+                    pointBackgroundColor: 'rgb(220, 57, 18, 1)',
+                    pointHoverBackgroundColor: 'rgba(220, 57, 18, 1)',
+                    pointHoverBorderColor: 'rgba(220, 57, 18, 1)',
+                }
+            ]
+        };
+
+        this.analysisResults?.estimationChanges?.forEach(estimation => {
+            chartData.labels?.push(DateHelper.convertDateToGerman(estimation.date));
+            chartData.datasets[0].data.push(estimation.profitPerShare);
+            chartData.datasets[1].data.push(estimation.dividend);
         });
 
         return chartData;

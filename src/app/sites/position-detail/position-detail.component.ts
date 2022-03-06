@@ -19,7 +19,6 @@ import {LineChartComponent} from "../../components/line-chart/line-chart.compone
 import {DividendProjection} from "../../models/dividend-projection";
 import {DividendProjectionCreator} from "../../creators/dividend-projection-creator";
 import {ShareheadEstimation} from "../../models/sharehead-estimation";
-import {ShareheadBalance} from "../../models/sharehead-balance";
 import {formatNumber} from "@angular/common";
 
 

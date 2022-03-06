@@ -241,6 +241,10 @@
                         <h5>Equity Ratio</h5>
                         <app-line-chart [data]="shareheadShare.equityRatesChartData()" [height]="150" [forceBeginAtZero]="true" [percentageChart]="true" [pointRadius]="4"></app-line-chart>
                     </div>
+                    <div class="info-box info-box-lg">
+                        <h5>Estimation Changes</h5>
+                        <app-line-chart [data]="shareheadShare.estimationChangesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
+                    </div>
                 </div>
             </ng-container>
             <ng-container *ngIf="!shareheadShare">
