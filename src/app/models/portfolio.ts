@@ -2,6 +2,8 @@ import {BankAccount} from './bank-account';
 import {BankAccountCreator} from "../creators/bank-account-creator";
 import {Share} from "./share";
 import {Currency} from "./currency";
+import {YearDividendsTotal} from "../sites/my-dashboard/my-dashboard.component";
+import {ChartData} from "chart.js";
 
 
 export class Portfolio {
@@ -105,6 +107,53 @@ export class Portfolio {
         });
 
         return currencies;
+    }
+
+
+    yearDividendTotals(): YearDividendsTotal[] {
+        const totals: YearDividendsTotal[] = [];
+        totals.push(
+            {
+                year: 2018,
+                total: 325
+            }
+        );
+        totals.push(
+            {
+                year: 2019,
+                total: 678
+            }
+        );
+        totals.push(
+            {
+                year: 2020,
+                total: 1267
+            }
+        );
+
+        return totals;
+    }
+
+
+    dividendIncomeChartData(): ChartData {
+        const chartData: ChartData = {
+            labels: [],
+            datasets: [
+                {
+                    data: [],
+                    borderColor: 'rgb(51, 102, 204, 1)',
+                    backgroundColor: 'rgb(51, 102, 204, 1)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)'
+                }
+            ]
+        };
+
+        this.yearDividendTotals()?.forEach(dividendTotal => {
+            chartData.labels?.push(dividendTotal.year);
+            chartData.datasets[0].data.push(dividendTotal.total);
+        });
+
+        return chartData;
     }
 
 

@@ -15,6 +15,11 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CurrencyService} from "../../services/currency.service";
 
 
+export interface YearDividendsTotal {
+    year: number;
+    total: number;
+}
+
 @Component({
     selector: 'app-my-dashboard',
     templateUrl: './my-dashboard.component.html',
@@ -35,6 +40,7 @@ export class MyDashboardComponent implements OnInit {
     private selectedBankAccount?: BankAccount;
     public selectedCurrency?: Currency;
     public dashboardTab = '0';
+    public yearDividedsTotals?: YearDividendsTotal[];
     modalRef?: BsModalRef;
 
     exchangeRateForm = new FormGroup({
@@ -61,6 +67,7 @@ export class MyDashboardComponent implements OnInit {
                     if (returnedPortfolio instanceof Portfolio) {
                         this.portfolio = returnedPortfolio;
                         this.currencies = this.portfolio.getAllCurrencies();
+                        this.yearDividedsTotals = this.portfolio.yearDividendTotals();
                     } else {
                         alert('Something went wrong!');
                         // todo: redirect back to landingpage. probably the solution: implement guards

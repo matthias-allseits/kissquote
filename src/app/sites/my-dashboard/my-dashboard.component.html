@@ -139,6 +139,10 @@
                 <h5>{{ account.name }}</h5>
                 <app-bar-chart [data]="getBalanceChartDataByAccount(account)"></app-bar-chart>
             </div>
+            <div class="info-box">
+                <h5>Dividenden-Einkommen</h5>
+                <app-bar-chart [data]="portfolio.dividendIncomeChartData()"></app-bar-chart>
+            </div>
         </div>
         <div class="shadow-sm p-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'settings'">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
