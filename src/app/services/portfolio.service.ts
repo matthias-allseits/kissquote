@@ -56,6 +56,19 @@ export class PortfolioService extends ApiService {
     }
 
 
+    public portfolioForDemo(): Observable<Portfolio|null>
+    {
+        return this.http.get<Portfolio>(this.apiUrl + '/demo')
+            .pipe(
+                map(res => PortfolioCreator.oneFromApiArray(res)),
+                catchError(this.handleError)
+                // map(this.extractData),
+                // catchError(this.handleError('addHero', portfolio))
+                // catchError(this.handleError('addHero', portfolio))
+            );
+    }
+
+
     public getBankAccountById(bankAccountId: number): Observable<BankAccount>
     {
         return new Observable(bankAccount => {
