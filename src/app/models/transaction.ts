@@ -1,4 +1,5 @@
 import {Position} from "./position";
+import {Currency} from "./currency";
 
 export class Transaction {
 
@@ -12,6 +13,7 @@ export class Transaction {
         public fee: number|null,
         public isFee: boolean = false,
         public isInterest: boolean = false,
+        public currency?: Currency,
     ) {}
 
 }

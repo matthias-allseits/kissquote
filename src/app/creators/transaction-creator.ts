@@ -1,5 +1,6 @@
 import {Transaction} from "../models/transaction";
 import {PositionCreator} from "./position-creator";
+import {CurrencyCreator} from "./currency-creator";
 
 
 export class TransactionCreator {
@@ -35,6 +36,8 @@ export class TransactionCreator {
                 apiArray.rate,
                 apiArray.fee,
                 apiArray.isFee,
+                apiArray.isInterest,
+                apiArray.currency ? CurrencyCreator.oneFromApiArray(apiArray.currency) : undefined,
             );
         } else {
             return null;
