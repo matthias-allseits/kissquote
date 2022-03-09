@@ -19,7 +19,6 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
 
     public transaction: Transaction;
     public position: Position|null = null;
-    public positions: Position[] = [];
 
     transactionForm = new FormGroup({
         title: new FormControl(''),
@@ -39,7 +38,6 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
     }
 
     ngOnInit(): void {
-        this.loadData();
         const now = new Date();
         const dateString = now.getFullYear() + '-' + now.getMonth()+1 + '-0' + now.getDate();
         console.log(dateString);
@@ -94,15 +92,6 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
                     this.location.back();
                 });
         }
-    }
-
-
-    private loadData(): void {
-        this.positionService.getPositions()
-            .subscribe(positions => {
-                console.log(positions);
-                this.positions = positions;
-            });
     }
 
 }

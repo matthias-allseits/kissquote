@@ -5,17 +5,6 @@
             Füllen Sie das Formular aus.
         </p>
         <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
-<!--            <div class="mb-3">-->
-<!--                <label for="position" class="form-label">Position: </label>-->
-<!--                <select id="position" name="position" formControlName="position" class="form-select form-select mb-3">-->
-<!--                    <option selected></option>-->
-<!--                    <ng-container *ngFor="let position of positions">-->
-<!--                        <ng-container *ngIf="position.share">-->
-<!--                            <option [selected]="transaction.position && transaction.position.id == position.id" [ngValue]="position">{{ position.share.name }}</option>-->
-<!--                        </ng-container>-->
-<!--                    </ng-container>-->
-<!--                </select>-->
-<!--            </div>-->
             <div class="mb-3">
                 <label for="title" class="form-label">Title: </label>
                 <input id="title" type="text" class="form-control" formControlName="title">
