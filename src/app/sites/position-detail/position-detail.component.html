@@ -79,6 +79,10 @@
                     <div class="col-9">Letzter Kurs<span *ngIf="position.balance.lastRate"> ({{ position.balance.lastRate.date|date: 'dd.MM.y' }})</span>:</div>
                     <div class="col-3"><span *ngIf="position.balance.lastRate" class="float-end">{{ position.balance.lastRate.rate }}</span></div>
                 </div>
+                <div *ngIf="position.balance.lastRate" class="row">
+                    <div class="col-9">Yield on value</div>
+                    <div class="col-3"><span class="float-end">{{ (100 / position.balance.lastRate.rate * elaboratedNextDividendPerShare()).toFixed(1) }}%</span></div>
+                </div>
                 <div class="row">
                     <div class="col-9">Bez. Kurs Brutto:</div>
                     <div class="col-3"><span *ngIf="position.balance.investment > 0" class="float-end">{{ position.balance.averagePayedPriceGross }}</span></div>

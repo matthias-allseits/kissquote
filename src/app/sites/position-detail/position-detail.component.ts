@@ -105,6 +105,20 @@ export class PositionDetailComponent implements OnInit {
     }
 
 
+    elaboratedNextDividendPerShare(): number
+    {
+        let result = 0;
+        if (this.position?.balance) {
+            result = this.position.balance.projectedNextDividendPerShare();
+            if (this.shareheadDividendPayment) {
+                result = +this.shareheadDividendPayment / this.position?.balance?.amount;
+            }
+        }
+
+        return result;
+    }
+
+
     navigateCross(direction: string): void {
         console.log(direction);
         let positionIndex: number = -1;

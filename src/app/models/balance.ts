@@ -22,4 +22,10 @@ export class Balance {
         return (100 / this.investment * this.collectedDividends).toFixed(1);
     }
 
+
+    projectedNextDividendPerShare(): number
+    {
+        return this.projectedNextDividendPayment / this.amount;
+    }
+
 }
