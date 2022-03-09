@@ -1,5 +1,4 @@
-<main *ngIf="position">
-    <div class="container px-4 py-2">
+<main *ngIf="position" class="col-md-12 col-lg-12 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">Position {{ position.getName() }}</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
@@ -275,8 +274,8 @@
                         <th scope="col"><span class="float-end">Rate</span></th>
                         <th scope="col"><span class="float-end">Fee/Tax</span></th>
                         <th scope="col">Currency</th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
+                        <th scope="col" style="width: 35px;"></th>
+                        <th scope="col" style="width: 35px;"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -295,7 +294,6 @@
                 </table>
             </div>
         </div>
-    </div>
 </main>
 
 <ng-template #template>
