@@ -13,3 +13,13 @@
 .container-fluid {
   padding-left: 100px;
 }
+
+.version-tape {
+    background-color: blue;
+    color: white;
+    position: fixed;
+    top: 8px;
+    left: -48px;
+    transform: rotate(-45deg);
+    padding: 0 50px; font-size: 12px;
+}
