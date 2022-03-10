@@ -15,11 +15,13 @@
 }
 
 .version-tape {
-    background-color: blue;
-    color: white;
-    position: fixed;
-    top: 8px;
-    left: -48px;
-    transform: rotate(-45deg);
-    padding: 0 50px; font-size: 12px;
+  background-color: blue;
+  color: white;
+  position: fixed;
+  top: 8px;
+  left: -48px;
+  transform: rotate(-45deg);
+  padding: 2px 50px;
+  font-size: 14px;
+  font-weight: bold;
 }
