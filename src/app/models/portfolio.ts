@@ -112,24 +112,31 @@ export class Portfolio {
 
     yearDividendTotals(): YearDividendsTotal[] {
         const totals: YearDividendsTotal[] = [];
-        totals.push(
-            {
-                year: 2018,
-                total: 325
-            }
-        );
-        totals.push(
-            {
-                year: 2019,
-                total: 678
-            }
-        );
-        totals.push(
-            {
-                year: 2020,
-                total: 1267
-            }
-        );
+        this.bankAccounts.forEach(account => {
+            account.getNonCashPositions().forEach(position => {
+                position.transactions.forEach(transaction => {
+                    if (transaction.isDividend() && transaction.date instanceof Date && transaction.rate) {
+                        const year = transaction.date.getFullYear();
+                        let added = false;
+                        totals.forEach(entry => {
+                            if (entry.year === year) {
+                                entry.total += transaction.rate ? transaction.rate : 0;
+                                added = true;
+                            }
+                        });
+                        if (!added) {
+                            totals.push(
+                                {
+                                    year: year,
+                                    total: transaction.rate
+                                }
+                            );
+                        }
+                    }
+                });
+            });
+        });
+        totals.sort((a, b) => (a.year > b.year) ? 1 : ((b.year > a.year) ? -1 : 0));
 
         return totals;
     }

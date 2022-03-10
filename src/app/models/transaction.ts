@@ -1,6 +1,7 @@
 import {Position} from "./position";
 import {Currency} from "./currency";
 
+
 export class Transaction {
 
     constructor(
@@ -15,5 +16,10 @@ export class Transaction {
         public isInterest: boolean = false,
         public currency?: Currency,
     ) {}
+
+    isDividend(): boolean {
+        const dividendTitles = ['Dividende', 'Capital Gain', 'Kapitalrückzahlung'];
+        return dividendTitles.indexOf(this.title) > -1;
+    }
 
 }
