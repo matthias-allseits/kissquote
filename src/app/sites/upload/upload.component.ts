@@ -183,7 +183,19 @@ export class UploadComponent implements OnInit {
                 this.closedPositions.push(position);
             }
         });
+        this.cashPositions.forEach(position => {
+            position.transactions.forEach(transaction => {
+                if (transaction.currency === null) {
+                    console.log('transaction-position has no currency!');
+                    console.log(position);
+                }
+            });
+        });
+
+        console.log(this.cashPositions);
+        // console.log(this.openPositions);
     }
+
 
     private parseTransaction(cells: string[]): ParsedTransaction {
         const dateSplit = cells[0].substring(0, 10).split('-');
@@ -243,6 +255,7 @@ export class UploadComponent implements OnInit {
                     this.resolvedActions++;
                     break;
                 case 'Split':
+                    currency = this.getCurrencyByName(parsedAction.currencyName);
                     position = this.getPositionByIsin(parsedAction.isin);
                     if (null === position) {
                         position = this.getPositionBySymbol(parsedAction.symbol);
@@ -261,6 +274,7 @@ export class UploadComponent implements OnInit {
                         transaction.date = parsedAction.date;
                         transaction.rate = parsedAction.rate;
                         transaction.quantity = parsedAction.quantity;
+                        transaction.currency = currency;
                         position.transactions.push(transaction);
                         this.resolvedActions++;
                     }
@@ -280,6 +294,7 @@ export class UploadComponent implements OnInit {
                     transaction.quantity = parsedAction.quantity;
                     transaction.fee = parsedAction.fee;
                     transaction.rate = parsedAction.rate;
+                    transaction.currency = currency;
 
                     position = this.getPositionByIsin(parsedAction.isin);
                     if (null === position) {
@@ -309,6 +324,8 @@ export class UploadComponent implements OnInit {
                 case 'Forex-Belastung':
                 case 'Zins':
                 case 'Depotgebühren':
+                    currency = this.getCurrencyByName(parsedAction.currencyName);
+
                     position = this.getCashPositionByName(parsedAction.currencyName);
 
                     if (null === position) {
@@ -322,6 +339,7 @@ export class UploadComponent implements OnInit {
                         transaction.fee = parsedAction.fee;
                         transaction.rate = parsedAction.rate;
                         transaction.isFee = parsedAction.title === 'Depotgebühren';
+                        transaction.currency = currency;
                         position.transactions.push(transaction);
                         this.resolvedActions++;
                     }
@@ -329,6 +347,8 @@ export class UploadComponent implements OnInit {
                 case 'Verkauf':
                 case 'Titelausgang':
                 case 'Verfall von Anrechten':
+                    currency = this.getCurrencyByName(parsedAction.currencyName);
+
                     position = this.getPositionByIsin(parsedAction.isin);
 
                     if (null === position) {
@@ -345,6 +365,7 @@ export class UploadComponent implements OnInit {
                         transaction.quantity = parsedAction.quantity * -1;
                         transaction.fee = parsedAction.fee;
                         transaction.rate = parsedAction.rate;
+                        transaction.currency = currency;
                         position.transactions.push(transaction);
                         this.resolvedActions++;
                     }
@@ -385,6 +406,7 @@ export class UploadComponent implements OnInit {
                         transaction.quantity = parsedAction.quantity;
                         transaction.fee = parsedAction.fee;
                         transaction.rate = parsedAction.rate;
+                        transaction.currency = currency;
                         position.transactions.push(transaction);
                     }
 
@@ -461,7 +483,6 @@ export class UploadComponent implements OnInit {
         if (null === hit) {
             hit = CurrencyCreator.createNewCurrency();
             hit.name = name;
-            hit.rate = 1;
             this.allCurrencies.push(hit);
         }
 
@@ -502,6 +523,7 @@ export class UploadComponent implements OnInit {
         transaction.quantity = parsedAction.quantity;
         transaction.fee = parsedAction.fee;
         transaction.rate = parsedAction.rate;
+        transaction.currency = currency;
         if (parsedAction.title === 'Zins') {
             transaction.isInterest = true;
         }
