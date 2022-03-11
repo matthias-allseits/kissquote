@@ -1,10 +1,10 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
-import {Portfolio} from '../../models/portfolio';
+import {DividendTotals, Portfolio} from '../../models/portfolio';
 import {PortfolioService} from '../../services/portfolio.service';
 import {faEdit, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {TranslationService} from "../../services/translation.service";
-import {Position} from "../../models/position";
+import {DividendTotal, Position} from "../../models/position";
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {PositionService} from "../../services/position.service";
 import {BankAccount} from "../../models/bank-account";
@@ -40,7 +40,9 @@ export class MyDashboardComponent implements OnInit {
     private selectedBankAccount?: BankAccount;
     public selectedCurrency?: Currency;
     public dashboardTab = '0';
-    public yearDividedsTotals?: YearDividendsTotal[];
+    public dividendListTab = 2021;
+    public yearDividendsTotals?: YearDividendsTotal[];
+    public dividendLists?: DividendTotals[];
     modalRef?: BsModalRef;
 
     exchangeRateForm = new FormGroup({
@@ -67,7 +69,8 @@ export class MyDashboardComponent implements OnInit {
                     if (returnedPortfolio instanceof Portfolio) {
                         this.portfolio = returnedPortfolio;
                         this.currencies = this.portfolio.getAllCurrencies();
-                        this.yearDividedsTotals = this.portfolio.yearDividendTotals();
+                        this.yearDividendsTotals = this.portfolio.yearDividendTotals();
+                        this.dividendLists = this.portfolio.collectDividendLists();
                     } else {
                         alert('Something went wrong!');
                         // todo: redirect back to landingpage. probably the solution: implement guards
@@ -99,9 +102,12 @@ export class MyDashboardComponent implements OnInit {
     }
 
     changeTab(selectedTab: string): void {
-        console.log(selectedTab);
         this.dashboardTab = selectedTab;
         localStorage.setItem('dashboardTab', selectedTab);
+    }
+
+    changeDividenListTab(selectedTab: number): void {
+        this.dividendListTab = selectedTab;
     }
 
     openPositionConfirmModal(template: TemplateRef<any>, position: Position) {

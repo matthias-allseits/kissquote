@@ -17,6 +17,9 @@
                 <a class="nav-link" [class.active]="dashboardTab === 'balance'" (click)="changeTab('balance')">Portfolio Balances</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" [class.active]="dashboardTab === 'dividends'" (click)="changeTab('dividends')">Dividends</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" [class.active]="dashboardTab === 'settings'" (click)="changeTab('settings')">Settings</a>
             </li>
         </ul>
@@ -142,6 +145,39 @@
             <div class="info-box">
                 <h5>Dividenden-Einkommen</h5>
                 <app-bar-chart [data]="portfolio.dividendIncomeChartData()"></app-bar-chart>
+            </div>
+        </div>
+        <div class="shadow-sm p-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'dividends'">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
+                <h4 class="pt-2">Dividends</h4>
+            </div>
+            <ul class="nav nav-tabs">
+                <li class="nav-item" *ngFor="let dividendList of dividendLists">
+                    <a class="nav-link" [class.active]="dividendListTab === dividendList.year" (click)="changeDividenListTab(dividendList.year)" aria-current="page">{{ dividendList.year }}</a>
+                </li>
+            </ul>
+            <div *ngFor="let dividendList of dividendLists" class="shadow-sm p-3 mb-5 bg-body rounded" [class.visually-hidden]="dividendListTab !== dividendList.year">
+                <h5>Total: {{ dividendList.total }}</h5>
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th scope="col">Position</th>
+                        <th scope="col">Source</th>
+                        <th scope="col"><span class="float-end">Dividende</span></th>
+                        <th scope="col"><span class="float-end">Currency-Corrected</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let entry of dividendList.list">
+                            <tr>
+                                <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.name }}</a></td>
+                                <td>From Transactions</td>
+                                <td><span class="float-end">{{ entry.total }} {{ entry.currency?.name }}</span></td>
+                                <td><span class="float-end"></span></td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="shadow-sm p-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'settings'">
