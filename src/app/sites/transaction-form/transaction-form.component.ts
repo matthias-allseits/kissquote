@@ -8,6 +8,8 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {TransactionService} from "../../services/transaction.service";
 import {TransactionCreator} from "../../creators/transaction-creator";
 import { Location } from '@angular/common';
+import {ShareheadShare} from "../../models/sharehead-share";
+import {ShareCreator} from "../../creators/share-creator";
 
 
 @Component({
@@ -19,6 +21,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
 
     public transaction: Transaction;
     public position: Position|null = null;
+    public titleOptions = ['Kauf', 'Fx-Gutschrift Comp.', 'Zins', 'Verkauf', 'Auszahlung', 'Dividende', 'Capital Gain', 'Forex-Gutschrift', 'Vergütung', 'Einzahlung', 'Depotgebühren', 'Fx-Belastung Comp.', 'Kapitalrückzahlung', 'Forex-Belastung', 'Corporate Action', 'Split'];
 
     transactionForm = new FormGroup({
         title: new FormControl(''),
@@ -93,6 +96,12 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
                     this.location.back();
                 });
         }
+    }
+
+
+    selectTitle(title: string): void {
+        const share = ShareCreator.createNewShare();
+        this.transactionForm.get('title')?.setValue(title);
     }
 
 }
