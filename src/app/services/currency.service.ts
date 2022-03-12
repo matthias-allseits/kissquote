@@ -5,6 +5,8 @@ import {map} from 'rxjs/operators';
 import {Currency} from '../models/currency';
 import {CurrencyCreator} from "../creators/currency-creator";
 import {ApiService} from "./api-service";
+import {Position} from "../models/position";
+import {DateHelper} from "../core/datehelper";
 
 
 const httpOptions = {
@@ -23,6 +25,17 @@ export class CurrencyService extends ApiService {
         public override http: HttpClient,
     ) {
         super('/currency', http);
+    }
+
+
+    create(currency: Currency): Observable<Currency|null> {
+        const url = `${this.apiUrl}`;
+        return this.http
+            .post(url, JSON.stringify(currency), httpOptions)
+            .pipe(
+                map(() => currency),
+                // catchError(this.handleError)
+            );
     }
 
 

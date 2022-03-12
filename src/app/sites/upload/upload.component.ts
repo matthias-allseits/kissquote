@@ -17,6 +17,7 @@ import {MarketplaceService} from "../../services/marketplace.service";
 import {Marketplace} from "../../models/marketplace";
 import {BankAccount} from "../../models/bank-account";
 import {ShareService} from "../../services/share.service";
+import {CurrencyService} from "../../services/currency.service";
 
 
 export interface ParsedTransaction {
@@ -64,6 +65,7 @@ export class UploadComponent implements OnInit {
         private shareService: ShareService,
         private portfolioService: PortfolioService,
         private positionService: PositionService,
+        private currencyService: CurrencyService,
         private marketplaceService: MarketplaceService,
     ) {
     }
@@ -125,10 +127,24 @@ export class UploadComponent implements OnInit {
                     console.log(returnedPortfolio);
                     if (null !== returnedPortfolio && null !== returnedPortfolio.hashKey) {
                         localStorage.setItem('my-key', returnedPortfolio.hashKey);
-                        this.persistPositions(returnedPortfolio.bankAccounts[0]);
+                        this.persistCurrencies();
+                        // todo: implement a better solution
+                        setTimeout(() => {
+                            this.persistPositions(returnedPortfolio.bankAccounts[0]);
+                        }, 1500);
                     }
                 });
         }
+    }
+
+
+    private persistCurrencies(): void {
+        this.allCurrencies.forEach(currency => {
+            this.currencyService.create(currency)
+                .subscribe(currency => {
+
+                });
+        });
     }
 
 
@@ -391,11 +407,9 @@ export class UploadComponent implements OnInit {
                         console.warn('das ist aber gar nicht gut weil die Dividende keiner Position zugewiesen werden kann: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
                         this.veryBadThingsHappend++;
                     } else {
-                        // todo: dividends obsolete?
                         const dividend = DividendCreator.createNewDividend();
                         dividend.share = position.share;
                         dividend.date = parsedAction.date;
-                        // todo: calculate values-per-share
                         dividend.valueNet = parsedAction.rate;
                         dividend.valueGross = parsedAction.fee;
                         this.resolvedActions++;
