@@ -44,6 +44,7 @@ export class PositionDetailComponent implements OnInit {
     public diviProjectionYears: DividendProjection[] = [];
     public positionTab = 'balance';
     public shareheadDividendPayment?: string;
+    public shareheadCurrencyCorrectedDividendPayment?: string;
     modalRef?: BsModalRef;
 
     public chartData?: ChartData;
@@ -112,6 +113,10 @@ export class PositionDetailComponent implements OnInit {
             result = this.position.balance.projectedNextDividendPerShare();
             if (this.shareheadDividendPayment) {
                 result = +this.shareheadDividendPayment / this.position?.balance?.amount;
+                // todo: finish this
+                // if () {
+                //
+                // }
             }
         }
 
@@ -202,10 +207,12 @@ export class PositionDetailComponent implements OnInit {
                                             this.diviProjectionYears.push(projection);
                                         }
                                     }
-                                    if (this.shareheadShare.lastBalance() && this.position?.balance) {
+                                    if (this.position?.balance) {
                                         const lastBalance = this.shareheadShare.lastBalance();
                                         if (lastBalance) {
                                             this.shareheadDividendPayment = (lastBalance?.dividend * this.position.balance.amount).toFixed(0);
+                                            // todo: finish this
+                                            this.shareheadCurrencyCorrectedDividendPayment = 'under construction';
                                         }
                                     }
                                 }
