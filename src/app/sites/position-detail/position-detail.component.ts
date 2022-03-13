@@ -20,6 +20,8 @@ import {DividendProjection} from "../../models/dividend-projection";
 import {DividendProjectionCreator} from "../../creators/dividend-projection-creator";
 import {ShareheadEstimation} from "../../models/sharehead-estimation";
 import {formatNumber} from "@angular/common";
+import {ShareCreator} from "../../creators/share-creator";
+import {ShareService} from "../../services/share.service";
 
 
 @Component({
@@ -45,6 +47,9 @@ export class PositionDetailComponent implements OnInit {
     public positionTab = 'balance';
     public shareheadDividendPayment?: string;
     public shareheadCurrencyCorrectedDividendPayment?: string;
+    public nextEstimationYear = new Date().getFullYear() + 1;
+    public shareheadShares: ShareheadShare[] = [];
+    public selectableShares?: ShareheadShare[];
     modalRef?: BsModalRef;
 
     public chartData?: ChartData;
@@ -55,6 +60,7 @@ export class PositionDetailComponent implements OnInit {
         private router: Router,
         private positionService: PositionService,
         private transactionService: TransactionService,
+        private shareService: ShareService,
         private shareheadService: ShareheadService,
         private modalService: BsModalService,
     ) { }
@@ -96,6 +102,35 @@ export class PositionDetailComponent implements OnInit {
     }
 
 
+    searchShare(event: any): void {
+        console.log(event.target.value);
+        this.selectableShares = [];
+        if (event.target.value) {
+            this.shareheadShares?.forEach(share => {
+                if (share.name && share.name.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1) {
+                    this.selectableShares?.push(share);
+                }
+            });
+        }
+        console.log(this.selectableShares.length);
+    }
+
+
+    selectShare(shareheadShare: ShareheadShare): void {
+        if (this.position) {
+            this.position.shareheadId = shareheadShare.shareheadId;
+            this.positionService.update(this.position)
+                .subscribe(position => {
+                    this.selectableShares = [];
+                    if (position) {
+                        this.position = position;
+                        this.loadData(this.position.id);
+                    }
+                });
+        }
+    }
+
+
     deleteTransaction(transaction: Transaction): void {
         console.log(transaction);
         this.transactionService.delete(transaction.id).subscribe(() => {
@@ -111,9 +146,9 @@ export class PositionDetailComponent implements OnInit {
         let result = 0;
         if (this.position?.balance) {
             result = this.position.balance.projectedNextDividendPerShare();
-            if (this.shareheadDividendPayment) {
+            if (this.shareheadDividendPayment && +this.shareheadDividendPayment > 0) {
                 result = +this.shareheadDividendPayment / this.position?.balance?.amount;
-                // todo: finish this
+                // todo: finish the currency-correction
                 // if () {
                 //
                 // }
@@ -177,6 +212,12 @@ export class PositionDetailComponent implements OnInit {
                                 },
                             ]
                         };
+                    }
+                    if (this.position.shareheadId === undefined) {
+                        this.shareService.getAllShareheadShares()
+                            .subscribe(shares => {
+                                this.shareheadShares = shares;
+                            });
                     }
                     if (this.position && this.position.shareheadId && this.position.shareheadId > 0) {
                         this.shareheadService.getShare(this.position.shareheadId)

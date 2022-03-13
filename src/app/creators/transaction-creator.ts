@@ -12,8 +12,8 @@ export class TransactionCreator {
     public static fromApiArray(apiArray: Transaction[]): Transaction[] {
         const array: Transaction[] = [];
 
-        for (const TransactionList of apiArray) {
-            const transaction = this.oneFromApiArray(TransactionList);
+        for (const transactionList of apiArray) {
+            const transaction = this.oneFromApiArray(transactionList);
             if (null !== transaction) {
                 array.push(transaction);
             }
