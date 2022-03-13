@@ -68,7 +68,7 @@ export class MyDashboardComponent implements OnInit {
                     console.log(returnedPortfolio);
                     if (returnedPortfolio instanceof Portfolio) {
                         this.portfolio = returnedPortfolio;
-                        this.currencies = this.portfolio.getAllCurrencies();
+                        this.currencies = this.portfolio.currencies;
                         this.yearDividendsTotals = this.portfolio.yearDividendTotals();
                         this.dividendLists = this.portfolio.collectDividendLists();
                     } else {

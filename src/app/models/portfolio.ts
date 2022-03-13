@@ -21,6 +21,7 @@ export class Portfolio {
         public hashKey: string|null,
         public startDate: Date|null,
         public bankAccounts: BankAccount[],
+        public currencies: Currency[],
     ) {}
 
 
@@ -98,22 +99,6 @@ export class Portfolio {
     openPositionsBalance(): number {
 
         return this.valueTotal() - this.investmentTotal();
-    }
-
-
-    getAllCurrencies(): Currency[] {
-        const currencies: Currency[] = [];
-        const currencyIds: number[] = [];
-        this.bankAccounts.forEach(account => {
-            account.getCashPositions().forEach(position => {
-                if (position.currency && currencyIds.indexOf(position.currency.id) === -1) {
-                    currencies.push(position.currency);
-                    currencyIds.push(position.currency.id);
-                }
-            });
-        });
-
-        return currencies;
     }
 
 

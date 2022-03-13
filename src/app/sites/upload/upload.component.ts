@@ -121,30 +121,16 @@ export class UploadComponent implements OnInit {
                     }
                 });
         } else {
-            const portfolio = new Portfolio(0, null, null, null, []);
+            const portfolio = new Portfolio(0, null, null, null, [], []);
             this.portfolioService.create(portfolio)
                 .subscribe(returnedPortfolio => {
                     console.log(returnedPortfolio);
                     if (null !== returnedPortfolio && null !== returnedPortfolio.hashKey) {
                         localStorage.setItem('my-key', returnedPortfolio.hashKey);
-                        this.persistCurrencies();
-                        // todo: implement a better solution
-                        setTimeout(() => {
-                            this.persistPositions(returnedPortfolio.bankAccounts[0]);
-                        }, 1500);
+                        this.persistPositions(returnedPortfolio.bankAccounts[0]);
                     }
                 });
         }
-    }
-
-
-    private persistCurrencies(): void {
-        this.allCurrencies.forEach(currency => {
-            this.currencyService.create(currency)
-                .subscribe(currency => {
-
-                });
-        });
     }
 
 
