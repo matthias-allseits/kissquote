@@ -79,8 +79,8 @@
                     <div class="col-3"><span *ngIf="position.balance.lastRate" class="float-end">{{ position.balance.lastRate.rate }}</span></div>
                 </div>
                 <div *ngIf="position.balance.lastRate" class="row">
-                    <div class="col-9">Yield on value</div>
-                    <div class="col-3"><span class="float-end banane">{{ (100 / position.balance.lastRate.rate * elaboratedNextDividendPerShare()).toFixed(1) }}%</span></div>
+                    <div class="col-10">Yield on value {{ currentYieldOnValueSource }}</div>
+                    <div class="col-2"><span class="float-end">{{ currentYieldOnValue }}%</span></div>
                 </div>
                 <div class="row">
                     <div class="col-9">Bez. Kurs Brutto:</div>

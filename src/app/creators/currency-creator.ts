@@ -4,7 +4,7 @@ import {Currency} from "../models/currency";
 export class CurrencyCreator {
 
     public static createNewCurrency(): Currency {
-        return new Currency(0, null, 1);
+        return new Currency(0, '', 1);
     }
 
 

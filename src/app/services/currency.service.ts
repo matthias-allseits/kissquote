@@ -7,6 +7,7 @@ import {CurrencyCreator} from "../creators/currency-creator";
 import {ApiService} from "./api-service";
 import {Position} from "../models/position";
 import {DateHelper} from "../core/datehelper";
+import {BankAccount} from "../models/bank-account";
 
 
 const httpOptions = {
@@ -58,6 +59,7 @@ export class CurrencyService extends ApiService {
             );
     }
 
+
     public getCurrencyByName(currencies: Currency[], name: string): Currency|undefined
     {
         if (name === 'GBX') { // island apes...
@@ -71,6 +73,21 @@ export class CurrencyService extends ApiService {
         });
 
         return hit;
+    }
+
+
+    public getUsersCurrencyByName(name: string): Observable<Currency>
+    {
+        return new Observable(currency => {
+            let hit = undefined;
+            this.getAllCurrencies().subscribe(currencies => {
+                currencies.forEach(crncy => {
+                    if (crncy.name === name) {
+                        currency.next(crncy);
+                    }
+                })
+            });
+        });
     }
 
 }

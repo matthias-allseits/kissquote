@@ -150,7 +150,7 @@ export class Position {
     }
 
 
-    public actualValue(): string|null {
+    public actualValue(): string {
         if (!this.isCash) {
             if (this.balance && this.balance.lastRate) {
                 return (this.balance.amount * this.balance.lastRate.rate).toFixed(0)
@@ -161,7 +161,7 @@ export class Position {
             }
         }
 
-        return null;
+        return '';
     }
 
 

@@ -177,6 +177,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                 console.log(shares);
                 this.shareheadShares = shares;
             });
+        // todo: migrate this to use the kissquote-api
         this.shareheadService.getAllCurrencies()
             .subscribe(currencies => {
                 console.log(currencies);

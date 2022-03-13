@@ -13,15 +13,15 @@ import {TransactionService} from "../../services/transaction.service";
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {ShareheadService} from "../../services/sharehead.service";
 import {ShareheadShare} from "../../models/sharehead-share";
-import {ChartData, ChartDataset} from "chart.js";
+import {ChartData} from "chart.js";
 import {DateHelper} from "../../core/datehelper";
 import {LineChartComponent} from "../../components/line-chart/line-chart.component";
 import {DividendProjection} from "../../models/dividend-projection";
 import {DividendProjectionCreator} from "../../creators/dividend-projection-creator";
 import {ShareheadEstimation} from "../../models/sharehead-estimation";
 import {formatNumber} from "@angular/common";
-import {ShareCreator} from "../../creators/share-creator";
 import {ShareService} from "../../services/share.service";
+import {CurrencyService} from "../../services/currency.service";
 
 
 @Component({
@@ -47,6 +47,8 @@ export class PositionDetailComponent implements OnInit {
     public positionTab = 'balance';
     public shareheadDividendPayment?: string;
     public shareheadCurrencyCorrectedDividendPayment?: string;
+    public currentYieldOnValue = '';
+    public currentYieldOnValueSource = '';
     public nextEstimationYear = new Date().getFullYear() + 1;
     public shareheadShares: ShareheadShare[] = [];
     public selectableShares?: ShareheadShare[];
@@ -59,6 +61,7 @@ export class PositionDetailComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private positionService: PositionService,
+        private currencyService: CurrencyService,
         private transactionService: TransactionService,
         private shareService: ShareService,
         private shareheadService: ShareheadService,
@@ -141,24 +144,6 @@ export class PositionDetailComponent implements OnInit {
     }
 
 
-    elaboratedNextDividendPerShare(): number
-    {
-        let result = 0;
-        if (this.position?.balance) {
-            result = this.position.balance.projectedNextDividendPerShare();
-            if (this.shareheadDividendPayment && +this.shareheadDividendPayment > 0) {
-                result = +this.shareheadDividendPayment / this.position?.balance?.amount;
-                // todo: finish the currency-correction
-                // if () {
-                //
-                // }
-            }
-        }
-
-        return result;
-    }
-
-
     navigateCross(direction: string): void {
         console.log(direction);
         let positionIndex: number = -1;
@@ -198,6 +183,10 @@ export class PositionDetailComponent implements OnInit {
                 console.log(position);
                 if (position) {
                     this.position = position;
+                    if (this.position.balance?.lastRate) {
+                        this.currentYieldOnValue = (100 / this.position.balance.lastRate.rate * this.position.balance.projectedNextDividendPerShare()).toFixed(1);
+                        this.currentYieldOnValueSource = '(from last payment)';
+                    }
                     if (this.position && this.position.balance) {
                         this.chartData = {
                             labels: ['Kosten vs Einnahmen'],
@@ -252,8 +241,23 @@ export class PositionDetailComponent implements OnInit {
                                         const lastBalance = this.shareheadShare.lastBalance();
                                         if (lastBalance) {
                                             this.shareheadDividendPayment = (lastBalance?.dividend * this.position.balance.amount).toFixed(0);
-                                            // todo: finish this
-                                            this.shareheadCurrencyCorrectedDividendPayment = 'under construction';
+                                            if (this.position.balance?.lastRate && +this.shareheadDividendPayment > 0) {
+                                                this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadDividendPayment / this.position.balance.amount)).toFixed(1);
+                                                this.currentYieldOnValueSource = '(from sharehead)';
+                                            }
+                                            if (this.position.currency?.name !== this.shareheadShare.currency?.name) {
+                                                if (this.shareheadShare.currency) {
+                                                    const usersCurrency = this.currencyService.getUsersCurrencyByName(this.shareheadShare.currency?.name)
+                                                        .subscribe(currency => {
+                                                            if (this.shareheadDividendPayment && this.position?.currency) {
+                                                                this.shareheadCurrencyCorrectedDividendPayment = (+this.shareheadDividendPayment * currency.rate / this.position?.currency.rate).toFixed(0);
+                                                                if (this.position.balance?.lastRate) {
+                                                                    this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadCurrencyCorrectedDividendPayment / this.position.balance.amount)).toFixed(1);
+                                                                }
+                                                            }
+                                                        });
+                                                }
+                                            }
                                         }
                                     }
                                 }
