@@ -106,14 +106,14 @@
             <div *ngIf="position.balance" class="info-box" [class.green20]="position.balance.investment < 0">
                 <h5>Dividends</h5>
                 <div class="row">
-                    <div class="col-9">Collected dividends:</div>
-                    <div class="col-3"><span class="float-end">{{ position.balance.collectedDividends|number: '1.0' }}</span></div>
+                    <div class="col-8">Collected dividends:</div>
+                    <div class="col-4"><span class="float-end">{{ position.balance.collectedDividends|number: '1.0' }} {{ position.balance.collectedDividendsCurrency }}</span></div>
                 </div>
                 <div class="row">
                     <div class="col-9">ROI by dividends:</div>
                     <div class="col-3"><span class="float-end" *ngIf="position.balance.investment > 0">{{ position.balance.returnOnInvestentByDividends() }}%</span></div>
                 </div>
-                <h6>From last(s) payments(s)</h6>
+                <h6>Projection from last payment(s)</h6>
                 <div class="row">
                     <div class="col-8">Next payment:</div>
                     <div class="col-4"><span class="float-end">{{ position.balance.projectedNextDividendPayment|number: '1.0' }} {{ position.balance.projectedNextDividendCurrency }}</span></div>
@@ -123,14 +123,14 @@
                     <div class="col-6"><span class="float-end"><span *ngIf="position.dividendPeriodicity === 'quaterly'">(annualized) </span>{{ position.yieldOnInvestent() }}%</span></div>
                 </div>
                 <ng-container *ngIf="shareheadShare && shareheadDividendPayment">
-                    <h6>According to sharehead</h6>
+                    <h6>Projection according to sharehead</h6>
                     <div class="row">
                         <div class="col-8">Next payment:</div>
                         <div class="col-4"><span class="float-end">{{ shareheadDividendPayment|number: '1.0' }} {{ shareheadShare.currency?.name }}</span></div>
                     </div>
                     <div class="row" *ngIf="position.currency?.name !== shareheadShare.currency?.name">
                         <div class="col-8">Currency-corrected:</div>
-                        <div class="col-4"><span class="float-end">{{ shareheadCurrencyCorrectedDividendPayment|number: '1.0' }} {{ position.currency?.name }}</span></div>
+                        <div class="col-4"><strong class="float-end">{{ shareheadCurrencyCorrectedDividendPayment|number: '1.0' }} {{ position.currency?.name }}</strong></div>
                     </div>
                     <div class="row" *ngIf="position.currency?.name === shareheadShare.currency?.name">
 <!--                        todo: this is not acceptable-->
@@ -154,7 +154,7 @@
                         <div class="col-10"><span class="float-end">{{ projection.projection }}</span></div>
                     </div>
                     <div *ngIf="projection.currencyCorrectedProjection" class="row">
-                        <div class="col-12"><span class="float-end">{{ projection.currencyCorrectedProjection }}</span></div>
+                        <div class="col-12"><strong class="float-end">{{ projection.currencyCorrectedProjection }}</strong></div>
                     </div>
                     <div class="row mb-2" *ngIf="position.balance.investment > 0">
                         <div class="col-4"></div>
