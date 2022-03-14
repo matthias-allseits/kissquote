@@ -144,7 +144,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         if (this.shareheadShares && newShare.isin) {
             const shareheadShare = this.shareheadService.getShareByIsin(this.shareheadShares, newShare.isin);
             if (shareheadShare) {
-                this.position.shareheadId = shareheadShare.id;
+                this.position.shareheadId = shareheadShare.shareheadId;
             }
         }
         this.position.share = newShare;
