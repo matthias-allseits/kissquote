@@ -3,11 +3,12 @@ import {Transaction} from "../../models/transaction";
 import {Position} from "../../models/position";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {Location} from "@angular/common";
+import {formatDate, Location} from "@angular/common";
 import {PositionService} from "../../services/position.service";
 import {TransactionService} from "../../services/transaction.service";
 import {TransactionCreator} from "../../creators/transaction-creator";
 import {MotherFormComponent} from "../mother-form.component";
+import {ShareCreator} from "../../creators/share-creator";
 
 
 @Component({
@@ -19,6 +20,8 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
 
     public transaction: Transaction;
     public position: Position|null = null;
+    public titleOptions = ['Kauf', 'Fx-Gutschrift Comp.', 'Zins', 'Verkauf', 'Auszahlung', 'Dividende', 'Capital Gain', 'Forex-Gutschrift', 'Vergütung', 'Einzahlung', 'Depotgebühren', 'Fx-Belastung Comp.', 'Kapitalrückzahlung', 'Forex-Belastung', 'Corporate Action', 'Split'];
+
 
     transactionForm = new FormGroup({
         title: new FormControl(''),
@@ -39,7 +42,7 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
 
     ngOnInit(): void {
         const now = new Date();
-        const dateString = now.getFullYear() + '-' + now.getMonth()+1 + '-0' + now.getDate();
+        const dateString = formatDate(now, 'yyyy-MM-dd', 'en');
         console.log(dateString);
         this.transactionForm.get('date')?.setValue(dateString);
         this.route.params.subscribe((params: Params) => {
@@ -60,6 +63,7 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
                             if (transaction instanceof Transaction) {
                                 this.transaction = transaction;
                                 this.transactionForm.patchValue(transaction, { onlySelf: true });
+                                this.transactionForm.get('date')?.setValue(formatDate(transaction.date, 'yyyy-MM-dd', 'en'));
                             }
                         });
                 } else {
@@ -92,6 +96,12 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
                     this.location.back();
                 });
         }
+    }
+
+
+    selectTitle(title: string): void {
+        const share = ShareCreator.createNewShare();
+        this.transactionForm.get('title')?.setValue(title);
     }
 
 }

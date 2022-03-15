@@ -10,6 +10,7 @@ export class Share {
         public isin: string|null,
         public type: string|null,
         public marketplace?: Marketplace,
+        public shareheadId?: number,
     ) { }
 
 }

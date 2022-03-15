@@ -27,12 +27,13 @@ export class ShareCreator {
     {
         if (apiArray !== undefined && apiArray !== null) {
             return new Share(
-                apiArray.id,
+                +apiArray.id,
                 apiArray.name,
                 apiArray.shortname,
                 apiArray.isin,
                 apiArray.type,
                 apiArray.marketplace ? MarketplaceCreator.oneFromApiArray(apiArray.marketplace): undefined,
+                apiArray.shareheadId ? +apiArray.shareheadId : undefined,
             );
         } else {
             return null;

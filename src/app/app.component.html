@@ -1,11 +1,11 @@
 <body>
     <nav class="navbar navbar-expand-md fixed-top border-bottom bg-white">
-        <div class="version-tape">Alpha</div>
+        <div class="version-tape" tooltip="Alpha-Release">Alpha</div>
         <a (click)="handleHomeClick()" id="home-icon" class="me-3 text-dark text-decoration-none head-anchor">
             <img src="assets/kissquote.svg" width="35" tooltip="{{ tranService.trans('GLOB_TITLE') }}">
         </a>
         <div class="container-fluid">
-            <span *ngIf="myKey !== null">Mein Schlüssel: <a routerLink="/my-dashboard" id="dashboard-anchor">{{ myKey }}</a></span>
+            <span *ngIf="myKey !== null">Mein Schlüssel: <a routerLink="/my-dashboard" id="dashboard-anchor" tooltip="Ihr Schlüssel. Unbedingt speichern!">{{ myKey }}</a></span>
         </div>
 
         <div *ngIf="myKey !== null" class="dropdown" style="margin-right: 15px;">

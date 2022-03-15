@@ -144,7 +144,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         if (this.shareheadShares && newShare.isin) {
             const shareheadShare = this.shareheadService.getShareByIsin(this.shareheadShares, newShare.isin);
             if (shareheadShare) {
-                this.position.shareheadId = shareheadShare.id;
+                this.position.shareheadId = shareheadShare.shareheadId;
             }
         }
         this.position.share = newShare;
@@ -177,6 +177,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                 console.log(shares);
                 this.shareheadShares = shares;
             });
+        // todo: migrate this to use the kissquote-api
         this.shareheadService.getAllCurrencies()
             .subscribe(currencies => {
                 console.log(currencies);

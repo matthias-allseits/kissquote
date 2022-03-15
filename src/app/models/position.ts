@@ -9,6 +9,13 @@ import {StockRateCreator} from "../creators/stock-rate-creator";
 import {DateHelper} from "../core/datehelper";
 
 
+export interface DividendTotal {
+    positionId: number;
+    name: string;
+    total: number;
+    currency: Currency|null;
+}
+
 export class Position {
 
     constructor(
@@ -47,6 +54,29 @@ export class Position {
         }
 
         return result.toFixed(1);
+    }
+
+
+    dividendTotalByYear(year: number): DividendTotal
+    {
+        let total = 0;
+        let currency = null;
+
+        this.transactions.forEach(transaction => {
+            if (transaction.isDividend() && transaction.date instanceof Date && transaction.date.getFullYear() === year && transaction.rate) {
+                total += transaction.rate;
+                currency = transaction.currency;
+            }
+        });
+        total = +total.toFixed(1);
+        const result = {
+            positionId: this.id,
+            name: this.getName(),
+            total: total,
+            currency: currency
+        };
+
+        return result;
     }
 
 
@@ -120,7 +150,7 @@ export class Position {
     }
 
 
-    public actualValue(): string|null {
+    public actualValue(): string {
         if (!this.isCash) {
             if (this.balance && this.balance.lastRate) {
                 return (this.balance.amount * this.balance.lastRate.rate).toFixed(0)
@@ -131,7 +161,7 @@ export class Position {
             }
         }
 
-        return null;
+        return '';
     }
 
 

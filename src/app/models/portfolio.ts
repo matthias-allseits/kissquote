@@ -3,7 +3,14 @@ import {BankAccountCreator} from "../creators/bank-account-creator";
 import {Currency} from "./currency";
 import {YearDividendsTotal} from "../sites/my-dashboard/my-dashboard.component";
 import {ChartData} from "chart.js";
+import {DividendTotal, Position} from "./position";
 
+
+export interface DividendTotals {
+    year: number;
+    list: DividendTotal[];
+    total: number;
+}
 
 export class Portfolio {
 
@@ -13,6 +20,7 @@ export class Portfolio {
         public hashKey: string|null,
         public startDate: Date|null,
         public bankAccounts: BankAccount[],
+        public currencies: Currency[],
     ) {}
 
 
@@ -93,19 +101,39 @@ export class Portfolio {
     }
 
 
-    getAllCurrencies(): Currency[] {
-        const currencies: Currency[] = [];
-        const currencyIds: number[] = [];
+    getAllPositions(): Position[] {
+        let positions: Position[] = [];
         this.bankAccounts.forEach(account => {
-            account.getCashPositions().forEach(position => {
-                if (position.currency && currencyIds.indexOf(position.currency.id) === -1) {
-                    currencies.push(position.currency);
-                    currencyIds.push(position.currency.id);
-                }
-            });
+            positions = positions.concat(account.getNonCashPositions());
         });
 
-        return currencies;
+        return positions;
+    }
+
+
+    collectDividendLists(): DividendTotals[] {
+        const totals: DividendTotals[] = [];
+        [2015, 2016, 2017, 2018, 2020, 2021, 2022, 2023, 2024, 2025].forEach(year => {
+            const list: DividendTotal[] = [];
+            let total = 0;
+            this.getAllPositions().forEach(position => {
+                const result = position.dividendTotalByYear(year);
+                if (result.total > 0) {
+                    list.push(result);
+                    total += result.total;
+                }
+            });
+            const fixedTotal = +total.toFixed(0);
+            totals.push(
+                {
+                    year: year,
+                    list: list,
+                    total: fixedTotal,
+                }
+            );
+        });
+
+        return totals;
     }
 
 
@@ -156,7 +184,7 @@ export class Portfolio {
 
         this.yearDividendTotals()?.forEach(dividendTotal => {
             chartData.labels?.push(dividendTotal.year);
-            chartData.datasets[0].data.push(dividendTotal.total);
+            chartData.datasets[0].data.push(+dividendTotal.total.toFixed(0));
         });
 
         return chartData;
