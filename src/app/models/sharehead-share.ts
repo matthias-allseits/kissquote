@@ -90,7 +90,7 @@ export class ShareheadShare {
                 chartData.datasets[0].backgroundColor.push('rgb(51, 102, 204, 1)');
             }
             if (Array.isArray(chartData.datasets[0].hoverBackgroundColor)) {
-                chartData.datasets[0].hoverBackgroundColor.push('rgb(51, 102, 204, 0.5)');
+                chartData.datasets[0].hoverBackgroundColor.push('rgb(51, 102, 204, 0.4)');
             }
         });
         let year = new Date().getFullYear();
@@ -102,10 +102,10 @@ export class ShareheadShare {
                 chartData.labels?.push(lastEstimation.year);
                 chartData.datasets[0].data.push(lastEstimation.sales);
                 if (Array.isArray(chartData.datasets[0].borderColor)) {
-                    chartData.datasets[0].borderColor.push('rgb(51, 102, 204, 0.5)');
+                    chartData.datasets[0].borderColor.push('rgb(51, 102, 204, 0.4)');
                 }
                 if (Array.isArray(chartData.datasets[0].backgroundColor)) {
-                    chartData.datasets[0].backgroundColor.push('rgb(51, 102, 204, 0.5)');
+                    chartData.datasets[0].backgroundColor.push('rgb(51, 102, 204, 0.4)');
                 }
                 if (Array.isArray(chartData.datasets[0].hoverBackgroundColor)) {
                     chartData.datasets[0].hoverBackgroundColor.push('rgb(51, 102, 204, 0.2)');
@@ -134,12 +134,12 @@ export class ShareheadShare {
                 {
                     data: [],
                     label: 'Estimated Profit per Share',
-                    borderColor: 'rgb(51, 102, 204, 0.5)',
-                    backgroundColor: 'rgb(51, 102, 204, 0.5)',
+                    borderColor: 'rgb(51, 102, 204, 0.4)',
+                    backgroundColor: 'rgb(51, 102, 204, 0.4)',
                     hoverBackgroundColor: 'rgb(51, 102, 204, 0.2)',
-                    pointBackgroundColor: 'rgba(51, 102, 204, 0.5)',
-                    pointHoverBackgroundColor: 'rgba(51, 102, 204, 0.5)',
-                    pointHoverBorderColor: 'rgba(51, 102, 204, 0.5)',
+                    pointBackgroundColor: 'rgba(51, 102, 204, 0.4)',
+                    pointHoverBackgroundColor: 'rgba(51, 102, 204, 0.4)',
+                    pointHoverBorderColor: 'rgba(51, 102, 204, 0.4)',
                 },
                 {
                     data: [],
@@ -154,12 +154,12 @@ export class ShareheadShare {
                 {
                     data: [],
                     label: 'Estimated Dividend per Share',
-                    borderColor: 'rgb(220, 57, 18, 0.5)',
-                    backgroundColor: 'rgb(220, 57, 18, 0.5)',
+                    borderColor: 'rgb(220, 57, 18, 0.4)',
+                    backgroundColor: 'rgb(220, 57, 18, 0.4)',
                     hoverBackgroundColor: 'rgb(220, 57, 18, 0.2)',
-                    pointBackgroundColor: 'rgb(220, 57, 18, 0.5)',
-                    pointHoverBackgroundColor: 'rgba(220, 57, 18, 0.5)',
-                    pointHoverBorderColor: 'rgba(220, 57, 18, 0.5)',
+                    pointBackgroundColor: 'rgb(220, 57, 18, 0.4)',
+                    pointHoverBackgroundColor: 'rgba(220, 57, 18, 0.4)',
+                    pointHoverBorderColor: 'rgba(220, 57, 18, 0.4)',
                 }
             ]
         };
