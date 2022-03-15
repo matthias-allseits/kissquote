@@ -73,9 +73,9 @@ export class ShareheadShare {
             datasets: [
                 {
                     data: [],
-                    borderColor: 'rgb(51, 102, 204, 1)',
-                    backgroundColor: 'rgb(51, 102, 204, 1)',
-                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)'
+                    borderColor: [],
+                    backgroundColor: [],
+                    hoverBackgroundColor: []
                 }
             ]
         };
@@ -83,7 +83,35 @@ export class ShareheadShare {
         this.balances?.forEach(balance => {
             chartData.labels?.push(balance.year);
             chartData.datasets[0].data.push(balance.sales);
+            if (Array.isArray(chartData.datasets[0].borderColor)) {
+                chartData.datasets[0].borderColor.push('rgb(51, 102, 204, 1)');
+            }
+            if (Array.isArray(chartData.datasets[0].backgroundColor)) {
+                chartData.datasets[0].backgroundColor.push('rgb(51, 102, 204, 1)');
+            }
+            if (Array.isArray(chartData.datasets[0].hoverBackgroundColor)) {
+                chartData.datasets[0].hoverBackgroundColor.push('rgb(51, 102, 204, 0.5)');
+            }
         });
+        let year = new Date().getFullYear();
+        for (let x = 1; x <= 3; x++) {
+            const estimationYear = year + x;
+            const estimationDate = new Date(estimationYear, 1, 1);
+            const lastEstimation = this.lastEstimationForYear(estimationDate);
+            if (lastEstimation) {
+                chartData.labels?.push(lastEstimation.year);
+                chartData.datasets[0].data.push(lastEstimation.sales);
+                if (Array.isArray(chartData.datasets[0].borderColor)) {
+                    chartData.datasets[0].borderColor.push('rgb(51, 102, 204, 0.5)');
+                }
+                if (Array.isArray(chartData.datasets[0].backgroundColor)) {
+                    chartData.datasets[0].backgroundColor.push('rgb(51, 102, 204, 0.5)');
+                }
+                if (Array.isArray(chartData.datasets[0].hoverBackgroundColor)) {
+                    chartData.datasets[0].hoverBackgroundColor.push('rgb(51, 102, 204, 0.2)');
+                }
+            }
+        }
 
         return chartData;
     }
@@ -105,6 +133,16 @@ export class ShareheadShare {
                 },
                 {
                     data: [],
+                    label: 'Estimated Profit per Share',
+                    borderColor: 'rgb(51, 102, 204, 0.5)',
+                    backgroundColor: 'rgb(51, 102, 204, 0.5)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.2)',
+                    pointBackgroundColor: 'rgba(51, 102, 204, 0.5)',
+                    pointHoverBackgroundColor: 'rgba(51, 102, 204, 0.5)',
+                    pointHoverBorderColor: 'rgba(51, 102, 204, 0.5)',
+                },
+                {
+                    data: [],
                     label: 'Dividend per Share',
                     borderColor: 'rgb(220, 57, 18, 1)',
                     backgroundColor: 'rgb(220, 57, 18, 1)',
@@ -112,6 +150,16 @@ export class ShareheadShare {
                     pointBackgroundColor: 'rgb(220, 57, 18, 1)',
                     pointHoverBackgroundColor: 'rgba(220, 57, 18, 1)',
                     pointHoverBorderColor: 'rgba(220, 57, 18, 1)',
+                },
+                {
+                    data: [],
+                    label: 'Estimated Dividend per Share',
+                    borderColor: 'rgb(220, 57, 18, 0.5)',
+                    backgroundColor: 'rgb(220, 57, 18, 0.5)',
+                    hoverBackgroundColor: 'rgb(220, 57, 18, 0.2)',
+                    pointBackgroundColor: 'rgb(220, 57, 18, 0.5)',
+                    pointHoverBackgroundColor: 'rgba(220, 57, 18, 0.5)',
+                    pointHoverBorderColor: 'rgba(220, 57, 18, 0.5)',
                 }
             ]
         };
@@ -119,8 +167,26 @@ export class ShareheadShare {
         this.balances?.forEach(balance => {
             chartData.labels?.push(balance.year);
             chartData.datasets[0].data.push(balance.profitPerShare);
-            chartData.datasets[1].data.push(balance.dividend);
+            chartData.datasets[1].data.push(NaN);
+            chartData.datasets[2].data.push(balance.dividend);
+            chartData.datasets[3].data.push(NaN);
         });
+        chartData.datasets[1].data[chartData.datasets[1].data.length - 1] = chartData.datasets[0].data[chartData.datasets[0].data.length - 1];
+        chartData.datasets[3].data[chartData.datasets[3].data.length - 1] = chartData.datasets[2].data[chartData.datasets[2].data.length - 1];
+
+        let year = new Date().getFullYear();
+        for (let x = 1; x <= 3; x++) {
+            const estimationYear = year + x;
+            const estimationDate = new Date(estimationYear, 1, 1);
+            const lastEstimation = this.lastEstimationForYear(estimationDate);
+            if (lastEstimation) {
+                chartData.labels?.push(lastEstimation.year);
+                chartData.datasets[0].data.push(NaN);
+                chartData.datasets[1].data.push(lastEstimation.profitPerShare);
+                chartData.datasets[2].data.push(NaN);
+                chartData.datasets[3].data.push(lastEstimation.dividend);
+            }
+        }
 
         return chartData;
     }

@@ -1,6 +1,5 @@
 import {BankAccount} from './bank-account';
 import {BankAccountCreator} from "../creators/bank-account-creator";
-import {Share} from "./share";
 import {Currency} from "./currency";
 import {YearDividendsTotal} from "../sites/my-dashboard/my-dashboard.component";
 import {ChartData} from "chart.js";
@@ -161,20 +160,6 @@ export class Portfolio {
         });
 
         return chartData;
-    }
-
-
-    getAllShares(): Share[] {
-        const shares: Share[] = [];
-        this.bankAccounts.forEach(account => {
-            account.positions.forEach(position => {
-                if (position.share) {
-                    shares.push(position.share);
-                }
-            });
-        });
-
-        return shares;
     }
 
 

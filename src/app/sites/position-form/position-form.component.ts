@@ -183,11 +183,6 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                 this.currencies = currencies;
                 this.setCurrency();
             });
-        // this.shareheadService.getAllShares()
-        //     .subscribe(shares => {
-        //         console.log(shares);
-        //         this.shareheadShares = shares;
-        //     });
         this.marketplaceService.getAllMarketplaces()
             .subscribe(places => {
                 this.marketplaces = places;
