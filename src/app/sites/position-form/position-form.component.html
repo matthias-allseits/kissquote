@@ -5,19 +5,8 @@
             Wählen Sie einen Share aus dem Kissquote Universum oder erweitern Sie dieses erbärmlich kleine Universum.
         </p>
         <form [formGroup]="positionForm" (ngSubmit)="onSubmit()">
-<!--            <div class="mb-3">-->
-<!--                <label for="shareName" class="form-label">{{ tranService.trans('GLOB_SHARE') }}: </label>-->
-<!--                <input formControlName="shareName" id="shareName"-->
-<!--                       [typeahead]="swissquoteShares"-->
-<!--                       typeaheadOptionField="name"-->
-<!--                       (typeaheadOnSelect)="onSelect($event)"-->
-<!--                       [typeaheadOptionsLimit]="7"-->
-<!--                       [typeaheadMinLength]="0"-->
-<!--                       placeholder="Typeahead inside a form"-->
-<!--                       class="form-control">-->
-<!--            </div>-->
             <div class="row">
-                <div class="col">
+                <div class="col-sm">
                     <div class="mb-3">
                         <label for="shareName" class="form-label">Name: </label>
                         <input (keyup)="searchShare($event)" id="shareName" type="text" class="form-control" formControlName="shareName">
@@ -50,7 +39,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-sm">
                     <div class="mb-3">
                         <label for="dividendPeriodicity" class="form-label">Dividend Periodicity: </label>
                         <select formControlName="dividendPeriodicity" id="dividendPeriodicity" name="dividendPeriodicity" class="form-select form-select mb-3">
@@ -61,7 +50,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-sm">
 
                 </div>
             </div>

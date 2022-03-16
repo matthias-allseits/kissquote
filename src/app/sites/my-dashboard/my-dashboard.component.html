@@ -11,10 +11,10 @@
     <div *ngIf="portfolio && portfolio.bankAccounts.length > 0">
         <ul class="nav nav-tabs">
             <li class="nav-item" *ngFor="let bankAccount of portfolio.bankAccounts index as accountIndex;">
-                <a class="nav-link" [class.active]="dashboardTab === accountIndex.toString()" (click)="changeTab(accountIndex.toString())" aria-current="page">Bank-Account {{ bankAccount.name }}</a>
+                <a class="nav-link" [class.active]="dashboardTab === accountIndex.toString()" (click)="changeTab(accountIndex.toString())" aria-current="page"><span class="d-none d-md-inline">Bank-Account</span> {{ bankAccount.name }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" [class.active]="dashboardTab === 'balance'" (click)="changeTab('balance')">Portfolio Balances</a>
+                <a class="nav-link" [class.active]="dashboardTab === 'balance'" (click)="changeTab('balance')"><span class="d-none d-md-inline">Portfolio</span> Balances</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" [class.active]="dashboardTab === 'dividends'" (click)="changeTab('dividends')">Dividends</a>
@@ -44,9 +44,9 @@
                         <tr>
                             <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
                             <th scope="col" style="width: 105px;"><span class="float-end">Value</span></th>
-                            <th scope="col" style="width: 105px;">Active From</th>
-                            <th scope="col" style="width: 105px;">Active Until</th>
-                            <th scope="col" style="width: 105px;">Transactions</th>
+                            <th scope="col" class="d-none d-md-inline" style="width: 105px;">Active From</th>
+                            <th scope="col" class="d-none d-md-inline" style="width: 105px;">Active Until</th>
+                            <th scope="col" class="d-none d-md-inline" style="width: 105px;">Transactions</th>
                             <th scope="col" style="width: 35px;"></th>
                             <th scope="col" style="width: 35px;"></th>
                             <th scope="col" style="width: 35px;"></th>
@@ -56,9 +56,9 @@
                         <tr *ngFor="let position of bankAccount.getCashPositions()">
                             <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
                             <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>
-                            <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
-                            <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
-                            <td class="text-center">{{ position.transactions.length }}</td>
+                            <td class="d-none d-md-inline"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
+                            <td class="d-none d-md-inline"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
+                            <td class="text-center d-none d-md-inline">{{ position.transactions.length }}</td>
                             <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
                             <td><button [routerLink]="'/position/' + position.id + '/cash-transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>
                             <td><button (click)="openPositionConfirmModal(template, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
@@ -73,9 +73,9 @@
                             <th scope="col" style="width: 40%;">{{ tranService.trans('GLOB_SHARE') }}</th>
                             <th scope="col" style="width: 105px;"><span class="float-end">Value</span></th>
                             <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
-                            <th scope="col" style="width: 105px;">Active From</th>
-                            <th scope="col" style="width: 105px;">Active Until</th>
-                            <th scope="col" style="width: 105px;">Transactions</th>
+                            <th scope="col" class="d-none d-md-inline" style="width: 105px;">Active From</th>
+                            <th scope="col" class="d-none d-md-inline" style="width: 105px;">Active Until</th>
+                            <th scope="col" class="d-none d-md-inline" style="width: 105px;">Transactions</th>
                             <th scope="col" style="width: 35px;"></th>
                             <th scope="col" style="width: 35px;"></th>
                             <th scope="col" style="width: 35px;"></th>
@@ -86,9 +86,9 @@
                             <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
                             <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>
                             <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
-                            <td><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
-                            <td><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
-                            <td class="text-center">{{ position.transactions.length }}</td>
+                            <td class="d-none d-md-inline"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
+                            <td class="d-none d-md-inline"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
+                            <td class="text-center d-none d-md-inline">{{ position.transactions.length }}</td>
                             <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
 <!--                            <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>-->
                             <td><button [routerLink]="['/bank-account/' + accountIndex + '/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Edit Position"><fa-icon [icon]="editIcon"></fa-icon></button></td>
@@ -101,7 +101,7 @@
                 Ohne Positionen wird es hier sehr schnell sehr langweilig...
             </p>
         </div>
-        <div class="shadow-sm p-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'balance'">
+        <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'balance'">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                 <h4 class="pt-2">Totals</h4>
             </div>
@@ -147,7 +147,7 @@
                 <app-bar-chart [data]="portfolio.dividendIncomeChartData()"></app-bar-chart>
             </div>
         </div>
-        <div class="shadow-sm p-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'dividends'">
+        <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'dividends'">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                 <h4 class="pt-2">Dividends</h4>
             </div>
@@ -180,7 +180,7 @@
                 </table>
             </div>
         </div>
-        <div class="shadow-sm p-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'settings'">
+        <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'settings'">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                 <h4 class="pt-2">Settings</h4>
             </div>

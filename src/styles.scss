@@ -71,16 +71,18 @@ a:hover, .nav-link:hover {
   background-color: #F9F9F9;
   width: 350px;
   padding: 8px;
-  margin-right: 25px;
+  margin-right: 20px;
   margin-bottom: 20px;
 }
 
-.info-box-lg {
-  width: 500px;
-}
+@include media-breakpoint-up(sm) {
+    .info-box-lg {
+        width: 500px;
+    }
 
-.info-box-doubled {
-  width: 725px;
+    .info-box-doubled {
+        width: 725px;
+    }
 }
 
 .green-text {

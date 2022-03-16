@@ -4,7 +4,7 @@
         <a (click)="handleHomeClick()" id="home-icon" class="me-3 text-dark text-decoration-none head-anchor">
             <img src="assets/kissquote.svg" width="35" tooltip="{{ tranService.trans('GLOB_TITLE') }}">
         </a>
-        <div class="container-fluid">
+        <div class="container-fluid d-none d-md-inline">
             <span *ngIf="myKey !== null">Mein Schlüssel: <a routerLink="/my-dashboard" id="dashboard-anchor" tooltip="Ihr Schlüssel. Unbedingt speichern!">{{ myKey }}</a></span>
         </div>
 
