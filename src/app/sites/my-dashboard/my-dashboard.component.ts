@@ -13,6 +13,7 @@ import {ChartData} from "chart.js";
 import {Currency} from "../../models/currency";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CurrencyService} from "../../services/currency.service";
+import {ShareheadService} from "../../services/sharehead.service";
 
 
 export interface YearDividendsTotal {
@@ -56,6 +57,7 @@ export class MyDashboardComponent implements OnInit {
         private currencyService: CurrencyService,
         private bankAccountService: BankAccountService,
         private modalService: BsModalService,
+        private shareheadService: ShareheadService,
     ) {
     }
 
@@ -70,7 +72,12 @@ export class MyDashboardComponent implements OnInit {
                         this.portfolio = returnedPortfolio;
                         this.currencies = this.portfolio.currencies;
                         this.yearDividendsTotals = this.portfolio.yearDividendTotals();
-                        this.dividendLists = this.portfolio.collectDividendLists();
+                        this.loadShareheadShares();
+                        setTimeout (() => {
+                            if (this.portfolio) {
+                                this.dividendLists = this.portfolio.collectDividendLists();
+                            }
+                        }, 2000);
                     } else {
                         alert('Something went wrong!');
                         // todo: redirect back to landingpage. probably the solution: implement guards
@@ -170,6 +177,21 @@ export class MyDashboardComponent implements OnInit {
         this.bankAccountService.delete(account.id).subscribe(() => {
             document.location.reload();
         });
+    }
+
+    private loadShareheadShares(): void {
+        if (this.portfolio) {
+            this.portfolio.getAllPositions().forEach(position => {
+                if (position.shareheadId !== undefined && position.shareheadId > 0) {
+                    this.shareheadService.getShare(position.shareheadId)
+                        .subscribe(share => {
+                            if (share) {
+                                position.shareheadShare = share;
+                            }
+                        });
+                }
+            });
+        }
     }
 
 }

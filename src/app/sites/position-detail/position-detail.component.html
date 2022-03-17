@@ -127,19 +127,19 @@
                 <div class="col-6">Yield on investment:</div>
                 <div class="col-6"><span class="float-end"><span *ngIf="position.dividendPeriodicity === 'quaterly'">(annualized) </span>{{ position.yieldOnInvestent() }}%</span></div>
             </div>
-            <ng-container *ngIf="shareheadShare && shareheadDividendPayment">
+            <ng-container *ngIf="position.shareheadShare && shareheadDividendPayment">
                 <h6>Projection according to sharehead</h6>
                 <div class="row">
                     <div class="col-8">Next payment:</div>
-                    <div class="col-4"><span class="float-end">{{ shareheadDividendPayment|number: '1.0' }} {{ shareheadShare.currency?.name }}</span></div>
+                    <div class="col-4"><span class="float-end">{{ shareheadDividendPayment|number: '1.0' }} {{ position.shareheadShare.currency?.name }}</span></div>
                 </div>
-                <ng-container *ngIf="position.currency?.name === shareheadShare.currency?.name">
+                <ng-container *ngIf="position.currency?.name === position.shareheadShare.currency?.name">
                     <div class="row">
                         <div class="col-8">Yield on investment:</div>
                         <div class="col-4"><span class="float-end">{{ (100 / position.balance.investment * +shareheadDividendPayment).toFixed(1) }}%</span></div>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="position.currency?.name !== shareheadShare.currency?.name && shareheadCurrencyCorrectedDividendPayment">
+                <ng-container *ngIf="position.currency?.name !== position.shareheadShare.currency?.name && shareheadCurrencyCorrectedDividendPayment">
                     <div class="row">
                         <div class="col-8">Currency-corrected:</div>
                         <div class="col-4"><span class="float-end bold">{{ shareheadCurrencyCorrectedDividendPayment|number: '1.0' }} {{ position.currency?.name }}</span></div>
@@ -186,19 +186,19 @@
 <!--        </div>-->
     </div>
     <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="positionTab !== 'sharehead'">
-        <ng-container *ngIf="shareheadShare">
+        <ng-container *ngIf="position.shareheadShare">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                 <h4 class="pt-2">Sharehead Infos</h4>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group me-2">
-                            <a href="{{ shareheadShare.urlWikipedia }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> Wikipedia</a>
+                            <a href="{{ position.shareheadShare.urlWikipedia }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> Wikipedia</a>
                         </div>
                         <div class="btn-group me-2">
-                            <a href="{{ shareheadShare.urlFinanznet }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> finanzen.net</a>
+                            <a href="{{ position.shareheadShare.urlFinanznet }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> finanzen.net</a>
                         </div>
                         <div class="btn-group me-2">
-                            <a href="{{ shareheadShare.urlInvesting }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> investing.com</a>
+                            <a href="{{ position.shareheadShare.urlInvesting }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> investing.com</a>
                         </div>
                     </div>
                 </div>
@@ -206,7 +206,7 @@
             <div class="info-box">
                 <div class="row">
                     <div class="col-4">Name:</div>
-                    <div class="col-8"><span class="float-end">{{ shareheadShare.name }}</span></div>
+                    <div class="col-8"><span class="float-end">{{ position.shareheadShare.name }}</span></div>
                 </div>
                 <div class="row">
                     <div class="col-9">KGV:</div>
@@ -230,11 +230,11 @@
                 </div>
                 <div class="row">
                     <div class="col-9">Country:</div>
-                    <div class="col-3"><span class="float-end">{{ shareheadShare.country }}</span></div>
+                    <div class="col-3"><span class="float-end">{{ position.shareheadShare.country }}</span></div>
                 </div>
                 <div class="row">
                     <div class="col-9">Sector:</div>
-                    <div class="col-3"><span class="float-end">{{ shareheadShare.sector }}</span></div>
+                    <div class="col-3"><span class="float-end">{{ position.shareheadShare.sector }}</span></div>
                 </div>
                 <div class="row">
                     <div class="col-9">Market cap:</div>
@@ -242,11 +242,11 @@
                 </div>
                 <div class="row">
                     <div class="col-9">Fin. year ends:</div>
-                    <div class="col-3"><span class="float-end">{{ shareheadShare.financialYearEndDate|date:'dd.MM.y' }}</span></div>
+                    <div class="col-3"><span class="float-end">{{ position.shareheadShare.financialYearEndDate|date:'dd.MM.y' }}</span></div>
                 </div>
-                <div *ngIf="shareheadShare.estimationsCurrency() !== shareheadShare.balancesCurrency()" class="row">
+                <div *ngIf="position.shareheadShare.estimationsCurrency() !== position.shareheadShare.balancesCurrency()" class="row">
                     <div class="col-12">
-                        <div class="yellow">The estimations have another currency ({{ shareheadShare.estimationsCurrency() }}) than the balances ({{ shareheadShare.balancesCurrency() }})</div>
+                        <div class="yellow">The estimations have another currency ({{ position.shareheadShare.estimationsCurrency() }}) than the balances ({{ position.shareheadShare.balancesCurrency() }})</div>
                     </div>
                 </div>
             </div>
@@ -259,31 +259,31 @@
             </div>
             <div>
                 <div class="info-box info-box-lg">
-                    <h5>Sales (in Mio. {{ shareheadShare.balancesCurrency() }})</h5>
-                    <app-bar-chart [data]="shareheadShare.salesChartData()" [height]="150"></app-bar-chart>
+                    <h5>Sales (in Mio. {{ position.shareheadShare.balancesCurrency() }})</h5>
+                    <app-bar-chart [data]="position.shareheadShare.salesChartData()" [height]="150"></app-bar-chart>
                 </div>
                 <div class="info-box info-box-lg">
                     <h5>Profit + Dividend per Share</h5>
-                    <app-line-chart [data]="shareheadShare.profitChartData()" [height]="150" [forceBeginAtZero]="!shareheadShare.hadNegativeBalances()" [pointRadius]="4"></app-line-chart>
+                    <app-line-chart [data]="position.shareheadShare.profitChartData()" [height]="150" [forceBeginAtZero]="!position.shareheadShare.hadNegativeBalances()" [pointRadius]="4"></app-line-chart>
                 </div>
                 <div class="info-box info-box-lg">
                     <h5>Avg Rates</h5>
-                    <app-line-chart [data]="shareheadShare.yearlyAverageRatesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
+                    <app-line-chart [data]="position.shareheadShare.yearlyAverageRatesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
                 </div>
                 <div class="info-box info-box-lg">
                     <h5>Equity Ratio</h5>
-                    <app-line-chart [data]="shareheadShare.equityRatesChartData()" [height]="150" [forceBeginAtZero]="true" [percentageChart]="true" [pointRadius]="4"></app-line-chart>
+                    <app-line-chart [data]="position.shareheadShare.equityRatesChartData()" [height]="150" [forceBeginAtZero]="true" [percentageChart]="true" [pointRadius]="4"></app-line-chart>
                 </div>
                 <div class="info-box info-box-lg">
                     <h5>{{ nextEstimationYear }} Estimation Changes</h5>
-                    <app-line-chart [data]="shareheadShare.estimationChangesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
+                    <app-line-chart [data]="position.shareheadShare.estimationChangesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
                 </div>
                 <div class="info-box info-box-lg">
                     <button (click)="openShareheadConfirmModal(shareheadTemplate)" class="btn btn-sm btn-outline-primary">Remove this Sharehead Share</button>
                 </div>
             </div>
         </ng-container>
-        <ng-container *ngIf="!shareheadShare">
+        <ng-container *ngIf="!position.shareheadShare">
             Verbinden Sie Ihre Position mit einem Sharehead-Share
             <div class="mt-3">
                 <label for="shareSearch" class="form-label">Suche: </label>

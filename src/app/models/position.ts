@@ -8,6 +8,7 @@ import {StockRate} from "./stock-rate";
 import {StockRateCreator} from "../creators/stock-rate-creator";
 import {DateHelper} from "../core/datehelper";
 import {Observable} from "rxjs";
+import {ShareheadShare} from "./sharehead-share";
 
 
 export interface DividendTotal {
@@ -32,6 +33,7 @@ export class Position {
         public currency?: Currency,
         public balance?: Balance,
         public shareheadId?: number,
+        public shareheadShare?: ShareheadShare,
     ) {}
 
 

@@ -42,7 +42,6 @@ export class PositionDetailComponent implements OnInit {
 
     public position?: Position;
     public selectedTransaction?: Transaction;
-    public shareheadShare?: ShareheadShare;
     public diviProjectionYears: DividendProjection[] = [];
     public positionTab = 'balance';
     public shareheadDividendPayment?: string;
@@ -108,7 +107,6 @@ export class PositionDetailComponent implements OnInit {
 
     confirmShareheadRemoving(): void {
         if (this.position) {
-            this.shareheadShare = undefined;
             this.position.shareheadId = undefined;
             this.positionService.update(this.position)
                 .subscribe(position => {
@@ -235,8 +233,9 @@ export class PositionDetailComponent implements OnInit {
                         this.shareheadService.getShare(this.position.shareheadId)
                             .subscribe(share => {
                                 if (share) {
-                                    this.shareheadShare = share;
-                                    console.log(this.shareheadShare);
+                                    if (this.position) {
+                                        this.position.shareheadShare = share;
+                                    }
                                     if (this.position?.balance) {
                                         const nextYear = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
                                         const nextYearEstimation = share.dividendProjectionForYear(nextYear);
@@ -260,17 +259,17 @@ export class PositionDetailComponent implements OnInit {
                                             this.diviProjectionYears.push(projection);
                                         }
                                     }
-                                    if (this.position?.balance) {
-                                        const lastBalance = this.shareheadShare.lastBalance();
+                                    if (this.position?.balance && this.position.shareheadShare) {
+                                        const lastBalance = this.position.shareheadShare.lastBalance();
                                         if (lastBalance) {
                                             this.shareheadDividendPayment = (lastBalance?.dividend * this.position.balance.amount).toFixed(0);
                                             if (this.position.balance?.lastRate && +this.shareheadDividendPayment > 0) {
                                                 this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadDividendPayment / this.position.balance.amount)).toFixed(1);
                                                 this.currentYieldOnValueSource = '(from sharehead)';
                                             }
-                                            if (this.position.currency?.name !== this.shareheadShare.currency?.name) {
-                                                if (this.shareheadShare.currency) {
-                                                    const usersCurrency = this.currencyService.getUsersCurrencyByName(this.shareheadShare.currency?.name)
+                                            if (this.position.currency?.name !== this.position.shareheadShare.currency?.name) {
+                                                if (this.position.shareheadShare.currency) {
+                                                    const usersCurrency = this.currencyService.getUsersCurrencyByName(this.position.shareheadShare.currency?.name)
                                                         .subscribe(currency => {
                                                             if (this.shareheadDividendPayment && this.position?.currency) {
                                                                 this.shareheadCurrencyCorrectedDividendPayment = (+this.shareheadDividendPayment * currency.rate / this.position?.currency.rate).toFixed(0);
