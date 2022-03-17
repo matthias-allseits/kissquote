@@ -9,6 +9,10 @@ import {StockRateCreator} from "../creators/stock-rate-creator";
 import {DateHelper} from "../core/datehelper";
 import {Observable} from "rxjs";
 import {ShareheadShare} from "./sharehead-share";
+import {ShareheadEstimation} from "./sharehead-estimation";
+import {DividendProjection} from "./dividend-projection";
+import {DividendProjectionCreator} from "../creators/dividend-projection-creator";
+import {formatNumber} from "@angular/common";
 
 
 export interface DividendTotal {
@@ -194,6 +198,36 @@ export class Position {
     }
 
 
+    public dividendProjections(): any {
+        const results = [];
+
+        if (this.shareheadShare) {
+            const nextYear = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
+            const nextYearEstimation = this.shareheadShare.dividendProjectionForYear(nextYear);
+
+            const nextYearP1 = new Date(new Date().setFullYear(new Date().getFullYear() + 2));
+            const nextYearEstimationP1 = this.shareheadShare.dividendProjectionForYear(nextYearP1);
+
+            const nextYearP2 = new Date(new Date().setFullYear(new Date().getFullYear() + 3));
+            const nextYearEstimationP2 = this.shareheadShare.dividendProjectionForYear(nextYearP2);
+            if (nextYearEstimation) {
+                const projection = this.generateProjection(nextYear, nextYearEstimation);
+                results.push(projection);
+            }
+            if (nextYearEstimationP1) {
+                const projection = this.generateProjection(nextYearP1, nextYearEstimationP1);
+                results.push(projection);
+            }
+            if (nextYearEstimationP2) {
+                const projection = this.generateProjection(nextYearP2, nextYearEstimationP2);
+                results.push(projection);
+            }
+        }
+
+        return results;
+    }
+
+
     public getRatesChartData(): Observable<ChartData> {
         return new Observable(obsData => {
             const historicRates: number[] = [];
@@ -265,6 +299,26 @@ export class Position {
         });
 
         return rates;
+    }
+
+
+    private generateProjection(nextYear: Date, nextYearEstimation: ShareheadEstimation): DividendProjection {
+        const projection = DividendProjectionCreator.createNewDividendProjection();
+        projection.year = nextYear;
+        if (this.balance && this.currency?.rate) {
+            let projectedValue = nextYearEstimation.dividend * this.balance?.amount;
+            projection.projection = '(by analyst-estimations) ' + formatNumber(projectedValue, 'de-CH', '0.0-0') + ' ' + nextYearEstimation.currency?.name;
+            if (nextYearEstimation.currency && nextYearEstimation.currency.rate && this.currency?.name !== nextYearEstimation.currency?.name) {
+                projectedValue = nextYearEstimation.dividend * nextYearEstimation.currency.rate * this.balance?.amount;
+                if (this.currency?.name !== 'CHF') {
+                    projectedValue = projectedValue / this.currency.rate;
+                }
+                projection.currencyCorrectedProjection = 'currency-corrected: ' + formatNumber(projectedValue, 'de-CH', '0.0-0') + ' ' + this.currency?.name;
+            }
+            projection.yieldFloat = (100 / this.balance.investment * projectedValue).toFixed(1).toString() + '%';
+        }
+
+        return projection;
     }
 
 }

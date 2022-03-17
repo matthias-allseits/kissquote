@@ -236,29 +236,8 @@ export class PositionDetailComponent implements OnInit {
                                     if (this.position) {
                                         this.position.shareheadShare = share;
                                     }
-                                    if (this.position?.balance) {
-                                        const nextYear = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
-                                        const nextYearEstimation = share.dividendProjectionForYear(nextYear);
+                                    this.diviProjectionYears = this.position?.dividendProjections();
 
-                                        const nextYearP1 = new Date(new Date().setFullYear(new Date().getFullYear() + 2));
-                                        const nextYearEstimationP1 = share.dividendProjectionForYear(nextYearP1);
-
-                                        const nextYearP2 = new Date(new Date().setFullYear(new Date().getFullYear() + 3));
-                                        const nextYearEstimationP2 = share.dividendProjectionForYear(nextYearP2);
-                                        this.diviProjectionYears = [];
-                                        if (nextYearEstimation) {
-                                            const projection = this.generateProjection(nextYear, nextYearEstimation);
-                                            this.diviProjectionYears.push(projection);
-                                        }
-                                        if (nextYearEstimationP1) {
-                                            const projection = this.generateProjection(nextYearP1, nextYearEstimationP1);
-                                            this.diviProjectionYears.push(projection);
-                                        }
-                                        if (nextYearEstimationP2) {
-                                            const projection = this.generateProjection(nextYearP2, nextYearEstimationP2);
-                                            this.diviProjectionYears.push(projection);
-                                        }
-                                    }
                                     if (this.position?.balance && this.position.shareheadShare) {
                                         const lastBalance = this.position.shareheadShare.lastBalance();
                                         if (lastBalance) {
@@ -316,26 +295,6 @@ export class PositionDetailComponent implements OnInit {
                 }
             }
         }
-    }
-
-
-    private generateProjection(nextYear: Date, nextYearEstimation: ShareheadEstimation): DividendProjection {
-        const projection = DividendProjectionCreator.createNewDividendProjection();
-        projection.year = nextYear;
-        if (this.position?.balance && this.position?.currency?.rate) {
-            let projectedValue = nextYearEstimation.dividend * this.position?.balance?.amount;
-            projection.projection = '(by analyst-estimations) ' + formatNumber(projectedValue, 'de-CH', '0.0-0') + ' ' + nextYearEstimation.currency?.name;
-            if (nextYearEstimation.currency && nextYearEstimation.currency.rate && this.position.currency?.name !== nextYearEstimation.currency?.name) {
-                projectedValue = nextYearEstimation.dividend * nextYearEstimation.currency.rate * this.position?.balance?.amount;
-                if (this.position.currency?.name !== 'CHF') {
-                    projectedValue = projectedValue / this.position.currency.rate;
-                }
-                projection.currencyCorrectedProjection = 'currency-corrected: ' + formatNumber(projectedValue, 'de-CH', '0.0-0') + ' ' + this.position.currency?.name;
-            }
-            projection.yieldFloat = (100 / this.position.balance.investment * projectedValue).toFixed(1).toString() + '%';
-        }
-
-        return projection;
     }
 
 }
