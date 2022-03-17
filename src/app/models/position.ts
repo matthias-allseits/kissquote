@@ -20,6 +20,7 @@ export interface DividendTotal {
     name: string;
     total: number;
     currency: Currency|null;
+    source: string;
 }
 
 export class Position {
@@ -80,7 +81,8 @@ export class Position {
             positionId: this.id,
             name: this.getName(),
             total: total,
-            currency: currency
+            currency: currency,
+            source: ''
         };
 
         return result;
@@ -91,16 +93,23 @@ export class Position {
     {
         let total = 0;
         let currency = null;
+        let source = 'From last payment(s)';
 
         if (this.balance && this.currency) {
             total = this.balance.projectedNextDividendPayment;
             currency = this.currency;
         }
+        const shareheadSharePayment = this.shareheadDividendPayment();
+        if (+shareheadSharePayment > 0) {
+            total = +shareheadSharePayment;
+            source = 'From stathead'
+        }
         const result = {
             positionId: this.id,
             name: this.getName(),
             total: total,
-            currency: currency
+            currency: currency,
+            source: source
         };
 
         return result;
@@ -232,7 +241,7 @@ export class Position {
         let result = '';
         if (this.shareheadShare && this.balance) {
             const lastBalance = this.shareheadShare.lastBalance();
-            if (lastBalance) {
+            if (lastBalance && this.currency?.name == this.shareheadShare.currency?.name) {
                 result = (lastBalance?.dividend * this.balance.amount).toFixed(0);
             }
         }

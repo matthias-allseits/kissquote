@@ -198,7 +198,7 @@
                             <ng-container *ngFor="let entry of dividendList.plannedList">
                                 <tr>
                                     <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.name }}</a></td>
-                                    <td>From Last Payment(s)</td>
+                                    <td>{{ entry.source }}</td>
                                     <td><span class="float-end">{{ entry.total|number: '1.0-0' }} {{ entry.currency?.name }}</span></td>
                                     <td><span class="float-end"></span></td>
                                 </tr>
