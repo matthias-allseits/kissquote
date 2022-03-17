@@ -24,8 +24,9 @@
     <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="positionTab !== 'balance'">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
             <h4 class="pt-2">Balance</h4>
-            <div class="btn-toolbar mb-2 mb-md-0">
-                <div class="btn-toolbar mb-2 mb-md-0">
+            <a [routerLink]="['/bank-account/0/position-form/' + position.id]" class="btn btn-sm btn-outline-primary">Edit this position</a>
+            <div class="btn-toolbar mb-md-0">
+                <div class="btn-toolbar mb-md-0">
                     <div *ngIf="position.urlSwissquote()" class="btn-group me-2">
                         <a href="{{ position.urlSwissquote() }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> Swissquote</a>
                     </div>
@@ -170,13 +171,15 @@
                 </div>
             </ng-container>
         </div>
-        <div *ngIf="position.balance" class="info-box">
-            <h5>Costs</h5>
-            <div class="row">
-                <div class="col-9">Transaction fees total:</div>
-                <div class="col-3"><span class="float-end">{{ position.balance.transactionFeesTotal|number: '1.0' }}</span></div>
+<!--        <div class="info-box-wrapper">-->
+            <div *ngIf="position.balance" class="info-box">
+                <h5>Costs</h5>
+                <div class="row">
+                    <div class="col-9">Transaction fees total:</div>
+                    <div class="col-3"><span class="float-end">{{ position.balance.transactionFeesTotal|number: '1.0' }}</span></div>
+                </div>
             </div>
-        </div>
+<!--        </div>-->
     </div>
     <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="positionTab !== 'sharehead'">
         <ng-container *ngIf="shareheadShare">
@@ -271,6 +274,9 @@
                     <h5>{{ nextEstimationYear }} Estimation Changes</h5>
                     <app-line-chart [data]="shareheadShare.estimationChangesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
                 </div>
+                <div class="info-box info-box-lg">
+                    <button (click)="openShareheadConfirmModal(shareheadTemplate)" class="btn btn-sm btn-outline-primary">Remove this Sharehead Share</button>
+                </div>
             </div>
         </ng-container>
         <ng-container *ngIf="!shareheadShare">
@@ -332,6 +338,14 @@
     <div class="modal-body text-center">
         <p>Wollen Sie diese Transaktion wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirm()">Ja</button>
+        <button type="button" class="btn btn-primary" (click)="decline()">Nein</button>
+    </div>
+</ng-template>
+
+<ng-template #shareheadTemplate>
+    <div class="modal-body text-center">
+        <p>Wollen Sie dieses Bankkonto wirklich löschen?</p>
+        <button type="button" class="btn btn-default" (click)="confirmShareheadRemoving()">Ja</button>
         <button type="button" class="btn btn-primary" (click)="decline()">Nein</button>
     </div>
 </ng-template>

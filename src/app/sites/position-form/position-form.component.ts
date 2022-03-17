@@ -18,6 +18,7 @@ import {MarketplaceService} from "../../services/marketplace.service";
 import {Marketplace} from "../../models/marketplace";
 import {ShareCreator} from "../../creators/share-creator";
 import {ShareheadShare} from "../../models/sharehead-share";
+import {Location} from "@angular/common";
 
 
 @Component({
@@ -52,6 +53,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
     constructor(
         private route: ActivatedRoute,
         private router: Router,
+        private location: Location,
         private positionService: PositionService,
         private portfolioService: PortfolioService,
         private shareService: ShareService,
@@ -152,12 +154,12 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         if (this.position.id > 0) {
             this.positionService.update(this.position)
                 .subscribe(position => {
-                    this.router.navigate(['my-dashboard']);
+                    this.location.back();
                 });
         } else {
             this.positionService.create(this.position)
                 .subscribe(position => {
-                    this.router.navigate(['my-dashboard']);
+                    this.location.back();
                 });
         }
     }

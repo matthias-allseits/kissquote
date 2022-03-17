@@ -53,6 +53,7 @@ export class PositionDetailComponent implements OnInit {
     public shareheadShares: ShareheadShare[] = [];
     public selectableShares?: ShareheadShare[];
     modalRef?: BsModalRef;
+    shareheadModalRef?: BsModalRef;
 
     public chartData?: ChartData;
     public lineChartData?: ChartData;
@@ -92,6 +93,10 @@ export class PositionDetailComponent implements OnInit {
         this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
     }
 
+    openShareheadConfirmModal(template: TemplateRef<any>) {
+        this.shareheadModalRef = this.modalService.show(template, {class: 'modal-sm'});
+    }
+
 
     confirm(): void {
         if (this.selectedTransaction) {
@@ -100,8 +105,26 @@ export class PositionDetailComponent implements OnInit {
         this.modalRef?.hide();
     }
 
+
+    confirmShareheadRemoving(): void {
+        if (this.position) {
+            this.shareheadShare = undefined;
+            this.position.shareheadId = undefined;
+            this.positionService.update(this.position)
+                .subscribe(position => {
+                    if (position) {
+                        this.position = position;
+                        this.loadData(this.position.id);
+                    }
+                });
+        }
+        this.shareheadModalRef?.hide();
+    }
+
+
     decline(): void {
         this.modalRef?.hide();
+        this.shareheadModalRef?.hide();
     }
 
 

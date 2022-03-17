@@ -75,6 +75,11 @@ a:hover, .nav-link:hover {
   margin-bottom: 20px;
 }
 
+.info-box-wrapper {
+  display: inline-block;
+  width: 370px;
+}
+
 @include media-breakpoint-up(sm) {
     .info-box-lg {
         width: 500px;
