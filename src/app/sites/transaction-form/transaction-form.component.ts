@@ -8,9 +8,11 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {TransactionService} from "../../services/transaction.service";
 import {TransactionCreator} from "../../creators/transaction-creator";
 import { Location } from '@angular/common';
-import {ShareheadShare} from "../../models/sharehead-share";
 import {ShareCreator} from "../../creators/share-creator";
 import { formatDate } from '@angular/common';
+import {TranslationService} from "../../services/translation.service";
+import {Currency} from "../../models/currency";
+import {CurrencyService} from "../../services/currency.service";
 
 
 @Component({
@@ -22,6 +24,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
 
     public transaction: Transaction;
     public position: Position|null = null;
+    public currencies: Currency[] = [];
     public titleOptions = ['Kauf', 'Fx-Gutschrift Comp.', 'Zins', 'Verkauf', 'Auszahlung', 'Dividende', 'Capital Gain', 'Forex-Gutschrift', 'Vergütung', 'Einzahlung', 'Depotgebühren', 'Fx-Belastung Comp.', 'Kapitalrückzahlung', 'Forex-Belastung', 'Corporate Action', 'Split'];
 
     transactionForm = new FormGroup({
@@ -30,6 +33,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
         quantity: new FormControl('', Validators.required),
         rate: new FormControl('', Validators.required),
         fee: new FormControl(''),
+        currency: new FormControl('', Validators.required),
     });
 
     constructor(
@@ -37,7 +41,9 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
         private router: Router,
         private location: Location,
         private positionService: PositionService,
+        private currencyService: CurrencyService,
         private transactionService: TransactionService,
+        public tranService: TranslationService,
     ) {
         super();
         this.transaction = TransactionCreator.createNewTransaction();
@@ -68,6 +74,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
                                 this.transactionForm.patchValue(transaction, { onlySelf: true });
                                 this.transactionForm.get('date')?.setValue(formatDate(transaction.date, 'yyyy-MM-dd', 'en'));
                             }
+                            this.setCurrency();
                         });
                 } else {
                     this.transaction = TransactionCreator.createNewTransaction();
@@ -75,10 +82,15 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
             } else {
                 throw Error;
             }
+            this.currencyService.getAllCurrencies()
+                .subscribe(currencies => {
+                    this.currencies = currencies;
+                });
         });
     }
 
     get quantity() { return this.transactionForm.get('quantity'); }
+
 
     onSubmit(): void {
         this.patchValuesBack(this.transactionForm, this.transaction);
@@ -104,6 +116,16 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
     selectTitle(title: string): void {
         const share = ShareCreator.createNewShare();
         this.transactionForm.get('title')?.setValue(title);
+    }
+
+
+    private setCurrency(): void {
+        console.log('set currency');
+        this.currencies.forEach(currency => {
+            if (this.transaction.currency?.name === currency.name) {
+                this.transactionForm.get('currency')?.setValue(currency);
+            }
+        });
     }
 
 }
