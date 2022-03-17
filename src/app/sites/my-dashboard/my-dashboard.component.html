@@ -161,18 +161,19 @@
                 </li>
             </ul>
             <div *ngFor="let dividendList of dividendLists" class="shadow-sm p-3 mb-5 bg-body rounded" [class.visually-hidden]="dividendListTab !== dividendList.year">
-                <h5>Total: {{ dividendList.total }}</h5>
+                <h4>{{ dividendList.year }} Total: {{ dividendList.payedTotal + dividendList.plannedTotal  }}</h4>
+                <h5>Payed Total: {{ dividendList.payedTotal }}</h5>
                 <table class="table table-striped table-sm">
                     <thead>
                     <tr>
-                        <th scope="col">Position</th>
+                        <th scope="col" style="width: 200px;">Position</th>
                         <th scope="col">Source</th>
                         <th scope="col"><span class="float-end">Dividende</span></th>
-                        <th scope="col"><span class="float-end">Currency-Corrected</span></th>
+                        <th scope="col" style="width: 200px;"><span class="float-end">Currency-Corrected</span></th>
                     </tr>
                     </thead>
                     <tbody>
-                        <ng-container *ngFor="let entry of dividendList.list">
+                        <ng-container *ngFor="let entry of dividendList.payedList">
                             <tr>
                                 <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.name }}</a></td>
                                 <td>From Transactions</td>
@@ -182,6 +183,29 @@
                         </ng-container>
                     </tbody>
                 </table>
+                <div *ngIf="dividendList.plannedTotal > 0" class="mt-4">
+                    <h5>Planned Total: {{ dividendList.plannedTotal }}</h5>
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="width: 200px;">Position</th>
+                            <th scope="col">Source</th>
+                            <th scope="col"><span class="float-end">Dividende</span></th>
+                            <th scope="col" style="width: 200px;"><span class="float-end">Currency-Corrected</span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let entry of dividendList.plannedList">
+                                <tr>
+                                    <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.name }}</a></td>
+                                    <td>From Last Payment(s)</td>
+                                    <td><span class="float-end">{{ entry.total|number: '1.0-0' }} {{ entry.currency?.name }}</span></td>
+                                    <td><span class="float-end"></span></td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'settings'">

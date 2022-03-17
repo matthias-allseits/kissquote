@@ -8,8 +8,10 @@ import {DividendTotal, Position} from "./position";
 
 export interface DividendTotals {
     year: number;
-    list: DividendTotal[];
-    total: number;
+    payedList: DividendTotal[];
+    plannedList: DividendTotal[];
+    payedTotal: number;
+    plannedTotal: number;
 }
 
 export class Portfolio {
@@ -113,22 +115,39 @@ export class Portfolio {
 
     collectDividendLists(): DividendTotals[] {
         const totals: DividendTotals[] = [];
-        [2015, 2016, 2017, 2018, 2020, 2021, 2022, 2023, 2024, 2025].forEach(year => {
-            const list: DividendTotal[] = [];
-            let total = 0;
+        const thisYear = new Date().getFullYear();
+        const startYear = thisYear - 7;
+        const allYears = [];
+        for(let x = 0; x <= 10; x++) {
+            allYears.push(startYear + x);
+        }
+        allYears.forEach(year => {
+            const payedList: DividendTotal[] = [];
+            const plannedList: DividendTotal[] = [];
+            let payedTotal = 0;
+            let plannedTotal = 0;
             this.getAllPositions().forEach(position => {
-                const result = position.dividendTotalByYear(year);
-                if (result.total > 0) {
-                    list.push(result);
-                    total += result.total;
+                const payedResult = position.payedDividendsTotalByYear(year);
+                const plannedResult = position.plannedDividendsTotalByYear(year);
+                if (payedResult.total > 0) {
+                    payedList.push(payedResult);
+                    payedTotal += payedResult.total;
+                    +(plannedResult.total -= payedResult.total).toFixed(0);
+                }
+                if (year >= thisYear) {
+                    plannedList.push(plannedResult);
+                    plannedTotal += plannedResult.total;
                 }
             });
-            const fixedTotal = +total.toFixed(0);
+            const fixedPayedTotal = +payedTotal.toFixed(0);
+            const fixedPlannedTotal = +plannedTotal.toFixed(0);
             totals.push(
                 {
                     year: year,
-                    list: list,
-                    total: fixedTotal,
+                    payedList: payedList,
+                    plannedList: plannedList,
+                    payedTotal: fixedPayedTotal,
+                    plannedTotal: fixedPlannedTotal,
                 }
             );
         });

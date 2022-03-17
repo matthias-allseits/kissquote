@@ -57,7 +57,7 @@ export class Position {
     }
 
 
-    dividendTotalByYear(year: number): DividendTotal
+    payedDividendsTotalByYear(year: number): DividendTotal
     {
         let total = 0;
         let currency = null;
@@ -69,6 +69,26 @@ export class Position {
             }
         });
         total = +total.toFixed(1);
+        const result = {
+            positionId: this.id,
+            name: this.getName(),
+            total: total,
+            currency: currency
+        };
+
+        return result;
+    }
+
+
+    plannedDividendsTotalByYear(year: number): DividendTotal
+    {
+        let total = 0;
+        let currency = null;
+
+        if (this.balance && this.currency) {
+            total = this.balance.projectedNextDividendPayment;
+            currency = this.currency;
+        }
         const result = {
             positionId: this.id,
             name: this.getName(),
