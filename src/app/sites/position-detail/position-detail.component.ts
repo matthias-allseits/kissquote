@@ -237,27 +237,24 @@ export class PositionDetailComponent implements OnInit {
                                         this.position.shareheadShare = share;
                                     }
                                     this.diviProjectionYears = this.position?.dividendProjections();
+                                    this.shareheadDividendPayment = this.position?.shareheadDividendPayment();
+                                    if (this.position && this.position.balance?.lastRate && this.shareheadDividendPayment !== undefined && +this.shareheadDividendPayment > 0) {
+                                        this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadDividendPayment / this.position.balance.amount)).toFixed(1);
+                                        this.currentYieldOnValueSource = '(from sharehead)';
+                                    }
 
                                     if (this.position?.balance && this.position.shareheadShare) {
-                                        const lastBalance = this.position.shareheadShare.lastBalance();
-                                        if (lastBalance) {
-                                            this.shareheadDividendPayment = (lastBalance?.dividend * this.position.balance.amount).toFixed(0);
-                                            if (this.position.balance?.lastRate && +this.shareheadDividendPayment > 0) {
-                                                this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadDividendPayment / this.position.balance.amount)).toFixed(1);
-                                                this.currentYieldOnValueSource = '(from sharehead)';
-                                            }
-                                            if (this.position.currency?.name !== this.position.shareheadShare.currency?.name) {
-                                                if (this.position.shareheadShare.currency) {
-                                                    const usersCurrency = this.currencyService.getUsersCurrencyByName(this.position.shareheadShare.currency?.name)
-                                                        .subscribe(currency => {
-                                                            if (this.shareheadDividendPayment && this.position?.currency) {
-                                                                this.shareheadCurrencyCorrectedDividendPayment = (+this.shareheadDividendPayment * currency.rate / this.position?.currency.rate).toFixed(0);
-                                                                if (this.position.balance?.lastRate) {
-                                                                    this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadCurrencyCorrectedDividendPayment / this.position.balance.amount)).toFixed(1);
-                                                                }
+                                        if (this.position.currency?.name !== this.position.shareheadShare.currency?.name) {
+                                            if (this.position.shareheadShare.currency) {
+                                                const usersCurrency = this.currencyService.getUsersCurrencyByName(this.position.shareheadShare.currency?.name)
+                                                    .subscribe(currency => {
+                                                        if (this.shareheadDividendPayment && this.position?.currency) {
+                                                            this.shareheadCurrencyCorrectedDividendPayment = (+this.shareheadDividendPayment * currency.rate / this.position?.currency.rate).toFixed(0);
+                                                            if (this.position.balance?.lastRate) {
+                                                                this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadCurrencyCorrectedDividendPayment / this.position.balance.amount)).toFixed(1);
                                                             }
-                                                        });
-                                                }
+                                                        }
+                                                    });
                                             }
                                         }
                                     }

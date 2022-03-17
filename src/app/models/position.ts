@@ -228,6 +228,19 @@ export class Position {
     }
 
 
+    public shareheadDividendPayment(): string {
+        let result = '';
+        if (this.shareheadShare && this.balance) {
+            const lastBalance = this.shareheadShare.lastBalance();
+            if (lastBalance) {
+                result = (lastBalance?.dividend * this.balance.amount).toFixed(0);
+            }
+        }
+
+        return result;
+    }
+
+
     public getRatesChartData(): Observable<ChartData> {
         return new Observable(obsData => {
             const historicRates: number[] = [];
