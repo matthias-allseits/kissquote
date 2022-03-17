@@ -40,7 +40,7 @@ export class MyDashboardComponent implements OnInit {
     private selectedBankAccount?: BankAccount;
     public selectedCurrency?: Currency;
     public dashboardTab = '0';
-    public dividendListTab = 2021;
+    public dividendListTab = new Date().getFullYear();
     public yearDividendsTotals?: YearDividendsTotal[];
     public dividendLists?: DividendTotals[];
     modalRef?: BsModalRef;

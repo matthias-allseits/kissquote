@@ -7,6 +7,7 @@ import {ChartData} from "chart.js";
 import {StockRate} from "./stock-rate";
 import {StockRateCreator} from "../creators/stock-rate-creator";
 import {DateHelper} from "../core/datehelper";
+import {Observable} from "rxjs";
 
 
 export interface DividendTotal {
@@ -106,9 +107,6 @@ export class Position {
         if (this.balance) {
             result = (100 / this.balance.investment * this.balance.projectedNextDividendPayment);
         }
-        if (this.dividendPeriodicity === 'quaterly') {
-            result *= 4;
-        }
 
         return result.toFixed(1);
     }
@@ -194,44 +192,46 @@ export class Position {
     }
 
 
-    public getRatesChartData(): ChartData {
-        const historicRates: number[] = [];
-        const historicLabels: string[] = [];
-        if (this.share) {
-            let request = new XMLHttpRequest();
-            const ratesUrl = `https://www.swissquote.ch/sqi_ws/HistoFromServlet?format=pipe&key=${this.share.isin}_${this.share.marketplace?.urlKey}_${this.currency?.name}&ftype=day&fvalue=1&ptype=a&pvalue=1`;
-            request.open("GET", ratesUrl, false);
-            request.send(null);
-            let content = request.responseText;
-            // console.log(content);
-            const rates = this.parseRates(content);
+    public getRatesChartData(): Observable<ChartData> {
+        return new Observable(obsData => {
+            const historicRates: number[] = [];
+            const historicLabels: string[] = [];
+            if (this.share) {
+                let request = new XMLHttpRequest();
+                const ratesUrl = `https://www.swissquote.ch/sqi_ws/HistoFromServlet?format=pipe&key=${this.share.isin}_${this.share.marketplace?.urlKey}_${this.currency?.name}&ftype=day&fvalue=1&ptype=a&pvalue=1`;
+                request.open("GET", ratesUrl, false);
+                request.send(null);
+                let content = request.responseText;
+                // console.log(content);
+                const rates = this.parseRates(content);
 
-            rates.forEach(rate => {
-                if (rate.date) {
-                    historicRates.push(rate.rate);
-                    historicLabels.push(DateHelper.convertDateToGerman(rate.date));
-                }
-            });
-        }
+                rates.forEach(rate => {
+                    if (rate.date) {
+                        historicRates.push(rate.rate);
+                        historicLabels.push(DateHelper.convertDateToGerman(rate.date));
+                    }
+                });
+            }
 
-        const data = {
-            datasets: [
-                {
-                    data: historicRates,
-                    label: 'Kurs seit Start der Position',
-                    backgroundColor: 'rgba(255,102,51,0)',
-                    borderColor: '#ff6633',
-                    pointBackgroundColor: '#c9461a',
-                    pointBorderColor: '#ff6633',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: '#ff6633',
-                    fill: 'origin',
-                }
-            ],
-            labels: historicLabels
-        };
+            const data = {
+                datasets: [
+                    {
+                        data: historicRates,
+                        label: 'Kurs seit Start der Position',
+                        backgroundColor: 'rgba(255,102,51,0)',
+                        borderColor: '#ff6633',
+                        pointBackgroundColor: '#c9461a',
+                        pointBorderColor: '#ff6633',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#ff6633',
+                        fill: 'origin',
+                    }
+                ],
+                labels: historicLabels
+            };
 
-        return data;
+            obsData.next(data);
+        });
     }
 
 

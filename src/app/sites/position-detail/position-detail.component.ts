@@ -287,12 +287,15 @@ export class PositionDetailComponent implements OnInit {
                             })
                     }
 
-                    this.lineChartData = this.position?.getRatesChartData();
-                    console.log('chartdata length: ' + this.lineChartData?.datasets[0].data.length);
-                    this.addLatestRateToLineChart();
-                    if (this.lineChartComponent) {
-                        this.lineChartComponent.updateData(this.lineChartData);
-                    }
+                    this.position?.getRatesChartData()
+                        .subscribe(data => {
+                            this.lineChartData = data;
+                            console.log('chartdata length: ' + this.lineChartData?.datasets[0].data.length);
+                            this.addLatestRateToLineChart();
+                            if (this.lineChartComponent) {
+                                this.lineChartComponent.updateData(this.lineChartData);
+                            }
+                        });
                 }
             });
     }
