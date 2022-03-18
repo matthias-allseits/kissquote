@@ -105,50 +105,52 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                 <h4 class="pt-2">Totals</h4>
             </div>
-            <div class="info-box">
-                <div class="row">
-                    <div class="col-9">Aktuelles Investment:</div>
-                    <div class="col-3"><span class="float-end">{{ portfolio.investmentTotal()|number: '1.0' }}</span></div>
+            <div class="info-container">
+                <div class="info-box">
+                    <div class="row">
+                        <div class="col-9">Aktuelles Investment:</div>
+                        <div class="col-3"><span class="float-end">{{ portfolio.investmentTotal()|number: '1.0' }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Aktueller Wert:</div>
+                        <div class="col-3"><span class="float-end">{{ portfolio.valueTotal()|number: '1.0' }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Bilanz offener Positionen:</div>
+                        <div class="col-3"><span class="float-end bold">{{ portfolio.openPositionsBalance()|number: '1.0' }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Cash:</div>
+                        <div class="col-3"><span class="float-end bold">{{ portfolio.cashTotal()|number: '1.0-0' }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Cash-Ratio:</div>
+                        <div class="col-3"><span class="float-end bold"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">StopLoss Reserve:</div>
+                        <div class="col-3"><span class="float-end"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Bilanz geschlossener Positionen:</div>
+                        <div class="col-3"><span class="float-end"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Dividendenaussicht:</div>
+                        <div class="col-3"><span class="float-end bold">{{ portfolio.dividendProjectionsTotal()|number: '1.0' }}</span></div>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-9">Aktueller Wert:</div>
-                    <div class="col-3"><span class="float-end">{{ portfolio.valueTotal()|number: '1.0' }}</span></div>
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
+                    <h4 class="pt-2">Bilanzen</h4>
                 </div>
-                <div class="row">
-                    <div class="col-9">Bilanz offener Positionen:</div>
-                    <div class="col-3"><span class="float-end bold">{{ portfolio.openPositionsBalance()|number: '1.0' }}</span></div>
+                <div *ngFor="let account of portfolio.bankAccounts" class="info-box">
+                    <h5>{{ account.name }}</h5>
+                    <app-bar-chart [data]="getBalanceChartDataByAccount(account)"></app-bar-chart>
                 </div>
-                <div class="row">
-                    <div class="col-9">Cash:</div>
-                    <div class="col-3"><span class="float-end bold">{{ portfolio.cashTotal()|number: '1.0-0' }}</span></div>
+                <div class="info-box">
+                    <h5>Dividenden-Einkommen</h5>
+                    <app-bar-chart [data]="portfolio.dividendIncomeChartData()"></app-bar-chart>
                 </div>
-                <div class="row">
-                    <div class="col-9">Cash-Ratio:</div>
-                    <div class="col-3"><span class="float-end bold"></span></div>
-                </div>
-                <div class="row">
-                    <div class="col-9">StopLoss Reserve:</div>
-                    <div class="col-3"><span class="float-end"></span></div>
-                </div>
-                <div class="row">
-                    <div class="col-9">Bilanz geschlossener Positionen:</div>
-                    <div class="col-3"><span class="float-end"></span></div>
-                </div>
-                <div class="row">
-                    <div class="col-9">Dividendenaussicht:</div>
-                    <div class="col-3"><span class="float-end bold">{{ portfolio.dividendProjectionsTotal()|number: '1.0' }}</span></div>
-                </div>
-            </div>
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-                <h4 class="pt-2">Bilanzen</h4>
-            </div>
-            <div *ngFor="let account of portfolio.bankAccounts" class="info-box">
-                <h5>{{ account.name }}</h5>
-                <app-bar-chart [data]="getBalanceChartDataByAccount(account)"></app-bar-chart>
-            </div>
-            <div class="info-box">
-                <h5>Dividenden-Einkommen</h5>
-                <app-bar-chart [data]="portfolio.dividendIncomeChartData()"></app-bar-chart>
             </div>
         </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'dividends'">

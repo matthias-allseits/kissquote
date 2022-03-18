@@ -80,13 +80,24 @@ a:hover, .nav-link:hover {
   width: 370px;
 }
 
-@include media-breakpoint-up(sm) {
+@include media-breakpoint-up(md) {
     .info-box-lg {
         width: 500px;
     }
 
     .info-box-doubled {
         width: 725px;
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .info-container {
+        width: 100%;
+        padding-right: var(--bs-gutter-x, 0.75rem);
+        padding-left: var(--bs-gutter-x, 0.75rem);
+        margin-right: auto;
+        margin-left: auto;
+        text-align: center!important;
     }
 }
 
