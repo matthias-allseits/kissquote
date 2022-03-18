@@ -192,6 +192,7 @@ export class PositionDetailComponent implements OnInit {
                 }
                 console.log(nextIndex);
                 const nextPosition = positions[nextIndex];
+                this.position = undefined;
                 this.router.navigate(['/position-detail/' + nextPosition.id]);
                 this.loadData(nextPosition.id);
             });
