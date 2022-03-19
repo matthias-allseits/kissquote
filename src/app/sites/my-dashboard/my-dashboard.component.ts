@@ -71,6 +71,7 @@ export class MyDashboardComponent implements OnInit {
                     if (returnedPortfolio instanceof Portfolio) {
                         this.portfolio = returnedPortfolio;
                         this.currencies = this.portfolio.currencies;
+                        localStorage.setItem('currencies', JSON.stringify(this.currencies));
                         this.yearDividendsTotals = this.portfolio.yearDividendTotals();
                         this.loadShareheadShares();
                         setTimeout (() => {

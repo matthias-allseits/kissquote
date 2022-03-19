@@ -34,13 +34,15 @@
             </div>
         </div>
         <div class="info-container">
-            <div class="info-box">
-                <app-bar-chart [data]="chartData"></app-bar-chart>
-            </div>
-            <div class="info-box info-box-doubled">
-                <div class="flex">
-                    <div class="flex-item">
-                        <app-line-chart [data]="lineChartData" [height]="141"></app-line-chart>
+            <div>
+                <div class="info-box">
+                    <app-bar-chart [data]="chartData"></app-bar-chart>
+                </div>
+                <div class="info-box info-box-doubled">
+                    <div class="flex">
+                        <div class="flex-item">
+                            <app-line-chart [data]="lineChartData" [height]="141"></app-line-chart>
+                        </div>
                     </div>
                 </div>
             </div>

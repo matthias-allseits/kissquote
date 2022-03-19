@@ -120,7 +120,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         this.positionForm.get('isin')?.setValue(share.isin);
         this.position.share = share;
         if (share.marketplace?.currency) {
-            const currency = this.currencyService.getCurrencyByName(this.currencies, share.marketplace.currency);
+            const currency = this.currencyService.getCachedCurrencyByName(share.marketplace.currency);
             this.position.currency = currency;
         }
         this.setMarketplace();

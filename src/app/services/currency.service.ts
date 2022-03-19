@@ -60,17 +60,21 @@ export class CurrencyService extends ApiService {
     }
 
 
-    public getCurrencyByName(currencies: Currency[], name: string): Currency|undefined
+    public getCachedCurrencyByName(name: string): Currency|undefined
     {
+        let hit = undefined;
         if (name === 'GBX') { // island apes...
             name = 'GBP';
         }
-        let hit = undefined;
-        currencies.forEach(currency => {
-            if (currency.name == name) {
-                hit = currency;
-            }
-        });
+        const cachedCurrencies = localStorage.getItem('currencies');
+        if (cachedCurrencies) {
+            const currencies: Currency[] = JSON.parse(cachedCurrencies);
+            currencies.forEach(currency => {
+                if (currency.name == name) {
+                    hit = currency;
+                }
+            });
+        }
 
         return hit;
     }
