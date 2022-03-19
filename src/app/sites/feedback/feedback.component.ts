@@ -1,5 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {TranslationService} from '../../services/translation.service';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FeedbackService} from "../../services/feedback.service";
+import {Feedback} from "../../models/feedback";
+import {Location} from "@angular/common";
+
 
 @Component({
     selector: 'app-feedback',
@@ -12,8 +17,14 @@ export class FeedbackComponent implements OnInit {
     public placeholder = '';
     public submitText = '';
 
+    feedbackForm = new FormGroup({
+        feedback: new FormControl('', Validators.required),
+    });
+
     constructor(
-        public tranService: TranslationService
+        public tranService: TranslationService,
+        public feedbackService: FeedbackService,
+        private location: Location,
     ) { }
 
     ngOnInit(): void {
@@ -38,6 +49,15 @@ export class FeedbackComponent implements OnInit {
                 this.submitText = 'Send my kiss';
                 break;
         }
+    }
+
+    submitFeedback(): void {
+        console.log(this.feedbackForm.get('feedback')?.value);
+        const feedback = new Feedback(0, this.activeMood, this.feedbackForm.get('feedback')?.value);
+        this.feedbackService.post(feedback)
+            .subscribe(feedback => {
+                this.location.back();
+            });
     }
 
 }
