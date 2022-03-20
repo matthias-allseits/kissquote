@@ -42,7 +42,7 @@ export class Portfolio {
     investmentTotal(): number {
         let total = 0;
         this.bankAccounts.forEach(account => {
-            account.getNonCashPositions().forEach(position => {
+            account.getActiveNonCashPositions().forEach(position => {
                 if (position.balance) {
                     total += position.balance?.investment;
                 }
@@ -56,7 +56,7 @@ export class Portfolio {
     valueTotal(): number {
         let total = 0;
         this.bankAccounts.forEach(account => {
-            account.getNonCashPositions().forEach(position => {
+            account.getActiveNonCashPositions().forEach(position => {
                 const actualValue = position.actualValue();
                 if (actualValue) {
                     total += +actualValue;
@@ -86,7 +86,7 @@ export class Portfolio {
     dividendProjectionsTotal(): number {
         let total = 0;
         this.bankAccounts.forEach(account => {
-            account.getNonCashPositions().forEach(position => {
+            account.getActiveNonCashPositions().forEach(position => {
                 if (position.balance) {
                     total += position.balance?.projectedNextDividendPayment;
                 }
@@ -106,7 +106,17 @@ export class Portfolio {
     getAllPositions(): Position[] {
         let positions: Position[] = [];
         this.bankAccounts.forEach(account => {
-            positions = positions.concat(account.getNonCashPositions());
+            positions = positions.concat(account.getActiveNonCashPositions());
+        });
+
+        return positions;
+    }
+
+
+    getClosedNonCashPositions(): Position[] {
+        let positions: Position[] = [];
+        this.bankAccounts.forEach(account => {
+            positions = positions.concat(account.getClosedNonCashPositions());
         });
 
         return positions;
@@ -159,7 +169,7 @@ export class Portfolio {
     yearDividendTotals(): YearDividendsTotal[] {
         const totals: YearDividendsTotal[] = [];
         this.bankAccounts.forEach(account => {
-            account.getNonCashPositions().forEach(position => {
+            account.getActiveNonCashPositions().forEach(position => {
                 position.transactions.forEach(transaction => {
                     if (transaction.isDividend() && transaction.date instanceof Date && transaction.rate) {
                         const year = transaction.date.getFullYear();

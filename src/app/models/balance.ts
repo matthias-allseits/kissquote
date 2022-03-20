@@ -16,6 +16,7 @@ export class Balance {
     public projectedNextDividendCurrency: string,
     public lastRate?: StockRate,
     public cashValue?: number,
+    public closedResult?: number,
     ) {}
 
 

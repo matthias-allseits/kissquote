@@ -10,10 +10,10 @@ export class BankAccount {
     ) {}
 
 
-    getNonCashPositions(): Position[] {
+    getActiveNonCashPositions(): Position[] {
         const positions: Position[] = [];
         this.positions.forEach(position => {
-            if (!position.isCash) {
+            if (!position.isCash && position.active) {
                 positions.push(position);
             }
         });
@@ -26,6 +26,18 @@ export class BankAccount {
         const positions: Position[] = [];
         this.positions.forEach(position => {
             if (position.isCash) {
+                positions.push(position);
+            }
+        });
+
+        return positions;
+    }
+
+
+    getClosedNonCashPositions(): Position[] {
+        const positions: Position[] = [];
+        this.positions.forEach(position => {
+            if (!position.isCash && !position.active) {
                 positions.push(position);
             }
         });
@@ -52,7 +64,7 @@ export class BankAccount {
 
     getEarningsTotal(): number {
         let total = 0;
-        this.getNonCashPositions().forEach(position => {
+        this.getActiveNonCashPositions().forEach(position => {
             if (position.balance) {
                 total += position.balance?.collectedDividends;
             }

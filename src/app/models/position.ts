@@ -116,6 +116,18 @@ export class Position {
     }
 
 
+    isDividendRelevant(): boolean {
+        let result = false;
+        this.transactions.forEach(transaction => {
+            if (transaction.isDividend()) {
+                result = true;
+            }
+        });
+
+        return result;
+    }
+
+
     yieldOnInvestent(): string
     {
         let result = 0;

@@ -11,7 +11,7 @@ import {MoreInfoComponent} from "./sites/more-info/more-info.component";
 import {FeedbackComponent} from "./sites/feedback/feedback.component";
 import {SessionRestoreComponent} from "./sites/session-restore/session-restore.component";
 import {DemoComponent} from "./sites/demo/demo.component";
-import {UploadComponent} from "./sites/upload/upload.component";
+import {ImportComponent} from "./sites/import/import.component";
 import {UploadExplanationComponent} from "./sites/upload-explanation/upload-explanation.component";
 import {UploadAlternativeComponent} from "./sites/upload-alternative/upload-alternative.component";
 import {MyDashboardComponent} from "./sites/my-dashboard/my-dashboard.component";
@@ -49,7 +49,7 @@ registerLocaleData(localeCH);
         FeedbackComponent,
         SessionRestoreComponent,
         DemoComponent,
-        UploadComponent,
+        ImportComponent,
         UploadExplanationComponent,
         FaqComponent,
         UploadAlternativeComponent,

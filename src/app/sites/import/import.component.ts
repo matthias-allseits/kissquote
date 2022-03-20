@@ -40,10 +40,10 @@ export interface ParsedTransaction {
 
 @Component({
     selector: 'app-upload',
-    templateUrl: './upload.component.html',
-    styleUrls: ['./upload.component.scss']
+    templateUrl: './import.component.html',
+    styleUrls: ['./import.component.scss']
 })
-export class UploadComponent implements OnInit {
+export class ImportComponent implements OnInit {
 
     private file: File|null = null;
     public parsedTransactions: ParsedTransaction[] = [];
@@ -53,6 +53,7 @@ export class UploadComponent implements OnInit {
     public allShares: Share[] = [];
     public cashPositions: Position[] = [];
     public openPositions: Position[] = [];
+    public dividendRelevantClosedPositions: Position[] = [];
     public closedPositions: Position[] = [];
     public dividends: Dividend[] = [];
     public resolvedActions = 0;
@@ -151,6 +152,15 @@ export class UploadComponent implements OnInit {
                     });
             }
         });
+        this.dividendRelevantClosedPositions.forEach(position => {
+            if (position.share?.isin) {
+                position.bankAccount = bankAccount;
+                this.positionService.create(position)
+                    .subscribe(position => {
+
+                    });
+            }
+        });
 
 
 
@@ -182,7 +192,11 @@ export class UploadComponent implements OnInit {
                     this.openPositions.push(position);
                 }
             } else {
-                this.closedPositions.push(position);
+                if (position.isDividendRelevant()) {
+                    this.dividendRelevantClosedPositions.push(position);
+                } else {
+                    this.closedPositions.push(position);
+                }
             }
         });
         this.cashPositions.forEach(position => {
@@ -263,6 +277,7 @@ export class UploadComponent implements OnInit {
                         position = this.getPositionBySymbol(parsedAction.symbol);
                         if (null !== position && position.share) {
                             position.share.isin = parsedAction.isin;
+                            position.shareheadId = this.getShareheadIdByIsin(position.share.isin);
                         }
                     }
 
