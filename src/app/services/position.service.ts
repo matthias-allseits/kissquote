@@ -51,6 +51,22 @@ export class PositionService extends ApiService {
     }
 
 
+    public getNonCashPositions(): Observable<Position[]>
+    {
+        return new Observable(psitons => {
+            const positions: Position[] = [];
+            this.getPositions().subscribe(positions => {
+                positions.forEach(position => {
+                    if (!position.isCash) {
+                        positions.push(position);
+                    }
+                });
+                psitons.next(positions);
+            });
+        });
+    }
+
+
     create(position: Position): Observable<Position|null> {
         position.activeFrom = DateHelper.convertDateToMysql(position.activeFrom);
         position.transactions.forEach(transaction => {
