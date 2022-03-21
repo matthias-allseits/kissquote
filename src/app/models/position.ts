@@ -30,7 +30,7 @@ export class Position {
         public share: Share|null,
         public active: boolean,
         public activeFrom: Date|string,
-        public activeUntil: Date|null,
+        public activeUntil: Date|null|string,
         public transactions: Transaction[],
         public isCash: boolean = false,
         public dividendPeriodicity: string,
