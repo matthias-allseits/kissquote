@@ -22,6 +22,15 @@
                 <label for="rate" class="form-label">Rate: </label>
                 <input id="rate" type="number" class="form-control" formControlName="rate">
             </div>
+            <div class="mb-3">
+                <label for="currency" class="form-label">{{ tranService.trans('GLOB_CURRENCY') }}: </label>
+                <select formControlName="currency" id="currency" name="currency" class="form-select form-select mb-3">
+                    <option disabled selected></option>
+                    <ng-container *ngFor="let currency of currencies">
+                        <option [ngValue]="currency">{{ currency.name }}</option>
+                    </ng-container>
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary" [disabled]="!transactionForm.valid">Submit</button>
         </form>
     </div>

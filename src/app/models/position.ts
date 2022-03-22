@@ -201,8 +201,8 @@ export class Position {
                 return (this.balance.amount * this.balance.lastRate.rate).toFixed(0)
             }
         } else {
-            if (this.balance && this.balance.cashValue) {
-                return this.balance?.cashValue.toString();
+            if (this.balance && this.balance.cashValue !== undefined) {
+                return this.balance?.cashValue.toFixed(2);
             }
         }
 

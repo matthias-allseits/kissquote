@@ -9,6 +9,9 @@ import {TransactionService} from "../../services/transaction.service";
 import {TransactionCreator} from "../../creators/transaction-creator";
 import {MotherFormComponent} from "../mother-form.component";
 import {ShareCreator} from "../../creators/share-creator";
+import {TranslationService} from "../../services/translation.service";
+import {CurrencyService} from "../../services/currency.service";
+import {Currency} from "../../models/currency";
 
 
 @Component({
@@ -20,6 +23,7 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
 
     public transaction: Transaction;
     public position: Position|null = null;
+    public currencies: Currency[] = [];
     public titleOptions = ['Kauf', 'Fx-Gutschrift Comp.', 'Zins', 'Verkauf', 'Auszahlung', 'Dividende', 'Capital Gain', 'Forex-Gutschrift', 'Vergütung', 'Einzahlung', 'Depotgebühren', 'Fx-Belastung Comp.', 'Kapitalrückzahlung', 'Forex-Belastung', 'Corporate Action', 'Split'];
 
 
@@ -27,6 +31,7 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
         title: new FormControl(''),
         date: new FormControl(),
         rate: new FormControl('', Validators.required),
+        currency: new FormControl('', Validators.required),
     });
 
     constructor(
@@ -34,7 +39,9 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
         private router: Router,
         private location: Location,
         private positionService: PositionService,
+        private currencyService: CurrencyService,
         private transactionService: TransactionService,
+        public tranService: TranslationService,
     ) {
         super();
         this.transaction = TransactionCreator.createNewTransaction();
@@ -72,6 +79,10 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
             } else {
                 throw Error;
             }
+            this.currencyService.getAllCurrencies()
+                .subscribe(currencies => {
+                    this.currencies = currencies;
+                });
         });
     }
 
@@ -80,6 +91,7 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
     onSubmit(): void {
         this.patchValuesBack(this.transactionForm, this.transaction);
         this.transaction.position = this.position;
+        this.transaction.fee = 0;
         this.transaction.quantity = 1;
         if (this.transaction.position) {
             this.transaction.position.balance = undefined;
