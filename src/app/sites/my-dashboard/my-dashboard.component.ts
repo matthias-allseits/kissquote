@@ -70,8 +70,6 @@ export class MyDashboardComponent implements OnInit {
                     console.log(returnedPortfolio);
                     if (returnedPortfolio instanceof Portfolio) {
                         this.portfolio = returnedPortfolio;
-                        this.currencies = this.portfolio.currencies;
-                        localStorage.setItem('currencies', JSON.stringify(this.currencies));
                         this.yearDividendsTotals = this.portfolio.yearDividendTotals();
                         this.loadShareheadShares();
                         setTimeout (() => {
@@ -83,6 +81,11 @@ export class MyDashboardComponent implements OnInit {
                         alert('Something went wrong!');
                         // todo: redirect back to landingpage. probably the solution: implement guards
                     }
+                });
+            this.currencyService.getAllCurrencies()
+                .subscribe(currencies => {
+                    this.currencies = currencies;
+                    localStorage.setItem('currencies', JSON.stringify(this.currencies));
                 });
         } else {
             // todo: redirect back to landingpage. probably the solution: implement guards

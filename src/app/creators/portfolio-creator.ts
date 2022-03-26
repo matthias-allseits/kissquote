@@ -14,7 +14,7 @@ export class PortfolioCreator {
                 apiArray.hashKey,
                 apiArray.startDate ? new Date(apiArray.startDate) : null,
                 apiArray.bankAccounts ? BankAccountCreator.fromApiArray(apiArray.bankAccounts) : [],
-                apiArray.currencies ? CurrencyCreator.fromApiArray(apiArray.currencies) : [],
+                []
             );
         } else {
             return null;

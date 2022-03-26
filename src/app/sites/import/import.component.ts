@@ -136,6 +136,7 @@ export class ImportComponent implements OnInit {
 
 
     private persistPositions(bankAccount: BankAccount): void {
+        // cash
         this.cashPositions.forEach(position => {
             position.bankAccount = bankAccount;
             this.positionService.createCashPosition(position)
@@ -143,24 +144,28 @@ export class ImportComponent implements OnInit {
 
                 });
         });
+
+        // open
         this.openPositions.forEach(position => {
             if (position.share?.isin) {
                 position.bankAccount = bankAccount;
-                this.positionService.create(position)
-                    .subscribe(position => {
-
-                    });
             }
         });
+        this.positionService.createPositionsFromBunch(this.openPositions)
+            .subscribe(positions => {
+
+            });
+
+        // relevant closed
         this.dividendRelevantClosedPositions.forEach(position => {
             if (position.share?.isin) {
                 position.bankAccount = bankAccount;
-                this.positionService.create(position)
-                    .subscribe(position => {
-
-                    });
             }
         });
+        this.positionService.createPositionsFromBunch(this.dividendRelevantClosedPositions)
+            .subscribe(position => {
+
+            });
 
 
 
@@ -300,7 +305,7 @@ export class ImportComponent implements OnInit {
                 case 'Corporate Action':
                 case 'Ausgabe von Anrechten':
                 case 'Kauf':
-                case 'Kapitalerhöhung':
+                // case 'Kapitalerhöhung':
                     currency = this.getCurrencyByName(parsedAction.currencyName);
 
                     share = this.getShareByParsedTransaction(parsedAction);

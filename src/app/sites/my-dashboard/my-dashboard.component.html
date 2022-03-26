@@ -242,6 +242,7 @@
                     <thead>
                     <tr>
                         <th scope="col" style="width: 40%;">{{ tranService.trans('GLOB_SHARE') }}</th>
+                        <th scope="col" style="width: 150px;">Account</th>
                         <th scope="col" style="width: 105px;"><span class="float-end">Result</span></th>
                         <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
                         <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Active From</th>
@@ -255,6 +256,7 @@
                     <tbody>
                     <tr *ngFor="let position of portfolio.getClosedNonCashPositions()">
                         <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
+                        <td>{{ position.bankAccount?.name }}</td>
                         <td><span class="float-end">{{ position.balance?.closedResult }}</span></td>
                         <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
                         <td class="d-none d-md-table-cell"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>

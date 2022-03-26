@@ -99,6 +99,25 @@ export class PositionService extends ApiService {
     }
 
 
+    createPositionsFromBunch(positions: Position[]): Observable<Position[]|null> {
+        positions.forEach(position => {
+            position.activeFrom = DateHelper.convertDateToMysql(position.activeFrom);
+            position.activeUntil = DateHelper.convertDateToMysql(position.activeUntil);
+            position.transactions.forEach(transaction => {
+                transaction.date = DateHelper.convertDateToMysql(transaction.date);
+            });
+        })
+        const url = `${this.apiUrl}/bunch`;
+        console.log(JSON.stringify(positions));
+        return this.http
+            .post(url, JSON.stringify(positions), httpOptions)
+            .pipe(
+                map(() => positions),
+                // catchError(this.handleError)
+            );
+    }
+
+
     update(position: Position): Observable<Position|null> {
         position.activeFrom = DateHelper.convertDateToMysql(position.activeFrom);
         const url = `${this.apiUrl}/${position.id}`;
