@@ -187,7 +187,7 @@ export class ImportComponent implements OnInit {
             }
         });
         this.parsedTransactions.reverse();
-        console.log(this.parsedTransactions);
+        // console.log(this.parsedTransactions);
         this.convertTransactionsToPositions(this.parsedTransactions);
         this.allPositions.forEach(position => {
             if (position.active) {
@@ -213,7 +213,7 @@ export class ImportComponent implements OnInit {
             });
         });
 
-        console.log(this.cashPositions);
+        // console.log(this.cashPositions);
         // console.log(this.openPositions);
     }
 
@@ -261,7 +261,7 @@ export class ImportComponent implements OnInit {
 
 
     private convertTransactionsToPositions(transactions: ParsedTransaction[]): void {
-        transactions.forEach(parsedAction => {
+        transactions.forEach((parsedAction, index) => {
             let position = null;
             let transaction = null;
             let currency = null;
@@ -288,7 +288,7 @@ export class ImportComponent implements OnInit {
 
                     if (null === position) {
                         console.warn('das ist aber gar nicht gut weil beim Split Position tot: ' + parsedAction.title + ' ' + parsedAction.name + ' (' + parsedAction.isin + ')');
-                        console.log(parsedAction);
+                        // console.log(parsedAction);
                         this.veryBadThingsHappend++;
                     } else {
                         transaction = TransactionCreator.createNewTransaction();
@@ -366,6 +366,19 @@ export class ImportComponent implements OnInit {
                         this.resolvedActions++;
                     }
                     break;
+                case 'Titelumbuchung':
+                    const previousAction = transactions[index-1];
+                    if (previousAction.title === 'Titelumbuchung') {
+                        console.log('Titelumbuchung');
+                        console.log(parsedAction);
+                        console.log(previousAction);
+                        position = this.getPositionByIsin(previousAction.isin);
+                        if (position !== null && position.share) {
+                            position.share.isin = parsedAction.isin;
+                            position.share.name = parsedAction.name;
+                        }
+                    }
+                    break;
                 case 'Verkauf':
                 case 'Titelausgang':
                 case 'Verfall von Anrechten':
@@ -438,7 +451,7 @@ export class ImportComponent implements OnInit {
 
                     break;
                 default:
-                    console.log(parsedAction);
+                    // console.log(parsedAction);
                     this.badTransactions.push(parsedAction);
             }
         })
@@ -564,12 +577,12 @@ export class ImportComponent implements OnInit {
 
     private getShareheadIdByIsin(isin: string): number|undefined {
         let id = undefined;
-        console.log('search for sharehead share by isin: ' + isin);
-        console.log(this.shareheadShares.length);
+        // console.log('search for sharehead share by isin: ' + isin);
+        // console.log(this.shareheadShares.length);
         this.shareheadShares.forEach(share => {
             if (isin === share.isin) {
                 id = share.shareheadId;
-                console.log('sharehead hit: ' + id);
+                // console.log('sharehead hit: ' + id);
             }
         });
 
