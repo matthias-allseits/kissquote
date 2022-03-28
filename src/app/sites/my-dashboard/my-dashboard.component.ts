@@ -40,6 +40,7 @@ export class MyDashboardComponent implements OnInit {
     private selectedPosition?: Position;
     private selectedBankAccount?: BankAccount;
     public selectedCurrency?: Currency;
+    private availableDashboardTabs = ['balance', 'dividends', 'settings', 'closedPositions'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
     public yearDividendsTotals?: YearDividendsTotal[];
@@ -70,6 +71,15 @@ export class MyDashboardComponent implements OnInit {
                     console.log(returnedPortfolio);
                     if (returnedPortfolio instanceof Portfolio) {
                         this.portfolio = returnedPortfolio;
+                        this.portfolio.bankAccounts.forEach((account, index) => {
+                            this.availableDashboardTabs.push(index.toString());
+                        });
+                        const storedTab = localStorage.getItem('dashboardTab');
+                        if (storedTab && this.availableDashboardTabs.indexOf(storedTab) > -1) {
+                            this.dashboardTab = storedTab;
+                        } else {
+                            this.dashboardTab = '0';
+                        }
                         this.yearDividendsTotals = this.portfolio.yearDividendTotals();
                         this.loadShareheadShares();
                         setTimeout (() => {
@@ -89,10 +99,6 @@ export class MyDashboardComponent implements OnInit {
                 });
         } else {
             // todo: redirect back to landingpage. probably the solution: implement guards
-        }
-        const storedTab = localStorage.getItem('dashboardTab');
-        if (storedTab) {
-            this.dashboardTab = storedTab;
         }
     }
 
