@@ -168,7 +168,7 @@ export class PositionDetailComponent implements OnInit {
     navigateCross(direction: string): void {
         console.log(direction);
         let positionIndex: number = -1;
-        this.positionService.getNonCashPositions()
+        this.positionService.getNonCashAndActivePositions()
             .subscribe(positions => {
                 positions.forEach((position, index) => {
                     if (this.position) {

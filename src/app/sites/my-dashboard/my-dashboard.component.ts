@@ -82,6 +82,7 @@ export class MyDashboardComponent implements OnInit {
                         }
                         this.yearDividendsTotals = this.portfolio.yearDividendTotals();
                         this.loadShareheadShares();
+                        // todo: implement a better solution
                         setTimeout (() => {
                             if (this.portfolio) {
                                 this.dividendLists = this.portfolio.collectDividendLists();

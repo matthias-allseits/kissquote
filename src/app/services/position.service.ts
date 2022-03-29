@@ -51,13 +51,13 @@ export class PositionService extends ApiService {
     }
 
 
-    public getNonCashPositions(): Observable<Position[]>
+    public getNonCashAndActivePositions(): Observable<Position[]>
     {
         return new Observable(psitons => {
             const positions: Position[] = [];
             this.getPositions().subscribe(positions => {
                 positions.forEach(position => {
-                    if (!position.isCash) {
+                    if (!position.isCash && position.active) {
                         positions.push(position);
                     }
                 });
