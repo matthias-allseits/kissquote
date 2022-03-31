@@ -33,10 +33,11 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ModalModule} from "ngx-bootstrap/modal";
 import {TabsModule} from "ngx-bootstrap/tabs";
 import {NgChartsModule} from "ng2-charts";
-import { BarChartComponent } from './components/bar-chart/bar-chart.component';
 import { LineChartComponent } from './components/line-chart/line-chart.component';
 import { CashPositionFormComponent } from './sites/cash-position-form/cash-position-form.component';
 import { CashTransactionFormComponent } from './sites/cash-transaction-form/cash-transaction-form.component';
+import {StackedBarChartComponent} from "./components/stacked-bar-chart/stacked-bar-chart.component";
+import {BarChartComponent} from "./components/bar-chart/bar-chart.component";
 registerLocaleData(localeCH);
 
 
@@ -60,6 +61,7 @@ registerLocaleData(localeCH);
         PositionListComponent,
         TransactionFormComponent,
         BarChartComponent,
+        StackedBarChartComponent,
         LineChartComponent,
         CashPositionFormComponent,
         CashTransactionFormComponent,

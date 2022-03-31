@@ -1,7 +1,6 @@
 import {BankAccount} from './bank-account';
 import {BankAccountCreator} from "../creators/bank-account-creator";
 import {Currency} from "./currency";
-import {YearDividendsTotal} from "../sites/my-dashboard/my-dashboard.component";
 import {ChartData} from "chart.js";
 import {DividendTotal, Position} from "./position";
 
@@ -171,38 +170,6 @@ export class Portfolio {
     }
 
 
-    yearDividendTotals(): YearDividendsTotal[] {
-        const totals: YearDividendsTotal[] = [];
-        this.bankAccounts.forEach(account => {
-            account.getActiveNonCashPositions().forEach(position => {
-                position.transactions.forEach(transaction => {
-                    if (transaction.isDividend() && transaction.date instanceof Date && transaction.rate) {
-                        const year = transaction.date.getFullYear();
-                        let added = false;
-                        totals.forEach(entry => {
-                            if (entry.year === year) {
-                                entry.total += transaction.rate ? transaction.rate : 0;
-                                added = true;
-                            }
-                        });
-                        if (!added) {
-                            totals.push(
-                                {
-                                    year: year,
-                                    total: transaction.rate
-                                }
-                            );
-                        }
-                    }
-                });
-            });
-        });
-        totals.sort((a, b) => (a.year > b.year) ? 1 : ((b.year > a.year) ? -1 : 0));
-
-        return totals;
-    }
-
-
     dividendIncomeChartData(): ChartData {
         const chartData: ChartData = {
             labels: [],
@@ -212,13 +179,20 @@ export class Portfolio {
                     borderColor: 'rgb(51, 102, 204, 1)',
                     backgroundColor: 'rgb(51, 102, 204, 1)',
                     hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)'
+                },
+                {
+                    data: [],
+                    borderColor: 'rgba(51,102,204,0.5)',
+                    backgroundColor: 'rgb(51, 102, 204, 0.5)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.2)'
                 }
             ]
         };
 
-        this.yearDividendTotals()?.forEach(dividendTotal => {
-            chartData.labels?.push(dividendTotal.year);
-            chartData.datasets[0].data.push(+dividendTotal.total.toFixed(0));
+        this.collectDividendLists()?.forEach(list => {
+            chartData.labels?.push(list.year);
+            chartData.datasets[0].data.push(+list.payedTotal.toFixed(0));
+            chartData.datasets[1].data.push(+list.plannedTotal.toFixed(0));
         });
 
         return chartData;

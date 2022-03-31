@@ -16,11 +16,6 @@ import {CurrencyService} from "../../services/currency.service";
 import {ShareheadService} from "../../services/sharehead.service";
 
 
-export interface YearDividendsTotal {
-    year: number;
-    total: number;
-}
-
 @Component({
     selector: 'app-my-dashboard',
     templateUrl: './my-dashboard.component.html',
@@ -43,7 +38,6 @@ export class MyDashboardComponent implements OnInit {
     private availableDashboardTabs = ['balance', 'dividends', 'settings', 'closedPositions'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
-    public yearDividendsTotals?: YearDividendsTotal[];
     public dividendLists?: DividendTotals[];
     modalRef?: BsModalRef;
 
@@ -80,7 +74,6 @@ export class MyDashboardComponent implements OnInit {
                         } else {
                             this.dashboardTab = '0';
                         }
-                        this.yearDividendsTotals = this.portfolio.yearDividendTotals();
                         this.loadShareheadShares();
                         // todo: implement a better solution
                         setTimeout (() => {
