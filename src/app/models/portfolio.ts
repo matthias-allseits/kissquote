@@ -148,7 +148,7 @@ export class Portfolio {
                     payedTotal += payedResult.total;
                     +(plannedResult.total -= payedResult.total).toFixed(0);
                 }
-                if (year >= thisYear) {
+                if (year >= thisYear && position.active) {
                     plannedList.push(plannedResult);
                     plannedTotal += plannedResult.total;
                 }
@@ -182,9 +182,9 @@ export class Portfolio {
                 },
                 {
                     data: [],
-                    borderColor: 'rgba(51,102,204,0.5)',
-                    backgroundColor: 'rgb(51, 102, 204, 0.5)',
-                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.2)'
+                    borderColor: 'rgb(255, 102, 51, 1)',
+                    backgroundColor: 'rgb(255, 102, 51, 1)',
+                    hoverBackgroundColor: 'rgb(255, 102, 51, 0.5)'
                 }
             ]
         };

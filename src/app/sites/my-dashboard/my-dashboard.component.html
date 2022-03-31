@@ -150,7 +150,7 @@
                     <h5>{{ account.name }}</h5>
                     <app-bar-chart [data]="getBalanceChartDataByAccount(account)"></app-bar-chart>
                 </div>
-                <div class="info-box">
+                <div *ngIf="dividendLists" class="info-box">
                     <h5>Dividenden-Einkommen</h5>
                     <app-stacked-bar-chart [data]="portfolio.dividendIncomeChartData()"></app-stacked-bar-chart>
                 </div>
