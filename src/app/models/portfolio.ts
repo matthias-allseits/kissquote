@@ -107,6 +107,7 @@ export class Portfolio {
         let positions: Position[] = [];
         this.bankAccounts.forEach(account => {
             positions = positions.concat(account.getActiveNonCashPositions());
+            positions = positions.concat(account.getClosedNonCashPositions());
         });
 
         return positions;

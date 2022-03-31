@@ -193,7 +193,7 @@ export class MyDashboardComponent implements OnInit {
     private loadShareheadShares(): void {
         if (this.portfolio) {
             this.portfolio.getAllPositions().forEach(position => {
-                if (position.shareheadId !== undefined && position.shareheadId > 0) {
+                if (position.shareheadId !== undefined && position.shareheadId > 0 && position.active) {
                     this.shareheadService.getShare(position.shareheadId)
                         .subscribe(share => {
                             if (share) {
