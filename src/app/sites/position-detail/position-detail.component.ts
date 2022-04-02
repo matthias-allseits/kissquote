@@ -45,6 +45,7 @@ export class PositionDetailComponent implements OnInit {
     public diviProjectionYears: DividendProjection[] = [];
     public positionTab = 'balance';
     public shareheadDividendPayment?: string;
+    public shareheadDividendPaymentCorrected?: string;
     public shareheadCurrencyCorrectedDividendPayment?: string;
     public currentYieldOnValue = '';
     public currentYieldOnValueSource = '';
@@ -238,7 +239,8 @@ export class PositionDetailComponent implements OnInit {
                                         this.position.shareheadShare = share;
                                     }
                                     this.diviProjectionYears = this.position?.dividendProjections();
-                                    this.shareheadDividendPayment = this.position?.shareheadDividendPaymentCorrected();
+                                    this.shareheadDividendPayment = this.position?.shareheadDividendPayment();
+                                    this.shareheadDividendPaymentCorrected = this.position?.shareheadDividendPaymentCorrected();
                                     if (this.position && this.position.balance?.lastRate && this.shareheadDividendPayment !== undefined && +this.shareheadDividendPayment > 0) {
                                         this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadDividendPayment / this.position.balance.amount)).toFixed(1);
                                         this.currentYieldOnValueSource = '(from sharehead)';
