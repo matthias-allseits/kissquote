@@ -175,12 +175,14 @@ export class Portfolio {
             labels: [],
             datasets: [
                 {
+                    label: 'payed',
                     data: [],
                     borderColor: 'rgb(51, 102, 204, 1)',
                     backgroundColor: 'rgb(51, 102, 204, 1)',
                     hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)'
                 },
                 {
+                    label: 'projected',
                     data: [],
                     borderColor: 'rgb(255, 102, 51, 1)',
                     backgroundColor: 'rgb(255, 102, 51, 1)',

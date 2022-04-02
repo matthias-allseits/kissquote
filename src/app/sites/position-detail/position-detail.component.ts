@@ -238,7 +238,7 @@ export class PositionDetailComponent implements OnInit {
                                         this.position.shareheadShare = share;
                                     }
                                     this.diviProjectionYears = this.position?.dividendProjections();
-                                    this.shareheadDividendPayment = this.position?.shareheadDividendPayment();
+                                    this.shareheadDividendPayment = this.position?.shareheadDividendPaymentCorrected();
                                     if (this.position && this.position.balance?.lastRate && this.shareheadDividendPayment !== undefined && +this.shareheadDividendPayment > 0) {
                                         this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadDividendPayment / this.position.balance.amount)).toFixed(1);
                                         this.currentYieldOnValueSource = '(from sharehead)';
