@@ -6,12 +6,12 @@ import {Router} from '@angular/router';
 
 
 @Component({
-    selector: 'app-upload-alternative',
-    templateUrl: './upload-alternative.component.html',
-    styleUrls: ['./upload-alternative.component.scss']
+    selector: 'app-import-alternative',
+    templateUrl: './import-alternative.component.html',
+    styleUrls: ['./import-alternative.component.scss']
 })
 
-export class UploadAlternativeComponent implements OnInit {
+export class ImportAlternativeComponent implements OnInit {
 
     constructor(
         public tranService: TranslationService,

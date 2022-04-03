@@ -6,8 +6,8 @@ import {MoreInfoComponent} from "./sites/more-info/more-info.component";
 import {SessionRestoreComponent} from "./sites/session-restore/session-restore.component";
 import {ImportComponent} from "./sites/import/import.component";
 import {DemoComponent} from "./sites/demo/demo.component";
-import {UploadExplanationComponent} from "./sites/upload-explanation/upload-explanation.component";
-import {UploadAlternativeComponent} from "./sites/upload-alternative/upload-alternative.component";
+import {ImportExplanationComponent} from "./sites/import-explanation/import-explanation.component";
+import {ImportAlternativeComponent} from "./sites/import-alternative/import-alternative.component";
 import {FaqComponent} from "./sites/faq/faq.component";
 import {PositionDetailComponent} from "./sites/position-detail/position-detail.component";
 import {PositionFormComponent} from "./sites/position-form/position-form.component";
@@ -24,10 +24,10 @@ const routes: Routes = [
     { path: 'my-dashboard', component: MyDashboardComponent },
     { path: 'more-info', component: MoreInfoComponent },
     { path: 'restore', component: SessionRestoreComponent },
-    { path: 'upload', component: ImportComponent },
+    { path: 'import', component: ImportComponent },
     { path: 'demo', component: DemoComponent },
-    { path: 'upload-explanation', component: UploadExplanationComponent },
-    { path: 'upload-alternative', component: UploadAlternativeComponent },
+    { path: 'import-explanation', component: ImportExplanationComponent },
+    { path: 'import-alternative', component: ImportAlternativeComponent },
     { path: 'faq', component: FaqComponent },
     { path: 'position-detail/:id', component: PositionDetailComponent },
     { path: 'bank-account/:aid/position-form/:id', component: PositionFormComponent },
