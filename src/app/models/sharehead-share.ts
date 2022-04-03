@@ -31,17 +31,6 @@ export class ShareheadShare {
     ) { }
 
 
-    dividendProjectionForYear(year: Date): ShareheadEstimation|null
-    {
-        const estimation = this.lastEstimationForYear(year);
-        if (estimation) {
-            return estimation;
-        }
-
-        return null;
-    }
-
-
     lastBalance(): ShareheadBalance|null
     {
         if (this.balances) {

@@ -84,13 +84,9 @@ export class Portfolio {
 
     dividendProjectionsTotal(): number {
         let total = 0;
-        this.bankAccounts.forEach(account => {
-            account.getActiveNonCashPositions().forEach(position => {
-                if (position.balance) {
-                    total += position.balance?.projectedNextDividendPayment;
-                }
-            });
-        });
+        const year = new Date().getFullYear();
+        const dividendCollection = this.collectDividendForYear(year, year);
+        total = dividendCollection.payedTotal + dividendCollection.plannedTotal;
 
         return total;
     }
@@ -124,49 +120,6 @@ export class Portfolio {
         });
 
         return positions;
-    }
-
-
-    collectDividendLists(): DividendTotals[] {
-        const totals: DividendTotals[] = [];
-        const thisYear = new Date().getFullYear();
-        const startYear = thisYear - 7;
-        const allYears = [];
-        for(let x = 0; x <= 10; x++) {
-            allYears.push(startYear + x);
-        }
-        allYears.forEach(year => {
-            const payedList: DividendTotal[] = [];
-            const plannedList: DividendTotal[] = [];
-            let payedTotal = 0;
-            let plannedTotal = 0;
-            this.getAllPositions().forEach(position => {
-                const payedResult = position.payedDividendsTotalByYear(year);
-                const plannedResult = position.plannedDividendsTotalByYear(year);
-                if (payedResult.total > 0) {
-                    payedList.push(payedResult);
-                    payedTotal += payedResult.total;
-                    +(plannedResult.total -= payedResult.total).toFixed(0);
-                }
-                if (year >= thisYear && position.active) {
-                    plannedList.push(plannedResult);
-                    plannedTotal += plannedResult.total;
-                }
-            });
-            const fixedPayedTotal = +payedTotal.toFixed(0);
-            const fixedPlannedTotal = +plannedTotal.toFixed(0);
-            totals.push(
-                {
-                    year: year,
-                    payedList: payedList,
-                    plannedList: plannedList,
-                    payedTotal: fixedPayedTotal,
-                    plannedTotal: fixedPlannedTotal,
-                }
-            );
-        });
-
-        return totals;
     }
 
 
@@ -210,6 +163,54 @@ export class Portfolio {
         });
 
         return hit;
+    }
+
+
+    collectDividendLists(): DividendTotals[] {
+        const totals: DividendTotals[] = [];
+        const thisYear = new Date().getFullYear();
+        const startYear = thisYear - 7;
+        const allYears = [];
+        for(let x = 0; x <= 10; x++) {
+            allYears.push(startYear + x);
+        }
+        allYears.forEach(year => {
+            const collection = this.collectDividendForYear(year, thisYear);
+            totals.push(collection);
+        });
+
+        return totals;
+    }
+
+
+    private collectDividendForYear(year: number, thisYear: number): DividendTotals {
+        const payedList: DividendTotal[] = [];
+        const plannedList: DividendTotal[] = [];
+        let payedTotal = 0;
+        let plannedTotal = 0;
+        this.getAllPositions().forEach(position => {
+            const payedResult = position.payedDividendsTotalByYear(year);
+            const plannedResult = position.plannedDividendsTotalByYear(year);
+            if (payedResult.total > 0) {
+                payedList.push(payedResult);
+                payedTotal += payedResult.total;
+                +(plannedResult.total -= payedResult.total).toFixed(0);
+            }
+            if (year >= thisYear && position.active) {
+                plannedList.push(plannedResult);
+                plannedTotal += plannedResult.total;
+            }
+        });
+        const fixedPayedTotal = +payedTotal.toFixed(0);
+        const fixedPlannedTotal = +plannedTotal.toFixed(0);
+
+        return {
+            year: year,
+            payedList: payedList,
+            plannedList: plannedList,
+            payedTotal: fixedPayedTotal,
+            plannedTotal: fixedPlannedTotal,
+        }
     }
 
 }

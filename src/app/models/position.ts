@@ -12,6 +12,7 @@ import {ShareheadShare} from "./sharehead-share";
 import {DividendProjection} from "./dividend-projection";
 import {DividendProjectionCreator} from "../creators/dividend-projection-creator";
 import {formatNumber} from "@angular/common";
+import {Forexhelper} from "../core/forexhelper";
 
 
 export interface DividendTotal {
@@ -368,7 +369,7 @@ export class Position {
 
     private generateProjection(nextYear: Date): DividendProjection|null {
         if (this.shareheadShare) {
-            const nextYearEstimation = this.shareheadShare.dividendProjectionForYear(nextYear);
+            const nextYearEstimation = this.shareheadShare.lastEstimationForYear(nextYear);
 
             if (nextYearEstimation) {
                 const projection = DividendProjectionCreator.createNewDividendProjection();
@@ -379,9 +380,12 @@ export class Position {
                     projection.projectionCurrency = '' + nextYearEstimation.currency?.name;
                     projection.projectionSource = '(by analysts estimations)';
                     if (nextYearEstimation.currency && nextYearEstimation.currency.rate && this.currency?.name !== nextYearEstimation.currency?.name) {
-                        projectedValue = nextYearEstimation.dividend * nextYearEstimation.currency.rate * this.balance?.amount;
-                        if (this.currency?.name !== 'CHF') {
-                            projectedValue = projectedValue / this.currency.rate;
+                        const usersCurrency = Forexhelper.getUsersCurrencyByName(nextYearEstimation.currency?.name);
+                        if (usersCurrency) {
+                            projectedValue = nextYearEstimation.dividend * usersCurrency.rate * this.balance?.amount;
+                            if (this.currency?.name !== 'CHF') {
+                                projectedValue = projectedValue / this.currency.rate;
+                            }
                         }
                         projection.currencyCorrectedProjectionValue = projectedValue;
                         projection.currencyCorrectedProjectionCurrency = this.currency?.name;
