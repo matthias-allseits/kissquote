@@ -23,6 +23,10 @@
                 <input id="rate" type="number" class="form-control" formControlName="rate">
             </div>
             <div class="mb-3">
+                <label for="fee" class="form-label">Fee: </label>
+                <input id="fee" type="number" class="form-control" formControlName="fee">
+            </div>
+            <div class="mb-3">
                 <label for="currency" class="form-label">{{ tranService.trans('GLOB_CURRENCY') }}: </label>
                 <select formControlName="currency" id="currency" name="currency" class="form-select form-select mb-3">
                     <option disabled selected></option>

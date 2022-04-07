@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {TranslationService} from '../../services/translation.service';
 
 @Component({
-    selector: 'app-upload-explanation',
-    templateUrl: './upload-explanation.component.html',
-    styleUrls: ['./upload-explanation.component.scss']
+    selector: 'app-import-explanation',
+    templateUrl: './import-explanation.component.html',
+    styleUrls: ['./import-explanation.component.scss']
 })
-export class UploadExplanationComponent implements OnInit {
+export class ImportExplanationComponent implements OnInit {
 
     constructor(
         public tranService: TranslationService

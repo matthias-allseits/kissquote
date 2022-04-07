@@ -39,7 +39,7 @@ export interface ParsedTransaction {
 }
 
 @Component({
-    selector: 'app-upload',
+    selector: 'app-import',
     templateUrl: './import.component.html',
     styleUrls: ['./import.component.scss']
 })

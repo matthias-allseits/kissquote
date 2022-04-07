@@ -17,9 +17,6 @@ import {ChartData} from "chart.js";
 import {DateHelper} from "../../core/datehelper";
 import {LineChartComponent} from "../../components/line-chart/line-chart.component";
 import {DividendProjection} from "../../models/dividend-projection";
-import {DividendProjectionCreator} from "../../creators/dividend-projection-creator";
-import {ShareheadEstimation} from "../../models/sharehead-estimation";
-import {formatNumber} from "@angular/common";
 import {ShareService} from "../../services/share.service";
 import {CurrencyService} from "../../services/currency.service";
 
@@ -45,6 +42,7 @@ export class PositionDetailComponent implements OnInit {
     public diviProjectionYears: DividendProjection[] = [];
     public positionTab = 'balance';
     public shareheadDividendPayment?: string;
+    public shareheadDividendPaymentCorrected?: string;
     public shareheadCurrencyCorrectedDividendPayment?: string;
     public currentYieldOnValue = '';
     public currentYieldOnValueSource = '';
@@ -205,6 +203,9 @@ export class PositionDetailComponent implements OnInit {
                 console.log(position);
                 if (position) {
                     this.position = position;
+                    if (this.position.isCash) {
+                        this.positionTab = 'transactions';
+                    }
                     if (this.position.balance?.lastRate) {
                         this.currentYieldOnValue = (100 / this.position.balance.lastRate.rate * this.position.balance.projectedNextDividendPerShare()).toFixed(1);
                         this.currentYieldOnValueSource = '(from last payment)';
@@ -239,6 +240,7 @@ export class PositionDetailComponent implements OnInit {
                                     }
                                     this.diviProjectionYears = this.position?.dividendProjections();
                                     this.shareheadDividendPayment = this.position?.shareheadDividendPayment();
+                                    this.shareheadDividendPaymentCorrected = this.position?.shareheadDividendPaymentCorrected();
                                     if (this.position && this.position.balance?.lastRate && this.shareheadDividendPayment !== undefined && +this.shareheadDividendPayment > 0) {
                                         this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadDividendPayment / this.position.balance.amount)).toFixed(1);
                                         this.currentYieldOnValueSource = '(from sharehead)';

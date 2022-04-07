@@ -31,6 +31,7 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
         title: new FormControl(''),
         date: new FormControl(),
         rate: new FormControl('', Validators.required),
+        fee: new FormControl(''),
         currency: new FormControl('', Validators.required),
     });
 
@@ -72,6 +73,7 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
                                 this.transactionForm.patchValue(transaction, { onlySelf: true });
                                 this.transactionForm.get('date')?.setValue(formatDate(transaction.date, 'yyyy-MM-dd', 'en'));
                             }
+                            this.setCurrency();
                         });
                 } else {
                     this.transaction = TransactionCreator.createNewTransaction();
@@ -91,7 +93,6 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
     onSubmit(): void {
         this.patchValuesBack(this.transactionForm, this.transaction);
         this.transaction.position = this.position;
-        this.transaction.fee = 0;
         this.transaction.quantity = 1;
         if (this.transaction.position) {
             this.transaction.position.balance = undefined;
@@ -114,6 +115,16 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
     selectTitle(title: string): void {
         const share = ShareCreator.createNewShare();
         this.transactionForm.get('title')?.setValue(title);
+    }
+
+
+    private setCurrency(): void {
+        console.log('set currency');
+        this.currencies.forEach(currency => {
+            if (this.transaction.currency?.name === currency.name) {
+                this.transactionForm.get('currency')?.setValue(currency);
+            }
+        });
     }
 
 }

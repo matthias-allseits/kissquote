@@ -35,7 +35,7 @@
                         <button [routerLink]="['/bank-account/' + accountIndex + '/position-form']" type="button" class="btn btn-sm btn-outline-primary">Add Position</button>
                         <button [routerLink]="['/bank-account/' + accountIndex + '/cash-position-form']" type="button" class="btn btn-sm btn-outline-primary">Add Cash-Position</button>
                         <ng-container *ngIf="bankAccount.positions.length === 0">
-                            <button [routerLink]="['/upload']" type="button" class="btn btn-sm btn-outline-primary">Import Transactions</button>
+                            <button [routerLink]="['/import']" type="button" class="btn btn-sm btn-outline-primary">Import Transactions</button>
                             <button *ngIf="portfolio.bankAccounts.length > 1" (click)="openAccountConfirmModal(baTemplate, bankAccount)" type="button" class="btn btn-sm btn-outline-primary">Delete Bankaccount</button>
                         </ng-container>
                     </div>
@@ -150,7 +150,7 @@
                     <h5>{{ account.name }}</h5>
                     <app-bar-chart [data]="getBalanceChartDataByAccount(account)"></app-bar-chart>
                 </div>
-                <div class="info-box">
+                <div *ngIf="dividendLists" class="info-box">
                     <h5>Dividenden-Einkommen</h5>
                     <app-stacked-bar-chart [data]="portfolio.dividendIncomeChartData()"></app-stacked-bar-chart>
                 </div>
