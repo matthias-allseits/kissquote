@@ -101,9 +101,14 @@ export class Position {
         }
         const shareheadSharePayment = this.shareheadDividendPaymentCorrected();
         let projectedDividend = null;
+        let lastProjectedDividend = null;
         if (year > new Date().getFullYear()) {
             const yearObject = new Date(new Date().setFullYear(year));
             projectedDividend = this.generateProjection(yearObject);
+            if (projectedDividend === null) {
+                const yearObject = new Date(new Date().setFullYear(year - 1));
+                lastProjectedDividend = this.generateProjection(yearObject);
+            }
         }
 
         if (projectedDividend) {
@@ -114,6 +119,15 @@ export class Position {
             } else {
                 source = 'From stathead estimations'
                 total += projectedDividend.projectionValue;
+            }
+        } else if (lastProjectedDividend && lastProjectedDividend.projectionValue > 0) {
+            total = 0;
+            if (lastProjectedDividend.currencyCorrectedProjectionValue !== undefined) {
+                source = 'From estimations ' +  + (year - 1) + ' (currency-corrected)'
+                total += lastProjectedDividend.currencyCorrectedProjectionValue;
+            } else {
+                source = 'From estimations ' + (year - 1)
+                total += lastProjectedDividend.projectionValue;
             }
         } else if (+shareheadSharePayment > 0) {
             total = +shareheadSharePayment;
