@@ -15,6 +15,9 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CurrencyService} from "../../services/currency.service";
 import {ShareheadService} from "../../services/sharehead.service";
 import {WatchlistEntry} from "../../models/watchlistEntry";
+import {ShareheadShare} from "../../models/sharehead-share";
+import {WatchlistService} from "../../services/watchlist.service";
+import {share} from "rxjs";
 
 
 @Component({
@@ -36,6 +39,7 @@ export class MyDashboardComponent implements OnInit {
     private selectedPosition?: Position;
     private selectedBankAccount?: BankAccount;
     public selectedCurrency?: Currency;
+    public selectedWatchlistEntry?: WatchlistEntry;
     private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
@@ -54,6 +58,7 @@ export class MyDashboardComponent implements OnInit {
         private bankAccountService: BankAccountService,
         private modalService: BsModalService,
         private shareheadService: ShareheadService,
+        private watchlistService: WatchlistService,
     ) {
     }
 
@@ -128,11 +133,12 @@ export class MyDashboardComponent implements OnInit {
     }
 
     openWatchlistConfirmModal(template: TemplateRef<any>, entry: WatchlistEntry) {
+        this.selectedWatchlistEntry = entry;
         this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
     }
 
 
-    confirmPosition(): void {
+    confirmDeletePosition(): void {
         if (this.selectedPosition) {
             this.deletePosition(this.selectedPosition);
         }
@@ -174,14 +180,7 @@ export class MyDashboardComponent implements OnInit {
         this.modalRef?.hide();
     }
 
-    removeWatchlistEntry(): void {
-        if (this.selectedBankAccount) {
-            this.deleteBankAccount(this.selectedBankAccount);
-        }
-        this.modalRef?.hide();
-    }
-
-    confirmAccount(): void {
+    confirmDeleteAccount(): void {
         if (this.selectedBankAccount) {
             this.deleteBankAccount(this.selectedBankAccount);
         }
@@ -193,6 +192,31 @@ export class MyDashboardComponent implements OnInit {
         this.bankAccountService.delete(account.id).subscribe(() => {
             document.location.reload();
         });
+    }
+
+    addWatchlistEntry(shareheadShare: ShareheadShare): void {
+        this.watchlistService.addEntry(shareheadShare.shareheadId)
+            .subscribe(newWatchlist => {
+                if (this.portfolio) {
+                    this.portfolio.watchlistEntries = newWatchlist;
+                }
+            });
+    }
+
+    confirmDeleteWatchlistEntry(): void {
+        if (this.selectedWatchlistEntry) {
+            this.removeWatchlistEntry(this.selectedWatchlistEntry);
+        }
+        this.modalRef?.hide();
+    }
+
+    removeWatchlistEntry(entry: WatchlistEntry): void {
+        this.watchlistService.removeEntry(entry.shareheadId)
+            .subscribe(newWatchlist => {
+                if (this.portfolio) {
+                    this.portfolio.watchlistEntries = newWatchlist;
+                }
+            });
     }
 
     private loadShareheadShares(): void {
@@ -207,14 +231,14 @@ export class MyDashboardComponent implements OnInit {
                         });
                 }
             });
-            this.portfolio.watchlistEntries.forEach(entry => {
-                this.shareheadService.getShare(entry.shareheadId)
-                    .subscribe(share => {
-                        if (share) {
-                            entry.shareheadShare = share;
-                        }
-                    });
-            });
+            // this.portfolio.watchlistEntries.forEach(entry => {
+            //     this.shareheadService.getShare(entry.shareheadId)
+            //         .subscribe(share => {
+            //             if (share) {
+            //                 entry.shareheadShare = share;
+            //             }
+            //         });
+            // });
         }
     }
 

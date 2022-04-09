@@ -1,0 +1,9 @@
+<div style="max-width: 300px;">
+    <label for="shareSearch" class="form-label">Suche: </label>
+    <input (keyup)="searchShare($event)" id="shareSearch" [(ngModel)]="searchInput" type="text" class="form-control">
+    <div *ngIf="selectableShares && selectableShares.length > 0" class="dropdown">
+        <ul class="dropdown-menu show">
+            <li *ngFor="let share of selectableShares"><a (click)="selectShare(share)" class="dropdown-item">{{ share.name }}</a></li>
+        </ul>
+    </div>
+</div>

@@ -2,13 +2,15 @@ import {WatchlistEntry} from "../models/watchlistEntry";
 
 export class WatchlistCreator {
 
-    public static fromApiArray(apiArray: WatchlistEntry[]): WatchlistEntry[] {
+    public static fromApiArray(apiArray: object): WatchlistEntry[] {
         const array: WatchlistEntry[] = [];
 
-        for (const watchList of apiArray) {
-            const entry = this.oneFromApiArray(watchList);
-            if (entry instanceof WatchlistEntry) {
-                array.push(entry);
+        if (Array.isArray(apiArray)) {
+            for (const watchList of apiArray) {
+                const entry = this.oneFromApiArray(watchList);
+                if (entry instanceof WatchlistEntry) {
+                    array.push(entry);
+                }
             }
         }
 
@@ -22,6 +24,7 @@ export class WatchlistCreator {
             return new WatchlistEntry(
                 apiArray.shareheadId,
                 new Date(apiArray.startDate),
+                apiArray.title,
             );
         } else {
             return null;

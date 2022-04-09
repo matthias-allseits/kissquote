@@ -5,7 +5,8 @@ export class WatchlistEntry {
     constructor(
         public shareheadId: number,
         public startDate: Date,
-        public shareheadShare?: ShareheadShare,
+        public title: string,
+        // public shareheadShare?: ShareheadShare,
     ) { }
 
 }

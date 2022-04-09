@@ -220,6 +220,7 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                 <h4 class="pt-2">Watchlist</h4>
             </div>
+            <app-sharehead-share-search (selectedShare)="addWatchlistEntry($event)"></app-sharehead-share-search>
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
@@ -231,9 +232,9 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let entry of portfolio.watchlistEntries">
-                    <td><span *ngIf="entry.shareheadShare">{{ entry.shareheadShare.name }}</span></td>
+                    <td>{{ entry.title }}</td>
                     <td class="d-none d-md-table-cell">{{ entry.startDate|date:'dd.MM.y' }}</td>
-                    <td><button [routerLink]="['/position-detail/' + entry.shareheadShare?.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                    <td><button [routerLink]="['/position-detail/' + entry.shareheadId]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
                     <td><button (click)="openWatchlistConfirmModal(removeWatchlistModal, entry)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Entfernen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                 </tr>
                 </tbody>
@@ -303,7 +304,7 @@
 <ng-template #removePositionModal>
     <div class="modal-body text-center">
         <p>Wollen Sie diese Position wirklich löschen?</p>
-        <button type="button" class="btn btn-default" (click)="confirmPosition()">Ja</button>
+        <button type="button" class="btn btn-default" (click)="confirmDeletePosition()">Ja</button>
         <button type="button" class="btn btn-primary" (click)="cancelModal()">Nein</button>
     </div>
 </ng-template>
@@ -311,7 +312,7 @@
 <ng-template #removeAccountModal>
     <div class="modal-body text-center">
         <p>Wollen Sie dieses Bankkonto wirklich löschen?</p>
-        <button type="button" class="btn btn-default" (click)="confirmAccount()">Ja</button>
+        <button type="button" class="btn btn-default" (click)="confirmDeleteAccount()">Ja</button>
         <button type="button" class="btn btn-primary" (click)="cancelModal()">Nein</button>
     </div>
 </ng-template>
@@ -319,7 +320,7 @@
 <ng-template #removeWatchlistModal>
     <div class="modal-body text-center">
         <p>Wollen Sie diesen Eintrag wirklich löschen?</p>
-        <button type="button" class="btn btn-default" (click)="removeWatchlistEntry()">Ja</button>
+        <button type="button" class="btn btn-default" (click)="confirmDeleteWatchlistEntry()">Ja</button>
         <button type="button" class="btn btn-primary" (click)="cancelModal()">Nein</button>
     </div>
 </ng-template>

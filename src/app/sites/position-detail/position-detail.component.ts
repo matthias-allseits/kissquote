@@ -46,8 +46,6 @@ export class PositionDetailComponent implements OnInit {
     public shareheadCurrencyCorrectedDividendPayment?: string;
     public currentYieldOnValue = '';
     public currentYieldOnValueSource = '';
-    public shareheadShares: ShareheadShare[] = [];
-    public selectableShares?: ShareheadShare[];
     modalRef?: BsModalRef;
     shareheadModalRef?: BsModalRef;
 
@@ -123,26 +121,11 @@ export class PositionDetailComponent implements OnInit {
     }
 
 
-    searchShare(event: any): void {
-        console.log(event.target.value);
-        this.selectableShares = [];
-        if (event.target.value) {
-            this.shareheadShares?.forEach(share => {
-                if (share.name && share.name.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1) {
-                    this.selectableShares?.push(share);
-                }
-            });
-        }
-        console.log(this.selectableShares.length);
-    }
-
-
-    selectShare(shareheadShare: ShareheadShare): void {
+    selectShareheadShare(shareheadShare: ShareheadShare): void {
         if (this.position) {
             this.position.shareheadId = shareheadShare.shareheadId;
             this.positionService.update(this.position)
                 .subscribe(position => {
-                    this.selectableShares = [];
                     if (position) {
                         this.position = position;
                         this.loadData(this.position.id);
@@ -223,12 +206,6 @@ export class PositionDetailComponent implements OnInit {
                                 },
                             ]
                         };
-                    }
-                    if (this.position.shareheadId === undefined) {
-                        this.shareService.getAllShareheadShares()
-                            .subscribe(shares => {
-                                this.shareheadShares = shares;
-                            });
                     }
                     if (this.position && this.position.shareheadId && this.position.shareheadId > 0) {
                         this.shareheadService.getShare(this.position.shareheadId)
