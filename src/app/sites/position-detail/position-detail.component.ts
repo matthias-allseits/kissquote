@@ -46,7 +46,6 @@ export class PositionDetailComponent implements OnInit {
     public shareheadCurrencyCorrectedDividendPayment?: string;
     public currentYieldOnValue = '';
     public currentYieldOnValueSource = '';
-    public nextEstimationYear = new Date().getFullYear() + 1;
     public shareheadShares: ShareheadShare[] = [];
     public selectableShares?: ShareheadShare[];
     modalRef?: BsModalRef;

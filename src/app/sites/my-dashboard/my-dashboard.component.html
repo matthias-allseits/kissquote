@@ -39,7 +39,7 @@
                         <button [routerLink]="['/bank-account/' + accountIndex + '/cash-position-form']" type="button" class="btn btn-sm btn-outline-primary">Add Cash-Position</button>
                         <ng-container *ngIf="bankAccount.positions.length === 0">
                             <button [routerLink]="['/import']" type="button" class="btn btn-sm btn-outline-primary">Import Transactions</button>
-                            <button *ngIf="portfolio.bankAccounts.length > 1" (click)="openAccountConfirmModal(baTemplate, bankAccount)" type="button" class="btn btn-sm btn-outline-primary">Delete Bankaccount</button>
+                            <button *ngIf="portfolio.bankAccounts.length > 1" (click)="openAccountConfirmModal(removeAccountModal, bankAccount)" type="button" class="btn btn-sm btn-outline-primary">Delete Bankaccount</button>
                         </ng-container>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                             <td class="text-center d-none d-md-table-cell">{{ position.transactions.length }}</td>
                             <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
                             <td><button [routerLink]="'/position/' + position.id + '/cash-transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>
-                            <td><button (click)="openPositionConfirmModal(template, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                            <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -98,7 +98,7 @@
                             <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
 <!--                            <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>-->
                             <td><button [routerLink]="['/bank-account/' + accountIndex + '/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Edit Position"><fa-icon [icon]="editIcon"></fa-icon></button></td>
-                            <td><button (click)="openPositionConfirmModal(template, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                            <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -234,7 +234,7 @@
                     <td><span *ngIf="entry.shareheadShare">{{ entry.shareheadShare.name }}</span></td>
                     <td class="d-none d-md-table-cell">{{ entry.startDate|date:'dd.MM.y' }}</td>
                     <td><button [routerLink]="['/position-detail/' + entry.shareheadShare?.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                    <td><button (click)="openWatchlistConfirmModal(watchlistTemplate, entry)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Entfernen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                    <td><button (click)="openWatchlistConfirmModal(removeWatchlistModal, entry)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Entfernen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                 </tr>
                 </tbody>
             </table>
@@ -253,7 +253,7 @@
                     <div class="col-9">{{ currency.name }}</div>
                     <div class="col-3">
                         <span class="float-end">{{ currency.rate }}
-                            <fa-icon [icon]="editIcon" (click)="openExchangeRateModal(exchangeRate, currency)" class="icon-as-btn" title="Edit rate"></fa-icon>
+                            <fa-icon [icon]="editIcon" (click)="openExchangeRateModal(exchangeRateFormModal, currency)" class="icon-as-btn" title="Edit rate"></fa-icon>
                         </span>
                     </div>
                 </div>
@@ -291,7 +291,7 @@
                         <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
                         <!--                            <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>-->
 <!--                        <td><button [routerLink]="['/bank-account/0/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Edit Position"><fa-icon [icon]="editIcon"></fa-icon></button></td>-->
-                        <td><button (click)="openPositionConfirmModal(template, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                        <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                     </tr>
                     </tbody>
                 </table>
@@ -300,7 +300,7 @@
     </div>
 </main>
 
-<ng-template #template>
+<ng-template #removePositionModal>
     <div class="modal-body text-center">
         <p>Wollen Sie diese Position wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirmPosition()">Ja</button>
@@ -308,7 +308,7 @@
     </div>
 </ng-template>
 
-<ng-template #baTemplate>
+<ng-template #removeAccountModal>
     <div class="modal-body text-center">
         <p>Wollen Sie dieses Bankkonto wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirmAccount()">Ja</button>
@@ -316,15 +316,15 @@
     </div>
 </ng-template>
 
-<ng-template #watchlistTemplate>
+<ng-template #removeWatchlistModal>
     <div class="modal-body text-center">
         <p>Wollen Sie diesen Eintrag wirklich löschen?</p>
-        <button type="button" class="btn btn-default" (click)="confirmWatchlistEntry()">Ja</button>
+        <button type="button" class="btn btn-default" (click)="removeWatchlistEntry()">Ja</button>
         <button type="button" class="btn btn-primary" (click)="cancelModal()">Nein</button>
     </div>
 </ng-template>
 
-<ng-template #exchangeRate>
+<ng-template #exchangeRateFormModal>
     <div *ngIf="selectedCurrency" class="modal-body">
         <p *ngIf="selectedCurrency">Geben Sie Ihre Exchange-Rate für Ihre Währung &laquo;{{ selectedCurrency.name }}&raquo; ein:</p>
         <form [formGroup]="exchangeRateForm">

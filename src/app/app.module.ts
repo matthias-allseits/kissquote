@@ -38,6 +38,7 @@ import { CashPositionFormComponent } from './sites/cash-position-form/cash-posit
 import { CashTransactionFormComponent } from './sites/cash-transaction-form/cash-transaction-form.component';
 import {StackedBarChartComponent} from "./components/stacked-bar-chart/stacked-bar-chart.component";
 import {BarChartComponent} from "./components/bar-chart/bar-chart.component";
+import { ShareheadShareInfoComponent } from './components/sharehead-share-info/sharehead-share-info.component';
 registerLocaleData(localeCH);
 
 
@@ -65,6 +66,7 @@ registerLocaleData(localeCH);
         LineChartComponent,
         CashPositionFormComponent,
         CashTransactionFormComponent,
+        ShareheadShareInfoComponent,
     ],
     imports: [
         BrowserModule,

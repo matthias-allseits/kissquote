@@ -174,14 +174,14 @@ export class MyDashboardComponent implements OnInit {
         this.modalRef?.hide();
     }
 
-    confirmAccount(): void {
+    removeWatchlistEntry(): void {
         if (this.selectedBankAccount) {
             this.deleteBankAccount(this.selectedBankAccount);
         }
         this.modalRef?.hide();
     }
 
-    confirmWatchlistEntry(): void {
+    confirmAccount(): void {
         if (this.selectedBankAccount) {
             this.deleteBankAccount(this.selectedBankAccount);
         }
