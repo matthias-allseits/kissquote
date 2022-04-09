@@ -15,7 +15,7 @@ export class PortfolioCreator {
                 apiArray.startDate ? new Date(apiArray.startDate) : null,
                 apiArray.bankAccounts ? BankAccountCreator.fromApiArray(apiArray.bankAccounts) : [],
                 [],
-                apiArray.watchlistEntries ? WatchlistCreator.fromApiArray(apiArray.watchlistEntries) : [],
+                apiArray.watchlistEntries ? WatchlistCreator.fromApiArray(apiArray.watchlistEntries).reverse() : [],
             );
         } else {
             return null;

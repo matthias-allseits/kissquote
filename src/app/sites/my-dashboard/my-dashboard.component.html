@@ -234,7 +234,7 @@
                 <tr *ngFor="let entry of portfolio.watchlistEntries">
                     <td>{{ entry.title }}</td>
                     <td class="d-none d-md-table-cell">{{ entry.startDate|date:'dd.MM.y' }}</td>
-                    <td><button [routerLink]="['/position-detail/' + entry.shareheadId]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                    <td><button [routerLink]="['/sharehead-share-detail/' + entry.shareheadId]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
                     <td><button (click)="openWatchlistConfirmModal(removeWatchlistModal, entry)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Entfernen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                 </tr>
                 </tbody>

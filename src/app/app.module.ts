@@ -40,6 +40,7 @@ import {StackedBarChartComponent} from "./components/stacked-bar-chart/stacked-b
 import {BarChartComponent} from "./components/bar-chart/bar-chart.component";
 import { ShareheadShareInfoComponent } from './components/sharehead-share-info/sharehead-share-info.component';
 import { ShareheadShareSearchComponent } from './components/sharehead-share-search/sharehead-share-search.component';
+import { ShareheadShareDetailComponent } from './sites/sharehead-share-detail/sharehead-share-detail.component';
 registerLocaleData(localeCH);
 
 
@@ -69,6 +70,7 @@ registerLocaleData(localeCH);
         CashTransactionFormComponent,
         ShareheadShareInfoComponent,
         ShareheadShareSearchComponent,
+        ShareheadShareDetailComponent,
     ],
     imports: [
         BrowserModule,

@@ -16,6 +16,7 @@ import {FeedbackComponent} from "./sites/feedback/feedback.component";
 import {TransactionFormComponent} from "./sites/transaction-form/transaction-form.component";
 import {CashPositionFormComponent} from "./sites/cash-position-form/cash-position-form.component";
 import {CashTransactionFormComponent} from "./sites/cash-transaction-form/cash-transaction-form.component";
+import {ShareheadShareDetailComponent} from "./sites/sharehead-share-detail/sharehead-share-detail.component";
 
 
 const routes: Routes = [
@@ -30,6 +31,7 @@ const routes: Routes = [
     { path: 'import-alternative', component: ImportAlternativeComponent },
     { path: 'faq', component: FaqComponent },
     { path: 'position-detail/:id', component: PositionDetailComponent },
+    { path: 'sharehead-share-detail/:id', component: ShareheadShareDetailComponent },
     { path: 'bank-account/:aid/position-form/:id', component: PositionFormComponent },
     { path: 'bank-account/:aid/position-form', component: PositionFormComponent },
     { path: 'bank-account/:aid/cash-position-form', component: CashPositionFormComponent },

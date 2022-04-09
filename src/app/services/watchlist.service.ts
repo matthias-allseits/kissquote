@@ -26,6 +26,15 @@ export class WatchlistService extends ApiService {
     }
 
 
+    public getAllEntries(): Observable<WatchlistEntry[]>
+    {
+        return this.http.get<WatchlistEntry[]>(this.apiUrl)
+            .pipe(
+                map(res => WatchlistCreator.fromApiArray(res))
+            );
+    }
+
+
     public addEntry(shareheadId: number): Observable<WatchlistEntry[]>
     {
         const url = `${this.apiUrl}`;

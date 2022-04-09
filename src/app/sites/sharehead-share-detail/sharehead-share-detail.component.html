@@ -1,0 +1,21 @@
+<main *ngIf="shareheadShare" class="col-md-12 col-lg-12 px-md-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 p-1 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Share {{ shareheadShare.name }}</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <button (click)="navigateCross('backward')" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="naviBackIcon"></fa-icon></button>
+            </div>
+            <div class="btn-group me-2">
+                <button (click)="navigateCross('forward')" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="naviForwardIcon"></fa-icon></button>
+            </div>
+        </div>
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="positionTab === 'sharehead'" (click)="changeTab('sharehead')">Sharehead Infos</a>
+        </li>
+    </ul>
+    <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="positionTab !== 'sharehead'">
+        <app-sharehead-share-info [shareheadShare]="shareheadShare"></app-sharehead-share-info>
+    </div>
+</main>
