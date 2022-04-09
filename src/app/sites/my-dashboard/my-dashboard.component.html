@@ -20,6 +20,9 @@
                 <a class="nav-link" [class.active]="dashboardTab === 'dividends'" (click)="changeTab('dividends')">Dividends</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" [class.active]="dashboardTab === 'watchlist'" (click)="changeTab('watchlist')">Watchlist</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" [class.active]="dashboardTab === 'settings'" (click)="changeTab('settings')">Settings</a>
             </li>
             <li class="nav-item">
@@ -213,6 +216,29 @@
                 </div>
             </div>
         </div>
+        <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'watchlist'">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
+                <h4 class="pt-2">Watchlist</h4>
+            </div>
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+                    <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Added</th>
+                    <th scope="col" style="width: 35px;"></th>
+                    <th scope="col" style="width: 35px;"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let entry of portfolio.watchlistEntries">
+                    <td><span *ngIf="entry.shareheadShare">{{ entry.shareheadShare.name }}</span></td>
+                    <td class="d-none d-md-table-cell">{{ entry.startDate|date:'dd.MM.y' }}</td>
+                    <td><button [routerLink]="['/position-detail/' + entry.shareheadShare?.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                    <td><button (click)="openWatchlistConfirmModal(watchlistTemplate, entry)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Entfernen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'settings'">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                 <h4 class="pt-2">Settings</h4>
@@ -286,6 +312,14 @@
     <div class="modal-body text-center">
         <p>Wollen Sie dieses Bankkonto wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirmAccount()">Ja</button>
+        <button type="button" class="btn btn-primary" (click)="cancelModal()">Nein</button>
+    </div>
+</ng-template>
+
+<ng-template #watchlistTemplate>
+    <div class="modal-body text-center">
+        <p>Wollen Sie diesen Eintrag wirklich löschen?</p>
+        <button type="button" class="btn btn-default" (click)="confirmWatchlistEntry()">Ja</button>
         <button type="button" class="btn btn-primary" (click)="cancelModal()">Nein</button>
     </div>
 </ng-template>

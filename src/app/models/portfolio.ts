@@ -3,6 +3,7 @@ import {BankAccountCreator} from "../creators/bank-account-creator";
 import {Currency} from "./currency";
 import {ChartData} from "chart.js";
 import {DividendTotal, Position} from "./position";
+import {WatchlistEntry} from "./watchlistEntry";
 
 
 export interface DividendTotals {
@@ -22,6 +23,7 @@ export class Portfolio {
         public startDate: Date|null,
         public bankAccounts: BankAccount[],
         public currencies: Currency[],
+        public watchlistEntries: WatchlistEntry[],
     ) {}
 
 

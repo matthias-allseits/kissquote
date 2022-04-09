@@ -122,7 +122,7 @@ export class ImportComponent implements OnInit {
                     }
                 });
         } else {
-            const portfolio = new Portfolio(0, null, null, null, [], []);
+            const portfolio = new Portfolio(0, null, null, null, [], [], []);
             this.portfolioService.create(portfolio)
                 .subscribe(returnedPortfolio => {
                     console.log(returnedPortfolio);

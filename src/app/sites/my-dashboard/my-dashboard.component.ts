@@ -14,6 +14,7 @@ import {Currency} from "../../models/currency";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CurrencyService} from "../../services/currency.service";
 import {ShareheadService} from "../../services/sharehead.service";
+import {WatchlistEntry} from "../../models/watchlistEntry";
 
 
 @Component({
@@ -35,7 +36,7 @@ export class MyDashboardComponent implements OnInit {
     private selectedPosition?: Position;
     private selectedBankAccount?: BankAccount;
     public selectedCurrency?: Currency;
-    private availableDashboardTabs = ['balance', 'dividends', 'settings', 'closedPositions'];
+    private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
     public dividendLists?: DividendTotals[];
@@ -126,6 +127,10 @@ export class MyDashboardComponent implements OnInit {
         this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
     }
 
+    openWatchlistConfirmModal(template: TemplateRef<any>, entry: WatchlistEntry) {
+        this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+    }
+
 
     confirmPosition(): void {
         if (this.selectedPosition) {
@@ -176,6 +181,13 @@ export class MyDashboardComponent implements OnInit {
         this.modalRef?.hide();
     }
 
+    confirmWatchlistEntry(): void {
+        if (this.selectedBankAccount) {
+            this.deleteBankAccount(this.selectedBankAccount);
+        }
+        this.modalRef?.hide();
+    }
+
     deleteBankAccount(account: BankAccount): void {
         console.log(account);
         this.bankAccountService.delete(account.id).subscribe(() => {
@@ -194,6 +206,14 @@ export class MyDashboardComponent implements OnInit {
                             }
                         });
                 }
+            });
+            this.portfolio.watchlistEntries.forEach(entry => {
+                this.shareheadService.getShare(entry.shareheadId)
+                    .subscribe(share => {
+                        if (share) {
+                            entry.shareheadShare = share;
+                        }
+                    });
             });
         }
     }
