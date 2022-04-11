@@ -127,11 +127,11 @@
                     </div>
                     <div class="row">
                         <div class="col-9">Cash:</div>
-                        <div class="col-3"><span class="float-end bold">{{ portfolio.cashTotal()|number: '1.0-0' }}</span></div>
+                        <div class="col-3"><span class="float-end">{{ portfolio.cashTotal()|number: '1.0-0' }}</span></div>
                     </div>
                     <div class="row">
                         <div class="col-9">Cash-Ratio:</div>
-                        <div class="col-3"><span class="float-end bold"></span></div>
+                        <div class="col-3"><span class="float-end bold">{{ portfolio.cashRatio()|number: '1.0-1' }}%</span></div>
                     </div>
                     <div class="row">
                         <div class="col-9">StopLoss Reserve:</div>
@@ -144,6 +144,10 @@
                     <div class="row">
                         <div class="col-9">Dividendenaussicht:</div>
                         <div class="col-3"><span class="float-end bold">{{ portfolio.dividendProjectionsTotal()|number: '1.0' }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Dividend-yield on investment:</div>
+                        <div class="col-3"><span class="float-end bold">{{ portfolio.dividendProjectionsYield()|number: '1.0-1' }}%</span></div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">

@@ -84,6 +84,12 @@ export class Portfolio {
     }
 
 
+    cashRatio(): number {
+
+        return (100 / this.valueTotal() * this.cashTotal());
+    }
+
+
     dividendProjectionsTotal(): number {
         let total = 0;
         const year = new Date().getFullYear();
@@ -91,6 +97,12 @@ export class Portfolio {
         total = dividendCollection.payedTotal + dividendCollection.plannedTotal;
 
         return total;
+    }
+
+
+    dividendProjectionsYield(): number {
+
+        return (100 / this.investmentTotal() * this.dividendProjectionsTotal());
     }
 
 
