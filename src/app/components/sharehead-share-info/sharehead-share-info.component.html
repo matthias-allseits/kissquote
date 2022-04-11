@@ -46,12 +46,12 @@
                 <div class="col-3"><span class="float-end"></span></div>
             </div>
             <div class="row">
-                <div class="col-9">Country:</div>
-                <div class="col-3"><span class="float-end">{{ shareheadShare.country }}</span></div>
+                <div class="col-6">Country:</div>
+                <div class="col-6"><span class="float-end">{{ shareheadShare.country }}</span></div>
             </div>
             <div class="row">
-                <div class="col-9">Sector:</div>
-                <div class="col-3"><span class="float-end">{{ shareheadShare.sector }}</span></div>
+                <div class="col-6">Sector:</div>
+                <div class="col-6"><span class="float-end">{{ shareheadShare.sector }}</span></div>
             </div>
             <div class="row">
                 <div class="col-9">Market cap:</div>
@@ -61,7 +61,7 @@
                 <div class="col-9">Fin. year ends:</div>
                 <div class="col-3"><span class="float-end">{{ shareheadShare.financialYearEndDate|date:'dd.MM.y' }}</span></div>
             </div>
-            <div *ngIf="shareheadShare.estimationsCurrency() !== shareheadShare.balancesCurrency()" class="row">
+            <div *ngIf="shareheadShare.estimationsCurrency() !== '' && shareheadShare.estimationsCurrency() !== shareheadShare.balancesCurrency()" class="row">
                 <div class="col-12">
                     <div class="yellow">The estimations have another currency ({{ shareheadShare.estimationsCurrency() }}) than the balances ({{ shareheadShare.balancesCurrency() }})</div>
                 </div>
