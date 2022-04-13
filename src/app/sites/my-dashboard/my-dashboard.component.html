@@ -172,7 +172,7 @@
                     <a class="nav-link" [class.active]="dividendListTab === dividendList.year" (click)="changeDividenListTab(dividendList.year)" aria-current="page">{{ dividendList.year }}</a>
                 </li>
             </ul>
-            <div *ngFor="let dividendList of dividendLists" [class.visually-hidden]="dividendListTab !== dividendList.year">
+            <div *ngFor="let dividendList of dividendLists" class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="dividendListTab !== dividendList.year">
                 <h4>{{ dividendList.year }} Total: {{ dividendList.payedTotal + dividendList.plannedTotal  }}</h4>
                 <h5>Payed Total: {{ dividendList.payedTotal }}</h5>
                 <table class="table table-striped table-sm">
