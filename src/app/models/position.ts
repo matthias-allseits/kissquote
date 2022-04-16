@@ -307,6 +307,19 @@ export class Position {
     }
 
 
+    public closedResultCorrected(): string {
+        let result = '';
+        if (this.balance && this.balance.closedResult) {
+            result = this.balance.closedResult.toFixed(0);
+            if (this.currency && this.currency?.name !== 'CHF') {
+                result = (this.balance.closedResult * this.currency.rate).toFixed(0);
+            }
+        }
+
+        return result;
+    }
+
+
     public getRatesChartData(): Observable<ChartData> {
         return new Observable(obsData => {
             const historicRates: number[] = [];

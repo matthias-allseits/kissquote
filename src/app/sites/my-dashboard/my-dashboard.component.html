@@ -268,34 +268,37 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                 <h4 class="pt-2">Closed Positions</h4>
             </div>
+            <h5 [class.red-text]="closedPositionsBalance < 0" [class.green-text]="closedPositionsBalance > 0">Balance:
+                <span *ngIf="closedPositionsBalance < 0">-{{ closedPositionsBalance }}</span>
+                <span *ngIf="closedPositionsBalance > 0">+{{ closedPositionsBalance }}</span>
+            </h5>
             <ng-container *ngIf="portfolio.getClosedNonCashPositions().length > 0">
                 <table class="table table-striped table-sm">
                     <thead>
                     <tr>
                         <th scope="col" style="width: 40%;">{{ tranService.trans('GLOB_SHARE') }}</th>
-                        <th scope="col" style="width: 150px;">Account</th>
-                        <th scope="col" style="width: 105px;"><span class="float-end">Result</span></th>
+                        <th scope="col" class="d-none d-md-table-cell" style="width: 150px;">Account</th>
+                        <th scope="col" class="d-none d-md-table-cell" style="width: 105px;"><span class="float-end">Result</span></th>
                         <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
+                        <th scope="col" style="width: 105px;"><span class="float-end">Result CHF</span></th>
                         <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Active From</th>
                         <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Active Until</th>
                         <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Transactions</th>
                         <th scope="col" style="width: 35px;"></th>
-<!--                        <th scope="col" style="width: 35px;"></th>-->
                         <th scope="col" style="width: 35px;"></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let position of portfolio.getClosedNonCashPositions()">
                         <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
-                        <td>{{ position.bankAccount?.name }}</td>
-                        <td><span class="float-end">{{ position.balance?.closedResult }}</span></td>
+                        <td class="d-none d-md-table-cell">{{ position.bankAccount?.name }}</td>
+                        <td class="d-none d-md-table-cell"><span class="float-end">{{ position.balance?.closedResult|number: '1.0-0' }}</span></td>
                         <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
+                        <td><span class="float-end" [class.red-text]="+position.closedResultCorrected() < 0" [class.green-text]="+position.closedResultCorrected() > 0">{{ position.closedResultCorrected() }}</span></td>
                         <td class="d-none d-md-table-cell"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
                         <td class="d-none d-md-table-cell"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
                         <td class="text-center d-none d-md-table-cell">{{ position.transactions.length }}</td>
                         <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                        <!--                            <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>-->
-<!--                        <td><button [routerLink]="['/bank-account/0/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Edit Position"><fa-icon [icon]="editIcon"></fa-icon></button></td>-->
                         <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                     </tr>
                     </tbody>

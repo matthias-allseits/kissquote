@@ -44,6 +44,7 @@ export class MyDashboardComponent implements OnInit {
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
     public dividendLists?: DividendTotals[];
+    public closedPositionsBalance = 0;
     modalRef?: BsModalRef;
 
     exchangeRateForm = new FormGroup({
@@ -80,6 +81,11 @@ export class MyDashboardComponent implements OnInit {
                         } else {
                             this.dashboardTab = '0';
                         }
+                        this.portfolio.getClosedNonCashPositions().forEach(position => {
+                            if (position.balance?.closedResult) {
+                                this.closedPositionsBalance += +position.closedResultCorrected();
+                            }
+                        });
                         this.loadShareheadShares();
                         // todo: implement a better solution
                         setTimeout (() => {
