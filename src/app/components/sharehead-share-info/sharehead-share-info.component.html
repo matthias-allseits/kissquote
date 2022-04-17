@@ -99,6 +99,10 @@
                 <h5>{{ nextEstimationYear }} Estimation Changes</h5>
                 <app-line-chart [data]="shareheadShare.estimationChangesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
             </div>
+            <div *ngIf="shareheadShare.analysisResults && shareheadShare.analysisResults.estimationChangesOverNext && shareheadShare.analysisResults.estimationChangesOverNext.length > 2" class="info-box info-box-lg">
+                <h5>{{ overNextEstimationYear }} Estimation Changes</h5>
+                <app-line-chart [data]="shareheadShare.estimationChangesChartData(true)" [height]="150" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
+            </div>
             <div class="info-box info-box-lg">
                 <button (click)="sendRemoveInquiry()" class="btn btn-sm btn-outline-primary">Remove this Sharehead Share</button>
             </div>

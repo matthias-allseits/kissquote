@@ -16,6 +16,7 @@ export class ShareheadShareInfoComponent implements OnInit {
     externalLinkIcon = faExternalLinkAlt;
 
     public nextEstimationYear = new Date().getFullYear() + 1;
+    public overNextEstimationYear = new Date().getFullYear() + 3;
 
     constructor() {
     }

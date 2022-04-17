@@ -4,6 +4,7 @@ export class ShareheadAnalysisResults {
 
     constructor(
         public estimationChanges: ShareheadBalance[],
+        public estimationChangesOverNext: ShareheadBalance[],
     ) {}
 
 }

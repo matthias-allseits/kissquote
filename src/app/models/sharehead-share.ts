@@ -235,7 +235,7 @@ export class ShareheadShare {
     }
 
 
-    estimationChangesChartData(): ChartData {
+    estimationChangesChartData(last = false): ChartData {
         const chartData: ChartData = {
             labels: [],
             datasets: [
@@ -262,11 +262,19 @@ export class ShareheadShare {
             ]
         };
 
-        this.analysisResults?.estimationChanges?.forEach(estimation => {
-            chartData.labels?.push(DateHelper.convertDateToGerman(estimation.date));
-            chartData.datasets[0].data.push(estimation.profitPerShare);
-            chartData.datasets[1].data.push(estimation.dividend);
-        });
+        if (last) {
+            this.analysisResults?.estimationChangesOverNext?.forEach(estimation => {
+                chartData.labels?.push(DateHelper.convertDateToGerman(estimation.date));
+                chartData.datasets[0].data.push(estimation.profitPerShare);
+                chartData.datasets[1].data.push(estimation.dividend);
+            });
+        } else {
+            this.analysisResults?.estimationChanges?.forEach(estimation => {
+                chartData.labels?.push(DateHelper.convertDateToGerman(estimation.date));
+                chartData.datasets[0].data.push(estimation.profitPerShare);
+                chartData.datasets[1].data.push(estimation.dividend);
+            });
+        }
 
         return chartData;
     }

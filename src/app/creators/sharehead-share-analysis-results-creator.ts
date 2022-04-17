@@ -9,6 +9,7 @@ export class ShareheadShareAnalysisResultsCreator {
         if (apiArray !== undefined && apiArray !== null) {
             return new ShareheadAnalysisResults(
                 apiArray.estimationChanges ? ShareheadEstimationCreator.fromApiArray(apiArray.estimationChanges) : [],
+                apiArray.estimationChangesOverNext ? ShareheadEstimationCreator.fromApiArray(apiArray.estimationChangesOverNext) : [],
             );
         } else {
             return undefined;
