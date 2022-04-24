@@ -168,6 +168,52 @@ export class Portfolio {
     }
 
 
+    investmentChartData(): ChartData {
+        const chartData: ChartData = {
+            labels: [],
+            datasets: [
+                {
+                    label: 'investment',
+                    data: [],
+                    borderColor: 'rgb(51, 102, 204, 1)',
+                    backgroundColor: 'rgb(51, 102, 204, 1)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)',
+                    pointBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBorderColor: 'rgba(51, 102, 204, 1)',
+                    yAxisID: 'y',
+                },
+                {
+                    label: 'yield',
+                    data: [],
+                    borderColor: 'rgb(255, 102, 51, 1)',
+                    backgroundColor: 'rgb(255, 102, 51, 1)',
+                    hoverBackgroundColor: 'rgb(255, 102, 51, 0.5)',
+                    pointBackgroundColor: 'rgb(220, 57, 18, 1)',
+                    pointHoverBackgroundColor: 'rgba(220, 57, 18, 1)',
+                    pointHoverBorderColor: 'rgba(220, 57, 18, 1)',
+                    yAxisID: 'y1',
+                }
+            ]
+        };
+
+        this.collectDividendLists()?.forEach(list => {
+            const date = new Date(list.year, 6, 1);
+            const relevantPositions = this.getPositionsAtDate(date);
+            let investment = 0;
+            relevantPositions.forEach(position => {
+                investment += position.investmentAtDate(date);
+            });
+            investment = +investment.toFixed(0);
+            chartData.labels?.push(list.year);
+            chartData.datasets[0].data.push(investment);
+            chartData.datasets[1].data.push(+(100 / investment * (+list.payedTotal.toFixed(0) + +list.plannedTotal.toFixed(0))).toFixed(1));
+        });
+
+        return chartData;
+    }
+
+
     getEmptyBankAccount(): BankAccount|null {
         let hit = null;
         this.bankAccounts.forEach(account => {
@@ -225,6 +271,22 @@ export class Portfolio {
             payedTotal: fixedPayedTotal,
             plannedTotal: fixedPlannedTotal,
         }
+    }
+
+
+    private getPositionsAtDate(date: Date): Position[]
+    {
+        const positions: Position[] = [];
+        this.getAllPositions().forEach(position => {
+            if (
+                position.activeFrom <= date &&
+                (position.activeUntil === null || position.activeUntil >= date)
+            ) {
+                positions.push(position);
+            }
+        });
+
+        return positions;
     }
 
 }

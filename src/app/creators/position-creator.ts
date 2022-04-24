@@ -35,7 +35,7 @@ export class PositionCreator {
                 ShareCreator.oneFromApiArray(apiArray.share),
                 apiArray.active,
                 new Date(apiArray.activeFrom),
-                apiArray.activeUntil,
+                apiArray.activeUntil ? new Date(apiArray.activeUntil) : null,
                 apiArray.transactions ? TransactionCreator.fromApiArray(apiArray.transactions) : [],
                 apiArray.isCash,
                 apiArray.dividendPeriodicity,

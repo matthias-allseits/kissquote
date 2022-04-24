@@ -65,6 +65,31 @@ export class Position {
     }
 
 
+    investmentAtDate(date: Date): number
+    {
+        let value = 0;
+        this.transactions.forEach(transaction => {
+            if (transaction.rate && transaction.date <= date) {
+                if (transaction.title === 'Kauf') {
+                    let transResult = (transaction.quantity * transaction.rate);
+                    if (transaction.fee) {
+                        transResult += transaction.fee;
+                    }
+                    value += transResult;
+                } else if (transaction.title === 'Verkauf') {
+                    let transResult = (transaction.quantity * transaction.rate);
+                    if (transaction.fee) {
+                        transResult -= transaction.fee;
+                    }
+                    value -= transResult;
+                }
+            }
+        });
+
+        return value;
+    }
+
+
     payedDividendsTotalByYear(year: number): DividendTotal
     {
         let total = 0;
