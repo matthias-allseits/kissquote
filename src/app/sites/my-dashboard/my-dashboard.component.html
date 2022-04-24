@@ -269,7 +269,7 @@
                 <h4 class="pt-2">Closed Positions</h4>
             </div>
             <h5 [class.red-text]="closedPositionsBalance < 0" [class.green-text]="closedPositionsBalance > 0">Balance:
-                <span *ngIf="closedPositionsBalance < 0">-{{ closedPositionsBalance }}</span>
+                <span *ngIf="closedPositionsBalance < 0">{{ closedPositionsBalance }}</span>
                 <span *ngIf="closedPositionsBalance > 0">+{{ closedPositionsBalance }}</span>
             </h5>
             <ng-container *ngIf="portfolio.getClosedNonCashPositions().length > 0">

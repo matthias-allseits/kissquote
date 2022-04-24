@@ -167,6 +167,17 @@ export class ImportComponent implements OnInit {
 
             });
 
+        // relevant closed
+        this.closedPositions.forEach(position => {
+            if (position.share?.isin) {
+                position.bankAccount = bankAccount;
+            }
+        });
+        this.positionService.createPositionsFromBunch(this.closedPositions)
+            .subscribe(position => {
+
+            });
+
 
 
         // todo: send user to his dashboard!
