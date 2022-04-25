@@ -4,11 +4,11 @@ import {BaseChartDirective} from "ng2-charts";
 
 
 @Component({
-    selector: 'app-line-chart',
-    templateUrl: './line-chart.component.html',
-    styleUrls: ['./line-chart.component.scss']
+    selector: 'app-line-chart-multi-axis',
+    templateUrl: './line-chart-multi-axis.component.html',
+    styleUrls: ['./line-chart-multi-axis.component.scss']
 })
-export class LineChartComponent implements OnInit {
+export class LineChartMultiAxisComponent implements OnInit {
 
     @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
     @Input() data?: ChartData;
@@ -44,6 +44,19 @@ export class LineChartComponent implements OnInit {
                     },
                 },
             },
+            y1: {
+                min: undefined,
+                grid: {
+                    drawBorder: false,
+                    color: function(context) {
+                        if (context.tick.value === 0) {
+                            return '#000000';
+                        } else {
+                            return 'rgb(201, 203, 207)';
+                        }
+                    },
+                },
+            }
             // 'y-axis-0': {
             //     // position: 'left',
             //     beginAtZero: this.beginAtZero
@@ -67,6 +80,9 @@ export class LineChartComponent implements OnInit {
         if (this.forceBeginAtZero) {
             if (this.lineChartOptions && this.lineChartOptions.scales && this.lineChartOptions.scales['y']) {
                 this.lineChartOptions.scales['y'].min = 0;
+            }
+            if (this.lineChartOptions && this.lineChartOptions.scales && this.lineChartOptions.scales['y1']) {
+                this.lineChartOptions.scales['y1'].min = 0;
             }
         }
         if (this.percentageChart) {

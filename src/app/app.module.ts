@@ -41,6 +41,7 @@ import {BarChartComponent} from "./components/bar-chart/bar-chart.component";
 import { ShareheadShareInfoComponent } from './components/sharehead-share-info/sharehead-share-info.component';
 import { ShareheadShareSearchComponent } from './components/sharehead-share-search/sharehead-share-search.component';
 import { ShareheadShareDetailComponent } from './sites/sharehead-share-detail/sharehead-share-detail.component';
+import {LineChartMultiAxisComponent} from "./components/line-chart-multi-axis/line-chart-multi-axis.component";
 registerLocaleData(localeCH);
 
 
@@ -66,6 +67,7 @@ registerLocaleData(localeCH);
         BarChartComponent,
         StackedBarChartComponent,
         LineChartComponent,
+        LineChartMultiAxisComponent,
         CashPositionFormComponent,
         CashTransactionFormComponent,
         ShareheadShareInfoComponent,

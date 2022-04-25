@@ -163,7 +163,7 @@
                 </div>
                 <div *ngIf="dividendLists" class="info-box">
                     <h5>Investment 1. Juli</h5>
-                    <app-line-chart [data]="portfolio.investmentChartData()" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
+                    <app-line-chart-multi-axis [data]="portfolio.investmentChartData()" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart-multi-axis>
                 </div>
             </div>
         </div>
