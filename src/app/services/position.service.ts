@@ -120,6 +120,7 @@ export class PositionService extends ApiService {
 
     update(position: Position): Observable<Position|null> {
         position.activeFrom = DateHelper.convertDateToMysql(position.activeFrom);
+        position.activeUntil = DateHelper.convertDateToMysql(position.activeUntil);
         const url = `${this.apiUrl}/${position.id}`;
         return this.http
             .put(url, JSON.stringify(position), httpOptions)
