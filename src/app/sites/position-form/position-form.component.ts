@@ -189,6 +189,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         this.marketplaceService.getAllMarketplaces()
             .subscribe(places => {
                 this.marketplaces = places;
+                this.setMarketplace();
             });
     }
 

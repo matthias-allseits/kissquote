@@ -62,6 +62,8 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
                         console.log(position);
                         if (position instanceof Position) {
                             this.position = position;
+                            this.transaction.currency = this.position.currency;
+                            this.setCurrency();
                         }
                     });
                 if (transactionId > 0) {

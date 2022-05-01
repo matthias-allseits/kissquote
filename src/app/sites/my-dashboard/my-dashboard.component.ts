@@ -17,7 +17,6 @@ import {ShareheadService} from "../../services/sharehead.service";
 import {WatchlistEntry} from "../../models/watchlistEntry";
 import {ShareheadShare} from "../../models/sharehead-share";
 import {WatchlistService} from "../../services/watchlist.service";
-import {share} from "rxjs";
 
 
 @Component({
