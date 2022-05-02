@@ -86,6 +86,7 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
             this.currencyService.getAllCurrencies()
                 .subscribe(currencies => {
                     this.currencies = currencies;
+                    this.setCurrency();
                 });
         });
     }
