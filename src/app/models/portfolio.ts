@@ -256,7 +256,7 @@ export class Portfolio {
                 payedTotal += payedResult.total;
                 +(plannedResult.total -= payedResult.total).toFixed(0);
             }
-            if (year >= thisYear && position.active) {
+            if (year >= thisYear && position.active && payedResult.transactionCount < position.maxDividendTransactionsByPeriodicy()) {
                 plannedList.push(plannedResult);
                 plannedTotal += plannedResult.total;
             }

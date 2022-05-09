@@ -21,6 +21,7 @@ export interface DividendTotal {
     total: number;
     currency: Currency|null;
     source: string;
+    transactionCount: number;
 }
 
 export class Position {
@@ -93,12 +94,18 @@ export class Position {
     payedDividendsTotalByYear(year: number): DividendTotal
     {
         let total = 0;
+        let transactionCount = 0;
         let currency = null;
+        let lastTransactionDate: Date;
 
         this.transactions.forEach(transaction => {
             if (transaction.isDividend() && transaction.date instanceof Date && transaction.date.getFullYear() === year && transaction.rate) {
                 total += transaction.rate;
                 currency = transaction.currency;
+                if (lastTransactionDate === undefined || transaction.date.getTime() !== lastTransactionDate.getTime()) {
+                    transactionCount++;
+                }
+                lastTransactionDate = transaction.date;
             }
         });
         total = +total.toFixed(1);
@@ -107,7 +114,8 @@ export class Position {
             name: this.getName(),
             total: total,
             currency: currency,
-            source: ''
+            source: '',
+            transactionCount: transactionCount
         };
 
         return result;
@@ -163,7 +171,8 @@ export class Position {
             name: this.getName(),
             total: total,
             currency: currency,
-            source: source
+            source: source,
+            transactionCount: 0
         };
 
         return result;
@@ -385,6 +394,18 @@ export class Position {
 
             obsData.next(data);
         });
+    }
+
+
+    public maxDividendTransactionsByPeriodicy(): number {
+        switch(this.dividendPeriodicity) {
+            case 'quaterly':
+                return 4;
+            case 'half-yearly':
+                return 2;
+            default:
+                return 1;
+        }
     }
 
 
