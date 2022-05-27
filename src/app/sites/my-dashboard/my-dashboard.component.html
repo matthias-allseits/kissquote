@@ -110,7 +110,7 @@
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'balance'">
             <div class="info-container">
                 <div class="info-box">
-                    <h5>Totals</h5>
+                    <h5>Portfolio Totals</h5>
                     <div class="row">
                         <div class="col-9">Aktuelles Investment:</div>
                         <div class="col-3"><span class="float-end">{{ portfolio.investmentTotal()|number: '1.0' }}</span></div>
@@ -122,6 +122,10 @@
                     <div class="row">
                         <div class="col-9">Bilanz offener Positionen:</div>
                         <div class="col-3"><span class="float-end bold">{{ portfolio.openPositionsBalance()|number: '1.0' }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Performance:</div>
+                        <div class="col-3"><span class="float-end bold">{{ (100 / portfolio.investmentTotal() * portfolio.openPositionsBalance()).toFixed(1) }}%</span></div>
                     </div>
                     <div class="row">
                         <div class="col-9">Cash:</div>
@@ -153,7 +157,43 @@
                         <h5>{{ account.name }}</h5>
                         <div class="row">
                             <div class="col-9">Aktuelles Investment:</div>
-                            <div class="col-3"><span class="float-end">{{ portfolio.investmentTotal()|number: '1.0' }}</span></div>
+                            <div class="col-3"><span class="float-end">{{ account.investmentTotal()|number: '1.0' }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Aktueller Wert:</div>
+                            <div class="col-3"><span class="float-end">{{ account.valueTotal()|number: '1.0' }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Bilanz offener Positionen:</div>
+                            <div class="col-3"><span class="float-end bold">{{ account.openPositionsBalance()|number: '1.0' }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Performance:</div>
+                            <div class="col-3"><span class="float-end bold">{{ (100 / account.investmentTotal() * account.openPositionsBalance()).toFixed(1) }}%</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Cash:</div>
+                            <div class="col-3"><span class="float-end">{{ account.cashTotal()|number: '1.0-0' }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Cash-Ratio:</div>
+                            <div class="col-3"><span class="float-end bold">{{ account.cashRatio()|number: '1.0-1' }}%</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">StopLoss Reserve:</div>
+                            <div class="col-3"><span class="float-end"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Bilanz geschlossener Positionen:</div>
+                            <div class="col-3"><span class="float-end"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Dividenden-Prognose 12 Monate:</div>
+                            <div class="col-3"><span class="float-end bold"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Dividend-yield on investment:</div>
+                            <div class="col-3"><span class="float-end bold"></span></div>
                         </div>
                     </div>
                 </ng-container>

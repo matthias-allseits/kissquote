@@ -43,11 +43,7 @@ export class Portfolio {
     investmentTotal(): number {
         let total = 0;
         this.bankAccounts.forEach(account => {
-            account.getActiveNonCashPositions().forEach(position => {
-                if (position.balance) {
-                    total += position.balance?.investment;
-                }
-            });
+            total += account.investmentTotal();
         });
 
         return total;
@@ -57,12 +53,7 @@ export class Portfolio {
     valueTotal(): number {
         let total = 0;
         this.bankAccounts.forEach(account => {
-            account.getActiveNonCashPositions().forEach(position => {
-                const actualValue = position.actualValue();
-                if (actualValue) {
-                    total += +actualValue;
-                }
-            });
+            total += account.valueTotal();
         });
 
         return total;
@@ -72,12 +63,7 @@ export class Portfolio {
     cashTotal(): number {
         let total = 0;
         this.bankAccounts.forEach(account => {
-            account.getCashPositions().forEach(position => {
-                const actualValue = position.actualValue();
-                if (actualValue) {
-                    total += +actualValue;
-                }
-            });
+            total += account.cashTotal();
         });
 
         return total;

@@ -73,4 +73,54 @@ export class BankAccount {
         return total;
     }
 
+
+    investmentTotal(): number {
+        let total = 0;
+        this.getActiveNonCashPositions().forEach(position => {
+            if (position.balance) {
+                total += position.balance?.investment;
+            }
+        });
+
+        return total;
+    }
+
+
+    valueTotal(): number {
+        let total = 0;
+        this.getActiveNonCashPositions().forEach(position => {
+            const actualValue = position.actualValue();
+            if (actualValue) {
+                total += +actualValue;
+            }
+        });
+
+        return total;
+    }
+
+
+    cashTotal(): number {
+        let total = 0;
+        this.getCashPositions().forEach(position => {
+            const actualValue = position.actualValue();
+            if (actualValue) {
+                total += +actualValue;
+            }
+        });
+
+        return total;
+    }
+
+
+    openPositionsBalance(): number {
+
+        return this.valueTotal() - this.investmentTotal();
+    }
+
+
+    cashRatio(): number {
+
+        return (100 / this.valueTotal() * this.cashTotal());
+    }
+
 }
