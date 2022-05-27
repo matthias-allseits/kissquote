@@ -189,11 +189,11 @@
                         </div>
                         <div class="row">
                             <div class="col-9">Dividenden-Prognose 12 Monate:</div>
-                            <div class="col-3"><span class="float-end bold"></span></div>
+                            <div class="col-3"><span class="float-end bold">{{ account.dividendProjectionsTotal()|number: '1.0' }}</span></div>
                         </div>
                         <div class="row">
                             <div class="col-9">Dividend-yield on investment:</div>
-                            <div class="col-3"><span class="float-end bold"></span></div>
+                            <div class="col-3"><span class="float-end bold">{{ account.dividendProjectionsYield()|number: '1.0-1' }}%</span></div>
                         </div>
                     </div>
                 </ng-container>

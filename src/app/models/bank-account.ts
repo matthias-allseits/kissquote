@@ -1,4 +1,5 @@
-import {Position} from './position';
+import {DividendTotal, Position} from './position';
+import {DividendTotals} from "./portfolio";
 
 
 export class BankAccount {
@@ -121,6 +122,53 @@ export class BankAccount {
     cashRatio(): number {
 
         return (100 / this.valueTotal() * this.cashTotal());
+    }
+
+
+    dividendProjectionsTotal(): number {
+        let total = 0;
+        const year = new Date().getFullYear();
+        const dividendCollection = this.collectDividendForYear(year, year);
+        total = dividendCollection.payedTotal + dividendCollection.plannedTotal;
+
+        return total;
+    }
+
+
+    dividendProjectionsYield(): number {
+
+        return (100 / this.investmentTotal() * this.dividendProjectionsTotal());
+    }
+
+
+    private collectDividendForYear(year: number, thisYear: number): DividendTotals {
+        const payedList: DividendTotal[] = [];
+        const plannedList: DividendTotal[] = [];
+        let payedTotal = 0;
+        let plannedTotal = 0;
+        this.getActiveNonCashPositions().forEach(position => {
+            const payedResult = position.payedDividendsTotalByYear(year);
+            const plannedResult = position.plannedDividendsTotalByYear(year);
+            if (payedResult.total > 0) {
+                payedList.push(payedResult);
+                payedTotal += payedResult.total;
+                +(plannedResult.total -= payedResult.total).toFixed(0);
+            }
+            if (year >= thisYear && position.active && payedResult.transactionCount < position.maxDividendTransactionsByPeriodicy()) {
+                plannedList.push(plannedResult);
+                plannedTotal += plannedResult.total;
+            }
+        });
+        const fixedPayedTotal = +payedTotal.toFixed(0);
+        const fixedPlannedTotal = +plannedTotal.toFixed(0);
+
+        return {
+            year: year,
+            payedList: payedList,
+            plannedList: plannedList,
+            payedTotal: fixedPayedTotal,
+            plannedTotal: fixedPlannedTotal,
+        }
     }
 
 }
