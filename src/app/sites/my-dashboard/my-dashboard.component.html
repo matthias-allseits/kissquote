@@ -140,7 +140,7 @@
                         <div class="col-3"><span class="float-end"></span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Dividendenaussicht:</div>
+                        <div class="col-9">Dividenden-Prognose 12 Monate:</div>
                         <div class="col-3"><span class="float-end bold">{{ portfolio.dividendProjectionsTotal()|number: '1.0' }}</span></div>
                     </div>
                     <div class="row">
@@ -258,18 +258,26 @@
             </div>
             <div class="info-box">
                 <h5>Currencies</h5>
-                <div class="row">
-                    <div class="col-7"><strong>Name</strong></div>
-                    <div class="col-5"><strong class="float-end">Exchange rate</strong></div>
-                </div>
-                <div *ngFor="let currency of currencies" class="row">
-                    <div class="col-9">{{ currency.name }}</div>
-                    <div class="col-3">
-                        <span class="float-end">{{ currency.rate }}
-                            <fa-icon [icon]="editIcon" (click)="openExchangeRateModal(exchangeRateFormModal, currency)" class="icon-as-btn" title="Edit rate"></fa-icon>
-                        </span>
-                    </div>
-                </div>
+                <table class="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col"><span class="float-end">Exchange rate</span></th>
+                            <th style="width: 35px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let currency of currencies">
+                            <td>{{ currency.name }}</td>
+                            <td align="right">{{ currency.rate }}</td>
+                            <td>
+                                <button (click)="openExchangeRateModal(exchangeRateFormModal, currency)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen">
+                                    <fa-icon [icon]="editIcon"></fa-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'closedPositions'">
