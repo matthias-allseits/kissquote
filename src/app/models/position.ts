@@ -108,7 +108,7 @@ export class Position {
                 lastTransactionDate = transaction.date;
             }
         });
-        total = +total.toFixed(1);
+        total = +total.toFixed(0);
         const result = {
             positionId: this.id,
             name: this.getName(),
