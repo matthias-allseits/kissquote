@@ -258,7 +258,7 @@ export class PositionDetailComponent implements OnInit {
                                     rates.push(rate);
                                 }
                             });
-                            this.historicRates = rates.slice(-50);
+                            this.historicRates = rates.slice(-220);
                         });
                 }
             });
