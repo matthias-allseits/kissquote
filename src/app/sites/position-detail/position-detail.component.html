@@ -34,19 +34,19 @@
             </div>
         </div>
         <div class="info-container">
-            <div class="info-box info-box-doubled">
-                <app-share-chart [rates]="historicRates" [position]="position"></app-share-chart>
-            </div>
             <div>
                 <div class="info-box">
                     <app-bar-chart [data]="chartData"></app-bar-chart>
                 </div>
+<!--                <div class="info-box info-box-doubled">-->
+<!--                    <div class="flex">-->
+<!--                        <div class="flex-item">-->
+<!--                            <app-line-chart [data]="lineChartData" [height]="141"></app-line-chart>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="info-box info-box-doubled">
-                    <div class="flex">
-                        <div class="flex-item">
-                            <app-line-chart [data]="lineChartData" [height]="141"></app-line-chart>
-                        </div>
-                    </div>
+                    <app-share-chart [rates]="historicRates" [position]="position"></app-share-chart>
                 </div>
             </div>
             <div *ngIf="position.balance" class="info-box" [class.green20]="position.balance.investment < 0">
