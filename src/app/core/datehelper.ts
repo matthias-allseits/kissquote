@@ -45,7 +45,7 @@ export class DateHelper {
 
     public static convertGermanDateStringToDateObject(date: string): Date {
         const year = +date.substr(6, 4);
-        const monthIndex = +date.substr(4, 2) - 1;
+        const monthIndex = +date.substr(3, 2) - 1;
         const day = +date.substr(0, 2);
 
         // console.log(year);

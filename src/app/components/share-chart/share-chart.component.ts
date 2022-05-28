@@ -22,11 +22,12 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
     private offsetLeft = 30;
 
     private context: any;
-    private strokeColor = 'blue';
+    private strokeColor = '#3366cc';
     private buyColor = 'red';
     private helplineColor = '#dee2e6';
+    private monthColor = '#a4a4a4';
     private textColor = '#4e4e4e';
-    private stepWidth = 3;
+    private stepWidth = 2;
 
     constructor() {
     }
@@ -35,20 +36,20 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        console.log(this.rates);
         if (this.myCanvas && this.rates) {
             this.context = this.myCanvas.nativeElement.getContext('2d');
             const topRate = this.calculateTopEnd(this.rates);
             const lowRate = this.calculateLowEnd(this.rates);
             const verticalSteps = this.calculateVerticalSteps(topRate, lowRate);
-            console.log('vertical-steps: ' + verticalSteps);
+            // console.log('vertical-steps: ' + verticalSteps);
             const topEnd = Math.ceil(topRate / verticalSteps) * verticalSteps;
             const lowEnd = Math.floor(lowRate / verticalSteps) * verticalSteps;
             const verticalFactor = (this.canvasHeight - this.offsetTop - this.offsetBottom) / (topEnd - lowEnd);
-            console.log(topEnd);
-            console.log(lowEnd);
-            console.log('factor: ' + verticalFactor);
+            // console.log(topEnd);
+            // console.log(lowEnd);
+            // console.log('factor: ' + verticalFactor);
 
+            // horizontal help-lines
             this.context.strokeStyle = this.helplineColor;
             this.context.fillStyle = this.textColor;
             this.context.lineWidth = 1;
@@ -65,24 +66,50 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                 yRate -= verticalSteps;
             } while(yRate >= lowEnd);
 
+            // average-price
             if (this.position?.balance) {
                 this.context.beginPath();
                 this.context.strokeStyle = this.buyColor;
                 this.context.setLineDash([5, 5]);
                 const buyValue = ((topEnd - this.position?.balance?.averagePayedPriceNet) * verticalFactor) + this.offsetTop;
-                console.log('average-price: ' + this.position?.balance?.averagePayedPriceNet);
-                console.log('buyValue: ' + buyValue);
+                // console.log('average-price: ' + this.position?.balance?.averagePayedPriceNet);
+                // console.log('buyValue: ' + buyValue);
                 this.context.moveTo(this.offsetLeft, buyValue);
                 this.context.lineTo(this.canvasWidth, buyValue);
                 this.context.stroke();
             }
 
             this.context.beginPath();
+            this.context.setLineDash([]);
+            let lastMonth: number;
+            let lastYear: number;
+            this.rates.forEach((entry, i) => {
+                if (lastYear !== undefined && lastYear !== entry.date.getFullYear()) {
+                    this.context.beginPath();
+                    this.context.strokeStyle = this.monthColor;
+                    const xValue = this.offsetLeft + (i * this.stepWidth);
+                    this.context.moveTo(xValue, this.offsetTop);
+                    this.context.lineTo(xValue, 300);
+                    this.context.stroke();
+                } else if (lastMonth !== undefined && lastMonth !== entry.date.getMonth()) {
+                    this.context.beginPath();
+                    this.context.strokeStyle = this.helplineColor;
+                    const xValue = this.offsetLeft + (i * this.stepWidth);
+                    this.context.moveTo(xValue, this.offsetTop);
+                    this.context.lineTo(xValue, 300);
+                    this.context.stroke();
+                }
+                lastMonth = entry.date.getMonth();
+                lastYear = entry.date.getFullYear();
+            });
+
+            // rates
+            this.context.beginPath();
             this.context.strokeStyle = this.strokeColor;
             this.context.setLineDash([]);
             this.context.lineWidth = 2;
             const firstValue = ((topEnd - this.rates[0].rate) * verticalFactor) + this.offsetTop;
-            console.log('firstValue: ' + firstValue);
+            // console.log('firstValue: ' + firstValue);
             this.context.moveTo(this.offsetLeft, firstValue);
             let xValue = this.offsetLeft;
             this.rates.forEach(entry => {
@@ -100,7 +127,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
     {
         let verticalSteps = 50;
         const delta = topRate - lowRate;
-        console.log('delta: ' + delta);
+        // console.log('delta: ' + delta);
         if (delta < 5) {
             verticalSteps = 0.5;
         } else if (delta < 10) {
@@ -129,7 +156,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
             }
         });
 
-        console.log('topRate: ' + topRate);
+        // console.log('topRate: ' + topRate);
         return topRate;
     }
 
@@ -142,7 +169,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
             }
         });
 
-        console.log('lowRate: ' + lowRate);
+        // console.log('lowRate: ' + lowRate);
         return lowRate;
     }
 

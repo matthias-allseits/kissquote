@@ -252,13 +252,20 @@ export class PositionDetailComponent implements OnInit {
                                 this.lineChartComponent.updateData(this.lineChartData);
                             }
                             const rates: Rate[] = [];
+                            // console.log(this.lineChartData.labels);
                             this.lineChartData.datasets[0].data.forEach((entry, i) => {
-                                if (entry) {
-                                    const rate = new Rate(new Date(), +entry);
+                                if (entry && this.lineChartData?.labels && this.lineChartData.labels[i]) {
+                                    const dateString: string = this.lineChartData.labels[i] as string;
+                                    // console.log(dateString);
+                                    // console.log(DateHelper.convertGermanDateStringToDateObject(dateString));
+                                    // const dateSplit = dateString.split('.');
+                                    // console.log(dateSplit);
+                                    // console.log(+dateSplit[1]);
+                                    const rate = new Rate(DateHelper.convertGermanDateStringToDateObject(dateString), +entry);
                                     rates.push(rate);
                                 }
                             });
-                            this.historicRates = rates.slice(-220);
+                            this.historicRates = rates.slice(-330);
                         });
                 }
             });
