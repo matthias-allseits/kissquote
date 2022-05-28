@@ -19,6 +19,7 @@ import {LineChartComponent} from "../../components/line-chart/line-chart.compone
 import {DividendProjection} from "../../models/dividend-projection";
 import {ShareService} from "../../services/share.service";
 import {CurrencyService} from "../../services/currency.service";
+import {Rate} from "../../models/rate";
 
 
 @Component({
@@ -51,6 +52,7 @@ export class PositionDetailComponent implements OnInit {
 
     public chartData?: ChartData;
     public lineChartData?: ChartData;
+    public historicRates?: Rate[];
 
     constructor(
         private route: ActivatedRoute,
@@ -249,6 +251,14 @@ export class PositionDetailComponent implements OnInit {
                             if (this.lineChartComponent) {
                                 this.lineChartComponent.updateData(this.lineChartData);
                             }
+                            const rates: Rate[] = [];
+                            this.lineChartData.datasets[0].data.forEach((entry, i) => {
+                                if (entry) {
+                                    const rate = new Rate(new Date(), +entry);
+                                    rates.push(rate);
+                                }
+                            });
+                            this.historicRates = rates.slice(-50);
                         });
                 }
             });
