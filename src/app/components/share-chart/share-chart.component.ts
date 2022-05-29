@@ -1,6 +1,8 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {Rate} from "../../models/rate";
 import {Position} from "../../models/position";
+import {Transaction} from "../../models/transaction";
+import {DateHelper} from "../../core/datehelper";
 
 
 @Component({
@@ -23,16 +25,19 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
 
     private context: any;
     private strokeColor = '#3366cc';
-    private buyColor = 'red';
+    private redColor = 'red';
     private helplineColor = '#dee2e6';
     private monthColor = '#a4a4a4';
     private textColor = '#4e4e4e';
-    private stepWidth = 2;
+    private stepWidth = 1.5;
 
     constructor() {
     }
 
     ngOnInit(): void {
+        if (screen.width < 400) {
+            this.canvasWidth = 335;
+        }
     }
 
     ngAfterViewInit(): void {
@@ -48,6 +53,18 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
             // console.log(topEnd);
             // console.log(lowEnd);
             // console.log('factor: ' + verticalFactor);
+
+            // preparing transactions
+            const transactionsSell: Transaction[] = [];
+            const transactionsBuy: Transaction[] = [];
+            this.position?.transactions.forEach(transaction => {
+                if (transaction.title === 'Kauf') {
+                    transactionsBuy.push(transaction);
+                } else if (transaction.title === 'Verkauf') {
+                    transactionsSell.push(transaction);
+                }
+            });
+            console.log(transactionsBuy);
 
             // horizontal help-lines
             this.context.strokeStyle = this.helplineColor;
@@ -69,7 +86,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
             // average-price
             if (this.position?.balance) {
                 this.context.beginPath();
-                this.context.strokeStyle = this.buyColor;
+                this.context.strokeStyle = this.redColor;
                 this.context.setLineDash([5, 5]);
                 const buyValue = ((topEnd - this.position?.balance?.averagePayedPriceNet) * verticalFactor) + this.offsetTop;
                 // console.log('average-price: ' + this.position?.balance?.averagePayedPriceNet);
@@ -79,6 +96,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                 this.context.stroke();
             }
 
+            // monthly helplines
             this.context.beginPath();
             this.context.setLineDash([]);
             let lastMonth: number;
@@ -87,6 +105,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                 if (lastYear !== undefined && lastYear !== entry.date.getFullYear()) {
                     this.context.beginPath();
                     this.context.strokeStyle = this.monthColor;
+                    this.context.setLineDash([]);
                     const xValue = this.offsetLeft + (i * this.stepWidth);
                     this.context.moveTo(xValue, this.offsetTop);
                     this.context.lineTo(xValue, 300);
@@ -94,11 +113,40 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                 } else if (lastMonth !== undefined && lastMonth !== entry.date.getMonth()) {
                     this.context.beginPath();
                     this.context.strokeStyle = this.helplineColor;
+                    this.context.setLineDash([]);
                     const xValue = this.offsetLeft + (i * this.stepWidth);
                     this.context.moveTo(xValue, this.offsetTop);
                     this.context.lineTo(xValue, 300);
                     this.context.stroke();
                 }
+                transactionsSell.forEach(transaction => {
+                    if (transaction.date instanceof Date && transaction.rate) {
+                        if (DateHelper.datesAreEqual(transaction.date, entry.date)) {
+                            this.context.beginPath();
+                            this.context.strokeStyle = this.redColor;
+                            this.context.setLineDash([5, 5]);
+                            const xValue = this.offsetLeft + (i * this.stepWidth);
+                            const yValue = ((topEnd - transaction.rate) * verticalFactor) + this.offsetTop;
+                            this.context.moveTo(xValue, this.offsetTop);
+                            this.context.lineTo(xValue, yValue);
+                            this.context.stroke();
+                        }
+                    }
+                });
+                transactionsBuy.forEach(transaction => {
+                    if (transaction.date instanceof Date && transaction.rate) {
+                        if (DateHelper.datesAreEqual(transaction.date, entry.date)) {
+                            this.context.beginPath();
+                            this.context.strokeStyle = this.textColor;
+                            this.context.setLineDash([5, 5]);
+                            const xValue = this.offsetLeft + (i * this.stepWidth);
+                            const yValue = ((topEnd - transaction.rate) * verticalFactor) + this.offsetTop;
+                            this.context.moveTo(xValue, this.offsetTop);
+                            this.context.lineTo(xValue, yValue);
+                            this.context.stroke();
+                        }
+                    }
+                });
                 lastMonth = entry.date.getMonth();
                 lastYear = entry.date.getFullYear();
             });

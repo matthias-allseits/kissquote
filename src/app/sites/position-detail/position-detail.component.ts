@@ -268,7 +268,7 @@ export class PositionDetailComponent implements OnInit {
                             if (screen.width < 400) {
                                 this.historicRates = rates.slice(-150);
                             } else {
-                                this.historicRates = rates.slice(-330);
+                                this.historicRates = rates.slice(-440);
                             }
                         });
                 }
