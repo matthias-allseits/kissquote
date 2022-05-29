@@ -20,6 +20,7 @@ export class ShareheadShare {
         public country?: string,
         public sector?: string,
         public financialYearEndDate?: Date|null,
+        public nextReportDate?: Date|null,
         public urlFinanznet?: string,
         public urlWikipedia?: string,
         public urlInvesting?: string,

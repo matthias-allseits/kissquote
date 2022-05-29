@@ -71,11 +71,20 @@
                 </div>
             </div>
         </div>
-        <div class="info-box">
-            <h5>Analyst Ratings</h5>
-            <div class="row">
-                <div class="col-9">Last Rate:</div>
-                <div class="col-3"><span class="float-end"></span></div>
+        <div class="info-box-wrapper">
+            <div class="info-box">
+                <h5>Analyst Ratings</h5>
+                <div class="row">
+                    <div class="col-9">Last Rate:</div>
+                    <div class="col-3"><span class="float-end"></span></div>
+                </div>
+            </div>
+            <div class="info-box">
+                <h5>Termine</h5>
+                <div class="row">
+                    <div class="col-9">Next Report:</div>
+                    <div class="col-3"><span class="float-end">{{ shareheadShare.nextReportDate|date:'dd.MM.y' }}</span></div>
+                </div>
             </div>
         </div>
         <div>

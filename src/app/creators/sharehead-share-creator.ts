@@ -36,6 +36,7 @@ export class ShareheadShareCreator {
                 apiArray.country,
                 apiArray.sector,
                 apiArray.financialYearEndDate ? new Date(apiArray.financialYearEndDate) : null,
+                apiArray.nextReportDate ? new Date(apiArray.nextReportDate) : null,
                 apiArray.urlFinanznet,
                 apiArray.urlWikipedia,
                 apiArray.urlInvesting,
