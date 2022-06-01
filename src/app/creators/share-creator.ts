@@ -1,5 +1,6 @@
 import {Share} from "../models/share";
 import {MarketplaceCreator} from "./marketplace-creator";
+import {ManualDividendCreator} from "./manual-dividend-creator";
 
 
 export class ShareCreator {
@@ -32,8 +33,9 @@ export class ShareCreator {
                 apiArray.shortname,
                 apiArray.isin,
                 apiArray.type,
-                apiArray.marketplace ? MarketplaceCreator.oneFromApiArray(apiArray.marketplace): undefined,
+                apiArray.marketplace ? MarketplaceCreator.oneFromApiArray(apiArray.marketplace) : undefined,
                 apiArray.shareheadId ? +apiArray.shareheadId : undefined,
+                apiArray.manualDividends ? ManualDividendCreator.fromApiArray(apiArray.manualDividends) : undefined
             );
         } else {
             return null;

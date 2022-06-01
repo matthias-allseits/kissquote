@@ -26,6 +26,7 @@ export class ShareheadShare {
         public urlWikipedia?: string,
         public urlInvesting?: string,
         public urlFinanztreff?: string,
+        public urlDiviMax?: string,
         public currency?: Currency,
         public balances?: ShareheadBalance[],
         public estimations?: ShareheadEstimation[],

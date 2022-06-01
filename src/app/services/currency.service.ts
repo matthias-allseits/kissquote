@@ -5,9 +5,6 @@ import {map} from 'rxjs/operators';
 import {Currency} from '../models/currency';
 import {CurrencyCreator} from "../creators/currency-creator";
 import {ApiService} from "./api-service";
-import {Position} from "../models/position";
-import {DateHelper} from "../core/datehelper";
-import {BankAccount} from "../models/bank-account";
 
 
 const httpOptions = {

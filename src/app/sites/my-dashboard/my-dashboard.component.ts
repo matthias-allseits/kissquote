@@ -17,6 +17,9 @@ import {ShareheadService} from "../../services/sharehead.service";
 import {WatchlistEntry} from "../../models/watchlistEntry";
 import {ShareheadShare} from "../../models/sharehead-share";
 import {WatchlistService} from "../../services/watchlist.service";
+import {ManualDividend} from "../../models/manual-dividend";
+import {ManualDividendService} from "../../services/manual-dividend.service";
+import {DividendCreator} from "../../creators/dividend-creator";
 
 
 @Component({
@@ -39,15 +42,22 @@ export class MyDashboardComponent implements OnInit {
     private selectedBankAccount?: BankAccount;
     public selectedCurrency?: Currency;
     public selectedWatchlistEntry?: WatchlistEntry;
+    public selectedManualDividend?: ManualDividend;
     private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
     public dividendLists?: DividendTotals[];
     public closedPositionsBalance = 0;
+    public years = [2022, 2023, 2024, 2025];
     modalRef?: BsModalRef;
 
     exchangeRateForm = new FormGroup({
         rate: new FormControl('', Validators.required),
+    });
+
+    manualDividendForm = new FormGroup({
+        year: new FormControl(new Date().getFullYear(), Validators.required),
+        amount: new FormControl('', Validators.required),
     });
 
     constructor(
@@ -59,6 +69,7 @@ export class MyDashboardComponent implements OnInit {
         private modalService: BsModalService,
         private shareheadService: ShareheadService,
         private watchlistService: WatchlistService,
+        private manualDividendService: ManualDividendService,
     ) {
     }
 
@@ -142,6 +153,11 @@ export class MyDashboardComponent implements OnInit {
         this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
     }
 
+    openManualDividendConfirmModal(template: TemplateRef<any>, entry: ManualDividend|undefined) {
+        this.selectedManualDividend = entry;
+        this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+    }
+
 
     confirmDeletePosition(): void {
         if (this.selectedPosition) {
@@ -167,7 +183,6 @@ export class MyDashboardComponent implements OnInit {
     }
 
     openExchangeRateModal(template: TemplateRef<any>, currency: Currency) {
-        console.log(template);
         this.selectedCurrency = currency;
         this.exchangeRateForm.get('rate')?.setValue(currency.rate);
         this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
@@ -185,6 +200,29 @@ export class MyDashboardComponent implements OnInit {
         this.modalRef?.hide();
     }
 
+    openManualDividendModal(template: TemplateRef<any>, positionId: number) {
+        const position = this.portfolio?.positionById(positionId);
+        if (position) {
+            this.selectedManualDividend = DividendCreator.createNewDividend();
+            this.selectedManualDividend.share = position.share;
+            this.selectedManualDividend.year = new Date().getFullYear();
+            this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+        }
+    }
+
+    persistManualDividend(): void {
+        if (this.selectedManualDividend) {
+            this.selectedManualDividend.amount = this.manualDividendForm.get('amount')?.value;
+            this.selectedManualDividend.year = this.manualDividendForm.get('year')?.value;
+            this.manualDividendService.create(this.selectedManualDividend)
+                .subscribe(dividend => {
+                    // todo: implement a data updater
+                    document.location.reload();
+                });
+        }
+        this.modalRef?.hide();
+    }
+
     confirmDeleteAccount(): void {
         if (this.selectedBankAccount) {
             this.deleteBankAccount(this.selectedBankAccount);
@@ -195,6 +233,20 @@ export class MyDashboardComponent implements OnInit {
     deleteBankAccount(account: BankAccount): void {
         console.log(account);
         this.bankAccountService.delete(account.id).subscribe(() => {
+            document.location.reload();
+        });
+    }
+
+    confirmDeleteManualDividend(): void {
+        if (this.selectedManualDividend) {
+            this.deleteManualDividend(this.selectedManualDividend);
+        }
+        this.modalRef?.hide();
+    }
+
+    deleteManualDividend(dividend: ManualDividend): void {
+        console.log(dividend);
+        this.manualDividendService.delete(dividend.id).subscribe(() => {
             document.location.reload();
         });
     }

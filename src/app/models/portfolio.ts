@@ -40,6 +40,18 @@ export class Portfolio {
     }
 
 
+    positionById(id: number): Position|null {
+        let hit = null;
+        this.getAllPositions().forEach(position => {
+            if (position.id === id) {
+                hit = position;
+            }
+        });
+
+        return hit;
+    }
+
+
     investmentTotal(): number {
         let total = 0;
         this.bankAccounts.forEach(account => {
@@ -242,7 +254,10 @@ export class Portfolio {
                 payedTotal += payedResult.total;
                 +(plannedResult.total -= payedResult.total).toFixed(0);
             }
-            if (year >= thisYear && position.active && payedResult.transactionCount < position.maxDividendTransactionsByPeriodicy()) {
+            if (plannedResult.manualDividend) {
+                plannedList.push(plannedResult);
+                plannedTotal += plannedResult.total;
+            } else if (year >= thisYear && position.active && payedResult.transactionCount < position.maxDividendTransactionsByPeriodicy()) {
                 plannedList.push(plannedResult);
                 plannedTotal += plannedResult.total;
             }

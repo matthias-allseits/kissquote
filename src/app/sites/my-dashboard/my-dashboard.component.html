@@ -230,6 +230,7 @@
                         <th scope="col">Source</th>
                         <th scope="col"><span class="float-end">Dividende</span></th>
                         <th scope="col" class="d-none d-md-table-cell" style="width: 200px;"><span class="float-end">Currency-Corrected</span></th>
+                        <th scope="col" style="width: 35px;"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -239,6 +240,8 @@
                                 <td>From Transactions</td>
                                 <td><span class="float-end">{{ entry.total }} {{ entry.currency?.name }}</span></td>
                                 <td class="d-none d-md-table-cell"><span class="float-end"></span></td>
+                                <td *ngIf="entry.manualDividend === undefined"><button (click)="openManualDividendModal(manualDividendFormModal, entry.positionId)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>
+                                <td *ngIf="entry.manualDividend"><button (click)="openManualDividendConfirmModal(removeManualDividendModal, entry.manualDividend)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                             </tr>
                         </ng-container>
                     </tbody>
@@ -252,6 +255,7 @@
                             <th scope="col">Source</th>
                             <th scope="col"><span class="float-end">Dividende</span></th>
                             <th scope="col" class="d-none d-md-table-cell" style="width: 200px;"><span class="float-end">Currency-Corrected</span></th>
+                            <th scope="col" style="width: 35px;"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -261,6 +265,8 @@
                                     <td>{{ entry.source }}</td>
                                     <td><span class="float-end">{{ entry.total|number: '1.0-0' }} {{ entry.currency?.name }}</span></td>
                                     <td class="d-none d-md-table-cell"><span class="float-end"></span></td>
+                                    <td *ngIf="entry.manualDividend === undefined"><button (click)="openManualDividendModal(manualDividendFormModal, entry.positionId)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>
+                                    <td *ngIf="entry.manualDividend"><button (click)="openManualDividendConfirmModal(removeManualDividendModal, entry.manualDividend)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                                 </tr>
                             </ng-container>
                         </tbody>
@@ -388,6 +394,14 @@
     </div>
 </ng-template>
 
+<ng-template #removeManualDividendModal>
+    <div class="modal-body text-center">
+        <p>Wollen Sie diesen Eintrag wirklich löschen?</p>
+        <button type="button" class="btn btn-default" (click)="confirmDeleteManualDividend()">Ja</button>
+        <button type="button" class="btn btn-primary" (click)="cancelModal()">Nein</button>
+    </div>
+</ng-template>
+
 <ng-template #exchangeRateFormModal>
     <div *ngIf="selectedCurrency" class="modal-body">
         <p *ngIf="selectedCurrency">Geben Sie Ihre Exchange-Rate für Ihre Währung &laquo;{{ selectedCurrency.name }}&raquo; ein:</p>
@@ -402,6 +416,34 @@
                 </div>
                 <div class="col-6">
                     <button type="button" class="btn btn-primary float-end" (click)="persistExchangeRate()">Speichern</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #manualDividendFormModal>
+    <div *ngIf="selectedManualDividend && selectedManualDividend.share" class="modal-body">
+        <p>Geben Sie Ihre manuelle Dividende für Ihre Position &laquo;{{ selectedManualDividend.share.name }}&raquo; ein:</p>
+        <form [formGroup]="manualDividendForm">
+            <div class="mb-3">
+                <label for="dividend-year" class="form-label">Jahr: </label>
+                <select formControlName="year" id="dividend-year" name="year" class="form-select form-select mb-3">
+                    <ng-container *ngFor="let year of years">
+                        <option [ngValue]="year">{{ year }}</option>
+                    </ng-container>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="exchange-rate-input" class="form-label"></label>
+                <input formControlName="amount" id="dividend-amount-input" class="form-control" type="text" name="amount" value="">
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button type="button" class="btn btn-default" (click)="cancelModal()">Abbrechen</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="btn btn-primary float-end" (click)="persistManualDividend()">Speichern</button>
                 </div>
             </div>
         </form>

@@ -11,8 +11,8 @@ import {Observable} from "rxjs";
 import {ShareheadShare} from "./sharehead-share";
 import {DividendProjection} from "./dividend-projection";
 import {DividendProjectionCreator} from "../creators/dividend-projection-creator";
-import {formatNumber} from "@angular/common";
 import {Forexhelper} from "../core/forexhelper";
+import {ManualDividend} from "./manual-dividend";
 
 
 export interface DividendTotal {
@@ -22,6 +22,7 @@ export interface DividendTotal {
     currency: Currency|null;
     source: string;
     transactionCount: number;
+    manualDividend?: ManualDividend;
 }
 
 export class Position {
@@ -109,13 +110,17 @@ export class Position {
             }
         });
         total = +total.toFixed(0);
+
+        const manualDividend = this.share?.manualDividendByYear(year);
+
         const result = {
             positionId: this.id,
             name: this.getName(),
             total: total,
             currency: currency,
             source: '',
-            transactionCount: transactionCount
+            transactionCount: transactionCount,
+            manualDividend: manualDividend,
         };
 
         return result;
@@ -145,35 +150,42 @@ export class Position {
             }
         }
 
-        if (projectedDividend) {
+        const manualDividend = this.share?.manualDividendByYear(year);
+
+        if (manualDividend && manualDividend.amount) {
+            source = 'From manual dividend entry';
+            total = +manualDividend.amount;
+        } else if (projectedDividend) {
             total = 0;
             if (projectedDividend.currencyCorrectedProjectionValue !== undefined) {
-                source = 'From stathead estimations (currency-corrected)'
+                source = 'From stathead estimations (currency-corrected)';
                 total += projectedDividend.currencyCorrectedProjectionValue;
             } else {
-                source = 'From stathead estimations'
+                source = 'From stathead estimations';
                 total += projectedDividend.projectionValue;
             }
         } else if (lastProjectedDividend && lastProjectedDividend.projectionValue > 0) {
             total = 0;
             if (lastProjectedDividend.currencyCorrectedProjectionValue !== undefined) {
-                source = 'From estimations ' +  + (year - 1) + ' (currency-corrected)'
+                source = 'From estimations ' +  + (year - 1) + ' (currency-corrected)';
                 total += lastProjectedDividend.currencyCorrectedProjectionValue;
             } else {
-                source = 'From estimations ' + (year - 1)
+                source = 'From estimations ' + (year - 1);
                 total += lastProjectedDividend.projectionValue;
             }
         } else if (+shareheadSharePayment > 0) {
             total = +shareheadSharePayment;
-            source = 'From stathead'
+            source = 'From stathead';
         }
+
         const result = {
             positionId: this.id,
             name: this.getName(),
             total: total,
             currency: currency,
             source: source,
-            transactionCount: 0
+            transactionCount: 0,
+            manualDividend: manualDividend
         };
 
         return result;

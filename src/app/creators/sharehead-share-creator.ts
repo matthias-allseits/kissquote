@@ -42,6 +42,7 @@ export class ShareheadShareCreator {
                 apiArray.urlWikipedia,
                 apiArray.urlInvesting,
                 apiArray.urlFinanztreff,
+                apiArray.urlDiviMax,
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.balances ? ShareheadBalanceCreator.fromApiArray(apiArray.balances) : [],
                 apiArray.estimations ? ShareheadBalanceCreator.fromApiArray(apiArray.estimations) : [],
