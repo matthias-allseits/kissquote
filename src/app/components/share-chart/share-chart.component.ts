@@ -88,7 +88,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                 this.context.beginPath();
                 this.context.strokeStyle = this.redColor;
                 this.context.setLineDash([5, 5]);
-                const buyValue = ((topEnd - this.position?.balance?.averagePayedPriceNet) * verticalFactor) + this.offsetTop;
+                const buyValue = ((topEnd - this.position?.balance?.averagePayedPriceGross) * verticalFactor) + this.offsetTop;
                 // console.log('average-price: ' + this.position?.balance?.averagePayedPriceNet);
                 // console.log('buyValue: ' + buyValue);
                 this.context.moveTo(this.offsetLeft, buyValue);
