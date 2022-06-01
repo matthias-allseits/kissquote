@@ -5,6 +5,7 @@ import {ChartData} from "chart.js";
 import {Marketplace} from "./marketplace";
 import {ShareheadAnalysisResults} from "./sharehead-analysis-results";
 import {DateHelper} from "../core/datehelper";
+import {ShareheadPlannedDividend} from "./sharehead-planned-dividend";
 
 
 export class ShareheadShare {
@@ -29,6 +30,7 @@ export class ShareheadShare {
         public balances?: ShareheadBalance[],
         public estimations?: ShareheadEstimation[],
         public analysisResults?: ShareheadAnalysisResults,
+        public plannedDividends?: ShareheadPlannedDividend[],
     ) { }
 
 

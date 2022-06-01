@@ -85,6 +85,19 @@
                     <div class="col-9">Next Report:</div>
                     <div class="col-3"><span class="float-end">{{ shareheadShare.nextReportDate|date:'dd.MM.y' }}</span></div>
                 </div>
+                <ng-container *ngIf="shareheadShare.plannedDividends && shareheadShare.plannedDividends.length > 0">
+                    <div class="row">
+                        <div class="col-9">Next Ex-Dividend Date:</div>
+                        <div class="col-3"><span class="float-end">{{ shareheadShare.plannedDividends[0].exDate|date:'dd.MM.y' }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">Next Dividend Pay ({{ shareheadShare.plannedDividends[0].currency?.name }}
+                            <span *ngIf="shareheadShare.plannedDividends[0].amount">{{ shareheadShare.plannedDividends[0].amount }})</span>
+                            <span *ngIf="!shareheadShare.plannedDividends[0].amount">?)</span>
+                        </div>
+                        <div class="col-4" style="text-align: right;">{{ shareheadShare.plannedDividends[0].payDate|date:'dd.MM.y' }}</div>
+                    </div>
+                </ng-container>
             </div>
         </div>
         <div>

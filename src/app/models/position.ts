@@ -132,6 +132,7 @@ export class Position {
             total = this.balance.projectedNextDividendPayment;
             currency = this.currency;
         }
+        // todo: implement another method, that delivers the correct payment for this year considering the amount-changing-transactions
         const shareheadSharePayment = this.shareheadDividendPaymentCorrected();
         let projectedDividend = null;
         let lastProjectedDividend = null;
@@ -325,11 +326,13 @@ export class Position {
         let result = '';
         if (this.shareheadShare && this.balance) {
             const lastBalance = this.shareheadShare.lastBalance();
+            let relevantAmount = this.balance.amount;
+            // todo: implement a method, that checks dividend-transactions and amount-changing-transactions for correcting the result
             if (lastBalance) {
                 if (this.currency?.name == this.shareheadShare.currency?.name) {
-                    result = (lastBalance?.dividend * this.balance.amount).toFixed(0);
+                    result = (lastBalance?.dividend * relevantAmount).toFixed(0);
                 } else if (lastBalance.currency) {
-                    result = (lastBalance.dividend * lastBalance.currency.rate * this.balance?.amount).toFixed(0);
+                    result = (lastBalance.dividend * lastBalance.currency.rate * relevantAmount).toFixed(0);
                     if (this.currency && this.currency?.name !== 'CHF') {
                         result = (+result / this.currency.rate).toFixed(0);
                     }
