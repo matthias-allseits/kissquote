@@ -6,6 +6,7 @@ import {Marketplace} from "./marketplace";
 import {ShareheadAnalysisResults} from "./sharehead-analysis-results";
 import {DateHelper} from "../core/datehelper";
 import {ShareheadPlannedDividend} from "./sharehead-planned-dividend";
+import {AnalystRating} from "./analyst-rating";
 
 
 export class ShareheadShare {
@@ -32,6 +33,7 @@ export class ShareheadShare {
         public estimations?: ShareheadEstimation[],
         public analysisResults?: ShareheadAnalysisResults,
         public plannedDividends?: ShareheadPlannedDividend[],
+        public analystRatings?: AnalystRating[],
     ) { }
 
 
@@ -57,6 +59,21 @@ export class ShareheadShare {
         }
 
         return hit;
+    }
+
+
+    public filteredRatings(): AnalystRating[] {
+        let filtered: AnalystRating[] = [];
+        const checkArray: string[] = [];
+        this.analystRatings?.forEach(rating => {
+            if (checkArray.indexOf(rating.analyst) < 0) {
+                filtered.push(rating);
+                checkArray.push(rating.analyst);
+            }
+        });
+        filtered = filtered.slice(0, 10);
+
+        return filtered;
     }
 
 

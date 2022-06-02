@@ -4,6 +4,7 @@ import {ShareheadBalanceCreator} from "./sharehead-balance-creator";
 import {MarketplaceCreator} from "./marketplace-creator";
 import {ShareheadShareAnalysisResultsCreator} from "./sharehead-share-analysis-results-creator";
 import {ShareheadPlannedDividendCreator} from "./sharehead-planned-dividend-creator";
+import {AnalystRatingCreator} from "./analyst-rating-creator";
 
 
 export class ShareheadShareCreator {
@@ -48,6 +49,7 @@ export class ShareheadShareCreator {
                 apiArray.estimations ? ShareheadBalanceCreator.fromApiArray(apiArray.estimations) : [],
                 apiArray.analysisResults ? ShareheadShareAnalysisResultsCreator.oneFromApiArray(apiArray.analysisResults) : undefined,
                 apiArray.plannedDividends ? ShareheadPlannedDividendCreator.fromApiArray(apiArray.plannedDividends) : undefined,
+                apiArray.analystRatings ? AnalystRatingCreator.fromApiArray(apiArray.analystRatings) : undefined,
             );
         } else {
             return null;
