@@ -71,8 +71,13 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
             this.context.fillStyle = this.textColor;
             this.context.lineWidth = 1;
             let yRate = topEnd;
+            if (yRate < 2) {
+                yRate = Math.round(yRate * 10) / 10;
+            }
             do {
+                // console.log(yRate);
                 const yValue = ((topEnd - yRate) * verticalFactor) + this.offsetTop;
+                // console.log(yValue);
                 this.context.moveTo(this.offsetLeft, yValue);
                 this.context.lineTo(this.canvasWidth, yValue);
                 this.context.stroke();
@@ -81,6 +86,9 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                 this.context.direction = 'rtl';
                 this.context.fillText(yRate.toString(), 25, yValue);
                 yRate -= verticalSteps;
+                if (yRate < 2) {
+                    yRate = Math.round(yRate * 10) / 10;
+                }
             } while(yRate >= lowEnd);
 
             // average-price
@@ -176,7 +184,9 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
         let verticalSteps = 50;
         const delta = topRate - lowRate;
         // console.log('delta: ' + delta);
-        if (delta < 5) {
+        if (delta < 2) {
+            verticalSteps = 0.1;
+        } else if (delta < 5) {
             verticalSteps = 0.5;
         } else if (delta < 10) {
             verticalSteps = 1;
