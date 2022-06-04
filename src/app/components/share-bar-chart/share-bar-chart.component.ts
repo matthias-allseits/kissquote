@@ -4,15 +4,14 @@ import {Transaction} from "../../models/transaction";
 import {DateHelper} from "../../core/datehelper";
 import {StockRate} from "../../models/stock-rate";
 
-
 @Component({
-    selector: 'app-share-chart',
-    templateUrl: './share-chart.component.html',
-    styleUrls: ['./share-chart.component.scss']
+    selector: 'app-share-bar-chart',
+    templateUrl: './share-bar-chart.component.html',
+    styleUrls: ['./share-bar-chart.component.scss']
 })
-export class ShareChartComponent implements OnInit, AfterViewInit {
+export class ShareBarChartComponent implements OnInit, AfterViewInit {
 
-    @ViewChild('myCanvas', { static: true }) myCanvas?: ElementRef<HTMLCanvasElement>;
+    @ViewChild('myCanvas', {static: true}) myCanvas?: ElementRef<HTMLCanvasElement>;
 
     @Input() rates?: StockRate[];
     @Input() position?: Position;
@@ -29,7 +28,8 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
     private helplineColor = '#dee2e6';
     private monthColor = '#a4a4a4';
     private textColor = '#4e4e4e';
-    private stepWidth = 1.5;
+    private stepWidth = 6;
+    private barSpan = 5;
 
     constructor() {
     }
@@ -52,8 +52,8 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
             const topEnd = Math.ceil(topRate / verticalSteps) * verticalSteps;
             const lowEnd = Math.floor(lowRate / verticalSteps) * verticalSteps;
             const verticalFactor = (this.canvasHeight - this.offsetTop - this.offsetBottom) / (topEnd - lowEnd);
-            // console.log(topEnd);
-            // console.log(lowEnd);
+            console.log('topEnd: ' + topEnd);
+            console.log('lowEnd: ' + lowEnd);
             // console.log('factor: ' + verticalFactor);
 
             // preparing transactions
@@ -91,7 +91,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                 if (yRate < 5) {
                     yRate = Math.round(yRate * 10) / 10;
                 }
-            } while(yRate >= lowEnd);
+            } while (yRate >= lowEnd);
 
             // average-price
             if (this.position?.balance) {
@@ -111,31 +111,48 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
             this.context.setLineDash([]);
             let lastMonth: number;
             let lastYear: number;
-            this.rates.forEach((entry, i) => {
-                if (lastYear !== undefined && lastYear !== entry.date.getFullYear()) {
+
+            const chunkedRates = [];
+            for (let i = 0; i < this.rates.length; i += this.barSpan) {
+                chunkedRates.push(this.rates.slice(i, i + this.barSpan));
+            }
+            chunkedRates.forEach((rates, i) => {
+                const firstRate = rates[0];
+                const lastRate = rates[rates.length - 1];
+                const entryDates: Date[] = [];
+                rates.forEach(rate => {
+                    entryDates.push(rate.date);
+                });
+                if (lastYear !== undefined && lastYear !== lastRate.date.getFullYear()) {
                     this.context.beginPath();
                     this.context.strokeStyle = this.monthColor;
                     this.context.setLineDash([]);
-                    const xValue = this.offsetLeft + (i * this.stepWidth);
+                    const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
                     this.context.moveTo(xValue, this.offsetTop);
                     this.context.lineTo(xValue, 300);
                     this.context.stroke();
-                } else if (lastMonth !== undefined && lastMonth !== entry.date.getMonth()) {
+                } else if (lastMonth !== undefined && lastMonth !== lastRate.date.getMonth()) {
                     this.context.beginPath();
                     this.context.strokeStyle = this.helplineColor;
                     this.context.setLineDash([]);
-                    const xValue = this.offsetLeft + (i * this.stepWidth);
+                    const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
                     this.context.moveTo(xValue, this.offsetTop);
                     this.context.lineTo(xValue, 300);
                     this.context.stroke();
                 }
                 transactionsSell.forEach(transaction => {
                     if (transaction.date instanceof Date && transaction.rate) {
-                        if (DateHelper.datesAreEqual(transaction.date, entry.date)) {
+                        let hit = false;
+                        entryDates.forEach(date => {
+                            if (transaction.date instanceof Date && DateHelper.datesAreEqual(transaction.date, date)) {
+                                hit = true;
+                            }
+                        });
+                        if (hit) {
                             this.context.beginPath();
                             this.context.strokeStyle = this.redColor;
                             this.context.setLineDash([5, 5]);
-                            const xValue = this.offsetLeft + (i * this.stepWidth);
+                            const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
                             const yValue = ((topEnd - transaction.rate) * verticalFactor) + this.offsetTop;
                             this.context.moveTo(xValue, this.offsetTop);
                             this.context.lineTo(xValue, yValue);
@@ -145,11 +162,17 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                 });
                 transactionsBuy.forEach(transaction => {
                     if (transaction.date instanceof Date && transaction.rate) {
-                        if (DateHelper.datesAreEqual(transaction.date, entry.date)) {
+                        let hit = false;
+                        entryDates.forEach(date => {
+                            if (transaction.date instanceof Date && DateHelper.datesAreEqual(transaction.date, date)) {
+                                hit = true;
+                            }
+                        });
+                        if (hit) {
                             this.context.beginPath();
                             this.context.strokeStyle = this.textColor;
                             this.context.setLineDash([5, 5]);
-                            const xValue = this.offsetLeft + (i * this.stepWidth);
+                            const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
                             const yValue = ((topEnd - transaction.rate) * verticalFactor) + this.offsetTop;
                             this.context.moveTo(xValue, this.offsetTop);
                             this.context.lineTo(xValue, yValue);
@@ -157,35 +180,49 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                         }
                     }
                 });
-                lastMonth = entry.date.getMonth();
-                lastYear = entry.date.getFullYear();
+                lastMonth = lastRate.date.getMonth();
+                lastYear = lastRate.date.getFullYear();
             });
 
             // rates
             this.context.beginPath();
             this.context.strokeStyle = this.strokeColor;
             this.context.setLineDash([]);
-            this.context.lineWidth = 2;
-            const firstValue = ((topEnd - this.rates[0].rate) * verticalFactor) + this.offsetTop;
+            this.context.lineWidth = 1;
+            // const firstValue = ((topEnd - this.rates[0].rate) * verticalFactor) + this.offsetTop;
             // console.log('firstValue: ' + firstValue);
-            this.context.moveTo(this.offsetLeft, firstValue);
+            // this.context.moveTo(this.offsetLeft, firstValue);
             let xValue = this.offsetLeft;
-            this.rates.forEach(entry => {
+            chunkedRates.forEach((rates, i) => {
+                const firstRate = rates[0];
+                const lastRate = rates[rates.length - 1];
+                const yValue = ((topEnd - firstRate.rate) * verticalFactor) + this.offsetTop;
+                this.context.moveTo(xValue, yValue);
+                this.context.lineTo(xValue + 3, yValue);
+                this.context.stroke();
+
+                const yLValue = ((topEnd - lastRate.rate) * verticalFactor) + this.offsetTop;
+                this.context.moveTo(xValue + 3, yLValue);
+                this.context.lineTo(xValue + 6, yLValue);
+                this.context.stroke();
+
+                const topValue = this.extractTopValue(rates);
+                const lowValue = this.extractLowValue(rates);
+                const yTopValue = ((topEnd - topValue) * verticalFactor) + this.offsetTop;
+                const yLowValue = ((topEnd - lowValue) * verticalFactor) + this.offsetTop;
+                this.context.moveTo(xValue + 3, yTopValue);
+                this.context.lineTo(xValue + 3, yLowValue);
+                this.context.stroke();
                 xValue += this.stepWidth;
-                const yValue = ((topEnd - entry.rate) * verticalFactor) + this.offsetTop;
-                // console.log(yValue);
-                this.context.lineTo(xValue, yValue);
             });
-            this.context.stroke();
         }
     }
 
 
-    private calculateVerticalSteps(topRate: number, lowRate: number)
-    {
+    private calculateVerticalSteps(topRate: number, lowRate: number) {
         let verticalSteps = 50;
         const delta = topRate - lowRate;
-        // console.log('delta: ' + delta);
+        console.log('delta: ' + delta);
         if (delta < 2) {
             verticalSteps = 0.1;
         } else if (delta < 5) {
@@ -207,8 +244,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
         return verticalSteps;
     }
 
-    private calculateTopEnd(rates: StockRate[])
-    {
+    private calculateTopEnd(rates: StockRate[]) {
         let topRate = 0;
         rates.forEach(entry => {
             if (entry.rate > topRate) {
@@ -220,8 +256,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
         return topRate;
     }
 
-    private calculateLowEnd(rates: StockRate[])
-    {
+    private calculateLowEnd(rates: StockRate[]) {
         let lowRate = 10000000000;
         rates.forEach(entry => {
             if (entry.rate < lowRate) {
@@ -231,6 +266,28 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
 
         // console.log('lowRate: ' + lowRate);
         return lowRate;
+    }
+
+    private extractTopValue(rates: StockRate[]) {
+        let top = 0;
+        rates.forEach(rate => {
+            if (rate.high > top) {
+                top = rate.high;
+            }
+        })
+
+        return top;
+    }
+
+    private extractLowValue(rates: StockRate[]) {
+        let low = 10000000000;
+        rates.forEach(rate => {
+            if (rate.low < low) {
+                low = rate.low;
+            }
+        })
+
+        return low;
     }
 
 }

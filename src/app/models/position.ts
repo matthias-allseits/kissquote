@@ -412,6 +412,23 @@ export class Position {
     }
 
 
+    public getStockRates(): Observable<StockRate[]> {
+        return new Observable(obsData => {
+            if (this.share) {
+                let request = new XMLHttpRequest();
+                const ratesUrl = `https://www.swissquote.ch/sqi_ws/HistoFromServlet?format=pipe&key=${this.share.isin}_${this.share.marketplace?.urlKey}_${this.currency?.name}&ftype=day&fvalue=1&ptype=a&pvalue=1`;
+                request.open("GET", ratesUrl, false);
+                request.send(null);
+                let content = request.responseText;
+                // console.log(content);
+                const rates = this.parseRates(content);
+
+                obsData.next(rates);
+            }
+        });
+    }
+
+
     public maxDividendTransactionsByPeriodicy(): number {
         switch(this.dividendPeriodicity) {
             case 'quaterly':
@@ -425,6 +442,8 @@ export class Position {
 
 
     private parseRates(content: any): StockRate[] {
+        // 20220603 | 286.0 | 277.6 | 286.0 | 278.4   | 27525
+        // Datum    | Hoch  | Tief  | Start | Schluss | Volumen
         const rates: StockRate[] = [];
         const lines = content.split("\n");
         lines.forEach((line: any, index: number) => {
@@ -445,7 +464,10 @@ export class Position {
                     // console.log(date);
                     const rate = StockRateCreator.createNewStockRate();
                     rate.date = date;
-                    rate.rate = cells[4];
+                    rate.rate = +cells[4];
+                    rate.open = +cells[3];
+                    rate.high = +cells[1];
+                    rate.low = +cells[2];
                     rates.push(rate);
                 }
             }

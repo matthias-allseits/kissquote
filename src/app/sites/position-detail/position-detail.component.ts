@@ -19,7 +19,7 @@ import {LineChartComponent} from "../../components/line-chart/line-chart.compone
 import {DividendProjection} from "../../models/dividend-projection";
 import {ShareService} from "../../services/share.service";
 import {CurrencyService} from "../../services/currency.service";
-import {Rate} from "../../models/rate";
+import {StockRate} from "../../models/stock-rate";
 
 
 @Component({
@@ -52,7 +52,8 @@ export class PositionDetailComponent implements OnInit {
 
     public chartData?: ChartData;
     public lineChartData?: ChartData;
-    public historicRates?: Rate[];
+    public historicRates?: StockRate[];
+    public historicStockRates?: StockRate[];
 
     constructor(
         private route: ActivatedRoute,
@@ -243,52 +244,28 @@ export class PositionDetailComponent implements OnInit {
                             })
                     }
 
-                    this.position?.getRatesChartData()
-                        .subscribe(data => {
-                            this.lineChartData = data;
-                            console.log('chartdata length: ' + this.lineChartData?.datasets[0].data.length);
-                            this.addLatestRateToLineChart();
-                            if (this.lineChartComponent) {
-                                this.lineChartComponent.updateData(this.lineChartData);
-                            }
-                            const rates: Rate[] = [];
-                            // console.log(this.lineChartData.labels);
-                            this.lineChartData.datasets[0].data.forEach((entry, i) => {
-                                if (entry && this.lineChartData?.labels && this.lineChartData.labels[i]) {
-                                    const dateString: string = this.lineChartData.labels[i] as string;
-                                    // console.log(dateString);
-                                    // console.log(DateHelper.convertGermanDateStringToDateObject(dateString));
-                                    // const dateSplit = dateString.split('.');
-                                    // console.log(dateSplit);
-                                    // console.log(+dateSplit[1]);
-                                    const rate = new Rate(DateHelper.convertGermanDateStringToDateObject(dateString), +entry);
-                                    rates.push(rate);
-                                }
-                            });
+                    this.position.getStockRates()
+                        .subscribe((rates => {
+                            this.addLatestRateToLineChart(rates);
                             if (screen.width < 400) {
                                 this.historicRates = rates.slice(-200);
+                                this.historicStockRates = rates.slice(-200);
                             } else {
                                 this.historicRates = rates.slice(-440);
+                                this.historicStockRates = rates.slice(-555);
                             }
-                        });
+                        }));
                 }
             });
     }
 
 
-    private addLatestRateToLineChart(): void
+    private addLatestRateToLineChart(rates: StockRate[]): void
     {
-        if (this.lineChartData && this.position?.balance) {
-            if (this.lineChartData.labels && this.position.balance.lastRate?.date instanceof Date) {
-                const lastLabel = this.lineChartData.labels[this.lineChartData.labels?.length -1];
-                const lastLabelString = lastLabel + '';
-                const lastLabelDate = DateHelper.convertGermanDateStringToDateObject(lastLabelString);
-                const labelFromLastRate = DateHelper.convertDateToGerman(this.position.balance.lastRate?.date);
-                const lastRate = this.position.balance.lastRate?.rate;
-                console.log(lastLabel);
-                if (lastLabel !== labelFromLastRate && this.position.balance.lastRate?.date > lastLabelDate) {
-                    this.lineChartData.labels.push(labelFromLastRate);
-                    this.lineChartData.datasets[0].data.push(lastRate);
+        if (this.position?.balance) {
+            if (this.position.balance.lastRate?.date instanceof Date) {
+                if (this.position.balance.lastRate.date > rates[rates.length - 1].date) {
+                    rates.push(this.position.balance.lastRate);
                 }
             }
         }

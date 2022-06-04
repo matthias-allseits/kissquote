@@ -4,7 +4,7 @@ export class StockRateCreator {
 
 
     public static createNewStockRate(): StockRate {
-        return new StockRate(0, null, 0, '');
+        return new StockRate(0, new Date(), 0, 0, 0, 0, '');
     }
 
     public static oneFromApiArray(apiArray: StockRate): StockRate|undefined
@@ -12,8 +12,11 @@ export class StockRateCreator {
         if (apiArray !== undefined && apiArray !== null) {
             return new StockRate(
                 apiArray.id,
-                apiArray.date ? new Date(apiArray.date) : null,
+                new Date(apiArray.date),
                 apiArray.rate,
+                apiArray.open,
+                apiArray.high,
+                apiArray.low,
                 apiArray.currency,
             );
         } else {

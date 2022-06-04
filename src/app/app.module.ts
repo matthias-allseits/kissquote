@@ -43,6 +43,7 @@ import { ShareheadShareSearchComponent } from './components/sharehead-share-sear
 import { ShareheadShareDetailComponent } from './sites/sharehead-share-detail/sharehead-share-detail.component';
 import {LineChartMultiAxisComponent} from "./components/line-chart-multi-axis/line-chart-multi-axis.component";
 import { ShareChartComponent } from './components/share-chart/share-chart.component';
+import { ShareBarChartComponent } from './components/share-bar-chart/share-bar-chart.component';
 registerLocaleData(localeCH);
 
 
@@ -75,6 +76,7 @@ registerLocaleData(localeCH);
         ShareheadShareSearchComponent,
         ShareheadShareDetailComponent,
         ShareChartComponent,
+        ShareBarChartComponent,
     ],
     imports: [
         BrowserModule,
