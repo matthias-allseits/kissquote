@@ -42,6 +42,7 @@ export class PositionDetailComponent implements OnInit {
     public selectedTransaction?: Transaction;
     public diviProjectionYears: DividendProjection[] = [];
     public positionTab = 'balance';
+    public chartTab = 'line';
     public shareheadDividendPayment?: string;
     public shareheadDividendPaymentCorrected?: string;
     public shareheadCurrencyCorrectedDividendPayment?: string;
@@ -77,12 +78,22 @@ export class PositionDetailComponent implements OnInit {
         if (storedTab) {
             this.positionTab = storedTab;
         }
+        const storedChartTab = localStorage.getItem('positionChartTab');
+        if (storedChartTab) {
+            this.chartTab = storedChartTab;
+        }
     }
 
     changeTab(selectedTab: string): void {
         console.log(selectedTab);
         this.positionTab = selectedTab;
         localStorage.setItem('positionTab', selectedTab);
+    }
+
+    changeChartTab(selectedTab: string): void {
+        console.log(selectedTab);
+        this.chartTab = selectedTab;
+        localStorage.setItem('positionChartTab', selectedTab);
     }
 
     openModal(template: TemplateRef<any>, transaction: Transaction) {
@@ -249,7 +260,7 @@ export class PositionDetailComponent implements OnInit {
                             this.addLatestRateToLineChart(rates);
                             if (screen.width < 400) {
                                 this.historicRates = rates.slice(-200);
-                                this.historicStockRates = rates.slice(-200);
+                                this.historicStockRates = rates.slice(-250);
                             } else {
                                 this.historicRates = rates.slice(-440);
                                 this.historicStockRates = rates.slice(-555);

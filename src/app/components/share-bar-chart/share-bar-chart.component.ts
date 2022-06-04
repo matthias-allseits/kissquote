@@ -17,7 +17,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
     @Input() position?: Position;
 
     public canvasWidth = 700;
-    public canvasHeight = 300;
+    public canvasHeight = 320;
     private offsetTop = 10;
     private offsetBottom = 10;
     private offsetLeft = 30;
@@ -129,7 +129,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                     this.context.setLineDash([]);
                     const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
                     this.context.moveTo(xValue, this.offsetTop);
-                    this.context.lineTo(xValue, 300);
+                    this.context.lineTo(xValue, this.canvasHeight);
                     this.context.stroke();
                 } else if (lastMonth !== undefined && lastMonth !== lastRate.date.getMonth()) {
                     this.context.beginPath();
@@ -137,7 +137,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                     this.context.setLineDash([]);
                     const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
                     this.context.moveTo(xValue, this.offsetTop);
-                    this.context.lineTo(xValue, 300);
+                    this.context.lineTo(xValue, this.canvasHeight);
                     this.context.stroke();
                 }
                 transactionsSell.forEach(transaction => {
