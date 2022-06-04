@@ -63,4 +63,11 @@ export class DateHelper {
             && date1.getFullYear() === date2.getFullYear();
     }
 
+
+    public static monthFromDateObject(date: Date): string {
+        const monthStrings = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        return monthStrings[date.getMonth()];
+    }
+
 }

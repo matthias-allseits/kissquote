@@ -48,6 +48,7 @@ export class MyDashboardComponent implements OnInit {
     public dividendListTab = new Date().getFullYear();
     public dividendLists?: DividendTotals[];
     public closedPositionsBalance = 0;
+    public incomeChartData?: ChartData;
     public years = [2022, 2023, 2024, 2025];
     modalRef?: BsModalRef;
 
@@ -103,6 +104,7 @@ export class MyDashboardComponent implements OnInit {
                                 this.dividendLists = this.portfolio.collectDividendLists();
                             }
                         }, 2000);
+                        this.incomeChartData = this.portfolio?.incomeChartData();
                     } else {
                         alert('Something went wrong!');
                         // todo: redirect back to landingpage. probably the solution: implement guards
