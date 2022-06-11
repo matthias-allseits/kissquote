@@ -66,7 +66,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                     transactionsSell.push(transaction);
                 }
             });
-            console.log(transactionsBuy);
+            // console.log(transactionsBuy);
 
             // horizontal help-lines
             this.context.strokeStyle = this.helplineColor;
@@ -154,7 +154,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                             this.context.setLineDash([5, 5]);
                             const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
                             const yValue = ((topEnd - transaction.rate) * verticalFactor) + this.offsetTop;
-                            this.context.moveTo(xValue, this.offsetTop);
+                            this.context.moveTo(xValue, this.offsetTop - 10);
                             this.context.lineTo(xValue, yValue);
                             this.context.stroke();
                         }
@@ -174,7 +174,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                             this.context.setLineDash([5, 5]);
                             const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
                             const yValue = ((topEnd - transaction.rate) * verticalFactor) + this.offsetTop;
-                            this.context.moveTo(xValue, this.offsetTop);
+                            this.context.moveTo(xValue, this.offsetTop - 10);
                             this.context.lineTo(xValue, yValue);
                             this.context.stroke();
                         }

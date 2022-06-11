@@ -91,7 +91,7 @@ export class PositionDetailComponent implements OnInit {
     }
 
     changeChartTab(selectedTab: string): void {
-        console.log(selectedTab);
+        // console.log(selectedTab);
         this.chartTab = selectedTab;
         localStorage.setItem('positionChartTab', selectedTab);
     }
