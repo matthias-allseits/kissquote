@@ -76,6 +76,12 @@ a:hover, .nav-link:hover {
   width: 370px;
 }
 
+.share-chart-wrapper {
+  display: inline-block;
+  max-width: 800px;
+  margin-right: 22px;
+}
+
 @include media-breakpoint-up(md) {
     .info-box-lg {
         width: 500px;
@@ -99,6 +105,11 @@ a:hover, .nav-link:hover {
     .info-box {
         margin-right: 10px;
         margin-bottom: 10px;
+    }
+
+    .share-chart-wrapper {
+      max-width: none;
+      margin-right: 0;
     }
 }
 
