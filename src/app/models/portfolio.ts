@@ -131,6 +131,7 @@ export class Portfolio {
             });
             positions = positions.concat(accountsPositions);
         });
+        positions = positions.reverse();
 
         return positions;
     }
