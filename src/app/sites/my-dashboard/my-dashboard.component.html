@@ -216,6 +216,10 @@
                     <h5>Income per month</h5>
                     <app-bar-chart [data]="incomeChartData" [height]="300"></app-bar-chart>
                 </div>
+                <div *ngIf="incomeChartDataImproved" class="info-box">
+                    <h5>Income per month</h5>
+                    <app-bar-chart [data]="incomeChartDataImproved" [height]="300"></app-bar-chart>
+                </div>
             </div>
         </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'dividends'">

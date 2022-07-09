@@ -260,6 +260,85 @@ export class Portfolio {
     }
 
 
+    incomeChartDataImproved(): ChartData {
+        const chartData: ChartData = {
+            labels: [],
+            datasets: [
+                {
+                    label: (new Date().getFullYear() - 2).toString(),
+                    data: [],
+                    borderColor: 'rgb(51, 102, 204, 1)',
+                    backgroundColor: 'rgb(51, 102, 204, 1)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)',
+                    pointBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBorderColor: 'rgba(51, 102, 204, 1)',
+                    yAxisID: 'y',
+                },
+                {
+                    label: (new Date().getFullYear() - 1).toString(),
+                    data: [],
+                    borderColor: 'rgb(112, 204, 51)',
+                    backgroundColor: 'rgb(112, 204, 51, 1)',
+                    hoverBackgroundColor: 'rgb(112, 204, 51, 0.5)',
+                    pointBackgroundColor: 'rgba(112, 204, 51, 1)',
+                    pointHoverBackgroundColor: 'rgba(112, 204, 51, 1)',
+                    pointHoverBorderColor: 'rgba(112, 204, 51, 1)',
+                    yAxisID: 'y',
+                },
+                {
+                    label: (new Date().getFullYear()).toString(),
+                    data: [],
+                    borderColor: 'rgb(255, 102, 51, 1)',
+                    backgroundColor: 'rgb(255, 102, 51, 1)',
+                    hoverBackgroundColor: 'rgb(255, 102, 51, 0.5)',
+                    pointBackgroundColor: 'rgb(220, 57, 18, 1)',
+                    pointHoverBackgroundColor: 'rgba(220, 57, 18, 1)',
+                    pointHoverBorderColor: 'rgba(220, 57, 18, 1)',
+                    yAxisID: 'y',
+                }
+            ]
+        };
+
+        const months: Date[] = [];
+        for(let x = 0; x < 12; x++) {
+            const today = new Date();
+            const month = new Date(today.getFullYear(), x, 1);
+            months.push(month);
+        }
+
+        months.forEach(month => {
+            const monthThisYear = month;
+            const monthLastYear = new Date(month.getFullYear() - 1, month.getMonth(), 1);
+            const monthtwoYearsBefore = new Date(month.getFullYear() - 2, month.getMonth(), 1);
+            let incomeThisYear = 0;
+            let incomeLastYear = 0;
+            let incomeTwoYearsBefore = 0;
+            this.getAllPositions().forEach(position => {
+                position.transactions.forEach(transaction => {
+                    if (transaction.isDividend() && transaction.date instanceof Date && transaction.rate) {
+                        const workDate = transaction.date;
+                        workDate.setDate(1);
+                        if (DateHelper.datesAreEqual(monthThisYear, workDate)) {
+                            incomeThisYear += transaction.rate;
+                        } else if (DateHelper.datesAreEqual(monthLastYear, workDate)) {
+                            incomeLastYear += transaction.rate;
+                        } else if (DateHelper.datesAreEqual(monthtwoYearsBefore, workDate)) {
+                            incomeTwoYearsBefore += transaction.rate;
+                        }
+                    }
+                });
+            });
+            chartData.labels?.push(DateHelper.monthFromDateObject(month));
+            chartData.datasets[0].data.push(Math.round(incomeTwoYearsBefore));
+            chartData.datasets[1].data.push(Math.round(incomeLastYear));
+            chartData.datasets[2].data.push(Math.round(incomeThisYear));
+        });
+
+        return chartData;
+    }
+
+
     getEmptyBankAccount(): BankAccount|null {
         let hit = null;
         this.bankAccounts.forEach(account => {
