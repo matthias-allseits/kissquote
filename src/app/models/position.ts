@@ -446,6 +446,12 @@ export class Position {
         // Datum    | Hoch  | Tief  | Start | Schluss | Volumen
         const rates: StockRate[] = [];
         const lines = content.split("\n");
+        let startDate = new Date(this.activeFrom);
+        if (this.daysSinceStart() < 150) {
+            startDate.setMonth(startDate.getMonth() - 4);
+        }
+        startDate.setHours(0);
+        console.log(startDate);
         lines.forEach((line: any, index: number) => {
             line = line.replaceAll("'", '');
             line = line.replaceAll("\r", '');
@@ -459,9 +465,7 @@ export class Position {
                 // console.log(monthIndex);
                 const day = +rawDate.substr(6, 2);
                 const date = new Date(year, monthIndex, day);
-                const tempDate = new Date(this.activeFrom);
-                tempDate.setHours(0);
-                if (date >= tempDate) {
+                if (date >= startDate) {
                     // console.log(date);
                     const rate = StockRateCreator.createNewStockRate();
                     rate.date = date;
