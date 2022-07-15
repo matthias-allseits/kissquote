@@ -460,6 +460,7 @@ export class Position {
                 const day = +rawDate.substr(6, 2);
                 const date = new Date(year, monthIndex, day);
                 const tempDate = new Date(this.activeFrom);
+                tempDate.setHours(0);
                 if (date >= tempDate) {
                     // console.log(date);
                     const rate = StockRateCreator.createNewStockRate();
