@@ -45,8 +45,8 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
             this.context = this.myCanvas.nativeElement.getContext('2d');
             const topRate = this.calculateTopEnd(this.rates);
             const lowRate = this.calculateLowEnd(this.rates);
-            console.log('topRate: ' + topRate);
-            console.log('lowRate: ' + lowRate);
+            // console.log('topRate: ' + topRate);
+            // console.log('lowRate: ' + lowRate);
             const verticalSteps = this.calculateVerticalSteps(topRate, lowRate);
             // console.log('vertical-steps: ' + verticalSteps);
             const topEnd = Math.ceil(topRate / verticalSteps) * verticalSteps;

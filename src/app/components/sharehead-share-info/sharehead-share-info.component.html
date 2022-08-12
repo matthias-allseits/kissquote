@@ -29,8 +29,8 @@
                 <div class="col-8"><span class="float-end">{{ shareheadShare.currency?.name }}</span></div>
             </div>
             <div class="row">
-                <div class="col-9">Last Rate (01.01.2001):</div>
-                <div class="col-3"><span class="float-end"></span></div>
+                <div class="col-8">Last Rate<span *ngIf="stockRate"> ({{ stockRate.date|date:'dd.MM.y H:mm' }})</span>:</div>
+                <div class="col-4"><span *ngIf="stockRate" class="float-end">{{ stockRate.currency }} {{ stockRate.rate }}</span></div>
             </div>
             <div class="row">
                 <div class="col-9">Yield:</div>

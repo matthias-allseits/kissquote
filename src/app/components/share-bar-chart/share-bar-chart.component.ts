@@ -45,15 +45,15 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
             this.context = this.myCanvas.nativeElement.getContext('2d');
             const topRate = this.calculateTopEnd(this.rates);
             const lowRate = this.calculateLowEnd(this.rates);
-            console.log('topRate: ' + topRate);
-            console.log('lowRate: ' + lowRate);
+            // console.log('topRate: ' + topRate);
+            // console.log('lowRate: ' + lowRate);
             const verticalSteps = this.calculateVerticalSteps(topRate, lowRate);
             // console.log('vertical-steps: ' + verticalSteps);
             const topEnd = Math.ceil(topRate / verticalSteps) * verticalSteps;
             const lowEnd = Math.floor(lowRate / verticalSteps) * verticalSteps;
             const verticalFactor = (this.canvasHeight - this.offsetTop - this.offsetBottom) / (topEnd - lowEnd);
-            console.log('topEnd: ' + topEnd);
-            console.log('lowEnd: ' + lowEnd);
+            // console.log('topEnd: ' + topEnd);
+            // console.log('lowEnd: ' + lowEnd);
             // console.log('factor: ' + verticalFactor);
 
             // preparing transactions
@@ -222,7 +222,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
     private calculateVerticalSteps(topRate: number, lowRate: number) {
         let verticalSteps = 50;
         const delta = topRate - lowRate;
-        console.log('delta: ' + delta);
+        // console.log('delta: ' + delta);
         if (delta < 2) {
             verticalSteps = 0.1;
         } else if (delta < 5) {

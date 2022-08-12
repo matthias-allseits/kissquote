@@ -6,6 +6,8 @@ import {Currency} from "../models/currency";
 import {CurrencyCreator} from "../creators/currency-creator";
 import {ShareheadShare} from "../models/sharehead-share";
 import {ShareheadShareCreator} from "../creators/sharehead-share-creator";
+import {StockRateCreator} from "../creators/stock-rate-creator";
+import {StockRate} from "../models/stock-rate";
 
 
 @Injectable({
@@ -15,11 +17,14 @@ import {ShareheadShareCreator} from "../creators/sharehead-share-creator";
 export class ShareheadService {
 
     private baseUrl = 'http://sharehead.dyn-o-saur.com/api';
-    // private baseUrl = 'http://sharehead.local/api';
 
     constructor(
         private http: HttpClient,
-    ) {}
+    ) {
+        if (+window.location.port === 4300) {
+            this.baseUrl = 'http://sharehead.local/api';
+        }
+    }
 
 
     public getShare(id: number): Observable<ShareheadShare|null>
@@ -30,6 +35,15 @@ export class ShareheadService {
                 // map(this.extractData),
                 // catchError(this.handleError('addHero', portfolio))
                 // catchError(this.handleError('addHero', portfolio))
+            );
+    }
+
+
+    public getShareRate(id: number): Observable<StockRate|null>
+    {
+        return this.http.get<StockRate>(this.baseUrl + '/share/' + id + '/rate')
+            .pipe(
+                map(res => StockRateCreator.oneFromApiArray(res))
             );
     }
 
