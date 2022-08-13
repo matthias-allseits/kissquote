@@ -62,6 +62,53 @@ export class ShareheadShare {
     }
 
 
+    kgv(lastRate: number): number|null
+    {
+        if (this.lastProfitPerShare() > 0) {
+
+            return +(lastRate / this.lastProfitPerShare()).toFixed(0);
+        } else {
+
+            return null;
+        }
+    }
+
+
+    lastDividend(): number|null
+    {
+        let hit = null;
+        if (this.balances) {
+            hit = this.balances[this.balances.length - 1].dividend;
+        }
+
+        return hit;
+    }
+
+
+    yield(lastRate: number)
+    {
+        let yieldnumber = 0;
+        const lastDividend = this.lastDividend();
+        if (lastDividend !== null) {
+            yieldnumber = 100 / lastRate * lastDividend;
+            yieldnumber = +yieldnumber.toFixed(1);
+        }
+
+        return yieldnumber;
+    }
+
+
+    private lastProfitPerShare(): number
+    {
+        let hit = 0;
+        if (this.balances) {
+            hit = this.balances[this.balances.length - 1].profitPerShare;
+        }
+
+        return hit;
+    }
+
+
     public filteredRatings(): AnalystRating[] {
         let filtered: AnalystRating[] = [];
         const checkArray: string[] = [];

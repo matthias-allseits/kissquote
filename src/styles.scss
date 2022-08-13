@@ -136,3 +136,12 @@ a:hover, .nav-link:hover {
 .bold {
   font-weight: 500;
 }
+
+.loading {
+    background-image: url("assets/loading.gif");
+    min-height: 23px;
+    min-width: 41px;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.5;
+}
