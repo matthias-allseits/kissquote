@@ -152,7 +152,7 @@ export class Position {
 
         const manualDividend = this.share?.manualDividendByYear(year);
 
-        if (manualDividend && manualDividend.amount) {
+        if (manualDividend && manualDividend.amount !== undefined) {
             source = 'From manual dividend entry';
             total = +manualDividend.amount;
         } else if (projectedDividend) {
