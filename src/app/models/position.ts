@@ -292,7 +292,7 @@ export class Position {
             if (currencyName === 'GBP') {
                 currencyName = 'GBX';
             }
-            return `https://www.swissquote.ch/sq_mi/market/Detail.action?s=${this.share.isin}_${this.share.marketplace?.urlKey}_${this.currency?.name}`;
+            return `https://www.swissquote.ch/sq_mi/market/Detail.action?s=${this.share.isin}_${this.share.marketplace?.urlKey}_${currencyName}`;
         }
 
         return null;
@@ -377,9 +377,13 @@ export class Position {
         return new Observable(obsData => {
             const historicRates: number[] = [];
             const historicLabels: string[] = [];
-            if (this.share) {
+            if (this.share && this.currency) {
+                let currencyName = this.currency.name;
+                if (currencyName === 'GBP') {
+                    currencyName = 'GBX';
+                }
                 let request = new XMLHttpRequest();
-                const ratesUrl = `https://www.swissquote.ch/sqi_ws/HistoFromServlet?format=pipe&key=${this.share.isin}_${this.share.marketplace?.urlKey}_${this.currency?.name}&ftype=day&fvalue=1&ptype=a&pvalue=1`;
+                const ratesUrl = `https://www.swissquote.ch/sqi_ws/HistoFromServlet?format=pipe&key=${this.share.isin}_${this.share.marketplace?.urlKey}_${currencyName}&ftype=day&fvalue=1&ptype=a&pvalue=1`;
                 request.open("GET", ratesUrl, false);
                 request.send(null);
                 let content = request.responseText;
@@ -418,9 +422,13 @@ export class Position {
 
     public getStockRates(): Observable<StockRate[]> {
         return new Observable(obsData => {
-            if (this.share) {
+            if (this.share && this.currency) {
+                let currencyName = this.currency.name;
+                if (currencyName === 'GBP') {
+                    currencyName = 'GBX';
+                }
                 let request = new XMLHttpRequest();
-                const ratesUrl = `https://www.swissquote.ch/sqi_ws/HistoFromServlet?format=pipe&key=${this.share.isin}_${this.share.marketplace?.urlKey}_${this.currency?.name}&ftype=day&fvalue=1&ptype=a&pvalue=1`;
+                const ratesUrl = `https://www.swissquote.ch/sqi_ws/HistoFromServlet?format=pipe&key=${this.share.isin}_${this.share.marketplace?.urlKey}_${currencyName}&ftype=day&fvalue=1&ptype=a&pvalue=1`;
                 request.open("GET", ratesUrl, false);
                 request.send(null);
                 let content = request.responseText;
