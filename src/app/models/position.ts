@@ -287,7 +287,11 @@ export class Position {
 
 
     public urlSwissquote(): string|null {
-        if (this.share) {
+        if (this.share && this.currency) {
+            let currencyName = this.currency.name;
+            if (currencyName === 'GBP') {
+                currencyName = 'GBX';
+            }
             return `https://www.swissquote.ch/sq_mi/market/Detail.action?s=${this.share.isin}_${this.share.marketplace?.urlKey}_${this.currency?.name}`;
         }
 
