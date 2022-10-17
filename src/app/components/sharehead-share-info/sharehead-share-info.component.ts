@@ -32,7 +32,6 @@ export class ShareheadShareInfoComponent implements OnInit {
                 .subscribe(rate => {
                     if (rate) {
                         this.stockRate = rate;
-                        console.log(this.stockRate);
                     }
                 });
         }

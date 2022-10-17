@@ -20,6 +20,7 @@ import {DividendProjection} from "../../models/dividend-projection";
 import {ShareService} from "../../services/share.service";
 import {CurrencyService} from "../../services/currency.service";
 import {StockRate} from "../../models/stock-rate";
+import {StockRateCreator} from "../../creators/stock-rate-creator";
 
 
 @Component({
@@ -275,7 +276,16 @@ export class PositionDetailComponent implements OnInit {
         if (this.position?.balance) {
             if (this.position.balance.lastRate?.date instanceof Date) {
                 if (this.position.balance.lastRate.date > rates[rates.length - 1].date) {
-                    rates.push(this.position.balance.lastRate);
+                    if (this.position.share?.marketplace?.currency === 'GBX') {
+                        // island apes shit!
+                        const ratesCopy = StockRateCreator.createNewStockRate();
+                        ratesCopy.rate = this.position.balance.lastRate.rate * 100;
+                        ratesCopy.high = this.position.balance.lastRate.high;
+                        ratesCopy.low = this.position.balance.lastRate.low;
+                        rates.push(ratesCopy);
+                    } else {
+                        rates.push(this.position.balance.lastRate);
+                    }
                 }
             }
         }
