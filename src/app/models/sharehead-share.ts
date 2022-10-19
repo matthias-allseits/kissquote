@@ -37,6 +37,20 @@ export class ShareheadShare {
     ) { }
 
 
+    swissquoteUrl(): string|null {
+        if (this.marketplace) {
+            let currency = this.currency?.name;
+            if (currency == 'GBP') { // island apes...
+                currency = 'GBX';
+            }
+
+            return `https://www.swissquote.ch/sq_mi/public/market/Detail.action?s=${this.isin}_${this.marketplace.urlKey}_${currency}`;
+        }
+
+        return null;
+    }
+
+
     lastBalance(): ShareheadBalance|null
     {
         if (this.balances) {
