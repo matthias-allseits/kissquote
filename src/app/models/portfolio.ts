@@ -89,11 +89,27 @@ export class Portfolio {
     }
 
 
-    dividendProjectionsTotal(): number {
+    thisYearsDividendsTotal(): number {
         let total = 0;
         const year = new Date().getFullYear();
         const dividendCollection = this.collectDividendForYear(year, year);
         total = dividendCollection.payedTotal + dividendCollection.plannedTotal;
+
+        return total;
+    }
+
+
+    thisYearsDividendsYield(): number {
+
+        return (100 / this.investmentTotal() * this.thisYearsDividendsTotal());
+    }
+
+
+    dividendProjectionsTotal(): number {
+        let total = 0;
+        this.bankAccounts.forEach(account => {
+            total += account.dividendProjectionsTotal();
+        });
 
         return total;
     }

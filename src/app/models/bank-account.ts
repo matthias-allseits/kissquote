@@ -125,11 +125,25 @@ export class BankAccount {
     }
 
 
-    dividendProjectionsTotal(): number {
+    thisYearsDividendsTotal(): number {
         let total = 0;
         const year = new Date().getFullYear();
-        const dividendCollection = this.collectDividendForYear(year, year);
+        const dividendCollection = this.collectDividendsForYear(year, year);
         total = dividendCollection.payedTotal + dividendCollection.plannedTotal;
+
+        return total;
+    }
+
+
+    thisYearsDividendsYield(): number {
+
+        return (100 / this.investmentTotal() * this.thisYearsDividendsTotal());
+    }
+
+
+    dividendProjectionsTotal(): number {
+        const year = new Date().getFullYear();
+        const total = this.collectProjectedDividendsForYear(year, year);
 
         return total;
     }
@@ -141,7 +155,7 @@ export class BankAccount {
     }
 
 
-    private collectDividendForYear(year: number, thisYear: number): DividendTotals {
+    private collectDividendsForYear(year: number, thisYear: number): DividendTotals {
         const payedList: DividendTotal[] = [];
         const plannedList: DividendTotal[] = [];
         let payedTotal = 0;
@@ -169,6 +183,18 @@ export class BankAccount {
             payedTotal: fixedPayedTotal,
             plannedTotal: fixedPlannedTotal,
         }
+    }
+
+
+    private collectProjectedDividendsForYear(year: number, thisYear: number): number {
+        let total = 0;
+        this.getActiveNonCashPositions().forEach(position => {
+            if (position.balance) {
+                total += +position.shareheadDividendPaymentCorrected();
+            }
+        });
+
+        return total;
     }
 
 }

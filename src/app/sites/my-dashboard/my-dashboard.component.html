@@ -144,11 +144,19 @@
                         <div class="col-3"><span class="float-end"></span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Dividenden-Prognose 12 Monate:</div>
-                        <div class="col-3"><span class="float-end bold">{{ portfolio.dividendProjectionsTotal()|number: '1.0' }}</span></div>
+                        <div class="col-9">This years dividends:</div>
+                        <div class="col-3"><span class="float-end">{{ portfolio.thisYearsDividendsTotal()|number: '1.0' }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Dividend-yield on investment:</div>
+                        <div class="col-9">This years yield on investment:</div>
+                        <div class="col-3"><span class="float-end bold">{{ portfolio.thisYearsDividendsYield()|number: '1.0-1' }}%</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Dividend projection:</div>
+                        <div class="col-3"><span class="float-end">{{ portfolio.dividendProjectionsTotal()|number: '1.0' }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Dividend projection yield:</div>
                         <div class="col-3"><span class="float-end bold">{{ portfolio.dividendProjectionsYield()|number: '1.0-1' }}%</span></div>
                     </div>
                 </div>
@@ -188,11 +196,19 @@
                             <div class="col-3"><span class="float-end"></span></div>
                         </div>
                         <div class="row">
-                            <div class="col-9">Dividenden-Prognose 12 Monate:</div>
-                            <div class="col-3"><span class="float-end bold">{{ account.dividendProjectionsTotal()|number: '1.0' }}</span></div>
+                            <div class="col-9">This years dividends:</div>
+                            <div class="col-3"><span class="float-end bold">{{ account.thisYearsDividendsTotal()|number: '1.0' }}</span></div>
                         </div>
                         <div class="row">
-                            <div class="col-9">Dividend-yield on investment:</div>
+                            <div class="col-9">This years yield on investment:</div>
+                            <div class="col-3"><span class="float-end bold">{{ account.thisYearsDividendsYield()|number: '1.0-1' }}%</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Dividend projection:</div>
+                            <div class="col-3"><span class="float-end">{{ account.dividendProjectionsTotal()|number: '1.0' }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">Dividend projection yield:</div>
                             <div class="col-3"><span class="float-end bold">{{ account.dividendProjectionsYield()|number: '1.0-1' }}%</span></div>
                         </div>
                     </div>

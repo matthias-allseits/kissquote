@@ -167,7 +167,7 @@ export class Position {
         } else if (lastProjectedDividend && lastProjectedDividend.projectionValue > 0) {
             total = 0;
             if (lastProjectedDividend.currencyCorrectedProjectionValue !== undefined) {
-                source = 'From estimations ' +  + (year - 1) + ' (currency-corrected)';
+                source = 'From estimations ' + (year - 1) + ' (currency-corrected)';
                 total += lastProjectedDividend.currencyCorrectedProjectionValue;
             } else {
                 source = 'From estimations ' + (year - 1);
