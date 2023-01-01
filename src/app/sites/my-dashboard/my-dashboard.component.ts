@@ -50,7 +50,8 @@ export class MyDashboardComponent implements OnInit {
     public closedPositionsBalance = 0;
     public incomeChartData?: ChartData;
     public incomeChartDataImproved?: ChartData;
-    public years = [2022, 2023, 2024, 2025];
+    public incomeChartDataImprovedBoxHeight = 143;
+    public years = [2023, 2024, 2025, 2026];
     modalRef?: BsModalRef;
 
     exchangeRateForm = new FormGroup({
@@ -76,6 +77,9 @@ export class MyDashboardComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        if (screen.width < 400) {
+            this.incomeChartDataImprovedBoxHeight = 300;
+        }
         this.myKey = localStorage.getItem('my-key');
         if (null !== this.myKey) {
             // let us get the portfolio again with all its interesting data

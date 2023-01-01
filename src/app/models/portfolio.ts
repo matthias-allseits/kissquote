@@ -284,6 +284,17 @@ export class Portfolio {
                 {
                     label: (new Date().getFullYear() - 2).toString(),
                     data: [],
+                    borderColor: 'rgb(220, 193, 18, 1)',
+                    backgroundColor: 'rgb(220, 193, 18, 1)',
+                    hoverBackgroundColor: 'rgb(220, 193, 18, 0.5)',
+                    pointBackgroundColor: 'rgb(220, 193, 18, 1)',
+                    pointHoverBackgroundColor: 'rgba(220, 193, 18, 1)',
+                    pointHoverBorderColor: 'rgba(220, 193, 18, 1)',
+                    yAxisID: 'y',
+                },
+                {
+                    label: (new Date().getFullYear() - 1).toString(),
+                    data: [],
                     borderColor: 'rgb(51, 102, 204, 1)',
                     backgroundColor: 'rgb(51, 102, 204, 1)',
                     hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)',
@@ -293,7 +304,7 @@ export class Portfolio {
                     yAxisID: 'y',
                 },
                 {
-                    label: (new Date().getFullYear() - 1).toString(),
+                    label: (new Date().getFullYear()).toString(),
                     data: [],
                     borderColor: 'rgb(112, 204, 51)',
                     backgroundColor: 'rgb(112, 204, 51, 1)',
@@ -304,7 +315,7 @@ export class Portfolio {
                     yAxisID: 'y',
                 },
                 {
-                    label: (new Date().getFullYear()).toString(),
+                    label: (new Date().getFullYear() + 1).toString(),
                     data: [],
                     borderColor: 'rgb(255, 102, 51, 1)',
                     backgroundColor: 'rgb(255, 102, 51, 1)',
@@ -328,9 +339,11 @@ export class Portfolio {
             const monthThisYear = month;
             const monthLastYear = new Date(month.getFullYear() - 1, month.getMonth(), 1);
             const monthtwoYearsBefore = new Date(month.getFullYear() - 2, month.getMonth(), 1);
+            const monththreeYearsBefore = new Date(month.getFullYear() - 3, month.getMonth(), 1);
             let incomeThisYear = 0;
             let incomeLastYear = 0;
             let incomeTwoYearsBefore = 0;
+            let incomeThreeYearsBefore = 0;
             this.getAllPositions().forEach(position => {
                 position.transactions.forEach(transaction => {
                     if (transaction.isDividend() && transaction.date instanceof Date && transaction.rate) {
@@ -342,14 +355,17 @@ export class Portfolio {
                             incomeLastYear += transaction.rate;
                         } else if (DateHelper.datesAreEqual(monthtwoYearsBefore, workDate)) {
                             incomeTwoYearsBefore += transaction.rate;
+                        } else if (DateHelper.datesAreEqual(monththreeYearsBefore, workDate)) {
+                            incomeThreeYearsBefore += transaction.rate;
                         }
                     }
                 });
             });
             chartData.labels?.push(DateHelper.monthFromDateObject(month));
-            chartData.datasets[0].data.push(Math.round(incomeTwoYearsBefore));
-            chartData.datasets[1].data.push(Math.round(incomeLastYear));
-            chartData.datasets[2].data.push(Math.round(incomeThisYear));
+            chartData.datasets[0].data.push(Math.round(incomeThreeYearsBefore));
+            chartData.datasets[1].data.push(Math.round(incomeTwoYearsBefore));
+            chartData.datasets[2].data.push(Math.round(incomeLastYear));
+            chartData.datasets[3].data.push(Math.round(incomeThisYear));
         });
 
         return chartData;

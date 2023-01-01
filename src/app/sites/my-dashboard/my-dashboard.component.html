@@ -232,9 +232,9 @@
                     <h5>Income per month</h5>
                     <app-bar-chart [data]="incomeChartData" [height]="300"></app-bar-chart>
                 </div>
-                <div *ngIf="incomeChartDataImproved" class="info-box">
+                <div *ngIf="incomeChartDataImproved" class="info-box info-box-doubled">
                     <h5>Income per month</h5>
-                    <app-bar-chart [data]="incomeChartDataImproved" [height]="300"></app-bar-chart>
+                    <app-bar-chart [data]="incomeChartDataImproved" [height]="incomeChartDataImprovedBoxHeight"></app-bar-chart>
                 </div>
             </div>
         </div>
