@@ -73,7 +73,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
             this.context.fillStyle = this.textColor;
             this.context.lineWidth = 1;
             let yRate = topEnd;
-            if (yRate < 5) {
+            if (verticalSteps < 1) {
                 yRate = Math.round(yRate * 10) / 10;
             }
             do {
@@ -88,7 +88,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                 this.context.direction = 'rtl';
                 this.context.fillText(yRate.toString(), 25, yValue);
                 yRate -= verticalSteps;
-                if (yRate < 5) {
+                if (verticalSteps < 1) {
                     yRate = Math.round(yRate * 10) / 10;
                 }
             } while (yRate >= lowEnd);
@@ -251,8 +251,8 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
     private calculateTopEnd(rates: StockRate[]) {
         let topRate = 0;
         rates.forEach(entry => {
-            if (entry.rate > topRate) {
-                topRate = entry.rate;
+            if (entry.high > topRate) {
+                topRate = entry.high;
             }
         });
 
@@ -263,8 +263,8 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
     private calculateLowEnd(rates: StockRate[]) {
         let lowRate = 10000000000;
         rates.forEach(entry => {
-            if (entry.rate < lowRate) {
-                lowRate = entry.rate;
+            if (entry.low < lowRate) {
+                lowRate = entry.low;
             }
         });
 

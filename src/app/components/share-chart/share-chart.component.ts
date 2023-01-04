@@ -73,7 +73,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
             this.context.fillStyle = this.textColor;
             this.context.lineWidth = 1;
             let yRate = topEnd;
-            if (yRate < 5) {
+            if (verticalSteps < 5) {
                 yRate = Math.round(yRate * 10) / 10;
             }
             do {
@@ -88,7 +88,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                 this.context.direction = 'rtl';
                 this.context.fillText(yRate.toString(), 25, yValue);
                 yRate -= verticalSteps;
-                if (yRate < 5) {
+                if (verticalSteps < 5) {
                     yRate = Math.round(yRate * 10) / 10;
                 }
             } while(yRate >= lowEnd);
