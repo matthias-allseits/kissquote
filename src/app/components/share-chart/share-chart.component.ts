@@ -93,23 +93,6 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                 }
             } while(yRate >= lowEnd);
 
-            // average-price
-            if (this.position?.balance) {
-                this.context.beginPath();
-                this.context.strokeStyle = this.redColor;
-                this.context.setLineDash([5, 5]);
-                let avgPriceForChart = this.position?.balance?.averagePayedPriceGross;
-                if (this.position.currency?.name === 'GBP') {
-                    avgPriceForChart *= 100;
-                }
-                const buyValue = ((topEnd - avgPriceForChart) * verticalFactor) + this.offsetTop;
-                // console.log('average-price: ' + this.position?.balance?.averagePayedPriceNet);
-                // console.log('buyValue: ' + buyValue);
-                this.context.moveTo(this.offsetLeft, buyValue);
-                this.context.lineTo(this.canvasWidth, buyValue);
-                this.context.stroke();
-            }
-
             // monthly helplines
             this.context.beginPath();
             this.context.setLineDash([]);
@@ -133,6 +116,12 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                     this.context.lineTo(xValue, this.canvasHeight);
                     this.context.stroke();
                 }
+                lastMonth = entry.date.getMonth();
+                lastYear = entry.date.getFullYear();
+            });
+
+            // transaction lines
+            this.rates.forEach((entry, i) => {
                 transactionsSell.forEach(transaction => {
                     if (transaction.date instanceof Date && transaction.rate) {
                         if (DateHelper.datesAreEqual(transaction.date, entry.date)) {
@@ -140,7 +129,11 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                             this.context.strokeStyle = this.redColor;
                             this.context.setLineDash([5, 5]);
                             const xValue = this.offsetLeft + (i * this.stepWidth);
-                            const yValue = ((topEnd - transaction.rate) * verticalFactor) + this.offsetTop;
+                            let transactionsRate = transaction.rate;
+                            if (this.position?.currency?.name === 'GBP') {
+                                transactionsRate *= 100;
+                            }
+                            const yValue = ((topEnd - transactionsRate) * verticalFactor) + this.offsetTop;
                             this.context.moveTo(xValue, this.offsetTop - 10);
                             this.context.lineTo(xValue, yValue);
                             this.context.stroke();
@@ -154,7 +147,11 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                             this.context.strokeStyle = this.textColor;
                             this.context.setLineDash([5, 5]);
                             const xValue = this.offsetLeft + (i * this.stepWidth);
-                            const yValue = ((topEnd - transaction.rate) * verticalFactor) + this.offsetTop;
+                            let transactionsRate = transaction.rate;
+                            if (this.position?.currency?.name === 'GBP') {
+                                transactionsRate *= 100;
+                            }
+                            const yValue = ((topEnd - transactionsRate) * verticalFactor) + this.offsetTop;
                             this.context.moveTo(xValue, this.offsetTop - 10);
                             this.context.lineTo(xValue, yValue);
                             this.context.stroke();
@@ -164,6 +161,23 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                 lastMonth = entry.date.getMonth();
                 lastYear = entry.date.getFullYear();
             });
+
+            // average-price
+            if (this.position?.balance) {
+                this.context.beginPath();
+                this.context.strokeStyle = this.redColor;
+                this.context.setLineDash([5, 5]);
+                let avgPriceForChart = this.position?.balance?.averagePayedPriceGross;
+                if (this.position.currency?.name === 'GBP') {
+                    avgPriceForChart *= 100;
+                }
+                const buyValue = ((topEnd - avgPriceForChart) * verticalFactor) + this.offsetTop;
+                // console.log('average-price: ' + this.position?.balance?.averagePayedPriceNet);
+                // console.log('buyValue: ' + buyValue);
+                this.context.moveTo(this.offsetLeft, buyValue);
+                this.context.lineTo(this.canvasWidth, buyValue);
+                this.context.stroke();
+            }
 
             // rates
             this.context.beginPath();
