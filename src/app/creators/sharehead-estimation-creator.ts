@@ -33,6 +33,7 @@ export class ShareheadEstimationCreator {
                 apiArray.dividend,
                 apiArray.avgRate,
                 currency,
+                apiArray.analysts,
             );
         } else {
             return null;
