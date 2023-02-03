@@ -160,7 +160,6 @@ export class PositionDetailComponent implements OnInit {
 
 
     navigateCross(direction: string): void {
-        console.log(direction);
         let positionIndex: number = -1;
         this.positionService.getNonCashAndActivePositions()
             .subscribe(positions => {
@@ -171,7 +170,6 @@ export class PositionDetailComponent implements OnInit {
                         }
                     }
                 });
-                console.log(positionIndex);
                 let nextIndex = -1;
                 if (direction === 'forward') {
                     nextIndex = positionIndex + 1;
@@ -184,7 +182,6 @@ export class PositionDetailComponent implements OnInit {
                         nextIndex = positions.length - 1;
                     }
                 }
-                console.log(nextIndex);
                 const nextPosition = positions[nextIndex];
                 this.position = undefined;
                 this.router.navigate(['/position-detail/' + nextPosition.id]);
@@ -194,9 +191,9 @@ export class PositionDetailComponent implements OnInit {
 
 
     private loadData(positionId: number): void {
+        this.diviProjectionYears = [];
         this.positionService.getPosition(positionId)
             .subscribe(position => {
-                console.log(position);
                 if (position) {
                     this.position = position;
                     if (this.position.isCash) {
