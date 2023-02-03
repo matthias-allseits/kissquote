@@ -61,6 +61,18 @@ export class ShareheadShare {
     }
 
 
+    lastEstimation(): ShareheadEstimation|null
+    {
+        const estimations = this.estimations;
+        if (estimations !== undefined && estimations?.length > 0) {
+            console.log(estimations[estimations.length -1]);
+            return estimations[estimations.length -1];
+        }
+
+        return null;
+    }
+
+
     lastEstimationForYear(year: Date): ShareheadEstimation|null
     {
         let hit = null;
@@ -73,6 +85,18 @@ export class ShareheadShare {
         }
 
         return hit;
+    }
+
+
+    numberOfAnalysts(): number|undefined
+    {
+        let lastEstimation = this.lastEstimation();
+        if (null !== lastEstimation) {
+
+            return lastEstimation.analysts;
+        }
+
+        return undefined;
     }
 
 

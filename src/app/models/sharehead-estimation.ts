@@ -13,6 +13,7 @@ export class ShareheadEstimation {
         public dividend: number,
         public avgRate: number,
         public currency?: Currency,
+        public analysts?: number,
     ) {}
 
 }

@@ -5,6 +5,7 @@ import {MarketplaceCreator} from "./marketplace-creator";
 import {ShareheadShareAnalysisResultsCreator} from "./sharehead-share-analysis-results-creator";
 import {ShareheadPlannedDividendCreator} from "./sharehead-planned-dividend-creator";
 import {AnalystRatingCreator} from "./analyst-rating-creator";
+import {ShareheadEstimationCreator} from "./sharehead-estimation-creator";
 
 
 export class ShareheadShareCreator {
@@ -46,7 +47,7 @@ export class ShareheadShareCreator {
                 apiArray.urlDiviMax,
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.balances ? ShareheadBalanceCreator.fromApiArray(apiArray.balances) : [],
-                apiArray.estimations ? ShareheadBalanceCreator.fromApiArray(apiArray.estimations) : [],
+                apiArray.estimations ? ShareheadEstimationCreator.fromApiArray(apiArray.estimations) : [],
                 apiArray.analysisResults ? ShareheadShareAnalysisResultsCreator.oneFromApiArray(apiArray.analysisResults) : undefined,
                 apiArray.plannedDividends ? ShareheadPlannedDividendCreator.fromApiArray(apiArray.plannedDividends) : undefined,
                 apiArray.analystRatings ? AnalystRatingCreator.fromApiArray(apiArray.analystRatings) : undefined,
