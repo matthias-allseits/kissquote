@@ -54,8 +54,8 @@ export class PositionDetailComponent implements OnInit {
 
     public chartData?: ChartData;
     public lineChartData?: ChartData;
-    public historicRates?: StockRate[];
-    public historicStockRates?: StockRate[];
+    public historicRates: StockRate[] = [];
+    public historicStockRates: StockRate[] = [];
 
     constructor(
         private route: ActivatedRoute,
@@ -192,6 +192,8 @@ export class PositionDetailComponent implements OnInit {
 
     private loadData(positionId: number): void {
         this.diviProjectionYears = [];
+        this.historicRates = [];
+        this.historicStockRates = [];
         this.positionService.getPosition(positionId)
             .subscribe(position => {
                 if (position) {
