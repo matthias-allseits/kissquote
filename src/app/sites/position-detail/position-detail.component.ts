@@ -86,7 +86,6 @@ export class PositionDetailComponent implements OnInit {
     }
 
     changeTab(selectedTab: string): void {
-        console.log(selectedTab);
         this.positionTab = selectedTab;
         localStorage.setItem('positionTab', selectedTab);
     }

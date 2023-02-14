@@ -65,7 +65,6 @@ export class ShareheadShare {
     {
         const estimations = this.estimations;
         if (estimations !== undefined && estimations?.length > 0) {
-            console.log(estimations[estimations.length -1]);
             return estimations[estimations.length -1];
         }
 
@@ -151,7 +150,7 @@ export class ShareheadShare {
                 raisesCount--;
             }
 
-            if (dividendStart > 0 && raisesCount > 0) {
+            if (dividendStart > 0 && dividendEnd > 0 && raisesCount > 0) {
                 const result = ((Math.pow(dividendEnd / dividendStart, (1 / raisesCount)) - 1) * 100).toFixed(1);
 
                 return result;

@@ -319,6 +319,11 @@ export class Position {
             if (projection) {
                 results.push(projection);
             }
+            const extrapolationDelta = 5;
+            projection = this.extrapolateProjection(extrapolationDelta);
+            if (projection) {
+                results.push(projection);
+            }
         }
 
         return results;
@@ -453,6 +458,45 @@ export class Position {
     }
 
 
+    private extrapolateProjection(extrapolationDelta: number): DividendProjection|null
+    {
+        let projection = null;
+
+        const lastYield = this.extrapolateYield(extrapolationDelta);
+
+        const extraYear = new Date(new Date().setFullYear(new Date().getFullYear() + extrapolationDelta));
+
+        if (this.balance && this.balance?.lastRate && lastYield > 0) {
+            projection = DividendProjectionCreator.createNewDividendProjection();
+            projection.year = extraYear;
+            let projectedValue = (lastYield * this.balance.lastRate.rate * this.balance?.amount) / 100;
+            projection.projectionValue = projectedValue;
+            projection.projectionCurrency = '' + this.currency?.name;
+            projection.projectionSource = '(by extrapolation)';
+            projection.yieldFloat = (100 / this.balance.investment * projectedValue).toFixed(1).toString() + '%';
+        }
+
+        return projection;
+    }
+
+
+    private extrapolateYield(extrapolationDelta: number): number
+    {
+        let extraYield = 0;
+        if (this.shareheadShare && this.balance?.lastRate) {
+            extraYield = +(100 / this.balance.lastRate.rate * this.balance.projectedNextDividendPerShare()).toFixed(1);
+            // console.log('extraYield: ' + extraYield);
+            const avgDividendRaise = +this.shareheadShare.getAvgDividendRaise();
+            for (let x = 0; x < extrapolationDelta; x++) {
+                extraYield *= ((avgDividendRaise / 100) + 1);
+                // console.log('extraYield: ' + extraYield);
+            }
+        }
+
+        return extraYield;
+    }
+
+
     private parseRates(content: any): StockRate[] {
         // 20220603 | 286.0 | 277.6 | 286.0 | 278.4   | 27525
         // Datum    | Hoch  | Tief  | Start | Schluss | Volumen
@@ -463,7 +507,6 @@ export class Position {
             startDate.setMonth(startDate.getMonth() - 4);
         }
         startDate.setHours(0);
-        console.log(startDate);
         lines.forEach((line: any, index: number) => {
             line = line.replaceAll("'", '');
             line = line.replaceAll("\r", '');
