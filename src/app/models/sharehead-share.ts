@@ -136,6 +136,32 @@ export class ShareheadShare {
     }
 
 
+    getAvgDividendRaise()
+    {
+        if (this.balances && this.balances?.length > 0) {
+            let raisesCount = this.balances.length - 1;
+            let dividendStart = this.balances[0].dividend;
+            const dividendEnd = this.balances[raisesCount].dividend;
+            if (dividendStart == 0 && raisesCount > 0) {
+                dividendStart = this.balances[1].dividend;
+                raisesCount--;
+            }
+            if (dividendStart == 0 && raisesCount > 0) {
+                dividendStart = this.balances[2].dividend;
+                raisesCount--;
+            }
+
+            if (dividendStart > 0 && raisesCount > 0) {
+                const result = ((Math.pow(dividendEnd / dividendStart, (1 / raisesCount)) - 1) * 100).toFixed(1);
+
+                return result;
+            }
+        }
+
+        return 0;
+    }
+
+
     private lastProfitPerShare(): number
     {
         let hit = 0;
