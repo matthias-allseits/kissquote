@@ -472,7 +472,7 @@ export class Position {
             let projectedValue = (lastYield * this.balance.averagePayedPriceGross * this.balance?.amount) / 100;
             projection.projectionValue = projectedValue;
             projection.projectionCurrency = '' + this.currency?.name;
-            projection.projectionSource = '(by xtrapolation with ' + this.shareheadShare.getAvgDividendRaise() + '%)';
+            projection.projectionSource = '(by xtrapolatn with ' + this.shareheadShare.getAvgDividendRaise() + '%)';
             projection.yieldFloat = (100 / this.balance.investment * projectedValue).toFixed(1).toString() + '%';
         }
 
