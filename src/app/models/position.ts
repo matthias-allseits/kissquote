@@ -469,7 +469,7 @@ export class Position {
         if (this.balance && this.balance?.lastRate && lastYield > 0) {
             projection = DividendProjectionCreator.createNewDividendProjection();
             projection.year = extraYear;
-            let projectedValue = (lastYield * this.balance.lastRate.rate * this.balance?.amount) / 100;
+            let projectedValue = (lastYield * this.balance.averagePayedPriceGross * this.balance?.amount) / 100;
             projection.projectionValue = projectedValue;
             projection.projectionCurrency = '' + this.currency?.name;
             projection.projectionSource = '(by extrapolation)';
@@ -484,12 +484,16 @@ export class Position {
     {
         let extraYield = 0;
         if (this.shareheadShare && this.balance?.lastRate) {
-            extraYield = +(100 / this.balance.lastRate.rate * this.balance.projectedNextDividendPerShare()).toFixed(1);
-            // console.log('extraYield: ' + extraYield);
-            const avgDividendRaise = +this.shareheadShare.getAvgDividendRaise();
-            for (let x = 0; x < extrapolationDelta; x++) {
-                extraYield *= ((avgDividendRaise / 100) + 1);
-                // console.log('extraYield: ' + extraYield);
+            const lastBalance = this.shareheadShare.lastBalance();
+            if (lastBalance) {
+                // extraYield = +(100 / this.balance.investment * lastBalance?.dividend).toFixed(1)
+                extraYield = +(100 / this.balance.averagePayedPriceGross * lastBalance?.dividend).toFixed(1);
+                console.log('extraYield: ' + extraYield);
+                const avgDividendRaise = +this.shareheadShare.getAvgDividendRaise();
+                for (let x = 0; x < extrapolationDelta; x++) {
+                    extraYield *= ((avgDividendRaise / 100) + 1);
+                    console.log('extraYield: ' + extraYield);
+                }
             }
         }
 
