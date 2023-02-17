@@ -13,6 +13,9 @@ export class ShareheadBalance {
         public dividend: number,
         public avgRate: number,
         public currency?: Currency,
-        ) {}
+        public debtNet?: number,
+        public ordinarySharesNumber?: number,
+        public treasurySharesNumber?: number,
+    ) {}
 
 }

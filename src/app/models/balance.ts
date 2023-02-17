@@ -4,22 +4,22 @@ import {StockRate} from "./stock-rate";
 export class Balance {
 
     constructor(
-    public amount: number,
-    public firstRate: number,
-    public averagePayedPriceGross: number,
-    public averagePayedPriceNet: number,
-    public investment: number,
-    public transactionFeesTotal: number,
-    public collectedDividends: number,
-    public collectedDividendsCurrency: string,
-    public projectedNextDividendPayment: number,
-    public projectedNextDividendCurrency: string,
-    public lastRate?: StockRate|null,
-    public cashValue?: number,
-    public closedResult?: number,
-    public debtNet?: number,
-    public ordinarySharesNumber?: number,
-    public treasurySharesNumber?: number,
+        public amount: number,
+        public firstRate: number,
+        public averagePayedPriceGross: number,
+        public averagePayedPriceNet: number,
+        public investment: number,
+        public transactionFeesTotal: number,
+        public collectedDividends: number,
+        public collectedDividendsCurrency: string,
+        public projectedNextDividendPayment: number,
+        public projectedNextDividendCurrency: string,
+        public lastRate?: StockRate|null,
+        public cashValue?: number,
+        public closedResult?: number,
+        public debtNet?: number,
+        public ordinarySharesNumber?: number,
+        public treasurySharesNumber?: number,
     ) {}
 
     returnOnInvestentByDividends(): string

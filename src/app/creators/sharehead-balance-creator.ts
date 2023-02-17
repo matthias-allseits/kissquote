@@ -32,6 +32,9 @@ export class ShareheadBalanceCreator {
                 apiArray.dividend,
                 apiArray.avgRate,
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
+                apiArray.debtNet,
+                apiArray.ordinarySharesNumber,
+                apiArray.treasurySharesNumber,
             );
         } else {
             return null;
