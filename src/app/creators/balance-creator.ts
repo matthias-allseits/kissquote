@@ -21,6 +21,9 @@ export class BalanceCreator {
                 apiArray.lastRate ? StockRateCreator.oneFromApiArray(apiArray.lastRate) : undefined,
                 apiArray.cashValue,
                 apiArray.closedResult,
+                apiArray.debtNet,
+                apiArray.ordinarySharesNumber,
+                apiArray.treasurySharesNumber,
             );
         } else {
             return undefined;
