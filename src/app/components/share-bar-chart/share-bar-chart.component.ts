@@ -25,6 +25,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
     private context: any;
     private strokeColor = '#3366cc';
     private redColor = 'red';
+    private greenColor = 'green';
     private helplineColor = '#dee2e6';
     private monthColor = '#a4a4a4';
     private textColor = '#4e4e4e';
@@ -168,7 +169,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                         });
                         if (hit) {
                             this.context.beginPath();
-                            this.context.strokeStyle = this.textColor;
+                            this.context.strokeStyle = this.greenColor;
                             const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
                             let transactionsRate = transaction.rate;
                             if (this.position?.currency?.name === 'GBP') {

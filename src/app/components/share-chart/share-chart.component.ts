@@ -26,6 +26,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
     private context: any;
     private strokeColor = '#3366cc';
     private redColor = 'red';
+    private greenColor = 'green';
     private helplineColor = '#dee2e6';
     private monthColor = '#a4a4a4';
     private textColor = '#4e4e4e';
@@ -144,7 +145,7 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                     if (transaction.date instanceof Date && transaction.rate) {
                         if (DateHelper.datesAreEqual(transaction.date, entry.date)) {
                             this.context.beginPath();
-                            this.context.strokeStyle = this.textColor;
+                            this.context.strokeStyle = this.greenColor;
                             this.context.setLineDash([5, 5]);
                             const xValue = this.offsetLeft + (i * this.stepWidth);
                             let transactionsRate = transaction.rate;
