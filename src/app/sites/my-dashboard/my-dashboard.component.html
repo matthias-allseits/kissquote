@@ -352,16 +352,17 @@
                             <th scope="col"><span class="float-end">Days</span></th>
                             <th scope="col"><span class="float-end">Ppd</span></th>
                             <th scope="col" style="width: 35px;"></th>
+<!--                            <th scope="col" style="width: 35px;"></th>-->
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let position of ultimateBalanceList">
                             <ng-container *ngIf="position.share">
-                                <td>{{ position.share.shortname }}</td>
+                                <td>{{ position.share.name }}</td>
                                 <td><span class="float-end">{{ position.daysSinceStart()|number: '1.0' }}</span></td>
                                 <td><span class="float-end">{{ position.profitPerDay() }}</span></td>
                                 <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                                <td><button type="button" class="btn btn-sm btn-outline-primary" tooltip="Editieren"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+<!--                                <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Editieren"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>-->
                             </ng-container>
                         </tr>
                     </tbody>

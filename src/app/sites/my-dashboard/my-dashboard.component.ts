@@ -43,7 +43,7 @@ export class MyDashboardComponent implements OnInit {
     public selectedCurrency?: Currency;
     public selectedWatchlistEntry?: WatchlistEntry;
     public selectedManualDividend?: ManualDividend;
-    private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions'];
+    private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions', 'listings'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
     public listingTab = 'ultimate';
