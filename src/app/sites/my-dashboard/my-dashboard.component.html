@@ -23,6 +23,9 @@
                 <a class="nav-link" [class.active]="dashboardTab === 'watchlist'" (click)="changeTab('watchlist')">Watchlist</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" [class.active]="dashboardTab === 'listings'" (click)="changeTab('listings')">Listings</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" [class.active]="dashboardTab === 'settings'" (click)="changeTab('settings')">Settings</a>
             </li>
             <li class="nav-item">
@@ -321,6 +324,58 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'listings'">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
+                <h4 class="pt-2">Listings</h4>
+            </div>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="listingTab === 'ultimate'" (click)="changeListingTab('ultimate')" aria-current="page">Ultimate balance</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="listingTab === 'diversification'" (click)="changeListingTab('diversification')" aria-current="page">Diversification</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="listingTab === 'targets'" (click)="changeListingTab('targets')" aria-current="page">Targets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="listingTab === 'diviGrowthSummary'" (click)="changeListingTab('diviGrowthSummary')" aria-current="page">24 > 25</a>
+                </li>
+            </ul>
+            <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'ultimate'">
+                <h4>Ultimate balance</h4>
+                <table class="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+                            <th scope="col"><span class="float-end">Days</span></th>
+                            <th scope="col"><span class="float-end">Ppd</span></th>
+                            <th scope="col" style="width: 35px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let position of ultimateBalanceList">
+                            <ng-container *ngIf="position.share">
+                                <td>{{ position.share.shortname }}</td>
+                                <td><span class="float-end">{{ position.daysSinceStart()|number: '1.0' }}</span></td>
+                                <td><span class="float-end">{{ position.profitPerDay() }}</span></td>
+                                <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-primary" tooltip="Editieren"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                            </ng-container>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'diversification'">
+                <h4>Diversification</h4>
+            </div>
+            <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'targets'">
+                <h4>Target preview</h4>
+            </div>
+            <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'diviGrowthSummary'">
+                <h4>Dividend growth summary</h4>
+            </div>
         </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'settings'">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">

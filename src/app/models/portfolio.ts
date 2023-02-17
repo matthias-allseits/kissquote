@@ -138,6 +138,16 @@ export class Portfolio {
     }
 
 
+    getActiveNonCashPositions(): Position[] {
+        let positions: Position[] = [];
+        this.bankAccounts.forEach(account => {
+            positions = positions.concat(account.getActiveNonCashPositions());
+        });
+
+        return positions;
+    }
+
+
     getClosedNonCashPositions(): Position[] {
         let positions: Position[] = [];
         this.bankAccounts.forEach(account => {

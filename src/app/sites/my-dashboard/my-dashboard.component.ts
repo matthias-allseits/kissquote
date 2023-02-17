@@ -46,12 +46,14 @@ export class MyDashboardComponent implements OnInit {
     private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
+    public listingTab = 'ultimate';
     public dividendLists?: DividendTotals[];
     public closedPositionsBalance = 0;
     public incomeChartData?: ChartData;
     public incomeChartDataImproved?: ChartData;
     public incomeChartDataImprovedBoxHeight = 143;
     public years = [2023, 2024, 2025, 2026];
+    public ultimateBalanceList?: Position[];
     modalRef?: BsModalRef;
 
     exchangeRateForm = new FormGroup({
@@ -96,6 +98,8 @@ export class MyDashboardComponent implements OnInit {
                         } else {
                             this.dashboardTab = '0';
                         }
+                        this.ultimateBalanceList = this.portfolio.getActiveNonCashPositions();
+                        this.ultimateBalanceList.sort((a,b) => (+a.profitPerDay() < +b.profitPerDay()) ? 1 : ((+b.profitPerDay() < +a.profitPerDay()) ? -1 : 0))
                         this.portfolio.getClosedNonCashPositions().forEach(position => {
                             if (position.balance?.closedResult) {
                                 this.closedPositionsBalance += +position.closedResultCorrected();
@@ -148,6 +152,10 @@ export class MyDashboardComponent implements OnInit {
 
     changeDividenListTab(selectedTab: number): void {
         this.dividendListTab = selectedTab;
+    }
+
+    changeListingTab(selectedTab: string): void {
+        this.listingTab = selectedTab;
     }
 
     openPositionConfirmModal(template: TemplateRef<any>, position: Position) {
