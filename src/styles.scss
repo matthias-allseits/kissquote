@@ -111,6 +111,18 @@ a:hover, .nav-link:hover {
       max-width: none;
       margin-right: 0;
     }
+
+    .nav-link {
+        padding: 0.3rem 0.3rem;
+        font-size: 12px;
+        text-overflow: clip;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .nav-tabs-w45 .nav-item {
+        max-width: 45px;
+    }
 }
 
 .green-text {

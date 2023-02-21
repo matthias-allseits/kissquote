@@ -9,7 +9,7 @@
     </div>
 
     <div *ngIf="portfolio && portfolio.bankAccounts.length > 0">
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs nav-tabs-w45">
             <li class="nav-item" *ngFor="let bankAccount of portfolio.bankAccounts index as accountIndex;">
                 <a class="nav-link" [class.active]="dashboardTab === accountIndex.toString()" (click)="changeTab(accountIndex.toString())" aria-current="page"><span class="d-none d-md-inline">Bank-Account</span> {{ bankAccount.name }}</a>
             </li>
