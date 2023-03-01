@@ -7,6 +7,7 @@ import {ShareheadAnalysisResults} from "./sharehead-analysis-results";
 import {DateHelper} from "../core/datehelper";
 import {ShareheadPlannedDividend} from "./sharehead-planned-dividend";
 import {AnalystRating} from "./analyst-rating";
+import {ShareheadTurningPoint} from "./sharehead-turning-point";
 
 
 export class ShareheadShare {
@@ -34,6 +35,7 @@ export class ShareheadShare {
         public analysisResults?: ShareheadAnalysisResults,
         public plannedDividends?: ShareheadPlannedDividend[],
         public analystRatings?: AnalystRating[],
+        public turningPoints?: ShareheadTurningPoint[],
     ) { }
 
 
@@ -470,6 +472,96 @@ export class ShareheadShare {
         });
 
         return hit;
+    }
+
+
+    financialCrisisDrawdown(): number|null
+    {
+        const top = this.financialCrisisTop();
+        const bottom = this.financialCrisisBottom();
+        if (top && bottom) {
+
+            return +((100 / top.rate * bottom.rate) - 100).toFixed(1);
+        }
+
+        return null;
+    }
+
+
+    financialCrisisTop(): ShareheadTurningPoint|undefined
+    {
+        let result = undefined;
+        const allPoints = this.turningPoints;
+        allPoints?.forEach(point => {
+            const year = point.date.getFullYear();
+            if ([2007, 2008].indexOf(year) > -1 && point.type === 'top') {
+                console.log('hit');
+                result = point;
+            }
+        });
+
+        return result;
+    }
+
+
+    financialCrisisBottom(): ShareheadTurningPoint|undefined
+    {
+        let result = undefined;
+        const allPoints = this.turningPoints;
+        allPoints?.forEach(point => {
+            const year = point.date.getFullYear();
+            if ([2007, 2008].indexOf(year) > -1 && point.type === 'bottom') {
+
+                result = point;
+            }
+        });
+
+        return result;
+    }
+
+
+    coronaPandemicDrawdown(): number|null
+    {
+        const top = this.coronaPandemicTop();
+        const bottom = this.coronaPandemicBottom();
+        if (top && bottom) {
+
+            return +((100 / top.rate * bottom.rate) - 100).toFixed(1);
+        }
+
+        return null;
+    }
+
+
+    coronaPandemicTop(): ShareheadTurningPoint|undefined
+    {
+        let result = undefined;
+        const allPoints = this.turningPoints;
+        allPoints?.forEach(point => {
+            const year = point.date.getFullYear();
+            if ([2019, 2020].indexOf(year) > -1 && point.type === 'top') {
+
+                result = point;
+            }
+        });
+
+        return result;
+    }
+
+
+    coronaPandemicBottom(): ShareheadTurningPoint|undefined
+    {
+        let result = undefined;
+        const allPoints = this.turningPoints;
+        allPoints?.forEach(point => {
+            const year = point.date.getFullYear();
+            if ([2020].indexOf(year) > -1 && point.type === 'bottom') {
+
+                result = point;
+            }
+        });
+
+        return result;
     }
 
 }

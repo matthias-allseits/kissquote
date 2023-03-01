@@ -488,11 +488,9 @@ export class Position {
             if (lastBalance) {
                 // extraYield = +(100 / this.balance.investment * lastBalance?.dividend).toFixed(1)
                 extraYield = +(100 / this.balance.averagePayedPriceGross * lastBalance?.dividend).toFixed(1);
-                console.log('extraYield: ' + extraYield);
                 const avgDividendRaise = +this.shareheadShare.getAvgDividendRaise();
                 for (let x = 0; x < extrapolationDelta; x++) {
                     extraYield *= ((avgDividendRaise / 100) + 1);
-                    console.log('extraYield: ' + extraYield);
                 }
             }
         }

@@ -22,70 +22,118 @@
         </div>
     </div>
     <div class="info-container" style="margin: 0;">
-        <div class="info-box">
-            <div class="row">
-                <div class="col-4">Name:</div>
-                <div class="col-8"><span class="float-end">{{ shareheadShare.name }}</span></div>
-            </div>
-            <div class="row">
-                <div class="col-4">Währung:</div>
-                <div class="col-8"><span class="float-end">{{ shareheadShare.currency?.name }}</span></div>
-            </div>
-            <div class="row">
-                <div class="col-8">Last Rate<span *ngIf="stockRate"> ({{ stockRate.date|date:'dd.MM.y H:mm' }})</span>:</div>
-                <div class="col-4">
-                    <span *ngIf="stockRate" class="float-end">{{ stockRate.currency }} {{ stockRate.rate }}</span>
-                    <span *ngIf="!stockRate" class="float-end loading"></span>
+        <div class="info-box-wrapper">
+            <div class="info-box">
+                <div class="row">
+                    <div class="col-4">Name:</div>
+                    <div class="col-8"><span class="float-end">{{ shareheadShare.name }}</span></div>
+                </div>
+                <div class="row">
+                    <div class="col-4">Währung:</div>
+                    <div class="col-8"><span class="float-end">{{ shareheadShare.currency?.name }}</span></div>
+                </div>
+                <div class="row">
+                    <div class="col-8">Last Rate<span *ngIf="stockRate"> ({{ stockRate.date|date:'dd.MM.y H:mm' }})</span>:</div>
+                    <div class="col-4">
+                        <span *ngIf="stockRate" class="float-end">{{ stockRate.currency }} {{ stockRate.rate }}</span>
+                        <span *ngIf="!stockRate" class="float-end loading"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">Yield:</div>
+                    <div class="col-4"><span class="float-end">{{ shareheadShare.lastDividend() }}<span *ngIf="stockRate"> ({{ shareheadShare.yield(stockRate.rate) }}%)</span></span></div>
+                </div>
+                <div class="row">
+                    <div class="col-9">KGV:</div>
+                    <div class="col-3"><span *ngIf="stockRate" class="float-end">{{ shareheadShare.kgv(stockRate.rate) }}</span></div>
+                </div>
+    <!--            <div class="row">-->
+    <!--                <div class="col-9">Xtrapolated yield (5yrs):</div>-->
+    <!--                <div class="col-3"><span class="float-end"></span></div>-->
+    <!--            </div>-->
+    <!--            <div class="row">-->
+    <!--                <div class="col-9">Avg payout ratio:</div>-->
+    <!--                <div class="col-3"><span class="float-end"></span></div>-->
+    <!--            </div>-->
+                <div class="row">
+                    <div class="col-9">Avg yearly raise:</div>
+                    <div class="col-3"><span class="float-end">{{ shareheadShare.getAvgDividendRaise() }}%</span></div>
+                </div>
+    <!--            <div class="row">-->
+    <!--                <div class="col-9">Return on sales:</div>-->
+    <!--                <div class="col-3"><span class="float-end"></span></div>-->
+    <!--            </div>-->
+                <div class="row">
+                    <div class="col-6">Country:</div>
+                    <div class="col-6"><span class="float-end">{{ shareheadShare.country }}</span></div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Sector:</div>
+                    <div class="col-6"><span class="float-end">{{ shareheadShare.sector }}</span></div>
+                </div>
+    <!--            <div class="row">-->
+    <!--                <div class="col-9">Market capitalization (Mrd):</div>-->
+    <!--                <div class="col-3"><span class="float-end"></span></div>-->
+    <!--            </div>-->
+                <div class="row">
+                    <div class="col-6">Analysts number:</div>
+                    <div class="col-6"><span class="float-end">{{ shareheadShare.numberOfAnalysts() }}</span></div>
+                </div>
+                <div class="row">
+                    <div class="col-9">Fin. year ends:</div>
+                    <div class="col-3"><span class="float-end">{{ shareheadShare.financialYearEndDate|date:'dd.MM.y' }}</span></div>
+                </div>
+                <div *ngIf="shareheadShare.estimationsCurrency() !== '' && shareheadShare.estimationsCurrency() !== shareheadShare.balancesCurrency()" class="row">
+                    <div class="col-12">
+                        <div class="yellow">The estimations have another currency ({{ shareheadShare.estimationsCurrency() }}) than the balances ({{ shareheadShare.balancesCurrency() }})</div>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-8">Yield:</div>
-                <div class="col-4"><span class="float-end">{{ shareheadShare.lastDividend() }}<span *ngIf="stockRate"> ({{ shareheadShare.yield(stockRate.rate) }}%)</span></span></div>
-            </div>
-            <div class="row">
-                <div class="col-9">KGV:</div>
-                <div class="col-3"><span *ngIf="stockRate" class="float-end">{{ shareheadShare.kgv(stockRate.rate) }}</span></div>
-            </div>
-<!--            <div class="row">-->
-<!--                <div class="col-9">Xtrapolated yield (5yrs):</div>-->
-<!--                <div class="col-3"><span class="float-end"></span></div>-->
-<!--            </div>-->
-<!--            <div class="row">-->
-<!--                <div class="col-9">Avg payout ratio:</div>-->
-<!--                <div class="col-3"><span class="float-end"></span></div>-->
-<!--            </div>-->
-            <div class="row">
-                <div class="col-9">Avg yearly raise:</div>
-                <div class="col-3"><span class="float-end">{{ shareheadShare.getAvgDividendRaise() }}%</span></div>
-            </div>
-<!--            <div class="row">-->
-<!--                <div class="col-9">Return on sales:</div>-->
-<!--                <div class="col-3"><span class="float-end"></span></div>-->
-<!--            </div>-->
-            <div class="row">
-                <div class="col-6">Country:</div>
-                <div class="col-6"><span class="float-end">{{ shareheadShare.country }}</span></div>
-            </div>
-            <div class="row">
-                <div class="col-6">Sector:</div>
-                <div class="col-6"><span class="float-end">{{ shareheadShare.sector }}</span></div>
-            </div>
-<!--            <div class="row">-->
-<!--                <div class="col-9">Market capitalization (Mrd):</div>-->
-<!--                <div class="col-3"><span class="float-end"></span></div>-->
-<!--            </div>-->
-            <div class="row">
-                <div class="col-6">Analysts number:</div>
-                <div class="col-6"><span class="float-end">{{ shareheadShare.numberOfAnalysts() }}</span></div>
-            </div>
-            <div class="row">
-                <div class="col-9">Fin. year ends:</div>
-                <div class="col-3"><span class="float-end">{{ shareheadShare.financialYearEndDate|date:'dd.MM.y' }}</span></div>
-            </div>
-            <div *ngIf="shareheadShare.estimationsCurrency() !== '' && shareheadShare.estimationsCurrency() !== shareheadShare.balancesCurrency()" class="row">
-                <div class="col-12">
-                    <div class="yellow">The estimations have another currency ({{ shareheadShare.estimationsCurrency() }}) than the balances ({{ shareheadShare.balancesCurrency() }})</div>
-                </div>
+            <div class="info-box">
+                <h5>Financial crisis</h5>
+                <ng-container *ngIf="shareheadShare.financialCrisisDrawdown()">
+                    <div class="row">
+                        <div class="col-4">Top</div>
+                        <div class="col-4">{{ shareheadShare.financialCrisisTop()?.date|date:'dd.MM.y' }}</div>
+                        <div class="col-4"><span class="float-end">{{ shareheadShare.financialCrisisTop()?.rate }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Bottom</div>
+                        <div class="col-4">{{ shareheadShare.financialCrisisBottom()?.date|date:'dd.MM.y' }}</div>
+                        <div class="col-4"><span class="float-end">{{ shareheadShare.financialCrisisBottom()?.rate }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">Drawdown</div>
+                        <div class="col-9"><span class="float-end bold">{{ shareheadShare.financialCrisisDrawdown() }}%</span></div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="!shareheadShare.financialCrisisDrawdown()">
+                    <div class="row">
+                        <div class="col-12">No data available</div>
+                    </div>
+                </ng-container>
+                <h5 style="margin-top: 15px;">Corona pandemic</h5>
+                <ng-container *ngIf="shareheadShare.coronaPandemicDrawdown()">
+                    <div class="row">
+                        <div class="col-4">Top</div>
+                        <div class="col-4">{{ shareheadShare.coronaPandemicTop()?.date|date:'dd.MM.y' }}</div>
+                        <div class="col-4"><span class="float-end">{{ shareheadShare.coronaPandemicTop()?.rate }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Bottom</div>
+                        <div class="col-4">{{ shareheadShare.coronaPandemicBottom()?.date|date:'dd.MM.y' }}</div>
+                        <div class="col-4"><span class="float-end">{{ shareheadShare.coronaPandemicBottom()?.rate }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">Drawdown</div>
+                        <div class="col-9"><span class="float-end bold">{{ shareheadShare.coronaPandemicDrawdown() }}%</span></div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="!shareheadShare.coronaPandemicDrawdown()">
+                    <div class="row">
+                        <div class="col-12">No data available</div>
+                    </div>
+                </ng-container>
             </div>
         </div>
         <div class="info-box-wrapper">
