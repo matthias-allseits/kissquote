@@ -282,6 +282,14 @@ export class PositionDetailComponent implements OnInit {
                         ratesCopy.low = this.position.balance.lastRate.low;
                         rates.push(ratesCopy);
                     } else {
+                        if (this.position.share?.name && this.position.share?.name?.indexOf('BRC') > -1) {
+                            if (this.position.balance.lastRate.low === 0) {
+                                this.position.balance.lastRate.low = this.position.balance.lastRate.rate / 10;
+                            }
+                            if (this.position.balance.lastRate.high === 0) {
+                                this.position.balance.lastRate.high = this.position.balance.lastRate.rate / 10;
+                            }
+                        }
                         rates.push(this.position.balance.lastRate);
                     }
                 }
