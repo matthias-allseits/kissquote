@@ -134,6 +134,9 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                             if (this.position?.currency?.name === 'GBP') {
                                 transactionsRate *= 100;
                             }
+                            if (this.position?.share?.name && this.position?.share?.name.indexOf('BRC') > -1) {
+                                transactionsRate /= 10;
+                            }
                             const yValue = ((topEnd - transactionsRate) * verticalFactor) + this.offsetTop;
                             this.context.moveTo(xValue, this.offsetTop - 10);
                             this.context.lineTo(xValue, yValue);
@@ -151,6 +154,9 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                             let transactionsRate = transaction.rate;
                             if (this.position?.currency?.name === 'GBP') {
                                 transactionsRate *= 100;
+                            }
+                            if (this.position?.share?.name && this.position?.share?.name.indexOf('BRC') > -1) {
+                                transactionsRate /= 10;
                             }
                             const yValue = ((topEnd - transactionsRate) * verticalFactor) + this.offsetTop;
                             this.context.moveTo(xValue, this.offsetTop - 10);
@@ -171,6 +177,9 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                 let avgPriceForChart = this.position?.balance?.averagePayedPriceGross;
                 if (this.position.currency?.name === 'GBP') {
                     avgPriceForChart *= 100;
+                }
+                if (this.position?.share?.name && this.position?.share?.name.indexOf('BRC') > -1) {
+                    avgPriceForChart /= 10;
                 }
                 const buyValue = ((topEnd - avgPriceForChart) * verticalFactor) + this.offsetTop;
                 // console.log('average-price: ' + this.position?.balance?.averagePayedPriceNet);
