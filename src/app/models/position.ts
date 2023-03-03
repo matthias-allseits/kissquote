@@ -530,6 +530,12 @@ export class Position {
                     rate.open = +cells[3];
                     rate.high = +cells[1];
                     rate.low = +cells[2];
+                    if (rate.low === 0) {
+                        rate.low = rate.rate;
+                    }
+                    if (rate.high === 0) {
+                        rate.high = rate.rate;
+                    }
                     rates.push(rate);
                 }
             }
