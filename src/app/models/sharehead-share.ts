@@ -531,7 +531,7 @@ export class ShareheadShare {
         const allPoints = this.turningPoints;
         allPoints?.forEach(point => {
             const year = point.date.getFullYear();
-            if ([2007, 2008].indexOf(year) > -1 && point.type === 'bottom') {
+            if ([2008, 2009].indexOf(year) > -1 && point.type === 'bottom') {
 
                 result = point;
             }
@@ -576,7 +576,7 @@ export class ShareheadShare {
         const allPoints = this.turningPoints;
         allPoints?.forEach(point => {
             const year = point.date.getFullYear();
-            if ([2020].indexOf(year) > -1 && point.type === 'bottom') {
+            if ([2019, 2020].indexOf(year) > -1 && point.type === 'bottom') {
 
                 result = point;
             }
