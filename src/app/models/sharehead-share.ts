@@ -8,6 +8,7 @@ import {DateHelper} from "../core/datehelper";
 import {ShareheadPlannedDividend} from "./sharehead-planned-dividend";
 import {AnalystRating} from "./analyst-rating";
 import {ShareheadTurningPoint} from "./sharehead-turning-point";
+import {Balance} from "./balance";
 
 
 export class ShareheadShare {
@@ -30,6 +31,7 @@ export class ShareheadShare {
         public urlFinanztreff?: string,
         public urlDiviMax?: string,
         public currency?: Currency,
+        public ipoDate?: Date,
         public balances?: ShareheadBalance[],
         public estimations?: ShareheadEstimation[],
         public analysisResults?: ShareheadAnalysisResults,
@@ -139,16 +141,21 @@ export class ShareheadShare {
 
     getAvgDividendRaise()
     {
-        if (this.balances && this.balances?.length > 0) {
-            let raisesCount = this.balances.length - 1;
-            let dividendStart = this.balances[0].dividend;
-            const dividendEnd = this.balances[raisesCount].dividend;
+        const balances = this.workingBalancesByDate();
+        if (balances.length > 0) {
+            let raisesCount = balances.length - 1;
+            let dividendStart = balances[0].dividend;
+            const dividendEnd = balances[raisesCount].dividend;
             if (dividendStart == 0 && raisesCount > 0) {
-                dividendStart = this.balances[1].dividend;
+                dividendStart = balances[1].dividend;
                 raisesCount--;
             }
             if (dividendStart == 0 && raisesCount > 0) {
-                dividendStart = this.balances[2].dividend;
+                dividendStart = balances[2].dividend;
+                raisesCount--;
+            }
+            if (dividendStart == 0 && raisesCount > 0) {
+                dividendStart = balances[3].dividend;
                 raisesCount--;
             }
 
@@ -160,6 +167,20 @@ export class ShareheadShare {
         }
 
         return 0;
+    }
+
+
+    private workingBalancesByDate(): ShareheadBalance[]
+    {
+        const balances = this.balances ?? [];
+        const filteredBalances = [];
+        balances?.forEach(balance => {
+            if (undefined === this.ipoDate || this.ipoDate.getFullYear() <= balance.year) {
+                filteredBalances.push(balance);
+            }
+        });
+
+        return balances;
     }
 
 

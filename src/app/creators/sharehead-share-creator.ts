@@ -48,6 +48,7 @@ export class ShareheadShareCreator {
                 apiArray.urlFinanztreff,
                 apiArray.urlDiviMax,
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
+                apiArray.ipoDate ? new Date(apiArray.ipoDate) : undefined,
                 apiArray.balances ? ShareheadBalanceCreator.fromApiArray(apiArray.balances) : [],
                 apiArray.estimations ? ShareheadEstimationCreator.fromApiArray(apiArray.estimations) : [],
                 apiArray.analysisResults ? ShareheadShareAnalysisResultsCreator.oneFromApiArray(apiArray.analysisResults) : undefined,
