@@ -49,6 +49,18 @@
                             </ng-container>
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label for="activeFrom" class="form-label">Active from: </label>
+                        <input id="activeFrom" type="date" class="form-control" formControlName="activeFrom">
+                    </div>
+                    <div class="mb-3">
+                        <label for="activeUntil" class="form-label">Active until: </label>
+                        <input id="activeUntil" type="date" class="form-control" formControlName="activeUntil">
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="active" formControlName="active">
+                        <label class="form-check-label" for="active">Active</label>
+                    </div>
                 </div>
                 <div class="col-sm">
 

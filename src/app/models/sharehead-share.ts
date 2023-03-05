@@ -516,7 +516,6 @@ export class ShareheadShare {
         allPoints?.forEach(point => {
             const year = point.date.getFullYear();
             if ([2007, 2008].indexOf(year) > -1 && point.type === 'top') {
-                console.log('hit');
                 result = point;
             }
         });

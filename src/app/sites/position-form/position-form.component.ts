@@ -18,7 +18,7 @@ import {MarketplaceService} from "../../services/marketplace.service";
 import {Marketplace} from "../../models/marketplace";
 import {ShareCreator} from "../../creators/share-creator";
 import {ShareheadShare} from "../../models/sharehead-share";
-import {Location} from "@angular/common";
+import {formatDate, Location} from "@angular/common";
 
 
 @Component({
@@ -47,6 +47,9 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         isin: new FormControl('', Validators.required),
         marketplace: new FormControl('', Validators.required),
         currency: new FormControl('', Validators.required),
+        activeFrom: new FormControl('', Validators.required),
+        activeUntil: new FormControl(''),
+        active: new FormControl(''),
         dividendPeriodicity: new FormControl(''),
     });
 
@@ -82,12 +85,19 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                             this.positionForm.get('shareName')?.setValue(position.share?.name);
                             this.positionForm.get('isin')?.setValue(position.share?.isin);
                             this.positionForm.get('dividendPeriodicity')?.setValue(position.dividendPeriodicity);
+                            this.positionForm.get('activeFrom')?.setValue(formatDate(position.activeFrom, 'yyyy-MM-dd', 'en'));
+                            if (position.activeUntil) {
+                                this.positionForm.get('activeUntil')?.setValue(formatDate(position.activeUntil, 'yyyy-MM-dd', 'en'));
+                            }
+                            this.positionForm.get('active')?.setValue(position.active);
                             this.setMarketplace();
                             this.setCurrency();
                         }
                     });
             } else {
                 this.position = PositionCreator.createNewPosition();
+                this.positionForm.get('activeFrom')?.setValue(formatDate(this.position.activeFrom, 'yyyy-MM-dd', 'en'));
+                this.positionForm.get('active')?.setValue(this.position.active);
             }
         });
     }
@@ -114,7 +124,6 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         share.isin = shareheadShare.isin;
         share.name = shareheadShare.name;
         share.marketplace = shareheadShare.marketplace;
-        console.log(share);
         this.selectableShares = [];
         this.positionForm.get('shareName')?.setValue(share.name);
         this.positionForm.get('isin')?.setValue(share.isin);
@@ -176,7 +185,6 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
             });
         this.shareService.getAllShareheadShares()
             .subscribe(shares => {
-                console.log(shares);
                 this.shareheadShares = shares;
             });
         // todo: migrate this to use the kissquote-api

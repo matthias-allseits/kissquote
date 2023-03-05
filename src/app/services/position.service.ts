@@ -69,7 +69,11 @@ export class PositionService extends ApiService {
 
     create(position: Position): Observable<Position|null> {
         position.activeFrom = DateHelper.convertDateToMysql(position.activeFrom);
-        position.activeUntil = DateHelper.convertDateToMysql(position.activeUntil);
+        if (position.activeUntil) {
+            position.activeUntil = DateHelper.convertDateToMysql(position.activeUntil);
+        } else {
+            position.activeUntil = null;
+        }
         position.transactions.forEach(transaction => {
             transaction.date = DateHelper.convertDateToMysql(transaction.date);
         });
@@ -120,7 +124,11 @@ export class PositionService extends ApiService {
 
     update(position: Position): Observable<Position|null> {
         position.activeFrom = DateHelper.convertDateToMysql(position.activeFrom);
-        position.activeUntil = DateHelper.convertDateToMysql(position.activeUntil);
+        if (position.activeUntil) {
+            position.activeUntil = DateHelper.convertDateToMysql(position.activeUntil);
+        } else {
+            position.activeUntil = null;
+        }
         const url = `${this.apiUrl}/${position.id}`;
         return this.http
             .put(url, JSON.stringify(position), httpOptions)
