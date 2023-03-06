@@ -1,6 +1,6 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {Position} from '../../models/position';
+import {MaxDrawdownSummary, Position} from '../../models/position';
 import {PositionService} from '../../services/position.service';
 import {
     faChevronLeft, faChevronRight,
@@ -49,6 +49,7 @@ export class PositionDetailComponent implements OnInit {
     public shareheadCurrencyCorrectedDividendPayment?: string;
     public currentYieldOnValue = '';
     public currentYieldOnValueSource = '';
+    public maxDrawdownSummary?: MaxDrawdownSummary;
     modalRef?: BsModalRef;
     shareheadModalRef?: BsModalRef;
 
@@ -249,6 +250,7 @@ export class PositionDetailComponent implements OnInit {
                                             }
                                         }
                                     }
+                                    this.maxDrawdownSummary = this.position?.getMaxDrawdownSummary();
                                 }
                             })
                     }

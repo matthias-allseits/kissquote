@@ -193,7 +193,7 @@
                     </div>
                 </ng-container>
             </div>
-    <!--        <div class="info-box-wrapper">-->
+            <div class="info-box-wrapper">
                 <div *ngIf="position.balance" class="info-box">
                     <h5>Costs</h5>
                     <div class="row">
@@ -201,7 +201,39 @@
                         <div class="col-3"><span class="float-end">{{ position.balance.transactionFeesTotal|number: '1.0' }}</span></div>
                     </div>
                 </div>
-    <!--        </div>-->
+                <div class="info-box" *ngIf="maxDrawdownSummary">
+                    <h5>Lombard value</h5>
+                    <div class="row">
+                        <div class="col-6">Post corona top:</div>
+                        <div class="col-3">{{ maxDrawdownSummary.postCoronaTop?.date|date: 'dd.MM.YY' }}</div>
+                        <div class="col-3"><span class="float-end">{{ maxDrawdownSummary.postCoronaTop?.rate }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-7">Post corona top value:</div>
+                        <div class="col-5"><span class="float-end">{{ maxDrawdownSummary.postCoronaTopValue|number: '1.0' }} {{ position.currency?.name }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Max. drawdown:</div>
+                        <div class="col-3"><span class="float-end">{{ maxDrawdownSummary.maxDrawdown }}%</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">Method:</div>
+                        <div class="col-9"><span class="float-end">{{ maxDrawdownSummary.method }}</span></div>
+                    </div>
+                    <div class="row" [class.red-text]="+position.actualValue() < maxDrawdownSummary.maxDrawdownValue">
+                        <div class="col-7">Max. drawdown value:</div>
+                        <div class="col-5"><span class="float-end">{{ maxDrawdownSummary.maxDrawdownValue|number: '1.0' }} {{ position.currency?.name }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-7">Lombard value:</div>
+                        <div class="col-5"><span class="float-end">{{ maxDrawdownSummary.lombardValue|number: '1.0' }} {{ position.currency?.name }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">Lombard value from iv.:</div>
+                        <div class="col-3"><span class="float-end">{{ maxDrawdownSummary.lombardValueFromInvestment }}%</span></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="positionTab !== 'sharehead'">

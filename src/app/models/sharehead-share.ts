@@ -496,6 +496,21 @@ export class ShareheadShare {
     }
 
 
+    postCoronaTop(): ShareheadTurningPoint|undefined
+    {
+        let result = undefined;
+        const allPoints = this.turningPoints;
+        allPoints?.forEach(point => {
+            const year = point.date.getFullYear();
+            if ([2021, 2022, 2023].indexOf(year) > -1 && point.type === 'top') {
+                result = point;
+            }
+        });
+
+        return result;
+    }
+
+
     financialCrisisDrawdown(): number|null
     {
         const top = this.financialCrisisTop();

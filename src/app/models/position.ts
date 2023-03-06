@@ -13,6 +13,7 @@ import {DividendProjection} from "./dividend-projection";
 import {DividendProjectionCreator} from "../creators/dividend-projection-creator";
 import {Forexhelper} from "../core/forexhelper";
 import {ManualDividend} from "./manual-dividend";
+import {ShareheadTurningPoint} from "./sharehead-turning-point";
 
 
 export interface DividendTotal {
@@ -23,6 +24,16 @@ export interface DividendTotal {
     source: string;
     transactionCount: number;
     manualDividend?: ManualDividend;
+}
+
+export interface MaxDrawdownSummary {
+    postCoronaTop: ShareheadTurningPoint;
+    postCoronaTopValue: number;
+    maxDrawdown: number;
+    maxDrawdownValue: number;
+    method: string;
+    lombardValue: number;
+    lombardValueFromInvestment: number;
 }
 
 export class Position {
@@ -455,6 +466,58 @@ export class Position {
             default:
                 return 1;
         }
+    }
+
+
+    public getMaxDrawdownSummary(): MaxDrawdownSummary|undefined {
+        if (this.balance) {
+            const postCoronaTop = this.shareheadShare?.postCoronaTop();
+            const financialCrisisDrawdown = this.shareheadShare?.financialCrisisDrawdown();
+            const coronaPandemicDrawdown = this.shareheadShare?.coronaPandemicDrawdown();
+            let maxDrawDown = 90;
+            let method = 'hardcoded';
+            if (financialCrisisDrawdown && coronaPandemicDrawdown) {
+                if (financialCrisisDrawdown < coronaPandemicDrawdown) {
+                    maxDrawDown = financialCrisisDrawdown * -1;
+                    method = 'by financial crisis';
+                } else {
+                    maxDrawDown = coronaPandemicDrawdown * -1;
+                    method = 'by corona pandemic';
+                }
+            }
+            if (postCoronaTop) {
+                let topValue = this.balance.amount * postCoronaTop?.rate;
+                console.log('topValue: ' + topValue);
+                if (this.currency && this.shareheadShare?.currency && this.shareheadShare?.currency?.name !== this.currency?.name) {
+                    const usersCurrency = Forexhelper.getUsersCurrencyByName(this.shareheadShare?.currency.name);
+                    console.log(usersCurrency);
+                    if (usersCurrency) {
+                        topValue = usersCurrency.rate * topValue;
+                        console.log('topValue with usersCurrency: ' + topValue);
+                        if (this.currency?.name !== 'CHF') {
+                            topValue = topValue / this.currency.rate;
+                            console.log('topValue this currency is not chf: ' + topValue);
+                        }
+                    }
+                }
+                let maxDrawDownValue = +(topValue * ((100 - maxDrawDown) / 100)).toFixed();
+                let lombardValue = +(maxDrawDownValue / 2).toFixed();
+                let fromInvestment = +(100 / this.balance.investment * lombardValue).toFixed();
+                const summary = {
+                    postCoronaTop: postCoronaTop,
+                    postCoronaTopValue: +topValue.toFixed(),
+                    maxDrawdown: maxDrawDown * -1,
+                    maxDrawdownValue: maxDrawDownValue,
+                    method: method,
+                    lombardValue: lombardValue,
+                    lombardValueFromInvestment: fromInvestment,
+                };
+
+                return summary
+            }
+        }
+
+        return undefined;
     }
 
 
