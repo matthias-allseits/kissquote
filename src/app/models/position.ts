@@ -239,6 +239,19 @@ export class Position {
     }
 
 
+    daysTillEnd(): number
+    {
+        let currentDate = new Date();
+
+        if (this.activeUntil instanceof Date) {
+            // yes i know, not every day has 24 hours. i do not care...
+            return Math.floor((Date.UTC(this.activeUntil.getFullYear(), this.activeUntil.getMonth(), this.activeUntil.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) ) /(1000 * 60 * 60 * 24));
+        }
+
+        return 1;
+    }
+
+
     profitPerDay(): string
     {
         if (this.balance && this.balance.lastRate) {
@@ -487,16 +500,12 @@ export class Position {
             }
             if (postCoronaTop) {
                 let topValue = this.balance.amount * postCoronaTop?.rate;
-                console.log('topValue: ' + topValue);
                 if (this.currency && this.shareheadShare?.currency && this.shareheadShare?.currency?.name !== this.currency?.name) {
                     const usersCurrency = Forexhelper.getUsersCurrencyByName(this.shareheadShare?.currency.name);
-                    console.log(usersCurrency);
                     if (usersCurrency) {
                         topValue = usersCurrency.rate * topValue;
-                        console.log('topValue with usersCurrency: ' + topValue);
                         if (this.currency?.name !== 'CHF') {
                             topValue = topValue / this.currency.rate;
-                            console.log('topValue this currency is not chf: ' + topValue);
                         }
                     }
                 }
@@ -534,8 +543,19 @@ export class Position {
             projection.year = extraYear;
             let projectedValue = (lastYield * this.balance.averagePayedPriceGross * this.balance?.amount) / 100;
             projection.projectionValue = projectedValue;
-            projection.projectionCurrency = '' + this.currency?.name;
+            projection.projectionCurrency = '' + this.shareheadShare.currency?.name;
             projection.projectionSource = '(by xtrapolatn with ' + this.shareheadShare.getAvgDividendRaise() + '%)';
+            if (this.shareheadShare.currency && this.shareheadShare.currency.rate && this.currency?.name !== this.shareheadShare.currency?.name) {
+                const usersCurrency = Forexhelper.getUsersCurrencyByName(this.shareheadShare.currency?.name);
+                if (usersCurrency) {
+                    projectedValue = projectedValue * usersCurrency.rate;
+                    if (this.currency?.rate && this.currency?.name !== 'CHF') {
+                        projectedValue = projectedValue / this.currency.rate;
+                    }
+                }
+                projection.currencyCorrectedProjectionValue = projectedValue;
+                projection.currencyCorrectedProjectionCurrency = this.currency?.name;
+            }
             projection.yieldFloat = (100 / this.balance.investment * projectedValue).toFixed(1).toString() + '%';
         }
 

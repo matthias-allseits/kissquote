@@ -73,6 +73,10 @@
                     <div class="col-9">Ende:</div>
                     <div class="col-3"><span class="float-end">{{ position.activeUntil|date:'dd.MM.y' }}</span></div>
                 </div>
+                <div class="row" *ngIf="position.activeUntil">
+                    <div class="col-9">Days till end:</div>
+                    <div class="col-3"><span class="float-end">{{ position.daysTillEnd()|number: '1.0' }}</span></div>
+                </div>
                 <div class="row">
                     <div class="col-9">Currency:</div>
                     <div class="col-3"><span *ngIf="position.currency" class="float-end">{{ position.currency.name }}</span></div>
