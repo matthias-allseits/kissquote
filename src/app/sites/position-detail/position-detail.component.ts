@@ -194,6 +194,7 @@ export class PositionDetailComponent implements OnInit {
         this.diviProjectionYears = [];
         this.historicRates = [];
         this.historicStockRates = [];
+        this.maxDrawdownSummary = undefined;
         this.positionService.getPosition(positionId)
             .subscribe(position => {
                 if (position) {
