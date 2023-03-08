@@ -34,6 +34,7 @@ export interface MaxDrawdownSummary {
     method: string;
     lombardValue: number;
     lombardValueFromInvestment: number;
+    lombardValueFromPostCoronaTop: number;
 }
 
 export class Position {
@@ -512,6 +513,7 @@ export class Position {
                 let maxDrawDownValue = +(topValue * ((100 - maxDrawDown) / 100)).toFixed();
                 let lombardValue = +(maxDrawDownValue / 2).toFixed();
                 let fromInvestment = +(100 / this.balance.investment * lombardValue).toFixed();
+                let fromTop = +(100 / topValue * lombardValue).toFixed();
                 const summary = {
                     postCoronaTop: postCoronaTop,
                     postCoronaTopValue: +topValue.toFixed(),
@@ -520,6 +522,7 @@ export class Position {
                     method: method,
                     lombardValue: lombardValue,
                     lombardValueFromInvestment: fromInvestment,
+                    lombardValueFromPostCoronaTop: fromTop,
                 };
 
                 return summary
