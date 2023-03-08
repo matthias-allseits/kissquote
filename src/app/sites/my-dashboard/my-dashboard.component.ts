@@ -1,5 +1,5 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
-import {DividendTotals, Portfolio} from '../../models/portfolio';
+import {DividendTotals, LombardValuesSummary, Portfolio} from '../../models/portfolio';
 import {PortfolioService} from '../../services/portfolio.service';
 import {faEdit, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
@@ -54,6 +54,8 @@ export class MyDashboardComponent implements OnInit {
     public incomeChartDataImprovedBoxHeight = 143;
     public years = [2023, 2024, 2025, 2026];
     public ultimateBalanceList?: Position[];
+    public lombardValueList?: LombardValuesSummary[];
+    public lombardTotal = 0;
     modalRef?: BsModalRef;
 
     exchangeRateForm = new FormGroup({
@@ -110,6 +112,10 @@ export class MyDashboardComponent implements OnInit {
                         setTimeout (() => {
                             if (this.portfolio) {
                                 this.dividendLists = this.portfolio.collectDividendLists();
+                                this.lombardValueList = this.portfolio.lombardValuePositions();
+                                this.lombardValueList.forEach(entry => {
+                                    this.lombardTotal += +entry.maxDrawdownSummary.lombardValue;
+                                });
                             }
                         }, 2000);
                         this.incomeChartData = this.portfolio?.incomeChartData();

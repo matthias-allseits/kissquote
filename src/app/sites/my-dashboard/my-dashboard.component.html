@@ -334,6 +334,9 @@
                     <a class="nav-link" [class.active]="listingTab === 'ultimate'" (click)="changeListingTab('ultimate')" aria-current="page">Ultimate balance</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" [class.active]="listingTab === 'lombard'" (click)="changeListingTab('lombard')" aria-current="page">Lombard value</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" [class.active]="listingTab === 'diversification'" (click)="changeListingTab('diversification')" aria-current="page">Diversification</a>
                 </li>
                 <li class="nav-item">
@@ -364,6 +367,30 @@
                                 <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
 <!--                                <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Editieren"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>-->
                             </ng-container>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'lombard'">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
+                    <h4>Lombard value</h4>
+                </div>
+                <h6>Total: {{ lombardTotal|number: '1.0' }}</h6>
+                <table class="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+                            <th scope="col"><span class="float-end">Value</span></th>
+                            <th scope="col"><span class="float-end">frmInv</span></th>
+                            <th scope="col" style="width: 35px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let entry of lombardValueList">
+                            <td>{{ entry.position.share?.name }}</td>
+                            <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValue|number: '1.0' }}</span></td>
+                            <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValueFromInvestment }}%</span></td>
+                            <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
                         </tr>
                     </tbody>
                 </table>

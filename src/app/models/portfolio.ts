@@ -2,7 +2,7 @@ import {BankAccount} from './bank-account';
 import {BankAccountCreator} from "../creators/bank-account-creator";
 import {Currency} from "./currency";
 import {ChartData} from "chart.js";
-import {DividendTotal, Position} from "./position";
+import {DividendTotal, MaxDrawdownSummary, Position} from "./position";
 import {WatchlistEntry} from "./watchlistEntry";
 import {DateHelper} from "../core/datehelper";
 
@@ -13,6 +13,11 @@ export interface DividendTotals {
     plannedList: DividendTotal[];
     payedTotal: number;
     plannedTotal: number;
+}
+
+export interface LombardValuesSummary {
+    position: Position;
+    maxDrawdownSummary: MaxDrawdownSummary;
 }
 
 export class Portfolio {
@@ -158,6 +163,24 @@ export class Portfolio {
             positions = positions.concat(accountsPositions);
         });
         positions = positions.reverse();
+
+        return positions;
+    }
+
+
+    lombardValuePositions(): LombardValuesSummary[] {
+        const positions: LombardValuesSummary[] = [];
+        const relevantPositions = this.getActiveNonCashPositions();
+        relevantPositions.forEach(position => {
+            const summary = position.getMaxDrawdownSummary();
+            if (summary) {
+                positions.push({
+                    position: position,
+                    maxDrawdownSummary: summary,
+                });
+            }
+        });
+        positions.sort((a,b) => (a.maxDrawdownSummary.lombardValue < b.maxDrawdownSummary.lombardValue) ? 1 : ((b.maxDrawdownSummary.lombardValue < a.maxDrawdownSummary.lombardValue) ? -1 : 0));
 
         return positions;
     }
