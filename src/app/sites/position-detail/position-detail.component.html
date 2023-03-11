@@ -206,7 +206,11 @@
                     </div>
                 </div>
                 <div class="info-box" *ngIf="maxDrawdownSummary">
-                    <h5>Lombard value</h5>
+                    <h5>
+                        Lombard value
+                        <button *ngIf="position.manualDrawdown" (click)="openManualDrawdownConfirmModal(removeManualDrawdownConfirmModal)" type="button" class="btn btn-tiny btn-outline-primary float-end" tooltip="Remove manual drawdown"><fa-icon [icon]="deleteIcon"></fa-icon></button>
+                        <button *ngIf="!position.manualDrawdown" (click)="openManualDrawdownModal(manualDrawdownFormModal)" type="button" class="btn btn-tiny btn-outline-primary float-end" tooltip="Set manual drawdown"><fa-icon [icon]="addIcon"></fa-icon></button>
+                    </h5>
                     <div class="row">
                         <div class="col-6">Post corona top:</div>
                         <div class="col-3">{{ maxDrawdownSummary.postCoronaTop?.date|date: 'dd.MM.YY' }}</div>
@@ -310,6 +314,34 @@
     <div class="modal-body text-center">
         <p>Wollen Sie diese Verknüpfung wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirmShareheadRemoving()">Ja</button>
+        <button type="button" class="btn btn-primary" (click)="decline()">Nein</button>
+    </div>
+</ng-template>
+
+<ng-template #manualDrawdownFormModal>
+    <div *ngIf="position && position.share" class="modal-body">
+        <p>Set your manual maximum drawdown for your position &laquo;{{ position.share?.name }}&raquo;:</p>
+        <form [formGroup]="manualDrawdownForm">
+            <div class="mb-3">
+                <label for="drawdown-amount-input" class="form-label"></label>
+                <input formControlName="amount" id="drawdown-amount-input" class="form-control" type="text" name="amount" value="">
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button type="button" class="btn btn-default" (click)="cancelModal()">Abbrechen</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="btn btn-primary float-end" (click)="persistManualDrawdown()">Speichern</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #removeManualDrawdownConfirmModal>
+    <div class="modal-body text-center">
+        <p>Wollen Sie diesen manuellen Drawdown wirklich löschen?</p>
+        <button type="button" class="btn btn-default" (click)="confirmManualDrawdownRemoving()">Ja</button>
         <button type="button" class="btn btn-primary" (click)="decline()">Nein</button>
     </div>
 </ng-template>

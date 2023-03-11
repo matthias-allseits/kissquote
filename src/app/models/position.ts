@@ -52,6 +52,7 @@ export class Position {
         public currency?: Currency,
         public balance?: Balance,
         public shareheadId?: number,
+        public manualDrawdown?: number,
         public shareheadShare?: ShareheadShare,
     ) {}
 
@@ -498,6 +499,10 @@ export class Position {
                     maxDrawDown = coronaPandemicDrawdown * -1;
                     method = 'by corona pandemic';
                 }
+            }
+            if (this.manualDrawdown) {
+                maxDrawDown = this.manualDrawdown;
+                method = 'manual';
             }
             if (postCoronaTop) {
                 let topValue = this.balance.amount * postCoronaTop?.rate;

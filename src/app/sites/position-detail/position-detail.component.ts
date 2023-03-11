@@ -5,7 +5,7 @@ import {PositionService} from '../../services/position.service';
 import {
     faChevronLeft, faChevronRight,
     faEdit,
-    faExternalLinkAlt,
+    faExternalLinkAlt, faPlus,
     faTrashAlt
 } from "@fortawesome/free-solid-svg-icons";
 import {Transaction} from "../../models/transaction";
@@ -21,6 +21,7 @@ import {ShareService} from "../../services/share.service";
 import {CurrencyService} from "../../services/currency.service";
 import {StockRate} from "../../models/stock-rate";
 import {StockRateCreator} from "../../creators/stock-rate-creator";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 
 @Component({
@@ -38,6 +39,7 @@ export class PositionDetailComponent implements OnInit {
     externalLinkIcon = faExternalLinkAlt;
     naviForwardIcon = faChevronRight;
     naviBackIcon = faChevronLeft;
+    addIcon = faPlus;
 
     public position?: Position;
     public selectedTransaction?: Transaction;
@@ -57,6 +59,10 @@ export class PositionDetailComponent implements OnInit {
     public lineChartData?: ChartData;
     public historicRates: StockRate[] = [];
     public historicStockRates: StockRate[] = [];
+
+    manualDrawdownForm = new FormGroup({
+        amount: new FormControl('', Validators.required),
+    });
 
     constructor(
         private route: ActivatedRoute,
@@ -146,6 +152,46 @@ export class PositionDetailComponent implements OnInit {
                     }
                 });
         }
+    }
+
+    openManualDrawdownModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+    }
+
+    cancelModal(): void {
+        this.modalRef?.hide();
+    }
+
+    openManualDrawdownConfirmModal(template: TemplateRef<any>): void {
+        this.shareheadModalRef = this.modalService.show(template, {class: 'modal-sm'});
+    }
+
+    confirmManualDrawdownRemoving(): void {
+        if (this.position) {
+            this.position.manualDrawdown = undefined;
+            this.positionService.update(this.position)
+                .subscribe(position => {
+                    if (position) {
+                        this.position = position;
+                        this.loadData(this.position.id);
+                    }
+                });
+        }
+        this.decline();
+    }
+
+    persistManualDrawdown(): void {
+        if (this.position) {
+            this.position.manualDrawdown = this.manualDrawdownForm.get('amount')?.value;
+            this.positionService.update(this.position)
+                .subscribe(position => {
+                    if (position) {
+                        this.position = position;
+                        this.loadData(this.position.id);
+                    }
+                });
+        }
+        this.modalRef?.hide();
     }
 
 

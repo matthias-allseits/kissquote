@@ -58,6 +58,12 @@ a:hover, .nav-link:hover {
   background-color: #ff6633 !important;
 }
 
+.btn-tiny {
+    padding: 0.15rem 0.25rem;
+    font-size: 0.575rem;
+    border-radius: 0.2rem;
+}
+
 // info-box
 .info-box {
   display: inline-block;

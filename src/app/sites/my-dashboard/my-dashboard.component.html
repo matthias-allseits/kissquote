@@ -381,6 +381,7 @@
                     <thead>
                         <tr>
                             <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+                            <th scope="col">Method</th>
                             <th scope="col"><span class="float-end">Value</span></th>
                             <th scope="col"><span class="float-end">frmInv</span></th>
                             <th scope="col" style="width: 35px;"></th>
@@ -389,6 +390,7 @@
                     <tbody>
                         <tr *ngFor="let entry of lombardValueList">
                             <td>{{ entry.position.share?.name }}</td>
+                            <td>{{ entry.maxDrawdownSummary.method }}</td>
                             <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValue|number: '1.0' }}</span></td>
                             <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValueFromInvestment }}%</span></td>
                             <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
@@ -543,7 +545,7 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label for="exchange-rate-input" class="form-label"></label>
+                <label for="dividend-amount-input" class="form-label"></label>
                 <input formControlName="amount" id="dividend-amount-input" class="form-control" type="text" name="amount" value="">
             </div>
             <div class="row">

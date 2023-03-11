@@ -43,6 +43,7 @@ export class PositionCreator {
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.balance ? BalanceCreator.oneFromApiArray(apiArray.balance) : undefined,
                 apiArray.shareheadId,
+                apiArray.manualDrawdown ? apiArray.manualDrawdown : undefined
             );
         } else {
             return null;
