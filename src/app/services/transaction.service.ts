@@ -43,6 +43,11 @@ export class TransactionService extends ApiService {
         transaction.date = DateHelper.convertDateToMysql(transaction.date);
         if (transaction.position) {
             transaction.position.activeFrom = DateHelper.convertDateToMysql(transaction.position.activeFrom);
+            if (transaction.position.activeUntil) {
+                transaction.position.activeUntil = DateHelper.convertDateToMysql(transaction.position.activeUntil);
+            } else {
+                transaction.position.activeUntil = null;
+            }
             transaction.position.transactions.forEach(trans => {
                 trans.date = DateHelper.convertDateToMysql(trans.date);
             });
@@ -61,6 +66,11 @@ export class TransactionService extends ApiService {
         transaction.date = DateHelper.convertDateToMysql(transaction.date);
         if (transaction.position) {
             transaction.position.activeFrom = DateHelper.convertDateToMysql(transaction.position.activeFrom);
+            if (transaction.position.activeUntil) {
+                transaction.position.activeUntil = DateHelper.convertDateToMysql(transaction.position.activeUntil);
+            } else {
+                transaction.position.activeUntil = null;
+            }
             transaction.position.transactions.forEach(trans => {
                 trans.date = DateHelper.convertDateToMysql(trans.date);
             });
