@@ -355,7 +355,8 @@ export class ImportComponent implements OnInit {
                 case 'Auszahlung':
                 case 'Fx-Belastung Comp.':
                 case 'Forex-Belastung':
-                case 'Zins':
+                case 'Zins': // todo: negativzinsen will not last forever!
+                case 'Negativzins':
                 case 'Depotgebühren':
                     currency = this.getCurrencyByName(parsedAction.currencyName);
 

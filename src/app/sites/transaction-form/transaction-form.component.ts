@@ -25,7 +25,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
     public transaction: Transaction;
     public position: Position|null = null;
     public currencies: Currency[] = [];
-    public titleOptions = ['Kauf', 'Fx-Gutschrift Comp.', 'Zins', 'Verkauf', 'Auszahlung', 'Dividende', 'Capital Gain', 'Forex-Gutschrift', 'Vergütung', 'Einzahlung', 'Depotgebühren', 'Fx-Belastung Comp.', 'Kapitalrückzahlung', 'Forex-Belastung', 'Corporate Action', 'Split'];
+    public titleOptions = ['Kauf', 'Fx-Gutschrift Comp.', 'Zins', 'Coupon', 'Negativzins', 'Verkauf', 'Auszahlung', 'Dividende', 'Capital Gain', 'Forex-Gutschrift', 'Vergütung', 'Einzahlung', 'Depotgebühren', 'Fx-Belastung Comp.', 'Kapitalrückzahlung', 'Forex-Belastung', 'Corporate Action', 'Split'];
 
     transactionForm = new FormGroup({
         title: new FormControl('', Validators.required),
