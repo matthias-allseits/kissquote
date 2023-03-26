@@ -89,6 +89,9 @@ export class PositionDetailComponent implements OnInit {
         const storedChartTab = localStorage.getItem('positionChartTab');
         if (storedChartTab) {
             this.chartTab = storedChartTab;
+        } else {
+            this.chartTab = 'bar';
+            localStorage.setItem('positionChartTab', 'bar');
         }
     }
 
