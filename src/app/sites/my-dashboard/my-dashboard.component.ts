@@ -20,6 +20,7 @@ import {WatchlistService} from "../../services/watchlist.service";
 import {ManualDividend} from "../../models/manual-dividend";
 import {ManualDividendService} from "../../services/manual-dividend.service";
 import {DividendCreator} from "../../creators/dividend-creator";
+import {Observable} from "rxjs";
 
 
 @Component({
@@ -107,17 +108,17 @@ export class MyDashboardComponent implements OnInit {
                                 this.closedPositionsBalance += +position.closedResultCorrected();
                             }
                         });
-                        this.loadShareheadShares();
-                        // todo: implement a better solution
-                        setTimeout (() => {
-                            if (this.portfolio) {
-                                this.dividendLists = this.portfolio.collectDividendLists();
-                                this.lombardValueList = this.portfolio.lombardValuePositions();
-                                this.lombardValueList.forEach(entry => {
-                                    this.lombardTotal += +entry.maxDrawdownSummary.lombardValue;
-                                });
-                            }
-                        }, 2000);
+                        this.loadShareheadShares()
+                            .subscribe(result => {
+                                console.log(result);
+                                if (this.portfolio) {
+                                    this.dividendLists = this.portfolio.collectDividendLists();
+                                    this.lombardValueList = this.portfolio.lombardValuePositions();
+                                    this.lombardValueList.forEach(entry => {
+                                        this.lombardTotal += +entry.maxDrawdownSummary.lombardValue;
+                                    });
+                                }
+                            });
                         this.incomeChartData = this.portfolio?.incomeChartData();
                         this.incomeChartDataImproved = this.portfolio?.incomeChartDataImproved();
                     } else {
@@ -297,27 +298,35 @@ export class MyDashboardComponent implements OnInit {
             });
     }
 
-    private loadShareheadShares(): void {
-        if (this.portfolio) {
-            this.portfolio.getAllPositions().forEach(position => {
-                if (position.shareheadId !== undefined && position.shareheadId > 0 && position.active) {
-                    this.shareheadService.getShare(position.shareheadId)
-                        .subscribe(share => {
-                            if (share) {
-                                position.shareheadShare = share;
-                            }
-                        });
-                }
-            });
-            // this.portfolio.watchlistEntries.forEach(entry => {
-            //     this.shareheadService.getShare(entry.shareheadId)
-            //         .subscribe(share => {
-            //             if (share) {
-            //                 entry.shareheadShare = share;
-            //             }
-            //         });
-            // });
-        }
+    private loadShareheadShares(): Observable<boolean>
+    {
+        return new Observable(psitons => {
+            let result = false;
+            if (this.portfolio) {
+                const allPositions = this.portfolio.getAllPositions();
+                // console.log('length: ' + allPositions.length);
+                let counter = 0;
+                allPositions.forEach((position, index) => {
+                    if (position.shareheadId !== undefined && position.shareheadId > 0 && position.active) {
+                        this.shareheadService.getShare(position.shareheadId)
+                            .subscribe(share => {
+                                if (share) {
+                                    position.shareheadShare = share;
+                                }
+                                counter++;
+                                // console.log(counter);
+                                if (counter == allPositions.length) {
+                                    result = true;
+                                    psitons.next(result);
+                                }
+                            });
+                    } else {
+                        counter++;
+                        // console.log(counter);
+                    }
+                });
+            }
+        });
     }
 
 }
