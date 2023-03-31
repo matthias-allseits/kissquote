@@ -30,6 +30,7 @@ export class ShareheadShare {
         public urlInvesting?: string,
         public urlFinanztreff?: string,
         public urlDiviMax?: string,
+        public urlYahoo?: string,
         public currency?: Currency,
         public ipoDate?: Date,
         public balances?: ShareheadBalance[],

@@ -45,7 +45,7 @@ export class PositionDetailComponent implements OnInit {
     public selectedTransaction?: Transaction;
     public diviProjectionYears: DividendProjection[] = [];
     public positionTab = 'balance';
-    public chartTab = 'line';
+    public chartTab = 'bar';
     public shareheadDividendPayment?: string;
     public shareheadDividendPaymentCorrected?: string;
     public shareheadCurrencyCorrectedDividendPayment?: string;

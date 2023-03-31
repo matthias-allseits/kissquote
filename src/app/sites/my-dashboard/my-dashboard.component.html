@@ -256,7 +256,6 @@
                         <th scope="col" style="width: 200px;">Position</th>
                         <th scope="col">Source</th>
                         <th scope="col"><span class="float-end">Dividende</span></th>
-                        <th scope="col" class="d-none d-md-table-cell" style="width: 200px;"><span class="float-end">Currency-Corrected</span></th>
                         <th scope="col" style="width: 35px;"></th>
                     </tr>
                     </thead>
@@ -266,9 +265,8 @@
                                 <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.name }}</a></td>
                                 <td>From Transactions</td>
                                 <td><span class="float-end">{{ entry.total }} {{ entry.currency?.name }}</span></td>
-                                <td class="d-none d-md-table-cell"><span class="float-end"></span></td>
-                                <td *ngIf="entry.manualDividend === undefined"><button (click)="openManualDividendModal(manualDividendFormModal, entry.positionId)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>
-                                <td *ngIf="entry.manualDividend"><button (click)="openManualDividendConfirmModal(removeManualDividendModal, entry.manualDividend)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                                <td *ngIf="entry.manualDividend === undefined"><button (click)="openManualDividendModal(manualDividendFormModal, entry.positionId)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Set manual entry"><fa-icon [icon]="addIcon"></fa-icon></button></td>
+                                <td *ngIf="entry.manualDividend"><button (click)="openManualDividendConfirmModal(removeManualDividendModal, entry.manualDividend)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Remove manual entry"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                             </tr>
                         </ng-container>
                     </tbody>
@@ -281,7 +279,6 @@
                             <th scope="col" style="width: 200px;">Position</th>
                             <th scope="col">Source</th>
                             <th scope="col"><span class="float-end">Dividende</span></th>
-                            <th scope="col" class="d-none d-md-table-cell" style="width: 200px;"><span class="float-end">Currency-Corrected</span></th>
                             <th scope="col" style="width: 35px;"></th>
                         </tr>
                         </thead>
@@ -291,9 +288,8 @@
                                     <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.name }}</a></td>
                                     <td>{{ entry.source }}</td>
                                     <td><span class="float-end">{{ entry.total|number: '1.0-0' }} {{ entry.currency?.name }}</span></td>
-                                    <td class="d-none d-md-table-cell"><span class="float-end"></span></td>
-                                    <td *ngIf="entry.manualDividend === undefined"><button (click)="openManualDividendModal(manualDividendFormModal, entry.positionId)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>
-                                    <td *ngIf="entry.manualDividend"><button (click)="openManualDividendConfirmModal(removeManualDividendModal, entry.manualDividend)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                                    <td *ngIf="entry.manualDividend === undefined"><button (click)="openManualDividendModal(manualDividendFormModal, entry.positionId)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Set manual entry"><fa-icon [icon]="addIcon"></fa-icon></button></td>
+                                    <td *ngIf="entry.manualDividend"><button (click)="openManualDividendConfirmModal(removeManualDividendModal, entry.manualDividend)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Remove manual entry"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                                 </tr>
                             </ng-container>
                         </tbody>
@@ -353,7 +349,7 @@
                         <tr>
                             <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
                             <th scope="col"><span class="float-end">Days</span></th>
-                            <th scope="col"><span class="float-end">Ppd</span></th>
+                            <th scope="col"><span class="float-end" tooltip="Profit per day">Ppd</span></th>
                             <th scope="col" style="width: 35px;"></th>
 <!--                            <th scope="col" style="width: 35px;"></th>-->
                         </tr>
@@ -383,7 +379,7 @@
                             <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
                             <th scope="col">Method</th>
                             <th scope="col"><span class="float-end">Value</span></th>
-                            <th scope="col"><span class="float-end">frmInv</span></th>
+                            <th scope="col"><span class="float-end" tooltip="From Investment">frmInv</span></th>
                             <th scope="col" style="width: 35px;"></th>
                         </tr>
                     </thead>
@@ -427,7 +423,7 @@
                             <td>{{ currency.name }}</td>
                             <td align="right">{{ currency.rate }}</td>
                             <td>
-                                <button (click)="openExchangeRateModal(exchangeRateFormModal, currency)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen">
+                                <button (click)="openExchangeRateModal(exchangeRateFormModal, currency)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Editieren">
                                     <fa-icon [icon]="editIcon"></fa-icon>
                                 </button>
                             </td>
