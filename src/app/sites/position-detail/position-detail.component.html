@@ -12,18 +12,18 @@
     </div>
     <ul class="nav nav-tabs">
         <li class="nav-item" *ngIf="!position.isCash">
-            <a class="nav-link" [class.active]="positionTab === 'balance'" (click)="changeTab('balance')" aria-current="page">Balance</a>
+            <a class="nav-link" [class.active]="positionTab === 'balance'" (click)="changeTab('balance')" aria-current="page">{{ tranService.trans('GLOB_BALANCE') }}</a>
         </li>
         <li class="nav-item" *ngIf="!position.isCash">
             <a class="nav-link" [class.active]="positionTab === 'sharehead'" (click)="changeTab('sharehead')">Sharehead Infos</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.active]="positionTab === 'transactions'" (click)="changeTab('transactions')">Transactions</a>
+            <a class="nav-link" [class.active]="positionTab === 'transactions'" (click)="changeTab('transactions')">{{ tranService.trans('GLOB_TRANSACTIONS') }}</a>
         </li>
     </ul>
     <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="positionTab !== 'balance'">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-            <h4 class="pt-2">Balance</h4>
+            <h4 class="pt-2">{{ tranService.trans('GLOB_BALANCE') }}</h4>
             <a [routerLink]="['/bank-account/0/position-form/' + position.id]" class="btn btn-sm btn-outline-primary">Edit this position</a>
             <div class="btn-toolbar mb-md-0">
                 <div class="btn-toolbar mb-md-0">
@@ -126,12 +126,12 @@
                     <div class="col-3"><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></div>
                 </div>
                 <div class="row">
-                    <div class="col-9">Bilanz:</div>
+                    <div class="col-9">{{ tranService.trans('GLOB_BALANCE') }}:</div>
                     <div class="col-3"><span *ngIf="position.balance.investment > 0" class="float-end" [class.red-text]="+position.investmentBalance() < 0" [class.green-text]="+position.investmentBalance() > 0">{{ position.investmentBalance() }}%</span></div>
                 </div>
             </div>
             <div *ngIf="position.balance" class="info-box" [class.green20]="position.balance.investment < 0">
-                <h5>Dividends</h5>
+                <h5>{{ tranService.trans('GLOB_DIVIDENDS') }}</h5>
                 <div class="row">
                     <div class="col-8">Collected dividends:</div>
                     <div class="col-4"><span class="float-end">{{ position.balance.collectedDividends|number: '1.0' }} {{ position.balance.collectedDividendsCurrency }}</span></div>
@@ -199,7 +199,7 @@
             </div>
             <div class="info-box-wrapper">
                 <div *ngIf="position.balance" class="info-box">
-                    <h5>Costs</h5>
+                    <h5>{{ tranService.trans('GLOB_COSTS') }}</h5>
                     <div class="row">
                         <div class="col-9">Transaction fees total:</div>
                         <div class="col-3"><span class="float-end">{{ position.balance.transactionFeesTotal|number: '1.0' }}</span></div>
@@ -262,7 +262,7 @@
     </div>
     <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="positionTab !== 'transactions'">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-            <h4 class="pt-2">Transactions</h4>
+            <h4 class="pt-2">{{ tranService.trans('GLOB_TRANSACTIONS') }}</h4>
             <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group me-2">
                     <button *ngIf="!position.isCash" [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary">Add Transaction</button>
@@ -305,16 +305,16 @@
 <ng-template #removeTransactionConfirmModal>
     <div class="modal-body text-center">
         <p>Wollen Sie diese Transaktion wirklich löschen?</p>
-        <button type="button" class="btn btn-default" (click)="confirm()">Ja</button>
-        <button type="button" class="btn btn-primary" (click)="decline()">Nein</button>
+        <button type="button" class="btn btn-default" (click)="confirm()">{{ tranService.trans('GLOB_YES') }}</button>
+        <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>
 
 <ng-template #removeShareheadConfirmModal>
     <div class="modal-body text-center">
         <p>Wollen Sie diese Verknüpfung wirklich löschen?</p>
-        <button type="button" class="btn btn-default" (click)="confirmShareheadRemoving()">Ja</button>
-        <button type="button" class="btn btn-primary" (click)="decline()">Nein</button>
+        <button type="button" class="btn btn-default" (click)="confirmShareheadRemoving()">{{ tranService.trans('GLOB_YES') }}</button>
+        <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>
 
@@ -328,10 +328,10 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <button type="button" class="btn btn-default" (click)="cancelModal()">Abbrechen</button>
+                    <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
                 </div>
                 <div class="col-6">
-                    <button type="button" class="btn btn-primary float-end" (click)="persistManualDrawdown()">Speichern</button>
+                    <button type="button" class="btn btn-primary float-end" (click)="persistManualDrawdown()">{{ tranService.trans('GLOB_SAVE') }}</button>
                 </div>
             </div>
         </form>
@@ -341,7 +341,7 @@
 <ng-template #removeManualDrawdownConfirmModal>
     <div class="modal-body text-center">
         <p>Wollen Sie diesen manuellen Drawdown wirklich löschen?</p>
-        <button type="button" class="btn btn-default" (click)="confirmManualDrawdownRemoving()">Ja</button>
-        <button type="button" class="btn btn-primary" (click)="decline()">Nein</button>
+        <button type="button" class="btn btn-default" (click)="confirmManualDrawdownRemoving()">{{ tranService.trans('GLOB_YES') }}</button>
+        <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>

@@ -22,6 +22,7 @@ import {CurrencyService} from "../../services/currency.service";
 import {StockRate} from "../../models/stock-rate";
 import {StockRateCreator} from "../../creators/stock-rate-creator";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {TranslationService} from "../../services/translation.service";
 
 
 @Component({
@@ -65,6 +66,7 @@ export class PositionDetailComponent implements OnInit {
     });
 
     constructor(
+        public tranService: TranslationService,
         private route: ActivatedRoute,
         private router: Router,
         private positionService: PositionService,

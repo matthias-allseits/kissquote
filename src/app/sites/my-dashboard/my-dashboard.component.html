@@ -11,25 +11,25 @@
     <div *ngIf="portfolio && portfolio.bankAccounts.length > 0">
         <ul class="nav nav-tabs nav-tabs-w45">
             <li class="nav-item" *ngFor="let bankAccount of portfolio.bankAccounts index as accountIndex;">
-                <a class="nav-link" [class.active]="dashboardTab === accountIndex.toString()" (click)="changeTab(accountIndex.toString())" aria-current="page"><span class="d-none d-md-inline">Bank-Account</span> {{ bankAccount.name }}</a>
+                <a class="nav-link" [class.active]="dashboardTab === accountIndex.toString()" (click)="changeTab(accountIndex.toString())" aria-current="page"><span class="d-none d-md-inline">{{ tranService.trans('GLOB_ACCOUNT') }}</span> {{ bankAccount.name }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" [class.active]="dashboardTab === 'balance'" (click)="changeTab('balance')"><span class="d-none d-md-inline">Portfolio</span> Balances</a>
+                <a class="nav-link" [class.active]="dashboardTab === 'balance'" (click)="changeTab('balance')"><span class="d-none d-md-inline">Portfolio</span> {{ tranService.trans('GLOB_BALANCES') }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" [class.active]="dashboardTab === 'dividends'" (click)="changeTab('dividends')">Dividends</a>
+                <a class="nav-link" [class.active]="dashboardTab === 'dividends'" (click)="changeTab('dividends')">{{ tranService.trans('GLOB_DIVIDENDS') }}</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" [class.active]="dashboardTab === 'watchlist'" (click)="changeTab('watchlist')">Watchlist</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" [class.active]="dashboardTab === 'listings'" (click)="changeTab('listings')">Listings</a>
+                <a class="nav-link" [class.active]="dashboardTab === 'listings'" (click)="changeTab('listings')">{{ tranService.trans('GLOB_LISTINGS') }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" [class.active]="dashboardTab === 'settings'" (click)="changeTab('settings')">Settings</a>
+                <a class="nav-link" [class.active]="dashboardTab === 'settings'" (click)="changeTab('settings')">{{ tranService.trans('GLOB_SETTINGS') }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" [class.active]="dashboardTab === 'closedPositions'" (click)="changeTab('closedPositions')">Closed<span class="d-none d-md-inline"> Positions</span></a>
+                <a class="nav-link" [class.active]="dashboardTab === 'closedPositions'" (click)="changeTab('closedPositions')">{{ tranService.trans('GLOB_CLOSED') }}<span class="d-none d-md-inline"> {{ tranService.trans('GLOB_POSITIONS') }}</span></a>
             </li>
         </ul>
         <div *ngFor="let bankAccount of portfolio.bankAccounts index as accountIndex;" class="shadow-sm  p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== accountIndex.toString()">
@@ -41,7 +41,7 @@
                         <button [routerLink]="['/bank-account/' + accountIndex + '/position-form']" type="button" class="btn btn-sm btn-outline-primary">Add Position</button>
                         <button [routerLink]="['/bank-account/' + accountIndex + '/cash-position-form']" type="button" class="btn btn-sm btn-outline-primary">Add Cash-Position</button>
                         <ng-container *ngIf="bankAccount.positions.length === 0">
-                            <button [routerLink]="['/import']" type="button" class="btn btn-sm btn-outline-primary">Import Transactions</button>
+                            <button [routerLink]="['/import']" type="button" class="btn btn-sm btn-outline-primary">Import {{ tranService.trans('GLOB_TRANSACTIONS') }}</button>
                             <button *ngIf="portfolio.bankAccounts.length > 1" (click)="openAccountConfirmModal(removeAccountModal, bankAccount)" type="button" class="btn btn-sm btn-outline-primary">Delete Bankaccount</button>
                         </ng-container>
                     </div>
@@ -52,10 +52,10 @@
                     <thead>
                         <tr>
                             <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
-                            <th scope="col" style="width: 105px;"><span class="float-end">Value</span></th>
+                            <th scope="col" style="width: 105px;"><span class="float-end">{{ tranService.trans('GLOB_VALUE') }}</span></th>
                             <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Active From</th>
                             <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Active Until</th>
-                            <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Transactions</th>
+                            <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">{{ tranService.trans('GLOB_TRANSACTIONS') }}</th>
                             <th scope="col" style="width: 35px;"></th>
                             <th scope="col" style="width: 35px;"></th>
                             <th scope="col" style="width: 35px;"></th>
@@ -80,11 +80,11 @@
                     <thead>
                         <tr>
                             <th scope="col" style="width: 40%;">{{ tranService.trans('GLOB_SHARE') }}</th>
-                            <th scope="col" style="width: 105px;"><span class="float-end">Value</span></th>
+                            <th scope="col" style="width: 105px;"><span class="float-end">{{ tranService.trans('GLOB_VALUE') }}</span></th>
                             <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
                             <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Active From</th>
                             <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Active Until</th>
-                            <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Transactions</th>
+                            <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">{{ tranService.trans('GLOB_TRANSACTIONS') }}</th>
                             <th scope="col" style="width: 35px;"></th>
                             <th scope="col" style="width: 35px;"></th>
                             <th scope="col" style="width: 35px;"></th>
@@ -115,15 +115,15 @@
                 <div class="info-box">
                     <h5>Portfolio Totals</h5>
                     <div class="row">
-                        <div class="col-9">Aktuelles Investment:</div>
+                        <div class="col-9">{{ tranService.trans('MYDA_ACTUAL_INVESTMENT') }}:</div>
                         <div class="col-3"><span class="float-end">{{ portfolio.investmentTotal()|number: '1.0' }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Aktueller Wert:</div>
+                        <div class="col-9">{{ tranService.trans('MYDA_ACTUAL_VALUE') }}:</div>
                         <div class="col-3"><span class="float-end">{{ portfolio.valueTotal()|number: '1.0' }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Bilanz offener Positionen:</div>
+                        <div class="col-9">{{ tranService.trans('MYDA_BALANCE_OPEN') }}:</div>
                         <div class="col-3"><span class="float-end bold">{{ portfolio.openPositionsBalance()|number: '1.0' }}</span></div>
                     </div>
                     <div class="row">
@@ -143,23 +143,23 @@
                         <div class="col-3"><span class="float-end"></span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Bilanz geschlossener Positionen:</div>
+                        <div class="col-9">{{ tranService.trans('MYDA_BALANCE_CLOSED') }}:</div>
                         <div class="col-3"><span class="float-end"></span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">This years dividends:</div>
+                        <div class="col-9">{{ tranService.trans('MYDA_THIS_YRS_DIVIS') }}:</div>
                         <div class="col-3"><span class="float-end">{{ portfolio.thisYearsDividendsTotal()|number: '1.0' }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">This years yield on investment:</div>
+                        <div class="col-9">{{ tranService.trans('MYDA_THIS_YRS_YIELD') }}:</div>
                         <div class="col-3"><span class="float-end bold">{{ portfolio.thisYearsDividendsYield()|number: '1.0-1' }}%</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Dividend projection:</div>
+                        <div class="col-9">{{ tranService.trans('MYDA_DIVI_PROJECTION') }}:</div>
                         <div class="col-3"><span class="float-end">{{ portfolio.dividendProjectionsTotal()|number: '1.0' }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Dividend projection yield:</div>
+                        <div class="col-9">{{ tranService.trans('MYDA_YIELD_PROJECTION') }}:</div>
                         <div class="col-3"><span class="float-end bold">{{ portfolio.dividendProjectionsYield()|number: '1.0-1' }}%</span></div>
                     </div>
                 </div>
@@ -167,15 +167,15 @@
                     <div class="info-box" *ngFor="let account of portfolio.bankAccounts">
                         <h5>{{ account.name }}</h5>
                         <div class="row">
-                            <div class="col-9">Aktuelles Investment:</div>
+                            <div class="col-9">{{ tranService.trans('MYDA_ACTUAL_INVESTMENT') }}:</div>
                             <div class="col-3"><span class="float-end">{{ account.investmentTotal()|number: '1.0' }}</span></div>
                         </div>
                         <div class="row">
-                            <div class="col-9">Aktueller Wert:</div>
+                            <div class="col-9">{{ tranService.trans('MYDA_ACTUAL_VALUE') }}:</div>
                             <div class="col-3"><span class="float-end">{{ account.valueTotal()|number: '1.0' }}</span></div>
                         </div>
                         <div class="row">
-                            <div class="col-9">Bilanz offener Positionen:</div>
+                            <div class="col-9">{{ tranService.trans('MYDA_BALANCE_OPEN') }}:</div>
                             <div class="col-3"><span class="float-end bold">{{ account.openPositionsBalance()|number: '1.0' }}</span></div>
                         </div>
                         <div class="row">
@@ -195,48 +195,48 @@
                             <div class="col-3"><span class="float-end"></span></div>
                         </div>
                         <div class="row">
-                            <div class="col-9">Bilanz geschlossener Positionen:</div>
+                            <div class="col-9">{{ tranService.trans('MYDA_BALANCE_CLOSED') }}:</div>
                             <div class="col-3"><span class="float-end"></span></div>
                         </div>
                         <div class="row">
-                            <div class="col-9">This years dividends:</div>
+                            <div class="col-9">{{ tranService.trans('MYDA_THIS_YRS_DIVIS') }}:</div>
                             <div class="col-3"><span class="float-end bold">{{ account.thisYearsDividendsTotal()|number: '1.0' }}</span></div>
                         </div>
                         <div class="row">
-                            <div class="col-9">This years yield on investment:</div>
+                            <div class="col-9">{{ tranService.trans('MYDA_THIS_YRS_YIELD') }}:</div>
                             <div class="col-3"><span class="float-end bold">{{ account.thisYearsDividendsYield()|number: '1.0-1' }}%</span></div>
                         </div>
                         <div class="row">
-                            <div class="col-9">Dividend projection:</div>
+                            <div class="col-9">{{ tranService.trans('MYDA_DIVI_PROJECTION') }}:</div>
                             <div class="col-3"><span class="float-end">{{ account.dividendProjectionsTotal()|number: '1.0' }}</span></div>
                         </div>
                         <div class="row">
-                            <div class="col-9">Dividend projection yield:</div>
+                            <div class="col-9">{{ tranService.trans('MYDA_YIELD_PROJECTION') }}:</div>
                             <div class="col-3"><span class="float-end bold">{{ account.dividendProjectionsYield()|number: '1.0-1' }}%</span></div>
                         </div>
                     </div>
                 </ng-container>
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-                    <h4 class="pt-2">Bilanzen</h4>
+                    <h4 class="pt-2">{{ tranService.trans('GLOB_BALANCES') }}</h4>
                 </div>
                 <div *ngFor="let account of portfolio.bankAccounts" class="info-box">
                     <h5>{{ account.name }}</h5>
                     <app-bar-chart [data]="getBalanceChartDataByAccount(account)"></app-bar-chart>
                 </div>
                 <div *ngIf="dividendLists" class="info-box">
-                    <h5>Dividenden-Einkommen</h5>
+                    <h5>{{ tranService.trans('MYDA_DIVI_INCOME') }}</h5>
                     <app-stacked-bar-chart [data]="portfolio.dividendIncomeChartData()"></app-stacked-bar-chart>
                 </div>
                 <div *ngIf="dividendLists" class="info-box">
-                    <h5>Investment 1. Juli</h5>
+                    <h5>Investment per 1. Juli</h5>
                     <app-line-chart-multi-axis [data]="portfolio.investmentChartData()" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart-multi-axis>
                 </div>
                 <div *ngIf="incomeChartData" class="info-box">
-                    <h5>Income per month</h5>
+                    <h5>{{ tranService.trans('MYDA_INCOME_PER_MONTH') }}</h5>
                     <app-bar-chart [data]="incomeChartData" [height]="300"></app-bar-chart>
                 </div>
                 <div *ngIf="incomeChartDataImproved" class="info-box info-box-doubled">
-                    <h5>Income per month</h5>
+                    <h5>{{ tranService.trans('MYDA_INCOME_PER_MONTH') }}</h5>
                     <app-bar-chart [data]="incomeChartDataImproved" [height]="incomeChartDataImprovedBoxHeight"></app-bar-chart>
                 </div>
             </div>
@@ -323,7 +323,7 @@
         </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'listings'">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-                <h4 class="pt-2">Listings</h4>
+                <h4 class="pt-2">{{ tranService.trans('GLOB_LISTINGS') }}</h4>
             </div>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
@@ -348,7 +348,7 @@
                     <thead>
                         <tr>
                             <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
-                            <th scope="col"><span class="float-end">Days</span></th>
+                            <th scope="col"><span class="float-end">{{ tranService.trans('LISTNGS_DAYS') }}</span></th>
                             <th scope="col"><span class="float-end" tooltip="Profit per day">Ppd</span></th>
                             <th scope="col" style="width: 35px;"></th>
 <!--                            <th scope="col" style="width: 35px;"></th>-->
@@ -372,14 +372,14 @@
                     <h4>Lombard value</h4>
                 </div>
                 <h6>Total: {{ lombardTotal|number: '1.0' }}</h6>
-                <h6>From Investment: {{ (100 / portfolio.investmentTotal() * lombardTotal).toFixed() }}%</h6>
+                <h6>{{ tranService.trans('LISTNGS_FROM_INVESTMENT') }}: {{ (100 / portfolio.investmentTotal() * lombardTotal).toFixed() }}%</h6>
                 <table class="table table-striped table-sm">
                     <thead>
                         <tr>
                             <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
                             <th scope="col">Method</th>
-                            <th scope="col"><span class="float-end">Value</span></th>
-                            <th scope="col"><span class="float-end" tooltip="From Investment">frmInv</span></th>
+                            <th scope="col"><span class="float-end">{{ tranService.trans('GLOB_VALUE') }}</span></th>
+                            <th scope="col"><span class="float-end" tooltip="{{ tranService.trans('LISTNGS_FROM_INVESTMENT') }}">frmInv</span></th>
                             <th scope="col" style="width: 35px;"></th>
                         </tr>
                     </thead>
@@ -434,9 +434,9 @@
         </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'closedPositions'">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-                <h4 class="pt-2">Closed Positions</h4>
+                <h4 class="pt-2">{{ tranService.trans('GLOB_CLOSED') }} {{ tranService.trans('GLOB_POSITIONS') }}</h4>
             </div>
-            <h5 [class.red-text]="closedPositionsBalance < 0" [class.green-text]="closedPositionsBalance > 0">Balance:
+            <h5 [class.red-text]="closedPositionsBalance < 0" [class.green-text]="closedPositionsBalance > 0">{{ tranService.trans('GLOB_BALANCE') }}:
                 <span *ngIf="closedPositionsBalance < 0">{{ closedPositionsBalance }}</span>
                 <span *ngIf="closedPositionsBalance > 0">+{{ closedPositionsBalance }}</span>
             </h5>
@@ -451,7 +451,7 @@
                         <th scope="col" style="width: 105px;"><span class="float-end">Result CHF</span></th>
                         <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Active From</th>
                         <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Active Until</th>
-                        <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">Transactions</th>
+                        <th scope="col" class="d-none d-md-table-cell" style="width: 105px;">{{ tranService.trans('GLOB_TRANSACTIONS') }}</th>
                         <th scope="col" style="width: 35px;"></th>
                         <th scope="col" style="width: 35px;"></th>
                     </tr>
@@ -478,33 +478,33 @@
 
 <ng-template #removePositionModal>
     <div class="modal-body text-center">
-        <p>Wollen Sie diese Position wirklich löschen?</p>
-        <button type="button" class="btn btn-default" (click)="confirmDeletePosition()">Ja</button>
-        <button type="button" class="btn btn-primary" (click)="cancelModal()">Nein</button>
+        <p>{{ tranService.trans('MYDA_POS_REALLY_REMOVE') }}</p>
+        <button type="button" class="btn btn-default" (click)="confirmDeletePosition()">{{ tranService.trans('GLOB_YES') }}</button>
+        <button type="button" class="btn btn-primary" (click)="cancelModal()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>
 
 <ng-template #removeAccountModal>
     <div class="modal-body text-center">
-        <p>Wollen Sie dieses Bankkonto wirklich löschen?</p>
-        <button type="button" class="btn btn-default" (click)="confirmDeleteAccount()">Ja</button>
-        <button type="button" class="btn btn-primary" (click)="cancelModal()">Nein</button>
+        <p>{{ tranService.trans('MYDA_ACCOUNT_REALLY_REMOVE') }}</p>
+        <button type="button" class="btn btn-default" (click)="confirmDeleteAccount()">{{ tranService.trans('GLOB_YES') }}</button>
+        <button type="button" class="btn btn-primary" (click)="cancelModal()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>
 
 <ng-template #removeWatchlistModal>
     <div class="modal-body text-center">
-        <p>Wollen Sie diesen Eintrag wirklich löschen?</p>
-        <button type="button" class="btn btn-default" (click)="confirmDeleteWatchlistEntry()">Ja</button>
-        <button type="button" class="btn btn-primary" (click)="cancelModal()">Nein</button>
+        <p>{{ tranService.trans('MYDA_ENTRY_REALLY_REMOVE') }}</p>
+        <button type="button" class="btn btn-default" (click)="confirmDeleteWatchlistEntry()">{{ tranService.trans('GLOB_YES') }}</button>
+        <button type="button" class="btn btn-primary" (click)="cancelModal()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>
 
 <ng-template #removeManualDividendModal>
     <div class="modal-body text-center">
-        <p>Wollen Sie diesen Eintrag wirklich löschen?</p>
-        <button type="button" class="btn btn-default" (click)="confirmDeleteManualDividend()">Ja</button>
-        <button type="button" class="btn btn-primary" (click)="cancelModal()">Nein</button>
+        <p>{{ tranService.trans('MYDA_ENTRY_REALLY_REMOVE') }}</p>
+        <button type="button" class="btn btn-default" (click)="confirmDeleteManualDividend()">{{ tranService.trans('GLOB_YES') }}</button>
+        <button type="button" class="btn btn-primary" (click)="cancelModal()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>
 
@@ -518,10 +518,10 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <button type="button" class="btn btn-default" (click)="cancelModal()">Abbrechen</button>
+                    <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
                 </div>
                 <div class="col-6">
-                    <button type="button" class="btn btn-primary float-end" (click)="persistExchangeRate()">Speichern</button>
+                    <button type="button" class="btn btn-primary float-end" (click)="persistExchangeRate()">{{ tranService.trans('GLOB_SAVE') }}</button>
                 </div>
             </div>
         </form>
@@ -546,10 +546,10 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <button type="button" class="btn btn-default" (click)="cancelModal()">Abbrechen</button>
+                    <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
                 </div>
                 <div class="col-6">
-                    <button type="button" class="btn btn-primary float-end" (click)="persistManualDividend()">Speichern</button>
+                    <button type="button" class="btn btn-primary float-end" (click)="persistManualDividend()">{{ tranService.trans('GLOB_SAVE') }}</button>
                 </div>
             </div>
         </form>
