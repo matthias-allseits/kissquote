@@ -1,10 +1,10 @@
-import {ShareheadBalance} from "./sharehead-balance";
+import {ShareheadEstimation} from "./sharehead-estimation";
 
 export class ShareheadAnalysisResults {
 
     constructor(
-        public estimationChanges: ShareheadBalance[],
-        public estimationChangesOverNext: ShareheadBalance[],
+        public estimationChanges: ShareheadEstimation[],
+        public estimationChangesOverNext: ShareheadEstimation[],
     ) {}
 
 }

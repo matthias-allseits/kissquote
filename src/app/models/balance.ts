@@ -19,9 +19,6 @@ export class Balance {
         public lastRate?: StockRate|null,
         public cashValue?: number,
         public closedResult?: number,
-        public debtNet?: number,
-        public ordinarySharesNumber?: number,
-        public treasurySharesNumber?: number,
     ) {}
 
     returnOnInvestentByDividends(): string

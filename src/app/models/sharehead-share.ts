@@ -104,6 +104,33 @@ export class ShareheadShare {
     }
 
 
+    yahooBalances(): ShareheadBalance[]
+    {
+        const hits: ShareheadBalance[] = [];
+        this.balances?.forEach(balance => {
+            if (balance.ordinarySharesNumber && balance.ordinarySharesNumber > 0) {
+                hits.push(balance);
+            }
+        });
+
+        return hits;
+    }
+
+
+    shareNumbersChanges(): number|null
+    {
+        let result = 0;
+        const yahooBalances = this.yahooBalances();
+        const first = yahooBalances[0];
+        const last = yahooBalances[yahooBalances.length - 1];
+        if (yahooBalances.length > 0 && first.ordinarySharesNumber && last.ordinarySharesNumber) {
+            result = +((100 / first.ordinarySharesNumber * last.ordinarySharesNumber) - 100).toFixed(1);
+        }
+
+        return result;
+    }
+
+
     kgv(lastRate: number): number|null
     {
         if (this.lastProfitPerShare() > 0) {
@@ -430,6 +457,84 @@ export class ShareheadShare {
                 chartData.datasets[1].data.push(estimation.dividend);
             });
         }
+
+        return chartData;
+    }
+
+
+    debtChartData(): ChartData {
+        const chartData: ChartData = {
+            labels: [],
+            datasets: [
+                {
+                    data: [],
+                    label: 'NetDebt-Profit-Ratio',
+                    borderColor: 'rgb(220, 57, 18, 1)',
+                    backgroundColor: 'rgb(220, 57, 18, 1)',
+                    hoverBackgroundColor: 'rgb(220, 57, 18, 0.5)',
+                    pointBackgroundColor: 'rgb(220, 57, 18, 1)',
+                    pointBorderColor: 'rgb(220, 57, 18, 1)',
+                    pointHoverBackgroundColor: 'rgba(220, 57, 18, 1)',
+                    pointHoverBorderColor: 'rgba(220, 57, 18, 1)',
+                },
+                {
+                    data: [],
+                    label: 'Net debt (Mia.)',
+                    borderColor: 'rgb(51, 102, 204, 1)',
+                    backgroundColor: 'rgb(51, 102, 204, 1)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)',
+                    type: 'bar',
+                }
+            ]
+        };
+
+        this.yahooBalances()?.forEach(balance => {
+            if (balance.debtNet) {
+                chartData.labels?.push(balance.year);
+                chartData.datasets[0].data.push(balance.netDebtRatio());
+                chartData.datasets[1].data.push(balance.debtNet / 1000000);
+            }
+        });
+
+        return chartData;
+    }
+
+
+    shareNumbersChartData(): ChartData {
+        const chartData: ChartData = {
+            labels: [],
+            datasets: [
+                {
+                    data: [],
+                    label: 'Ordinary',
+                    borderColor: 'rgb(51, 102, 204, 1)',
+                    backgroundColor: 'rgb(51, 102, 204, 1)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)',
+                    pointBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBorderColor: 'rgba(51, 102, 204, 1)',
+                },
+                {
+                    data: [],
+                    label: 'Treasury',
+                    borderColor: 'rgb(220, 57, 18, 1)',
+                    backgroundColor: 'rgb(220, 57, 18, 1)',
+                    hoverBackgroundColor: 'rgb(220, 57, 18, 0.5)',
+                    pointBackgroundColor: 'rgb(220, 57, 18, 1)',
+                    pointBorderColor: 'rgb(220, 57, 18, 1)',
+                    pointHoverBackgroundColor: 'rgba(220, 57, 18, 1)',
+                    pointHoverBorderColor: 'rgba(220, 57, 18, 1)',
+                }
+            ]
+        };
+
+        this.yahooBalances()?.forEach(balance => {
+            if (balance.ordinarySharesNumber && balance.treasurySharesNumber) {
+                chartData.labels?.push(balance.year);
+                chartData.datasets[0].data.push(balance.ordinarySharesNumber);
+                chartData.datasets[1].data.push(balance.treasurySharesNumber);
+            }
+        });
 
         return chartData;
     }

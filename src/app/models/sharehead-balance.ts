@@ -18,4 +18,14 @@ export class ShareheadBalance {
         public treasurySharesNumber?: number,
     ) {}
 
+
+    netDebtRatio(): number|null
+    {
+        if (this.profit > 0 && this.debtNet && this.debtNet > 0) {
+            return +((this.debtNet / 1000) / this.profit).toFixed(1);
+        }
+
+        return null;
+    }
+
 }
