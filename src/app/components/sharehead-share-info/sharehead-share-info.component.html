@@ -181,31 +181,31 @@
             </div>
             <div class="info-box info-box-lg">
                 <h5>Profit + Dividend per Share</h5>
-                <app-line-chart [data]="shareheadShare.profitChartData()" [height]="150" [forceBeginAtZero]="!shareheadShare.hadNegativeBalances()" [pointRadius]="4"></app-line-chart>
+                <app-line-chart [data]="shareheadShare.profitChartData()" [height]="150" [forceBeginAtZero]="!shareheadShare.hadNegativeBalances()" [pointRadius]="3.5"></app-line-chart>
             </div>
             <div class="info-box info-box-lg">
                 <h5>Avg Rates</h5>
-                <app-line-chart [data]="shareheadShare.yearlyAverageRatesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
+                <app-line-chart [data]="shareheadShare.yearlyAverageRatesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
             <div class="info-box info-box-lg">
                 <h5>Equity Ratio</h5>
-                <app-line-chart [data]="shareheadShare.equityRatesChartData()" [height]="150" [forceBeginAtZero]="true" [percentageChart]="true" [pointRadius]="4"></app-line-chart>
+                <app-line-chart [data]="shareheadShare.equityRatesChartData()" [height]="150" [forceBeginAtZero]="true" [percentageChart]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
             <div class="info-box info-box-lg">
                 <h5>{{ nextEstimationYear }} Estimation Changes</h5>
-                <app-line-chart [data]="shareheadShare.estimationChangesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
+                <app-line-chart [data]="shareheadShare.estimationChangesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
             <div *ngIf="shareheadShare.analysisResults && shareheadShare.analysisResults.estimationChangesOverNext && shareheadShare.analysisResults.estimationChangesOverNext.length > 2" class="info-box info-box-lg">
                 <h5>{{ overNextEstimationYear }} Estimation Changes</h5>
-                <app-line-chart [data]="shareheadShare.estimationChangesChartData(true)" [height]="150" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
+                <app-line-chart [data]="shareheadShare.estimationChangesChartData(true)" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
             <div *ngIf="shareheadShare.yahooBalances().length > 0" class="info-box info-box-lg">
                 <h5>Net Debt and Profit Ratio</h5>
-                <app-line-chart [data]="shareheadShare.debtChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3"></app-line-chart>
+                <app-line-chart [data]="shareheadShare.debtChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
             <div *ngIf="shareheadShare.yahooBalances().length > 0" class="info-box info-box-lg">
                 <h5>Shares number ({{ shareheadShare.shareNumbersChanges() }}%)</h5>
-                <app-line-chart [data]="shareheadShare.shareNumbersChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3"></app-line-chart>
+                <app-line-chart [data]="shareheadShare.shareNumbersChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
             <div class="info-box info-box-lg">
                 <button (click)="sendRemoveInquiry()" class="btn btn-sm btn-outline-primary">Remove this Sharehead Share</button>
