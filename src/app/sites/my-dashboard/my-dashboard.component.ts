@@ -92,6 +92,7 @@ export class MyDashboardComponent implements OnInit {
                 .subscribe(returnedPortfolio => {
                     if (returnedPortfolio instanceof Portfolio) {
                         this.portfolio = returnedPortfolio;
+                        this.portfolio.calculatePositionsShareFromTotal();
                         this.portfolio.bankAccounts.forEach((account, index) => {
                             this.availableDashboardTabs.push(index.toString());
                         });

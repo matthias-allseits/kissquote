@@ -48,6 +48,7 @@ export class Position {
         public transactions: Transaction[],
         public isCash: boolean = false,
         public dividendPeriodicity: string,
+        public shareFromTotal: number,
         public bankAccount?: BankAccount,
         public currency?: Currency,
         public balance?: Balance,

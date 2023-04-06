@@ -33,6 +33,16 @@ export class Portfolio {
     ) {}
 
 
+    calculatePositionsShareFromTotal(): void {
+        const valueTotal = this.valueTotal();
+        this.bankAccounts.forEach(account => {
+            account.positions.forEach(position => {
+                position.shareFromTotal = 100 / valueTotal * +position.actualValue();
+            });
+        });
+    }
+
+
     getBankAccountsWithoutPositions(): BankAccount[] {
         const copy: BankAccount[] = [];
         this.bankAccounts.forEach(account => {
