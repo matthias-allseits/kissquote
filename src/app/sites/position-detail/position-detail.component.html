@@ -213,8 +213,8 @@
                     </h5>
                     <div class="row">
                         <div class="col-6">Post corona top:</div>
-                        <div class="col-3">{{ maxDrawdownSummary.postCoronaTop?.date|date: 'dd.MM.YY' }}</div>
-                        <div class="col-3"><span class="float-end">{{ maxDrawdownSummary.postCoronaTop?.rate }}</span></div>
+                        <div class="col-3">{{ maxDrawdownSummary.postCoronaTop.date|date: 'dd.MM.YY' }}</div>
+                        <div class="col-3"><span class="float-end">{{ maxDrawdownSummary.postCoronaTop.rate }}</span></div>
                     </div>
                     <div class="row">
                         <div class="col-7">Post corona top value:</div>
@@ -320,7 +320,7 @@
 
 <ng-template #manualDrawdownFormModal>
     <div *ngIf="position && position.share" class="modal-body">
-        <p>Set your manual maximum drawdown for your position &laquo;{{ position.share?.name }}&raquo;:</p>
+        <p>Set your manual maximum drawdown for your position &laquo;{{ position.share.name }}&raquo;:</p>
         <form [formGroup]="manualDrawdownForm">
             <div class="mb-3">
                 <label for="drawdown-amount-input" class="form-label"></label>
