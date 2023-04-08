@@ -34,7 +34,7 @@ export class LineChartMultiAxisComponent implements OnInit {
             y: {
                 min: undefined,
                 grid: {
-                    drawBorder: false,
+                    // drawBorder: false,
                     color: function(context) {
                         if (context.tick.value === 0) {
                             return '#000000';
@@ -47,7 +47,7 @@ export class LineChartMultiAxisComponent implements OnInit {
             y1: {
                 min: undefined,
                 grid: {
-                    drawBorder: false,
+                    // drawBorder: false,
                     color: function(context) {
                         if (context.tick.value === 0) {
                             return '#000000';

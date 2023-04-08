@@ -208,8 +208,8 @@
                 <div class="info-box" *ngIf="maxDrawdownSummary">
                     <h5>
                         Lombard value
-                        <button *ngIf="position.manualDrawdown" (click)="openManualDrawdownConfirmModal(removeManualDrawdownConfirmModal)" type="button" class="btn btn-tiny btn-outline-primary float-end" tooltip="Remove manual drawdown"><fa-icon [icon]="deleteIcon"></fa-icon></button>
-                        <button *ngIf="!position.manualDrawdown" (click)="openManualDrawdownModal(manualDrawdownFormModal)" type="button" class="btn btn-tiny btn-outline-primary float-end" tooltip="Set manual drawdown"><fa-icon [icon]="addIcon"></fa-icon></button>
+                        <button *ngIf="position.manualDrawdown" (click)="openManualDrawdownConfirmModal(removeManualDrawdownConfirmModal)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Remove manual drawdown"><fa-icon [icon]="deleteIcon"></fa-icon></button>
+                        <button *ngIf="!position.manualDrawdown" (click)="openManualDrawdownModal(manualDrawdownFormModal)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Set manual drawdown"><fa-icon [icon]="addIcon"></fa-icon></button>
                     </h5>
                     <div class="row">
                         <div class="col-6">Post corona top:</div>
@@ -292,9 +292,9 @@
                     <td><span class="float-end">{{ transaction.rate }}</span></td>
                     <td class="d-none d-md-table-cell"><span class="float-end">{{ transaction.fee }}</span></td>
                     <td class="d-none d-md-table-cell"><span>{{ transaction.currency?.name }}</span></td>
-                    <td *ngIf="!position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/transaction-form/' + transaction.id" type="button" class="btn btn-sm btn-outline-primary" tooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
-                    <td *ngIf="position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/cash-transaction-form/' + transaction.id" type="button" class="btn btn-sm btn-outline-primary" tooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
-                    <td><span class="float-end"><button (click)="openModal(removeTransactionConfirmModal, transaction)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></span></td>
+                    <td *ngIf="!position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/transaction-form/' + transaction.id" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
+                    <td *ngIf="position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/cash-transaction-form/' + transaction.id" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
+                    <td><span class="float-end"><button (click)="openModal(removeTransactionConfirmModal, transaction)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></span></td>
                 </tr>
                 </tbody>
             </table>

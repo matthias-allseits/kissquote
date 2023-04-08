@@ -34,7 +34,7 @@ export class LineChartComponent implements OnInit {
             y: {
                 min: undefined,
                 grid: {
-                    drawBorder: false,
+                    // drawBorder: false,
                     color: function(context) {
                         if (context.tick.value === 0) {
                             return '#000000';

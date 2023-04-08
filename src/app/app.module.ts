@@ -27,11 +27,11 @@ import { PositionListComponent } from './components/position-list/position-list.
 import { TransactionFormComponent } from './sites/transaction-form/transaction-form.component';
 import {JsonWebTokenInterceptor} from "./interceptor/json-web-token.interceptor";
 import {ErrorInterceptor} from "./interceptor/error-interceptor";
-import {TooltipModule} from "ngx-bootstrap/tooltip";
-import {TypeaheadModule} from "ngx-bootstrap/typeahead";
+// import {TooltipModule} from "ngx-bootstrap/tooltip";
+// import {TypeaheadModule} from "ngx-bootstrap/typeahead";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {ModalModule} from "ngx-bootstrap/modal";
-import {TabsModule} from "ngx-bootstrap/tabs";
+// import {ModalModule} from "ngx-bootstrap/modal";
+// import {TabsModule} from "ngx-bootstrap/tabs";
 import {NgChartsModule} from "ng2-charts";
 import { LineChartComponent } from './components/line-chart/line-chart.component';
 import { CashPositionFormComponent } from './sites/cash-position-form/cash-position-form.component';
@@ -88,10 +88,10 @@ registerLocaleData(localeCH);
         FontAwesomeModule,
         BrowserAnimationsModule,
         NgChartsModule,
-        TooltipModule.forRoot(),
-        TypeaheadModule.forRoot(),
-        ModalModule.forRoot(),
-        TabsModule.forRoot(),
+        // TooltipModule.forRoot(),
+        // TypeaheadModule.forRoot(),
+        // ModalModule.forRoot(),
+        // TabsModule.forRoot(),
     ],
     providers: [
         {

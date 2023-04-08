@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {PositionService} from '../../services/position.service';
 import {Position} from '../../models/position';
@@ -42,7 +42,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         'quaterly',
     ];
 
-    positionForm = new FormGroup({
+    positionForm = new UntypedFormGroup({
         shareName: new FormControl('', Validators.required),
         isin: new FormControl('', Validators.required),
         marketplace: new FormControl('', Validators.required),

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TranslationService} from '../../services/translation.service';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, UntypedFormControl, Validators} from "@angular/forms";
 import {FeedbackService} from "../../services/feedback.service";
 import {Feedback} from "../../models/feedback";
 import {Location} from "@angular/common";
@@ -18,7 +18,7 @@ export class FeedbackComponent implements OnInit {
     public submitText = '';
 
     feedbackForm = new FormGroup({
-        feedback: new FormControl('', Validators.required),
+        feedback: new UntypedFormControl('', Validators.required),
     });
 
     constructor(

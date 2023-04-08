@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MotherFormComponent} from "../mother-form.component";
 import {Transaction} from "../../models/transaction";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import {PositionService} from "../../services/position.service";
 import {Position} from "../../models/position";
 import {ActivatedRoute, Params, Router} from "@angular/router";
@@ -27,13 +27,13 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
     public currencies: Currency[] = [];
     public titleOptions = ['Kauf', 'Fx-Gutschrift Comp.', 'Zins', 'Coupon', 'Negativzins', 'Verkauf', 'Auszahlung', 'Dividende', 'Capital Gain', 'Forex-Gutschrift', 'Vergütung', 'Einzahlung', 'Depotgebühren', 'Fx-Belastung Comp.', 'Kapitalrückzahlung', 'Forex-Belastung', 'Corporate Action', 'Split'];
 
-    transactionForm = new FormGroup({
+    transactionForm = new UntypedFormGroup({
         title: new FormControl('', Validators.required),
-        date: new FormControl(null, Validators.required),
+        date: new UntypedFormControl(null, Validators.required),
         quantity: new FormControl('', Validators.required),
         rate: new FormControl('', Validators.required),
         fee: new FormControl(''),
-        currency: new FormControl('', Validators.required),
+        currency: new UntypedFormControl('', Validators.required),
     });
 
     constructor(

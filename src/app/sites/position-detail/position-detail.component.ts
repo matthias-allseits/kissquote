@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {Transaction} from "../../models/transaction";
 import {TransactionService} from "../../services/transaction.service";
-import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
+// import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {ShareheadService} from "../../services/sharehead.service";
 import {ShareheadShare} from "../../models/sharehead-share";
 import {ChartData} from "chart.js";
@@ -21,8 +21,9 @@ import {ShareService} from "../../services/share.service";
 import {CurrencyService} from "../../services/currency.service";
 import {StockRate} from "../../models/stock-rate";
 import {StockRateCreator} from "../../creators/stock-rate-creator";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, UntypedFormControl, Validators} from "@angular/forms";
 import {TranslationService} from "../../services/translation.service";
+import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 
 
 @Component({
@@ -53,8 +54,8 @@ export class PositionDetailComponent implements OnInit {
     public currentYieldOnValue = '';
     public currentYieldOnValueSource = '';
     public maxDrawdownSummary?: MaxDrawdownSummary;
-    modalRef?: BsModalRef;
-    shareheadModalRef?: BsModalRef;
+    modalRef?: NgbModalRef;
+    shareheadModalRef?: NgbModalRef;
 
     public chartData?: ChartData;
     public lineChartData?: ChartData;
@@ -62,7 +63,7 @@ export class PositionDetailComponent implements OnInit {
     public historicStockRates: StockRate[] = [];
 
     manualDrawdownForm = new FormGroup({
-        amount: new FormControl('', Validators.required),
+        amount: new UntypedFormControl('', Validators.required),
     });
 
     constructor(
@@ -74,7 +75,7 @@ export class PositionDetailComponent implements OnInit {
         private transactionService: TransactionService,
         private shareService: ShareService,
         private shareheadService: ShareheadService,
-        private modalService: BsModalService,
+        private modalService: NgbModal,
     ) { }
 
     ngOnInit(): void {
@@ -109,11 +110,11 @@ export class PositionDetailComponent implements OnInit {
 
     openModal(template: TemplateRef<any>, transaction: Transaction) {
         this.selectedTransaction = transaction;
-        this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+        this.modalRef = this.modalService.open(template);
     }
 
     openShareheadConfirmModal(template: TemplateRef<any>) {
-        this.shareheadModalRef = this.modalService.show(template, {class: 'modal-sm'});
+        this.shareheadModalRef = this.modalService.open(template);
     }
 
 
@@ -121,7 +122,7 @@ export class PositionDetailComponent implements OnInit {
         if (this.selectedTransaction) {
             this.deleteTransaction(this.selectedTransaction);
         }
-        this.modalRef?.hide();
+        this.modalRef?.close();
     }
 
 
@@ -136,13 +137,13 @@ export class PositionDetailComponent implements OnInit {
                     }
                 });
         }
-        this.shareheadModalRef?.hide();
+        this.shareheadModalRef?.close();
     }
 
 
     decline(): void {
-        this.modalRef?.hide();
-        this.shareheadModalRef?.hide();
+        this.modalRef?.close();
+        this.shareheadModalRef?.close();
     }
 
 
@@ -160,15 +161,15 @@ export class PositionDetailComponent implements OnInit {
     }
 
     openManualDrawdownModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+        this.modalRef = this.modalService.open(template);
     }
 
     cancelModal(): void {
-        this.modalRef?.hide();
+        this.modalRef?.close();
     }
 
     openManualDrawdownConfirmModal(template: TemplateRef<any>): void {
-        this.shareheadModalRef = this.modalService.show(template, {class: 'modal-sm'});
+        this.shareheadModalRef = this.modalService.open(template);
     }
 
     confirmManualDrawdownRemoving(): void {
@@ -187,7 +188,7 @@ export class PositionDetailComponent implements OnInit {
 
     persistManualDrawdown(): void {
         if (this.position) {
-            this.position.manualDrawdown = this.manualDrawdownForm.get('amount')?.value;
+            this.position.manualDrawdown = +this.manualDrawdownForm.get('amount')?.value;
             this.positionService.update(this.position)
                 .subscribe(position => {
                     if (position) {
@@ -196,7 +197,7 @@ export class PositionDetailComponent implements OnInit {
                     }
                 });
         }
-        this.modalRef?.hide();
+        this.modalRef?.close();
     }
 
 

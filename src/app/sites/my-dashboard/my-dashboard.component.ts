@@ -5,13 +5,13 @@ import {faEdit, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {TranslationService} from "../../services/translation.service";
 import {DividendTotal, Position} from "../../models/position";
-import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
+// import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {PositionService} from "../../services/position.service";
 import {BankAccount} from "../../models/bank-account";
 import {BankAccountService} from "../../services/bank-account.service";
 import {ChartData} from "chart.js";
 import {Currency} from "../../models/currency";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, UntypedFormControl, Validators} from "@angular/forms";
 import {CurrencyService} from "../../services/currency.service";
 import {ShareheadService} from "../../services/sharehead.service";
 import {WatchlistEntry} from "../../models/watchlistEntry";
@@ -21,6 +21,7 @@ import {ManualDividend} from "../../models/manual-dividend";
 import {ManualDividendService} from "../../services/manual-dividend.service";
 import {DividendCreator} from "../../creators/dividend-creator";
 import {Observable} from "rxjs";
+import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 
 
 @Component({
@@ -57,15 +58,15 @@ export class MyDashboardComponent implements OnInit {
     public ultimateBalanceList?: Position[];
     public lombardValueList?: LombardValuesSummary[];
     public lombardTotal = 0;
-    modalRef?: BsModalRef;
+    modalRef?: NgbModalRef;
 
     exchangeRateForm = new FormGroup({
-        rate: new FormControl('', Validators.required),
+        rate: new UntypedFormControl('', Validators.required),
     });
 
     manualDividendForm = new FormGroup({
-        year: new FormControl(new Date().getFullYear(), Validators.required),
-        amount: new FormControl('', Validators.required),
+        year: new UntypedFormControl(new Date().getFullYear(), Validators.required),
+        amount: new UntypedFormControl('', Validators.required),
     });
 
     constructor(
@@ -74,7 +75,7 @@ export class MyDashboardComponent implements OnInit {
         private positionService: PositionService,
         private currencyService: CurrencyService,
         private bankAccountService: BankAccountService,
-        private modalService: BsModalService,
+        private modalService: NgbModal,
         private shareheadService: ShareheadService,
         private watchlistService: WatchlistService,
         private manualDividendService: ManualDividendService,
@@ -168,17 +169,17 @@ export class MyDashboardComponent implements OnInit {
 
     openPositionConfirmModal(template: TemplateRef<any>, position: Position) {
         this.selectedPosition = position;
-        this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+        this.modalRef = this.modalService.open(template);
     }
 
     openWatchlistConfirmModal(template: TemplateRef<any>, entry: WatchlistEntry) {
         this.selectedWatchlistEntry = entry;
-        this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+        this.modalRef = this.modalService.open(template);
     }
 
     openManualDividendConfirmModal(template: TemplateRef<any>, entry: ManualDividend|undefined) {
         this.selectedManualDividend = entry;
-        this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+        this.modalRef = this.modalService.open(template);
     }
 
 
@@ -186,11 +187,11 @@ export class MyDashboardComponent implements OnInit {
         if (this.selectedPosition) {
             this.deletePosition(this.selectedPosition);
         }
-        this.modalRef?.hide();
+        this.modalRef?.close();
     }
 
     cancelModal(): void {
-        this.modalRef?.hide();
+        this.modalRef?.close();
     }
 
     deletePosition(position: Position): void {
@@ -202,13 +203,13 @@ export class MyDashboardComponent implements OnInit {
 
     openAccountConfirmModal(template: TemplateRef<any>, account: BankAccount) {
         this.selectedBankAccount = account;
-        this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+        this.modalRef = this.modalService.open(template);
     }
 
     openExchangeRateModal(template: TemplateRef<any>, currency: Currency) {
         this.selectedCurrency = currency;
         this.exchangeRateForm.get('rate')?.setValue(currency.rate);
-        this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+        this.modalRef = this.modalService.open(template);
     }
 
     persistExchangeRate(): void {
@@ -220,7 +221,7 @@ export class MyDashboardComponent implements OnInit {
                     document.location.reload();
                 });
         }
-        this.modalRef?.hide();
+        this.modalRef?.close();
     }
 
     openManualDividendModal(template: TemplateRef<any>, positionId: number) {
@@ -229,7 +230,7 @@ export class MyDashboardComponent implements OnInit {
             this.selectedManualDividend = DividendCreator.createNewDividend();
             this.selectedManualDividend.share = position.share;
             this.selectedManualDividend.year = new Date().getFullYear();
-            this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+            this.modalRef = this.modalService.open(template);
         }
     }
 
@@ -243,14 +244,14 @@ export class MyDashboardComponent implements OnInit {
                     document.location.reload();
                 });
         }
-        this.modalRef?.hide();
+        this.modalRef?.close();
     }
 
     confirmDeleteAccount(): void {
         if (this.selectedBankAccount) {
             this.deleteBankAccount(this.selectedBankAccount);
         }
-        this.modalRef?.hide();
+        this.modalRef?.close();
     }
 
     deleteBankAccount(account: BankAccount): void {
@@ -264,7 +265,7 @@ export class MyDashboardComponent implements OnInit {
         if (this.selectedManualDividend) {
             this.deleteManualDividend(this.selectedManualDividend);
         }
-        this.modalRef?.hide();
+        this.modalRef?.close();
     }
 
     deleteManualDividend(dividend: ManualDividend): void {
@@ -287,7 +288,7 @@ export class MyDashboardComponent implements OnInit {
         if (this.selectedWatchlistEntry) {
             this.removeWatchlistEntry(this.selectedWatchlistEntry);
         }
-        this.modalRef?.hide();
+        this.modalRef?.close();
     }
 
     removeWatchlistEntry(entry: WatchlistEntry): void {

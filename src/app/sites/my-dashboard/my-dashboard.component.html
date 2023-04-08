@@ -68,9 +68,9 @@
                             <td class="d-none d-md-table-cell"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
                             <td class="d-none d-md-table-cell"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
                             <td class="text-center d-none d-md-table-cell">{{ position.transactions.length }}</td>
-                            <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                            <td><button [routerLink]="'/position/' + position.id + '/cash-transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>
-                            <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                            <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                            <td><button [routerLink]="'/position/' + position.id + '/cash-transaction-form'" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>
+                            <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -100,10 +100,10 @@
                             <td class="d-none d-md-table-cell"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
                             <td class="d-none d-md-table-cell"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
                             <td class="text-center d-none d-md-table-cell">{{ position.transactions.length }}</td>
-                            <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-<!--                            <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>-->
-                            <td><button [routerLink]="['/bank-account/' + accountIndex + '/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Edit Position"><fa-icon [icon]="editIcon"></fa-icon></button></td>
-                            <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                            <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+<!--                            <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>-->
+                            <td><button [routerLink]="['/bank-account/' + accountIndex + '/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Edit Position"><fa-icon [icon]="editIcon"></fa-icon></button></td>
+                            <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -267,8 +267,8 @@
                                 <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.name }}</a></td>
                                 <td>From Transactions</td>
                                 <td><span class="float-end">{{ entry.total }} {{ entry.currency?.name }}</span></td>
-                                <td *ngIf="entry.manualDividend === undefined"><button (click)="openManualDividendModal(manualDividendFormModal, entry.positionId)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Set manual entry"><fa-icon [icon]="addIcon"></fa-icon></button></td>
-                                <td *ngIf="entry.manualDividend"><button (click)="openManualDividendConfirmModal(removeManualDividendModal, entry.manualDividend)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Remove manual entry"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                                <td *ngIf="entry.manualDividend === undefined"><button (click)="openManualDividendModal(manualDividendFormModal, entry.positionId)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Set manual entry"><fa-icon [icon]="addIcon"></fa-icon></button></td>
+                                <td *ngIf="entry.manualDividend"><button (click)="openManualDividendConfirmModal(removeManualDividendModal, entry.manualDividend)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Remove manual entry"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                             </tr>
                         </ng-container>
                     </tbody>
@@ -290,8 +290,8 @@
                                     <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.name }}</a></td>
                                     <td>{{ entry.source }}</td>
                                     <td><span class="float-end">{{ entry.total|number: '1.0-0' }} {{ entry.currency?.name }}</span></td>
-                                    <td *ngIf="entry.manualDividend === undefined"><button (click)="openManualDividendModal(manualDividendFormModal, entry.positionId)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Set manual entry"><fa-icon [icon]="addIcon"></fa-icon></button></td>
-                                    <td *ngIf="entry.manualDividend"><button (click)="openManualDividendConfirmModal(removeManualDividendModal, entry.manualDividend)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Remove manual entry"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                                    <td *ngIf="entry.manualDividend === undefined"><button (click)="openManualDividendModal(manualDividendFormModal, entry.positionId)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Set manual entry"><fa-icon [icon]="addIcon"></fa-icon></button></td>
+                                    <td *ngIf="entry.manualDividend"><button (click)="openManualDividendConfirmModal(removeManualDividendModal, entry.manualDividend)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Remove manual entry"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                                 </tr>
                             </ng-container>
                         </tbody>
@@ -317,8 +317,8 @@
                 <tr *ngFor="let entry of portfolio.watchlistEntries">
                     <td>{{ entry.title }}</td>
                     <td class="d-none d-md-table-cell">{{ entry.startDate|date:'dd.MM.y' }}</td>
-                    <td><button [routerLink]="['/sharehead-share-detail/' + entry.shareheadId]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                    <td><button (click)="openWatchlistConfirmModal(removeWatchlistModal, entry)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Entfernen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                    <td><button [routerLink]="['/sharehead-share-detail/' + entry.shareheadId]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                    <td><button (click)="openWatchlistConfirmModal(removeWatchlistModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Entfernen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                 </tr>
                 </tbody>
             </table>
@@ -351,7 +351,7 @@
                         <tr>
                             <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
                             <th scope="col"><span class="float-end">{{ tranService.trans('LISTNGS_DAYS') }}</span></th>
-                            <th scope="col"><span class="float-end" tooltip="Profit per day">Ppd</span></th>
+                            <th scope="col"><span class="float-end" ngbTooltip="Profit per day">Ppd</span></th>
                             <th scope="col" style="width: 35px;"></th>
 <!--                            <th scope="col" style="width: 35px;"></th>-->
                         </tr>
@@ -362,8 +362,8 @@
                                 <td>{{ position.share.name }}</td>
                                 <td><span class="float-end">{{ position.daysSinceStart()|number: '1.0' }}</span></td>
                                 <td><span class="float-end">{{ position.profitPerDay() }}</span></td>
-                                <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-<!--                                <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" tooltip="Editieren"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>-->
+                                <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+<!--                                <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Editieren"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>-->
                             </ng-container>
                         </tr>
                     </tbody>
@@ -381,7 +381,7 @@
                             <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
                             <th scope="col">Method</th>
                             <th scope="col"><span class="float-end">{{ tranService.trans('GLOB_VALUE') }}</span></th>
-                            <th scope="col"><span class="float-end" tooltip="{{ tranService.trans('LISTNGS_FROM_INVESTMENT') }}">frmInv</span></th>
+                            <th scope="col"><span class="float-end" ngbTooltip="{{ tranService.trans('LISTNGS_FROM_INVESTMENT') }}">frmInv</span></th>
                             <th scope="col" style="width: 35px;"></th>
                         </tr>
                     </thead>
@@ -391,7 +391,7 @@
                             <td>{{ entry.maxDrawdownSummary.method }}</td>
                             <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValue|number: '1.0' }}</span></td>
                             <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValueFromInvestment }}%</span></td>
-                            <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                            <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -425,7 +425,7 @@
                             <td>{{ currency.name }}</td>
                             <td align="right">{{ currency.rate }}</td>
                             <td>
-                                <button (click)="openExchangeRateModal(exchangeRateFormModal, currency)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Editieren">
+                                <button (click)="openExchangeRateModal(exchangeRateFormModal, currency)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Editieren">
                                     <fa-icon [icon]="editIcon"></fa-icon>
                                 </button>
                             </td>
@@ -468,8 +468,8 @@
                         <td class="d-none d-md-table-cell"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
                         <td class="d-none d-md-table-cell"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
                         <td class="text-center d-none d-md-table-cell">{{ position.transactions.length }}</td>
-                        <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" tooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                        <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" tooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                        <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                        <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                     </tr>
                     </tbody>
                 </table>
