@@ -27,7 +27,6 @@
     "bootstrap": "^5.1.3",
     "chart.js": "^3.7.0",
     "ng2-charts": "^3.0.7",
-    "ngx-bootstrap": "^7.1.2",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -44,19 +43,20 @@
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
+    "ngx-bootstrap": "^10.2.0",
     "typescript": "~4.5.2"
   },
-    "browserslist": [
-        "chrome 97",
-        "chrome 96",
-        "chrome 95",
-        "chrome 94",
-        "firefox 96",
-        "firefox 95",
-        "firefox 94",
-        "firefox 91",
-        "firefox 78",
-        "ios_saf 15.0-15.1",
-        "ios_saf 14.0-14.4"
-    ]
+  "browserslist": [
+    "chrome 97",
+    "chrome 96",
+    "chrome 95",
+    "chrome 94",
+    "firefox 96",
+    "firefox 95",
+    "firefox 94",
+    "firefox 91",
+    "firefox 78",
+    "ios_saf 15.0-15.1",
+    "ios_saf 14.0-14.4"
+  ]
 }
