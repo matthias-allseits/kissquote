@@ -335,6 +335,9 @@
                     <a class="nav-link" [class.active]="listingTab === 'lombard'" (click)="changeListingTab('lombard')" aria-current="page">Lombard</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" [class.active]="listingTab === 'lastMinute'" (click)="changeListingTab('lastMinute')" aria-current="page">Last Minute</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" [class.active]="listingTab === 'diversification'" (click)="changeListingTab('diversification')" aria-current="page">Diversification</a>
                 </li>
                 <li class="nav-item">
@@ -392,6 +395,34 @@
                             <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValue|number: '1.0' }}</span></td>
                             <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValueFromInvestment }}%</span></td>
                             <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'lastMinute'">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
+                    <h4>Last Minute</h4>
+                </div>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+                            <th scope="col" class="d-none d-md-table-cell">Payment</th>
+                            <th scope="col">Yield</th>
+                            <th scope="col">Ex-Date</th>
+                            <th scope="col">Pay-Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let entry of lastMinuteList" [class.orange]="entry.positionId || entry.isOnWatchlist">
+                            <ng-container *ngIf="entry.plannedDividends">
+                                <td *ngIf="entry.positionId"><a [routerLink]="['/position-detail/' + entry.positionId]" ngbTooltip="Zur Position">{{ entry.name }}</a></td>
+                                <td *ngIf="!entry.positionId"><a [routerLink]="['/sharehead-share-detail/' + entry.id]" ngbTooltip="Details">{{ entry.name }}</a></td>
+                                <td class="d-none d-md-table-cell"><span *ngIf="entry.plannedDividends[0].amount">{{ entry.plannedDividends[0].amount }}</span></td>
+                                <td><span *ngIf="entry.plannedDividends[0].amount && entry.lastRate">{{ (100 / entry.lastRate.rate * entry.plannedDividends[0].amount).toFixed(2) }}%</span></td>
+                                <td>{{ entry.plannedDividends[0].exDate|date:'dd.MM.YY' }}</td>
+                                <td>{{ entry.plannedDividends[0].payDate|date:'dd.MM.YY' }}</td>
+                            </ng-container>
                         </tr>
                     </tbody>
                 </table>

@@ -7,7 +7,7 @@ export class StockRateCreator {
         return new StockRate(0, new Date(), 0, 0, 0, 0, '');
     }
 
-    public static oneFromApiArray(apiArray: StockRate): StockRate|null
+    public static oneFromApiArray(apiArray: StockRate): StockRate|undefined
     {
         if (apiArray !== undefined && apiArray !== null) {
             return new StockRate(
@@ -20,7 +20,7 @@ export class StockRateCreator {
                 apiArray.currency,
             );
         } else {
-            return null;
+            return undefined;
         }
     }
 

@@ -8,6 +8,8 @@ import {AnalystRatingCreator} from "./analyst-rating-creator";
 import {ShareheadEstimationCreator} from "./sharehead-estimation-creator";
 import {ShareheadTurningPoint} from "../models/sharehead-turning-point";
 import {ShareheadTurningPointCreator} from "./sharehead-turning-point-creator";
+import {StockRate} from "../models/stock-rate";
+import {StockRateCreator} from "./stock-rate-creator";
 
 
 export class ShareheadShareCreator {
@@ -56,6 +58,7 @@ export class ShareheadShareCreator {
                 apiArray.plannedDividends ? ShareheadPlannedDividendCreator.fromApiArray(apiArray.plannedDividends) : undefined,
                 apiArray.analystRatings ? AnalystRatingCreator.fromApiArray(apiArray.analystRatings) : undefined,
                 apiArray.turningPoints ? ShareheadTurningPointCreator.fromApiArray(apiArray.turningPoints) : undefined,
+                apiArray.lastRate ? StockRateCreator.oneFromApiArray(apiArray.lastRate) : undefined,
             );
         } else {
             return null;

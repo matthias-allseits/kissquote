@@ -48,6 +48,7 @@ export class MyDashboardComponent implements OnInit {
     private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions', 'listings'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
+    private availableListingTabs = ['ultimate', 'lombard', 'lastMinute', 'diversification', 'targets', 'diviGrowthSummary'];
     public listingTab = 'ultimate';
     public dividendLists?: DividendTotals[];
     public closedPositionsBalance = 0;
@@ -57,6 +58,7 @@ export class MyDashboardComponent implements OnInit {
     public years = [2023, 2024, 2025, 2026];
     public ultimateBalanceList?: Position[];
     public lombardValueList?: LombardValuesSummary[];
+    public lastMinuteList?: ShareheadShare[];
     public lombardTotal = 0;
     modalRef?: NgbModalRef;
 
@@ -103,6 +105,12 @@ export class MyDashboardComponent implements OnInit {
                         } else {
                             this.dashboardTab = '0';
                         }
+                        const storedListingTab = localStorage.getItem('listingTab');
+                        if (storedListingTab && this.availableListingTabs.indexOf(storedListingTab) > -1) {
+                            this.listingTab = storedListingTab;
+                        } else {
+                            this.listingTab = 'ultimate';
+                        }
                         this.ultimateBalanceList = this.portfolio.getActiveNonCashPositions();
                         this.ultimateBalanceList.sort((a,b) => (+a.profitPerDay() < +b.profitPerDay()) ? 1 : ((+b.profitPerDay() < +a.profitPerDay()) ? -1 : 0))
                         this.portfolio.getClosedNonCashPositions().forEach(position => {
@@ -121,6 +129,11 @@ export class MyDashboardComponent implements OnInit {
                                     });
                                 }
                             });
+                        this.shareheadService.getLastMinuteList()
+                            .subscribe(shares => {
+                                this.lastMinuteList = shares;
+                                this.markSharesOnList(this.lastMinuteList, returnedPortfolio);
+                            })
                         this.incomeChartData = this.portfolio?.incomeChartData();
                         this.incomeChartDataImproved = this.portfolio?.incomeChartDataImproved();
                     } else {
@@ -165,6 +178,7 @@ export class MyDashboardComponent implements OnInit {
 
     changeListingTab(selectedTab: string): void {
         this.listingTab = selectedTab;
+        localStorage.setItem('listingTab', selectedTab);
     }
 
     openPositionConfirmModal(template: TemplateRef<any>, position: Position) {
@@ -328,6 +342,24 @@ export class MyDashboardComponent implements OnInit {
                     }
                 });
             }
+        });
+    }
+
+    private markSharesOnList(shareList: ShareheadShare[], portfolio: Portfolio): void
+    {
+        shareList.forEach(shareheadShare => {
+            portfolio.bankAccounts.forEach(account => {
+                account.getActiveNonCashPositions().forEach(position => {
+                    if (position.shareheadId === shareheadShare.id) {
+                        shareheadShare.positionId = position.id;
+                    }
+                });
+            });
+            portfolio.watchlistEntries.forEach(entry => {
+                if (entry.shareheadId === shareheadShare.id) {
+                    shareheadShare.isOnWatchlist = true;
+                }
+            });
         });
     }
 

@@ -9,6 +9,7 @@ import {ShareheadPlannedDividend} from "./sharehead-planned-dividend";
 import {AnalystRating} from "./analyst-rating";
 import {ShareheadTurningPoint} from "./sharehead-turning-point";
 import {Balance} from "./balance";
+import {StockRate} from "./stock-rate";
 
 
 export class ShareheadShare {
@@ -39,6 +40,9 @@ export class ShareheadShare {
         public plannedDividends?: ShareheadPlannedDividend[],
         public analystRatings?: AnalystRating[],
         public turningPoints?: ShareheadTurningPoint[],
+        public lastRate?: StockRate,
+        public positionId?: number,
+        public isOnWatchlist?: boolean,
     ) { }
 
 

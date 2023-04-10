@@ -8,6 +8,7 @@ import {ShareheadShare} from "../models/sharehead-share";
 import {ShareheadShareCreator} from "../creators/sharehead-share-creator";
 import {StockRateCreator} from "../creators/stock-rate-creator";
 import {StockRate} from "../models/stock-rate";
+import {Portfolio} from "../models/portfolio";
 
 
 @Injectable({
@@ -39,7 +40,7 @@ export class ShareheadService {
     }
 
 
-    public getShareRate(id: number): Observable<StockRate|null>
+    public getShareRate(id: number): Observable<StockRate|undefined>
     {
         return this.http.get<StockRate>(this.baseUrl + '/share/' + id + '/rate')
             .pipe(
@@ -75,6 +76,15 @@ export class ShareheadService {
         });
 
         return hit;
+    }
+
+
+    public getLastMinuteList(): Observable<ShareheadShare[]>
+    {
+        return this.http.get<ShareheadShare[]>(this.baseUrl + '/listing/last-minute')
+            .pipe(
+                map(res => ShareheadShareCreator.fromApiArray(res))
+            );
     }
 
 }
