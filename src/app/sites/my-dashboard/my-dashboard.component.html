@@ -342,6 +342,9 @@
                     <a class="nav-link" [class.active]="listingTab === 'lastMinute'" (click)="changeListingTab('lastMinute')" aria-current="page">Last Minute</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" [class.active]="listingTab === 'newestRatings'" (click)="changeListingTab('newestRatings')" aria-current="page">New Ratings</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" [class.active]="listingTab === 'diversification'" (click)="changeListingTab('diversification')" aria-current="page">Diversification</a>
                 </li>
                 <li class="nav-item">
@@ -426,6 +429,34 @@
                                 <td><span *ngIf="entry.plannedDividends[0].amount && entry.lastRate">{{ (100 / entry.lastRate.rate * entry.plannedDividends[0].amount).toFixed(2) }}%</span></td>
                                 <td>{{ entry.plannedDividends[0].exDate|date:'dd.MM.YY' }}</td>
                                 <td>{{ entry.plannedDividends[0].payDate|date:'dd.MM.YY' }}</td>
+                            </ng-container>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'newestRatings'">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
+                    <h4>Newest Ratings</h4>
+                </div>
+                <table class="table table-sm small-text">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+                            <th scope="col">Analyst</th>
+                            <th scope="col">Rating</th>
+                            <th scope="col">Target</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let rating of newestRatingsList">
+                            <ng-container *ngIf="rating.share">
+                                <td>{{ rating.date|date:'dd.MM.' }}</td>
+                                <td *ngIf="rating.positionId"><a [routerLink]="['/position-detail/' + rating.positionId]" ngbTooltip="Details">{{ rating.share.name }}</a></td>
+                                <td *ngIf="!rating.positionId"><a [routerLink]="['/sharehead-share-detail/' + rating.share.id]" ngbTooltip="Details">{{ rating.share.name }}</a></td>
+                                <td>{{ rating.analyst }}</td>
+                                <td>{{ rating.rating }}</td>
+                                <td>{{ rating.priceTarget }} {{ rating.currency }}</td>
                             </ng-container>
                         </tr>
                     </tbody>

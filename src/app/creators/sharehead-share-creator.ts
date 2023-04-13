@@ -28,9 +28,9 @@ export class ShareheadShareCreator {
     }
 
 
-    public static oneFromApiArray(apiArray: ShareheadShare|null): ShareheadShare|null
+    public static oneFromApiArray(apiArray: ShareheadShare|undefined): ShareheadShare|undefined
     {
-        if (apiArray !== undefined && apiArray !== null) {
+        if (apiArray !== undefined) {
             const marketplace = MarketplaceCreator.oneFromApiArray(apiArray.marketplace);
             return new ShareheadShare(
                 apiArray.id,
@@ -61,7 +61,7 @@ export class ShareheadShareCreator {
                 apiArray.lastRate ? StockRateCreator.oneFromApiArray(apiArray.lastRate) : undefined,
             );
         } else {
-            return null;
+            return undefined;
         }
     }
 

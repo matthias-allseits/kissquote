@@ -8,7 +8,10 @@ import {ShareheadShare} from "../models/sharehead-share";
 import {ShareheadShareCreator} from "../creators/sharehead-share-creator";
 import {StockRateCreator} from "../creators/stock-rate-creator";
 import {StockRate} from "../models/stock-rate";
-import {Portfolio} from "../models/portfolio";
+import {AnalystRating} from "../models/analyst-rating";
+import {AnalystRatingCreator} from "../creators/analyst-rating-creator";
+import {WatchlistCreator} from "../creators/watchlist-creator";
+import {Position} from "../models/position";
 
 
 @Injectable({
@@ -24,11 +27,13 @@ export class ShareheadService {
     ) {
         if (+window.location.port === 4300) {
             this.baseUrl = 'http://sharehead.local/api';
+        } else if (+window.location.port === 4500) {
+            this.baseUrl = 'http://localhost:8009/api';
         }
     }
 
 
-    public getShare(id: number): Observable<ShareheadShare|null>
+    public getShare(id: number): Observable<ShareheadShare|undefined>
     {
         return this.http.get<ShareheadShare>(this.baseUrl + '/share/' + id)
             .pipe(
@@ -84,6 +89,32 @@ export class ShareheadService {
         return this.http.get<ShareheadShare[]>(this.baseUrl + '/listing/last-minute')
             .pipe(
                 map(res => ShareheadShareCreator.fromApiArray(res))
+            );
+    }
+
+    public getNewestRatingsList(positions: Position[]): Observable<AnalystRating[]>
+    {
+        const shareheadIds: number[] = [];
+        positions.forEach(position => {
+            if (position.shareheadId) {
+                shareheadIds.push(position.shareheadId);
+            }
+        });
+        return this.http.post(this.baseUrl + '/listing/newest-ratings', JSON.stringify(shareheadIds))
+            .pipe(
+                map(res => {
+                    const ratings = AnalystRatingCreator.fromApiArray(res);
+                    ratings.reverse();
+                    positions.forEach(position => {
+                        ratings.forEach(rating => {
+                            if (position.shareheadId === rating.share?.id) {
+                                rating.positionId = position.id;
+                            }
+                        });
+                    });
+
+                    return ratings;
+                }),
             );
     }
 

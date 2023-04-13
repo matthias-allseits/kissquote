@@ -1,15 +1,18 @@
 import {AnalystRating} from "../models/analyst-rating";
+import {ShareheadShareCreator} from "./sharehead-share-creator";
 
 
 export class AnalystRatingCreator {
 
-    public static fromApiArray(apiArray: AnalystRating[]): AnalystRating[] {
+    public static fromApiArray(apiArray: object): AnalystRating[] {
         const array: AnalystRating[] = [];
 
-        for (const entry of apiArray) {
-            const share = this.oneFromApiArray(entry);
-            if (share instanceof AnalystRating) {
-                array.push(share);
+        if (Array.isArray(apiArray)) {
+            for (const entry of apiArray) {
+                const share = this.oneFromApiArray(entry);
+                if (share instanceof AnalystRating) {
+                    array.push(share);
+                }
             }
         }
         array.reverse();
@@ -28,6 +31,7 @@ export class AnalystRatingCreator {
                 new Date(apiArray.date),
                 apiArray.priceTarget,
                 apiArray.rating,
+                apiArray.share ? ShareheadShareCreator.oneFromApiArray(apiArray.share) : undefined,
             );
         } else {
             return null;

@@ -1,3 +1,4 @@
+import {ShareheadShare} from "./sharehead-share";
 
 export class AnalystRating {
 
@@ -8,11 +9,12 @@ export class AnalystRating {
         public date: Date,
         public priceTarget: number|null,
         public rating?: string,
+        public share?: ShareheadShare,
+        public positionId?: number,
     ) { }
 
     public isPositive(): boolean {
         return this.rating === 'buy' || this.rating === 'strong buy';
-        // {% if rating.rating == 'buy' or rating.rating == 'strong buy' %}green-text{% elseif rating.rating == 'hold' %}yellow-text{% else %}red-text{% endif %}
     }
 
     public isNeutral(): boolean {

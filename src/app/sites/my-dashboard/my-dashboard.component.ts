@@ -22,6 +22,7 @@ import {ManualDividendService} from "../../services/manual-dividend.service";
 import {DividendCreator} from "../../creators/dividend-creator";
 import {Observable} from "rxjs";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
+import {AnalystRating} from "../../models/analyst-rating";
 
 
 @Component({
@@ -48,7 +49,7 @@ export class MyDashboardComponent implements OnInit {
     private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions', 'listings'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
-    private availableListingTabs = ['ultimate', 'lombard', 'lastMinute', 'diversification', 'targets', 'diviGrowthSummary'];
+    private availableListingTabs = ['ultimate', 'lombard', 'lastMinute', 'newestRatings', 'diversification', 'targets', 'diviGrowthSummary'];
     public listingTab = 'ultimate';
     public dividendLists?: DividendTotals[];
     public closedPositionsBalance = 0;
@@ -59,6 +60,7 @@ export class MyDashboardComponent implements OnInit {
     public ultimateBalanceList?: Position[];
     public lombardValueList?: LombardValuesSummary[];
     public lastMinuteList?: ShareheadShare[];
+    public newestRatingsList?: AnalystRating[];
     public lombardTotal = 0;
     modalRef?: NgbModalRef;
 
@@ -133,7 +135,11 @@ export class MyDashboardComponent implements OnInit {
                             .subscribe(shares => {
                                 this.lastMinuteList = shares;
                                 this.markSharesOnList(this.lastMinuteList, returnedPortfolio);
-                            })
+                            });
+                        this.shareheadService.getNewestRatingsList(this.portfolio.getActiveNonCashPositions())
+                            .subscribe(shares => {
+                                this.newestRatingsList = shares;
+                            });
                         this.incomeChartData = this.portfolio?.incomeChartData();
                         this.incomeChartDataImproved = this.portfolio?.incomeChartDataImproved();
                     } else {

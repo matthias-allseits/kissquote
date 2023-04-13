@@ -464,6 +464,21 @@ export class Portfolio {
     }
 
 
+    allShareheadIdsFromPositions(): number[] {
+        const ids: number[] = [];
+        this.getActiveNonCashPositions().forEach(position => {
+            if (position.shareheadId) {
+                ids.push(position.shareheadId);
+            }
+        });
+        this.watchlistEntries.forEach(entry => {
+            ids.push(entry.shareheadId);
+        });
+
+        return ids;
+    }
+
+
     private collectDividendForYear(year: number, thisYear: number): DividendTotals {
         const payedList: DividendTotal[] = [];
         const plannedList: DividendTotal[] = [];
