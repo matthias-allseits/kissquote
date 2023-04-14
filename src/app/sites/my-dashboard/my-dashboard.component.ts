@@ -122,7 +122,6 @@ export class MyDashboardComponent implements OnInit {
                         });
                         this.loadShareheadShares()
                             .subscribe(result => {
-                                console.log(result);
                                 if (this.portfolio) {
                                     this.dividendLists = this.portfolio.collectDividendLists();
                                     this.lombardValueList = this.portfolio.lombardValuePositions();
@@ -136,7 +135,7 @@ export class MyDashboardComponent implements OnInit {
                                 this.lastMinuteList = shares;
                                 this.markSharesOnList(this.lastMinuteList, returnedPortfolio);
                             });
-                        this.shareheadService.getNewestRatingsList(this.portfolio.getActiveNonCashPositions())
+                        this.shareheadService.getNewestRatingsList(this.portfolio)
                             .subscribe(shares => {
                                 this.newestRatingsList = shares;
                             });

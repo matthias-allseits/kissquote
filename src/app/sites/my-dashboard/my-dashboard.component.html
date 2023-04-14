@@ -438,14 +438,14 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
                     <h4>Newest Ratings</h4>
                 </div>
-                <table class="table table-sm small-text">
+                <table class="table table-striped table-sm small-text">
                     <thead>
                         <tr>
                             <th scope="col">Date</th>
                             <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
                             <th scope="col">Analyst</th>
                             <th scope="col">Rating</th>
-                            <th scope="col">Target</th>
+                            <th scope="col"><span class="float-end">Target</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -456,7 +456,7 @@
                                 <td *ngIf="!rating.positionId"><a [routerLink]="['/sharehead-share-detail/' + rating.share.id]" ngbTooltip="Details">{{ rating.share.name }}</a></td>
                                 <td>{{ rating.analyst }}</td>
                                 <td>{{ rating.rating }}</td>
-                                <td>{{ rating.priceTarget }} {{ rating.currency }}</td>
+                                <td><span class="float-end">{{ rating.priceTarget }} {{ rating.currency }}</span></td>
                             </ng-container>
                         </tr>
                     </tbody>

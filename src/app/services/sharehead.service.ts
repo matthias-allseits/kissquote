@@ -12,6 +12,7 @@ import {AnalystRating} from "../models/analyst-rating";
 import {AnalystRatingCreator} from "../creators/analyst-rating-creator";
 import {WatchlistCreator} from "../creators/watchlist-creator";
 import {Position} from "../models/position";
+import {Portfolio} from "../models/portfolio";
 
 
 @Injectable({
@@ -92,20 +93,23 @@ export class ShareheadService {
             );
     }
 
-    public getNewestRatingsList(positions: Position[]): Observable<AnalystRating[]>
+    public getNewestRatingsList(portfolio: Portfolio): Observable<AnalystRating[]>
     {
         const shareheadIds: number[] = [];
-        positions.forEach(position => {
+        portfolio.getActiveNonCashPositions().forEach(position => {
             if (position.shareheadId) {
                 shareheadIds.push(position.shareheadId);
             }
+        });
+        portfolio.watchlistEntries.forEach(entry => {
+            shareheadIds.push(entry.shareheadId);
         });
         return this.http.post(this.baseUrl + '/listing/newest-ratings', JSON.stringify(shareheadIds))
             .pipe(
                 map(res => {
                     const ratings = AnalystRatingCreator.fromApiArray(res);
                     ratings.reverse();
-                    positions.forEach(position => {
+                    portfolio.getActiveNonCashPositions().forEach(position => {
                         ratings.forEach(rating => {
                             if (position.shareheadId === rating.share?.id) {
                                 rating.positionId = position.id;
