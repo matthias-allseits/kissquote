@@ -14,13 +14,15 @@ import {StockRateCreator} from "./stock-rate-creator";
 
 export class ShareheadShareCreator {
 
-    public static fromApiArray(apiArray: ShareheadShare[]): ShareheadShare[] {
+    public static fromApiArray(apiArray: object): ShareheadShare[] {
         const array: ShareheadShare[] = [];
 
-        for (const shareList of apiArray) {
-            const share = this.oneFromApiArray(shareList);
-            if (share instanceof ShareheadShare) {
-                array.push(share);
+        if (Array.isArray(apiArray)) {
+            for (const shareList of apiArray) {
+                const share = this.oneFromApiArray(shareList);
+                if (share instanceof ShareheadShare) {
+                    array.push(share);
+                }
             }
         }
 

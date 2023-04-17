@@ -122,4 +122,32 @@ export class ShareheadService {
             );
     }
 
+    public getNextReportsList(portfolio: Portfolio): Observable<ShareheadShare[]>
+    {
+        const shareheadIds: number[] = [];
+        portfolio.getActiveNonCashPositions().forEach(position => {
+            if (position.shareheadId) {
+                shareheadIds.push(position.shareheadId);
+            }
+        });
+        portfolio.watchlistEntries.forEach(entry => {
+            shareheadIds.push(entry.shareheadId);
+        });
+        return this.http.post(this.baseUrl + '/listing/next-reports', JSON.stringify(shareheadIds))
+            .pipe(
+                map(res => {
+                    const shares = ShareheadShareCreator.fromApiArray(res);
+                    portfolio.getActiveNonCashPositions().forEach(position => {
+                        shares.forEach(share => {
+                            if (position.shareheadId === share.id) {
+                                share.positionId = position.id;
+                            }
+                        });
+                    });
+
+                    return shares;
+                }),
+            );
+    }
+
 }

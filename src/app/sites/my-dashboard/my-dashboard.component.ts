@@ -49,7 +49,7 @@ export class MyDashboardComponent implements OnInit {
     private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions', 'listings'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
-    private availableListingTabs = ['ultimate', 'lombard', 'lastMinute', 'newestRatings', 'diversification', 'targets', 'diviGrowthSummary'];
+    private availableListingTabs = ['ultimate', 'lombard', 'lastMinute', 'newestRatings', 'nextReports', 'diversification', 'targets', 'diviGrowthSummary'];
     public listingTab = 'ultimate';
     public dividendLists?: DividendTotals[];
     public closedPositionsBalance = 0;
@@ -61,6 +61,7 @@ export class MyDashboardComponent implements OnInit {
     public lombardValueList?: LombardValuesSummary[];
     public lastMinuteList?: ShareheadShare[];
     public newestRatingsList?: AnalystRating[];
+    public nextReportsList?: ShareheadShare[];
     public lombardTotal = 0;
     modalRef?: NgbModalRef;
 
@@ -138,6 +139,10 @@ export class MyDashboardComponent implements OnInit {
                         this.shareheadService.getNewestRatingsList(this.portfolio)
                             .subscribe(shares => {
                                 this.newestRatingsList = shares;
+                            });
+                        this.shareheadService.getNextReportsList(this.portfolio)
+                            .subscribe(shares => {
+                                this.nextReportsList = shares;
                             });
                         this.incomeChartData = this.portfolio?.incomeChartData();
                         this.incomeChartDataImproved = this.portfolio?.incomeChartDataImproved();

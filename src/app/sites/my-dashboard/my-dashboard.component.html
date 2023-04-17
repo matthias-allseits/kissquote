@@ -345,6 +345,9 @@
                     <a class="nav-link" [class.active]="listingTab === 'newestRatings'" (click)="changeListingTab('newestRatings')" aria-current="page">New Ratings</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" [class.active]="listingTab === 'nextReports'" (click)="changeListingTab('nextReports')" aria-current="page">Next Reports</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" [class.active]="listingTab === 'diversification'" (click)="changeListingTab('diversification')" aria-current="page">Diversification</a>
                 </li>
                 <li class="nav-item">
@@ -457,6 +460,28 @@
                                 <td>{{ rating.analyst }}</td>
                                 <td>{{ rating.rating }}</td>
                                 <td><span class="float-end">{{ rating.priceTarget }} {{ rating.currency }}</span></td>
+                            </ng-container>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'nextReports'">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
+                    <h4>Next Reports</h4>
+                </div>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let share of nextReportsList">
+                            <ng-container>
+                                <td>{{ share.nextReportDate|date:'dd.MM.YY' }}</td>
+                                <td *ngIf="share.positionId"><a [routerLink]="['/position-detail/' + share.positionId]" ngbTooltip="Details">{{ share.name }}</a></td>
+                                <td *ngIf="!share.positionId"><a [routerLink]="['/sharehead-share-detail/' + share.id]" ngbTooltip="Details">{{ share.name }}</a></td>
                             </ng-container>
                         </tr>
                     </tbody>
