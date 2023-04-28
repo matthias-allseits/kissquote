@@ -182,8 +182,8 @@
                         <div class="col-3"><span class="float-end">{{ position.daysSinceStart()|number: '1.0' }}</span></div>
                     </div>
                     <div class="row">
-                        <div class="col-9">Profit per day:</div>
-                        <div class="col-3"><span class="float-end" [class.red-text]="+position.profitPerDay() < 0" [class.green-text]="+position.profitPerDay() > 0">{{ position.profitPerDay() }}</span></div>
+                        <div class="col-9">Total return per day:</div>
+                        <div class="col-3"><span class="float-end" [class.red-text]="+position.totalReturnPerDay() < 0" [class.green-text]="+position.totalReturnPerDay() > 0">{{ position.totalReturnPerDay() }}</span></div>
                     </div>
                     <h5 style="margin-top: 15px;">Dividend projections</h5>
                     <ng-container *ngFor="let projection of diviProjectionYears">

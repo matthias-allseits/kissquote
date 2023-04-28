@@ -364,7 +364,7 @@
                         <tr>
                             <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
                             <th scope="col"><span class="float-end">{{ tranService.trans('LISTNGS_DAYS') }}</span></th>
-                            <th scope="col"><span class="float-end" ngbTooltip="Profit per day">Ppd</span></th>
+                            <th scope="col"><span class="float-end" ngbTooltip="Total return per day">TRpd</span></th>
                             <th scope="col" style="width: 35px;"></th>
 <!--                            <th scope="col" style="width: 35px;"></th>-->
                         </tr>
@@ -374,7 +374,7 @@
                             <ng-container *ngIf="position.share">
                                 <td>{{ position.share.name }}</td>
                                 <td><span class="float-end">{{ position.daysSinceStart()|number: '1.0' }}</span></td>
-                                <td><span class="float-end">{{ position.profitPerDay() }}</span></td>
+                                <td><span class="float-end">{{ position.totalReturnPerDay() }}</span></td>
                                 <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
 <!--                                <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Editieren"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>-->
                             </ng-container>

@@ -115,7 +115,7 @@ export class MyDashboardComponent implements OnInit {
                             this.listingTab = 'ultimate';
                         }
                         this.ultimateBalanceList = this.portfolio.getActiveNonCashPositions();
-                        this.ultimateBalanceList.sort((a,b) => (+a.profitPerDay() < +b.profitPerDay()) ? 1 : ((+b.profitPerDay() < +a.profitPerDay()) ? -1 : 0))
+                        this.ultimateBalanceList.sort((a,b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0))
                         this.portfolio.getClosedNonCashPositions().forEach(position => {
                             if (position.balance?.closedResult) {
                                 this.closedPositionsBalance += +position.closedResultCorrected();

@@ -255,7 +255,7 @@ export class Position {
     }
 
 
-    profitPerDay(): string
+    totalReturnPerDay(): string
     {
         if (this.balance && this.balance.lastRate) {
             return ((((this.balance.amount * this.balance.lastRate.rate) - this.balance.investment) + this.balance?.collectedDividends) / this.daysSinceStart()).toFixed(1);
