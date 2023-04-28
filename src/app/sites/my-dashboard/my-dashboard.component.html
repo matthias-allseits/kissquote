@@ -237,10 +237,6 @@
                     <h5>ROI per 1. Juli</h5>
                     <app-line-chart [data]="portfolio.yieldChartData()" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
                 </div>
-                <div *ngIf="incomeChartData" class="info-box">
-                    <h5>{{ tranService.trans('MYDA_INCOME_PER_MONTH') }}</h5>
-                    <app-bar-chart [data]="incomeChartData" [height]="300"></app-bar-chart>
-                </div>
                 <div *ngIf="incomeChartDataImproved" class="info-box info-box-doubled">
                     <h5>{{ tranService.trans('MYDA_INCOME_PER_MONTH') }}</h5>
                     <app-bar-chart [data]="incomeChartDataImproved" [height]="incomeChartDataImprovedBoxHeight"></app-bar-chart>

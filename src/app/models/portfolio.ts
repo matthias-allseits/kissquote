@@ -334,53 +334,6 @@ export class Portfolio {
     }
 
 
-    incomeChartData(): ChartData {
-        const chartData: ChartData = {
-            labels: [],
-            datasets: [
-                {
-                    label: 'income',
-                    data: [],
-                    borderColor: 'rgb(51, 102, 204, 1)',
-                    backgroundColor: 'rgb(51, 102, 204, 1)',
-                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)',
-                    pointBackgroundColor: 'rgba(51, 102, 204, 1)',
-                    pointHoverBackgroundColor: 'rgba(51, 102, 204, 1)',
-                    pointHoverBorderColor: 'rgba(51, 102, 204, 1)',
-                    yAxisID: 'y',
-                }
-            ]
-        };
-
-        const months: Date[] = [];
-        for(let x = 0; x < 24; x++) {
-            const today = new Date();
-            const month = new Date(today.getFullYear(), today.getMonth() - x, 1);
-            months.push(month);
-        }
-
-        months.reverse();
-        months.forEach(month => {
-            let income = 0;
-            this.getAllPositions().forEach(position => {
-                position.transactions.forEach(transaction => {
-                    if (transaction.isDividend() && transaction.date instanceof Date && transaction.rate) {
-                        const workDate = transaction.date;
-                        workDate.setDate(1);
-                        if (DateHelper.datesAreEqual(month, workDate)) {
-                            income += transaction.rate;
-                        }
-                    }
-                });
-            });
-            chartData.labels?.push(DateHelper.monthFromDateObject(month) + ' ' + month.getFullYear());
-            chartData.datasets[0].data.push(Math.round(income));
-        });
-
-        return chartData;
-    }
-
-
     incomeChartDataImproved(): ChartData {
         const chartData: ChartData = {
             labels: [],

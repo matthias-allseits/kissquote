@@ -56,7 +56,6 @@ export class MyDashboardComponent implements OnInit {
     public listingTab = 'ultimate';
     public dividendLists?: DividendTotals[];
     public closedPositionsBalance = 0;
-    public incomeChartData?: ChartData;
     public incomeChartDataImproved?: ChartData;
     public incomeChartDataImprovedBoxHeight = 143;
     public years = [2023, 2024, 2025, 2026];
@@ -148,7 +147,6 @@ export class MyDashboardComponent implements OnInit {
                             .subscribe(shares => {
                                 this.nextReportsList = shares;
                             });
-                        this.incomeChartData = this.portfolio?.incomeChartData();
                         this.incomeChartDataImproved = this.portfolio?.incomeChartDataImproved();
                     } else {
                         alert('Something went wrong!');
