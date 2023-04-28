@@ -240,10 +240,21 @@ export class Portfolio {
                     pointBackgroundColor: 'rgba(51, 102, 204, 1)',
                     pointHoverBackgroundColor: 'rgba(51, 102, 204, 1)',
                     pointHoverBorderColor: 'rgba(51, 102, 204, 1)',
+                },
+                {
+                    label: 'projected',
+                    data: [],
+                    borderColor: 'rgb(255, 102, 51, 1)',
+                    backgroundColor: 'rgb(255, 102, 51, 1)',
+                    hoverBackgroundColor: 'rgb(255, 102, 51, 0.5)',
+                    pointBackgroundColor: 'rgb(220, 57, 18, 1)',
+                    pointHoverBackgroundColor: 'rgba(220, 57, 18, 1)',
+                    pointHoverBorderColor: 'rgba(220, 57, 18, 1)',
                 }
             ]
         };
 
+        const thisYear = new Date().getFullYear();
         this.collectDividendLists()?.forEach(list => {
             const date = new Date(list.year, 6, 1);
             const relevantPositions = this.getPositionsAtDate(date);
@@ -253,7 +264,16 @@ export class Portfolio {
             });
             investment = +investment.toFixed(0);
             chartData.labels?.push(list.year);
-            chartData.datasets[0].data.push(investment);
+            if (list.year < thisYear) {
+                chartData.datasets[0].data.push(investment);
+                chartData.datasets[1].data.push(NaN);
+            } else if (list.year == thisYear) {
+                chartData.datasets[0].data.push(investment);
+                chartData.datasets[1].data.push(investment);
+            } else {
+                chartData.datasets[0].data.push(NaN);
+                chartData.datasets[1].data.push(investment);
+            }
         });
 
         return chartData;
@@ -267,6 +287,16 @@ export class Portfolio {
                 {
                     label: 'yield',
                     data: [],
+                    borderColor: 'rgb(51, 102, 204, 1)',
+                    backgroundColor: 'rgb(51, 102, 204, 1)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)',
+                    pointBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBorderColor: 'rgba(51, 102, 204, 1)',
+                },
+                {
+                    label: 'projected',
+                    data: [],
                     borderColor: 'rgb(255, 102, 51, 1)',
                     backgroundColor: 'rgb(255, 102, 51, 1)',
                     hoverBackgroundColor: 'rgb(255, 102, 51, 0.5)',
@@ -277,6 +307,7 @@ export class Portfolio {
             ]
         };
 
+        const thisYear = new Date().getFullYear();
         this.collectDividendLists()?.forEach(list => {
             const date = new Date(list.year, 6, 1);
             const relevantPositions = this.getPositionsAtDate(date);
@@ -286,7 +317,17 @@ export class Portfolio {
             });
             investment = +investment.toFixed(0);
             chartData.labels?.push(list.year);
-            chartData.datasets[0].data.push(+(100 / investment * (+list.payedTotal.toFixed(0) + +list.plannedTotal.toFixed(0))).toFixed(1));
+            const result = +(100 / investment * (+list.payedTotal.toFixed(0) + +list.plannedTotal.toFixed(0))).toFixed(1);
+            if (list.year < thisYear) {
+                chartData.datasets[0].data.push(result);
+                chartData.datasets[1].data.push(NaN);
+            } else if (list.year == thisYear) {
+                chartData.datasets[0].data.push(result);
+                chartData.datasets[1].data.push(result);
+            } else {
+                chartData.datasets[0].data.push(NaN);
+                chartData.datasets[1].data.push(result);
+            }
         });
 
         return chartData;
