@@ -524,6 +524,27 @@
                     </tbody>
                 </table>
             </div>
+            <div class="info-box">
+                <h5>Labels</h5>
+                <table class="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th style="width: 35px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let label of labels">
+                            <td>{{ label.name }}</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Editieren">
+                                    <fa-icon [icon]="editIcon"></fa-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'closedPositions'">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">

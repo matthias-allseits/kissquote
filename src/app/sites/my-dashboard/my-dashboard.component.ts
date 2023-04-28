@@ -23,6 +23,8 @@ import {DividendCreator} from "../../creators/dividend-creator";
 import {Observable} from "rxjs";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {AnalystRating} from "../../models/analyst-rating";
+import {Label} from "../../models/label";
+import {LabelService} from "../../services/label.service";
 
 
 @Component({
@@ -41,6 +43,7 @@ export class MyDashboardComponent implements OnInit {
     // todo: the portfolio has to be ready at this time. probably the solution: resolvers!
     public portfolio: Portfolio|null = null;
     public currencies?: Currency[];
+    public labels?: Label[];
     private selectedPosition?: Position;
     private selectedBankAccount?: BankAccount;
     public selectedCurrency?: Currency;
@@ -79,6 +82,7 @@ export class MyDashboardComponent implements OnInit {
         private portfolioService: PortfolioService,
         private positionService: PositionService,
         private currencyService: CurrencyService,
+        private labelService: LabelService,
         private bankAccountService: BankAccountService,
         private modalService: NgbModal,
         private shareheadService: ShareheadService,
@@ -155,6 +159,11 @@ export class MyDashboardComponent implements OnInit {
                 .subscribe(currencies => {
                     this.currencies = currencies;
                     localStorage.setItem('currencies', JSON.stringify(this.currencies));
+                });
+            this.labelService.getAllLabels()
+                .subscribe(labels => {
+                    this.labels = labels;
+                    localStorage.setItem('labels', JSON.stringify(this.currencies));
                 });
         } else {
             // todo: redirect back to landingpage. probably the solution: implement guards
