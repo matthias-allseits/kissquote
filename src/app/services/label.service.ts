@@ -5,6 +5,8 @@ import {map} from 'rxjs/operators';
 import {ApiService} from "./api-service";
 import {Label} from "../models/label";
 import {LabelCreator} from "../creators/label-creator";
+import {ManualDividend} from "../models/manual-dividend";
+import {ManualDividendCreator} from "../creators/manual-dividend-creator";
 
 
 const httpOptions = {
@@ -53,6 +55,16 @@ export class LabelService extends ApiService {
         return this.http.get<Label[]>(this.apiUrl)
             .pipe(
                 map(res => LabelCreator.fromApiArray(res))
+            );
+    }
+
+
+    public delete(id: number): Observable<Object> {
+        const url = `${this.apiUrl}/${id}`;
+        return this.http.delete(url, httpOptions)
+            .pipe(
+                // map(res => LabelCreator.fromApiArray(res)),
+                // catchError(this.handleError)
             );
     }
 

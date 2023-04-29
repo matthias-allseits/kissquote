@@ -25,6 +25,7 @@ import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {AnalystRating} from "../../models/analyst-rating";
 import {Label} from "../../models/label";
 import {LabelService} from "../../services/label.service";
+import {LabelCreator} from "../../creators/label-creator";
 
 
 @Component({
@@ -49,6 +50,7 @@ export class MyDashboardComponent implements OnInit {
     public selectedCurrency?: Currency;
     public selectedWatchlistEntry?: WatchlistEntry;
     public selectedManualDividend?: ManualDividend;
+    public selectedLabel?: Label;
     private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions', 'listings'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
@@ -74,6 +76,10 @@ export class MyDashboardComponent implements OnInit {
     manualDividendForm = new FormGroup({
         year: new UntypedFormControl(new Date().getFullYear(), Validators.required),
         amount: new UntypedFormControl('', Validators.required),
+    });
+
+    labelForm = new FormGroup({
+        name: new UntypedFormControl('', Validators.required),
     });
 
     constructor(
@@ -158,11 +164,7 @@ export class MyDashboardComponent implements OnInit {
                     this.currencies = currencies;
                     localStorage.setItem('currencies', JSON.stringify(this.currencies));
                 });
-            this.labelService.getAllLabels()
-                .subscribe(labels => {
-                    this.labels = labels;
-                    localStorage.setItem('labels', JSON.stringify(this.currencies));
-                });
+            this.getAllLabels();
         } else {
             // todo: redirect back to landingpage. probably the solution: implement guards
         }
@@ -210,6 +212,23 @@ export class MyDashboardComponent implements OnInit {
 
     openManualDividendConfirmModal(template: TemplateRef<any>, entry: ManualDividend|undefined) {
         this.selectedManualDividend = entry;
+        this.modalRef = this.modalService.open(template);
+    }
+
+    openLabelConfirmModal(template: TemplateRef<any>, entry: Label|undefined) {
+        this.selectedLabel = entry;
+        this.modalRef = this.modalService.open(template);
+    }
+
+    openLabelFormModal(template: TemplateRef<any>, entry: Label|undefined) {
+        console.log(entry);
+        if (entry) {
+            this.labelForm.get('name')?.setValue(entry.name);
+            this.selectedLabel = entry;
+        } else {
+            this.selectedLabel = LabelCreator.createNewLabel();
+            this.labelForm.get('name')?.setValue('');
+        }
         this.modalRef = this.modalService.open(template);
     }
 
@@ -278,6 +297,23 @@ export class MyDashboardComponent implements OnInit {
         this.modalRef?.close();
     }
 
+    persistLabel(): void {
+        if (this.selectedLabel) {
+            this.selectedLabel.name = this.labelForm.get('name')?.value;
+            if (this.selectedLabel.id > 0) {
+                this.labelService.update(this.selectedLabel)
+                    .subscribe(label => {});
+            } else {
+                this.labelService.create(this.selectedLabel)
+                    .subscribe(label => {
+                        this.getAllLabels();
+                    });
+            }
+            this.selectedLabel = undefined;
+        }
+        this.modalRef?.close();
+    }
+
     confirmDeleteAccount(): void {
         if (this.selectedBankAccount) {
             this.deleteBankAccount(this.selectedBankAccount);
@@ -303,6 +339,20 @@ export class MyDashboardComponent implements OnInit {
         console.log(dividend);
         this.manualDividendService.delete(dividend.id).subscribe(() => {
             document.location.reload();
+        });
+    }
+
+    confirmDeleteLabel(): void {
+        if (this.selectedLabel) {
+            this.deleteLabel(this.selectedLabel);
+        }
+        this.modalRef?.close();
+    }
+
+    deleteLabel(label: Label): void {
+        console.log(label);
+        this.labelService.delete(label.id).subscribe(() => {
+            this.getAllLabels();
         });
     }
 
@@ -378,6 +428,15 @@ export class MyDashboardComponent implements OnInit {
                 }
             });
         });
+    }
+
+    private getAllLabels(): void
+    {
+        this.labelService.getAllLabels()
+            .subscribe(labels => {
+                this.labels = labels;
+                localStorage.setItem('labels', JSON.stringify(this.labels));
+            });
     }
 
 }
