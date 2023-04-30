@@ -14,6 +14,7 @@ import {DividendProjectionCreator} from "../creators/dividend-projection-creator
 import {Forexhelper} from "../core/forexhelper";
 import {ManualDividend} from "./manual-dividend";
 import {ShareheadTurningPoint} from "./sharehead-turning-point";
+import {Label} from "./label";
 
 
 export interface DividendTotal {
@@ -54,6 +55,7 @@ export class Position {
         public balance?: Balance,
         public shareheadId?: number,
         public manualDrawdown?: number,
+        public labels?: Label[],
         public shareheadShare?: ShareheadShare,
     ) {}
 

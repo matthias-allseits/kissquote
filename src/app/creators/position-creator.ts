@@ -4,6 +4,7 @@ import {ShareCreator} from "./share-creator";
 import {TransactionCreator} from "./transaction-creator";
 import {BalanceCreator} from "./balance-creator";
 import {BankAccountCreator} from "./bank-account-creator";
+import {LabelCreator} from "./label-creator";
 
 
 export class PositionCreator {
@@ -44,7 +45,8 @@ export class PositionCreator {
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.balance ? BalanceCreator.oneFromApiArray(apiArray.balance) : undefined,
                 apiArray.shareheadId,
-                apiArray.manualDrawdown ? apiArray.manualDrawdown : undefined
+                apiArray.manualDrawdown ? apiArray.manualDrawdown : undefined,
+                apiArray.labels ? LabelCreator.fromApiArray(apiArray.labels) : undefined
             );
         } else {
             return null;

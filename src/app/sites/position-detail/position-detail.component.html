@@ -1,6 +1,10 @@
 <main *ngIf="position" class="col-md-12 col-lg-12 px-md-4">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 p-1 pb-2 mb-3 border-bottom">
         <h1 class="h2">Position {{ position.getName() }}</h1>
+        <div class="mb-2 mb-md-0">
+            <span *ngFor="let label of position.labels" class="badge bg-secondary">{{ label.name }}</span>
+            <button (click)="openLabelModal(labelModal)" type="button" class="btn btn-tiny btn-outline-primary" ngbTooltip="Labels bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button>
+        </div>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
                 <button (click)="navigateCross('backward')" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="naviBackIcon"></fa-icon></button>
@@ -349,5 +353,26 @@
         <p>Wollen Sie diesen manuellen Drawdown wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirmManualDrawdownRemoving()">{{ tranService.trans('GLOB_YES') }}</button>
         <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
+    </div>
+</ng-template>
+
+<ng-template #labelModal>
+    <div *ngIf="position && position.share" class="modal-body">
+        <p>Modify the labels for your position &laquo;{{ position.share.name }}&raquo;</p>
+        <div *ngFor="let label of position.labels" class="row" style="margin-bottom: 5px;">
+            <div class="col-9"><span class="badge bg-secondary">{{ label.name }}</span></div>
+            <div class="col-3"><button (click)="deleteLabel(label)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Label entfernen"><fa-icon [icon]="deleteIcon"></fa-icon></button></div>
+        </div>
+        <div class="row">
+            <div class="col-9"></div>
+            <div class="col-3">
+                <div class="dropdown">
+                    <button (click)="toggleLabelsDropdown()" type="button" class="btn btn-sm btn-outline-primary" id="dropdownMenuLabels" ngbTooltip="Label hinzufügen"><fa-icon [icon]="addIcon"></fa-icon></button>
+                    <ul [class.show]="showLabelsDropdown" class="dropdown-menu" aria-labelledby="dropdownMenuLabels">
+                        <li *ngFor="let label of allLabels"><span (click)="addLabel(label)" class="dropdown-item">{{ label.name }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </ng-template>

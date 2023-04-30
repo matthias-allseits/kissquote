@@ -147,4 +147,22 @@ export class PositionService extends ApiService {
             );
     }
 
+
+    addLabel(positionId: number, labelId: number): Observable<Object> {
+        const url = `${this.apiUrl}/${positionId}/label/${labelId}`;
+        return this.http.get(url, httpOptions)
+            .pipe(
+                // catchError(this.handleError)
+            );
+    }
+
+
+    deleteLabel(positionId: number, labelId: number): Observable<Object> {
+        const url = `${this.apiUrl}/${positionId}/label/${labelId}`;
+        return this.http.delete(url, httpOptions)
+            .pipe(
+                // catchError(this.handleError)
+            );
+    }
+
 }

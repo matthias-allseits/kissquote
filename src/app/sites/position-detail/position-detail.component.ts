@@ -24,6 +24,7 @@ import {StockRateCreator} from "../../creators/stock-rate-creator";
 import {FormControl, FormGroup, UntypedFormControl, Validators} from "@angular/forms";
 import {TranslationService} from "../../services/translation.service";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
+import {Label} from "../../models/label";
 
 
 @Component({
@@ -56,6 +57,8 @@ export class PositionDetailComponent implements OnInit {
     public maxDrawdownSummary?: MaxDrawdownSummary;
     modalRef?: NgbModalRef;
     shareheadModalRef?: NgbModalRef;
+    public showLabelsDropdown = false;
+    public allLabels?: Label[];
 
     public chartData?: ChartData;
     public lineChartData?: ChartData;
@@ -95,6 +98,10 @@ export class PositionDetailComponent implements OnInit {
         } else {
             this.chartTab = 'bar';
             localStorage.setItem('positionChartTab', 'bar');
+        }
+        const labels = localStorage.getItem('labels');
+        if (labels !== null) {
+            this.allLabels = JSON.parse(labels);
         }
     }
 
@@ -172,6 +179,10 @@ export class PositionDetailComponent implements OnInit {
         this.shareheadModalRef = this.modalService.open(template);
     }
 
+    openLabelModal(template: TemplateRef<any>): void {
+        this.shareheadModalRef = this.modalService.open(template);
+    }
+
     confirmManualDrawdownRemoving(): void {
         if (this.position) {
             this.position.manualDrawdown = undefined;
@@ -211,6 +222,35 @@ export class PositionDetailComponent implements OnInit {
     }
 
 
+    deleteLabel(label: Label): void {
+        if (this.position) {
+            this.positionService.deleteLabel(this.position.id, label.id).subscribe(() => {
+                // if (this.position instanceof Position) {
+                //     this.loadData(this.position.id);
+                // }
+            });
+            this.position.labels?.forEach((labl, index) => {
+                if (labl.id === label.id) {
+                    this.position?.labels?.splice(index, 1);
+                }
+            });
+        }
+    }
+
+
+    addLabel(label: Label): void {
+        if (this.position) {
+            this.positionService.addLabel(this.position.id, label.id).subscribe(() => {
+                // if (this.position instanceof Position) {
+                //     this.loadData(this.position.id);
+                // }
+            });
+            this.position.labels?.push(label);
+            this.showLabelsDropdown = false;
+        }
+    }
+
+
     navigateCross(direction: string): void {
         let positionIndex: number = -1;
         this.positionService.getNonCashAndActivePositions()
@@ -239,6 +279,11 @@ export class PositionDetailComponent implements OnInit {
                 this.router.navigate(['/position-detail/' + nextPosition.id]);
                 this.loadData(nextPosition.id);
             });
+    }
+
+
+    public toggleLabelsDropdown(): void {
+        this.showLabelsDropdown = !this.showLabelsDropdown;
     }
 
 
