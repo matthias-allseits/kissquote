@@ -3,7 +3,7 @@ import {Label} from "../models/label";
 export class LabelCreator {
 
     public static createNewLabel(): Label {
-        return new Label(0, '');
+        return new Label(0, '', '');
     }
 
 
@@ -27,6 +27,7 @@ export class LabelCreator {
             return new Label(
                 apiArray.id,
                 apiArray.name,
+                apiArray.color,
             );
         } else {
             return undefined;

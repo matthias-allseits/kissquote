@@ -98,7 +98,7 @@
                             <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>
                             <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
                             <td class="d-none d-md-table-cell">
-                                <span *ngFor="let label of position.labels" class="badge bg-secondary">{{ label.name }}</span>
+                                <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
                             </td>
                             <td class="text-center d-none d-md-table-cell">{{ position.shareFromTotal|number: '1.0-1' }}%</td>
                             <td class="d-none d-md-table-cell"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
@@ -533,6 +533,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
+                            <th scope="col"></th>
                             <th style="width: 35px;"></th>
                             <th style="width: 35px;"></th>
                         </tr>
@@ -540,6 +541,7 @@
                     <tbody>
                         <tr *ngFor="let label of labels">
                             <td>{{ label.name }}</td>
+                            <td [style.background]="label.color"></td>
                             <td>
                                 <button (click)="openLabelFormModal(labelFormModal, label)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Editieren">
                                     <fa-icon [icon]="editIcon"></fa-icon>
@@ -687,8 +689,12 @@
     <div class="modal-body">
         <form [formGroup]="labelForm">
             <div class="mb-3">
-                <label for="drawdown-amount-input" class="form-label"></label>
-                <input formControlName="name" id="drawdown-amount-input" class="form-control" type="text" name="name" value="">
+                <label class="form-label">Name</label>
+                <input formControlName="name" class="form-control" type="text" name="name" value="">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Color</label>
+                <input *ngIf="selectedLabel" formControlName="color" [(colorPicker)]="selectedLabel.color" [style.background]="selectedLabel.color" class="form-control" type="text" name="color" />
             </div>
             <div class="row">
                 <div class="col-6">

@@ -67,6 +67,7 @@ export class MyDashboardComponent implements OnInit {
     public newestRatingsList?: AnalystRating[];
     public nextReportsList?: ShareheadShare[];
     public lombardTotal = 0;
+    public color = 'ffffff';
     modalRef?: NgbModalRef;
 
     exchangeRateForm = new FormGroup({
@@ -80,6 +81,7 @@ export class MyDashboardComponent implements OnInit {
 
     labelForm = new FormGroup({
         name: new UntypedFormControl('', Validators.required),
+        color: new UntypedFormControl('', Validators.required),
     });
 
     constructor(
@@ -221,13 +223,16 @@ export class MyDashboardComponent implements OnInit {
     }
 
     openLabelFormModal(template: TemplateRef<any>, entry: Label|undefined) {
-        console.log(entry);
         if (entry) {
             this.labelForm.get('name')?.setValue(entry.name);
+            this.labelForm.get('color')?.setValue(entry.color);
+            this.color = entry.color;
             this.selectedLabel = entry;
         } else {
             this.selectedLabel = LabelCreator.createNewLabel();
             this.labelForm.get('name')?.setValue('');
+            this.labelForm.get('color')?.setValue('');
+            this.color = '';
         }
         this.modalRef = this.modalService.open(template);
     }
@@ -300,6 +305,7 @@ export class MyDashboardComponent implements OnInit {
     persistLabel(): void {
         if (this.selectedLabel) {
             this.selectedLabel.name = this.labelForm.get('name')?.value;
+            // this.selectedLabel.color = this.labelForm.get('color')?.value;
             if (this.selectedLabel.id > 0) {
                 this.labelService.update(this.selectedLabel)
                     .subscribe(label => {});
@@ -336,7 +342,6 @@ export class MyDashboardComponent implements OnInit {
     }
 
     deleteManualDividend(dividend: ManualDividend): void {
-        console.log(dividend);
         this.manualDividendService.delete(dividend.id).subscribe(() => {
             document.location.reload();
         });
