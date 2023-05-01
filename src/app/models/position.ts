@@ -57,6 +57,7 @@ export class Position {
         public manualDrawdown?: number,
         public labels?: Label[],
         public shareheadShare?: ShareheadShare,
+        public visible?: boolean, // for filtering purposes
     ) {}
 
 

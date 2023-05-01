@@ -62,6 +62,7 @@ export class MyDashboardComponent implements OnInit {
     public incomeChartDataImprovedBoxHeight = 143;
     public years = [2023, 2024, 2025, 2026];
     public ultimateBalanceList?: Position[];
+    public ultimateBalanceFilter?: Label[];
     public lombardValueList?: LombardValuesSummary[];
     public lastMinuteList?: ShareheadShare[];
     public newestRatingsList?: AnalystRating[];
@@ -126,7 +127,8 @@ export class MyDashboardComponent implements OnInit {
                             this.listingTab = 'ultimate';
                         }
                         this.ultimateBalanceList = this.portfolio.getActiveNonCashPositions();
-                        this.ultimateBalanceList.sort((a,b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0))
+                        this.ultimateBalanceList.sort((a,b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
+                        this.getAllLabels();
                         this.portfolio.getClosedNonCashPositions().forEach(position => {
                             if (position.balance?.closedResult) {
                                 this.closedPositionsBalance += +position.closedResultCorrected();
@@ -166,7 +168,6 @@ export class MyDashboardComponent implements OnInit {
                     this.currencies = currencies;
                     localStorage.setItem('currencies', JSON.stringify(this.currencies));
                 });
-            this.getAllLabels();
         } else {
             // todo: redirect back to landingpage. probably the solution: implement guards
         }
@@ -308,7 +309,9 @@ export class MyDashboardComponent implements OnInit {
             // this.selectedLabel.color = this.labelForm.get('color')?.value;
             if (this.selectedLabel.id > 0) {
                 this.labelService.update(this.selectedLabel)
-                    .subscribe(label => {});
+                    .subscribe(label => {
+                        this.getAllLabels();
+                    });
             } else {
                 this.labelService.create(this.selectedLabel)
                     .subscribe(label => {
@@ -386,6 +389,41 @@ export class MyDashboardComponent implements OnInit {
             });
     }
 
+    toggleUltimateBalanceFilter(label: Label): void {
+        this.ultimateBalanceFilter?.forEach(filter => {
+            if (filter.id === label.id) {
+                filter.checked = !filter.checked;
+            }
+        });
+        localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
+        this.filterUltimateList();
+    }
+
+    filterUltimateList(): void {
+        this.ultimateBalanceList?.forEach(entry => {
+            if (entry.labels && this.ultimateBalanceFilter) {
+                if (this.checkFilterVisibility(entry.labels, this.ultimateBalanceFilter)) {
+                    entry.visible = true;
+                } else {
+                    entry.visible = false;
+                }
+            }
+        });
+    }
+
+    checkFilterVisibility(posiLabels: Label[], filterLabels: Label[]): boolean {
+        let result = false;
+        posiLabels.forEach(label => {
+            filterLabels.forEach(filter => {
+                if (label.id === filter.id && filter.checked) {
+                    result = true;
+                }
+            });
+        });
+
+        return result;
+    }
+
     private loadShareheadShares(): Observable<boolean>
     {
         return new Observable(psitons => {
@@ -441,6 +479,18 @@ export class MyDashboardComponent implements OnInit {
             .subscribe(labels => {
                 this.labels = labels;
                 localStorage.setItem('labels', JSON.stringify(this.labels));
+
+                const ultimateFilter = localStorage.getItem('ultimateFilter');
+                if (ultimateFilter === null) {
+                    this.ultimateBalanceFilter = this.labels;
+                    this.ultimateBalanceFilter?.forEach((label) => {
+                        label.checked = true;
+                    });
+                    localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
+                } else {
+                    this.ultimateBalanceFilter = JSON.parse(ultimateFilter);
+                }
+                this.filterUltimateList();
             });
     }
 
