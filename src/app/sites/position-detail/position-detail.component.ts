@@ -25,6 +25,7 @@ import {FormControl, FormGroup, UntypedFormControl, Validators} from "@angular/f
 import {TranslationService} from "../../services/translation.service";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {Label} from "../../models/label";
+import {Observable} from "rxjs";
 
 
 @Component({
@@ -86,6 +87,7 @@ export class PositionDetailComponent implements OnInit {
             const positionId = +params['id'];
             if (positionId) {
                 this.loadData(positionId);
+                this.checkAndResetPositionFilter(positionId);
             }
         });
         const storedTab = localStorage.getItem('positionTab');
@@ -213,7 +215,6 @@ export class PositionDetailComponent implements OnInit {
 
 
     deleteTransaction(transaction: Transaction): void {
-        console.log(transaction);
         this.transactionService.delete(transaction.id).subscribe(() => {
             if (this.position instanceof Position) {
                 this.loadData(this.position.id);
@@ -253,7 +254,7 @@ export class PositionDetailComponent implements OnInit {
 
     navigateCross(direction: string): void {
         let positionIndex: number = -1;
-        this.positionService.getNonCashAndActivePositions()
+        this.getFilteredPositions()
             .subscribe(positions => {
                 positions.forEach((position, index) => {
                     if (this.position) {
@@ -395,6 +396,69 @@ export class PositionDetailComponent implements OnInit {
                 }
             }
         }
+    }
+
+
+    private checkAndResetPositionFilter(positionId: number): void
+    {
+        let hit = false;
+        this.getFilteredPositions()
+            .subscribe(posis => {
+                posis.forEach(posi => {
+                    if (posi.id === positionId) {
+                        hit = true;
+                    }
+                });
+                if (!hit) {
+                    localStorage.removeItem('ultimateFilter');
+                }
+            });
+    }
+
+
+    private getFilteredPositions(): Observable<Position[]>
+    {
+        return new Observable(psitons => {
+            this.positionService.getNonCashAndActivePositions()
+                .subscribe(posis => {
+                    let positionsFilter = localStorage.getItem('ultimateFilter');
+                    if (positionsFilter === null) {
+                        psitons.next(posis);
+                    } else {
+                        positionsFilter = JSON.parse(positionsFilter);
+                        const positions = this.filterPositions(posis, positionsFilter);
+                        psitons.next(positions);
+                    }
+            });
+        });
+    }
+
+
+    private filterPositions(allPositions: Position[], positionsFilter: any): Position[] {
+        const filteredPosis: Position[] = [];
+        allPositions?.forEach(entry => {
+            if (entry.labels && positionsFilter) {
+                if (this.checkFilterVisibility(entry.labels, positionsFilter)) {
+                    filteredPosis.push(entry);
+                }
+            }
+        });
+
+        return filteredPosis;
+    }
+
+
+    private checkFilterVisibility(posiLabels: Label[], filterLabels: Label[]): boolean {
+        let result = false;
+        posiLabels.forEach(label => {
+            filterLabels.forEach(filter => {
+                if (label.id === filter.id && filter.checked) {
+                    result = true;
+                }
+            });
+        });
+
+        return result;
     }
 
 }
