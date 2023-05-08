@@ -10,11 +10,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {Transaction} from "../../models/transaction";
 import {TransactionService} from "../../services/transaction.service";
-// import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {ShareheadService} from "../../services/sharehead.service";
 import {ShareheadShare} from "../../models/sharehead-share";
 import {ChartData} from "chart.js";
-import {DateHelper} from "../../core/datehelper";
 import {LineChartComponent} from "../../components/line-chart/line-chart.component";
 import {DividendProjection} from "../../models/dividend-projection";
 import {ShareService} from "../../services/share.service";
@@ -26,6 +24,7 @@ import {TranslationService} from "../../services/translation.service";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {Label} from "../../models/label";
 import {Observable} from "rxjs";
+import {DateHelper} from "../../core/datehelper";
 
 
 @Component({
@@ -65,6 +64,7 @@ export class PositionDetailComponent implements OnInit {
     public lineChartData?: ChartData;
     public historicRates: StockRate[] = [];
     public historicStockRates: StockRate[] = [];
+    public daysTillNextEx?: number;
 
     manualDrawdownForm = new FormGroup({
         amount: new UntypedFormControl('', Validators.required),
@@ -293,6 +293,7 @@ export class PositionDetailComponent implements OnInit {
         this.historicRates = [];
         this.historicStockRates = [];
         this.maxDrawdownSummary = undefined;
+        this.daysTillNextEx = undefined;
         this.positionService.getPosition(positionId)
             .subscribe(position => {
                 if (position) {
@@ -350,6 +351,11 @@ export class PositionDetailComponent implements OnInit {
                                         }
                                     }
                                     this.maxDrawdownSummary = this.position?.getMaxDrawdownSummary();
+                                    if (share.plannedDividends && share.plannedDividends.length > 0) {
+                                        const currentDate = new Date();
+                                        const nextExDate = share.plannedDividends[0].exDate;
+                                        this.daysTillNextEx = Math.floor((Date.UTC(nextExDate.getFullYear(), nextExDate.getMonth(), nextExDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) ) /(1000 * 60 * 60 * 24));
+                                    }
                                 }
                             })
                     }

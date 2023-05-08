@@ -74,6 +74,10 @@
                         <div class="col-9">Start:</div>
                         <div class="col-3"><span class="float-end">{{ position.activeFrom|date:'dd.MM.y' }}</span></div>
                     </div>
+                    <div class="row">
+                        <div class="col-9">Days till next ex-dividend date:</div>
+                        <div class="col-3"><span *ngIf="daysTillNextEx" class="float-end">{{ daysTillNextEx }}</span></div>
+                    </div>
                     <div class="row" *ngIf="position.activeUntil">
                         <div class="col-9">Ende:</div>
                         <div class="col-3"><span class="float-end">{{ position.activeUntil|date:'dd.MM.y' }}</span></div>

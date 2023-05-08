@@ -5,7 +5,6 @@ import {faEdit, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {TranslationService} from "../../services/translation.service";
 import {DividendTotal, Position} from "../../models/position";
-// import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {PositionService} from "../../services/position.service";
 import {BankAccount} from "../../models/bank-account";
 import {BankAccountService} from "../../services/bank-account.service";
