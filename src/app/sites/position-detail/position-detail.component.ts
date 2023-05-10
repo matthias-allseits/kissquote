@@ -266,7 +266,7 @@ export class PositionDetailComponent implements OnInit {
     }
 
 
-    setSector(sector: Sector): void {
+    setSector(sector: Sector|undefined): void {
         if (this.position) {
             this.position.sector = sector;
             this.positionService.update(this.position)

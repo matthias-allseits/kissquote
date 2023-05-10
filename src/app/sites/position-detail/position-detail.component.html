@@ -396,6 +396,7 @@
         <div>
             <ul class="select-list">
                 <li *ngFor="let sector of allSectors" [class.selected-item]="position.sector && position.sector.id === sector.id"><span (click)="setSector(sector)" class="dropdown-item">{{ sector.name }}</span></li>
+                <li class="dropdown-item" (click)="setSector(undefined)">Clear</li>
             </ul>
         </div>
     </div>
