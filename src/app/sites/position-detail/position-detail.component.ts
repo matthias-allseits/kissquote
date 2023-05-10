@@ -25,6 +25,8 @@ import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {Label} from "../../models/label";
 import {Observable} from "rxjs";
 import {DateHelper} from "../../core/datehelper";
+import {Sector} from "../../models/sector";
+import {SectorService} from "../../services/sector.service";
 
 
 @Component({
@@ -59,6 +61,7 @@ export class PositionDetailComponent implements OnInit {
     shareheadModalRef?: NgbModalRef;
     public showLabelsDropdown = false;
     public allLabels?: Label[];
+    public allSectors?: Sector[];
 
     public chartData?: ChartData;
     public lineChartData?: ChartData;
@@ -76,6 +79,7 @@ export class PositionDetailComponent implements OnInit {
         private router: Router,
         private positionService: PositionService,
         private currencyService: CurrencyService,
+        private sectorService: SectorService,
         private transactionService: TransactionService,
         private shareService: ShareService,
         private shareheadService: ShareheadService,
@@ -169,6 +173,16 @@ export class PositionDetailComponent implements OnInit {
         }
     }
 
+    openSectorModal(template: TemplateRef<any>) {
+        if (this.allSectors === undefined) {
+            this.sectorService.getAllSectors()
+                .subscribe(sectors => {
+                    this.allSectors = sectors;
+                });
+        }
+        this.modalRef = this.modalService.open(template);
+    }
+
     openManualDrawdownModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.open(template);
     }
@@ -249,6 +263,20 @@ export class PositionDetailComponent implements OnInit {
             this.position.labels?.push(label);
             this.showLabelsDropdown = false;
         }
+    }
+
+
+    setSector(sector: Sector): void {
+        if (this.position) {
+            this.position.sector = sector;
+            this.positionService.update(this.position)
+                .subscribe(posi => {
+                    if (posi) {
+                        this.position = posi;
+                    }
+                });
+        }
+        this.cancelModal();
     }
 
 

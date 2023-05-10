@@ -5,6 +5,7 @@ import {TransactionCreator} from "./transaction-creator";
 import {BalanceCreator} from "./balance-creator";
 import {BankAccountCreator} from "./bank-account-creator";
 import {LabelCreator} from "./label-creator";
+import {SectorCreator} from "./sector-creator";
 
 
 export class PositionCreator {
@@ -42,6 +43,7 @@ export class PositionCreator {
                 apiArray.dividendPeriodicity,
                 0,
                 apiArray.bankAccount ? BankAccountCreator.oneFromApiArray(apiArray.bankAccount) : undefined,
+                apiArray.sector ? SectorCreator.oneFromApiArray(apiArray.sector) : undefined,
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.balance ? BalanceCreator.oneFromApiArray(apiArray.balance) : undefined,
                 apiArray.shareheadId,

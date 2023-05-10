@@ -15,6 +15,7 @@ import {Forexhelper} from "../core/forexhelper";
 import {ManualDividend} from "./manual-dividend";
 import {ShareheadTurningPoint} from "./sharehead-turning-point";
 import {Label} from "./label";
+import {Sector} from "./sector";
 
 
 export interface DividendTotal {
@@ -51,6 +52,7 @@ export class Position {
         public dividendPeriodicity: string,
         public shareFromTotal: number,
         public bankAccount?: BankAccount,
+        public sector?: Sector,
         public currency?: Currency,
         public balance?: Balance,
         public shareheadId?: number,

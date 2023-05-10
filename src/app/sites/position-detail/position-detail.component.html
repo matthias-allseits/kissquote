@@ -99,6 +99,15 @@
                         <div class="col-7"><span *ngIf="position.share && position.share.marketplace" class="float-end">{{ position.share.marketplace.getName() }}</span></div>
                     </div>
                     <div class="row">
+                        <div class="col-5">Sector:</div>
+                        <div class="col-7" (click)="openSectorModal(sectorModal)">
+                            <span *ngIf="position.sector" class="float-end modal-opener">{{ position.sector.name }}</span>
+                            <span *ngIf="!position.sector" class="float-end modal-opener">
+                                <button type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Set sector"><fa-icon [icon]="addIcon"></fa-icon></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-9">Erster Kurs:</div>
                         <div class="col-3"><span class="float-end">{{ position.balance.firstRate }}</span></div>
                     </div>
@@ -377,6 +386,17 @@
                     </ul>
                 </div>
             </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #sectorModal>
+    <div *ngIf="position && position.share" class="modal-body">
+        <p>Change the sector for your position &laquo;{{ position.share.name }}&raquo;</p>
+        <div>
+            <ul class="select-list">
+                <li *ngFor="let sector of allSectors" [class.selected-item]="position.sector && position.sector.id === sector.id"><span (click)="setSector(sector)" class="dropdown-item">{{ sector.name }}</span></li>
+            </ul>
         </div>
     </div>
 </ng-template>
