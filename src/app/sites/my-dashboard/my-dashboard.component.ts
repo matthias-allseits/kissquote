@@ -25,6 +25,9 @@ import {AnalystRating} from "../../models/analyst-rating";
 import {Label} from "../../models/label";
 import {LabelService} from "../../services/label.service";
 import {LabelCreator} from "../../creators/label-creator";
+import {Sector} from "../../models/sector";
+import {SectorService} from "../../services/sector.service";
+import {SectorCreator} from "../../creators/sector-creator";
 
 
 @Component({
@@ -44,12 +47,14 @@ export class MyDashboardComponent implements OnInit {
     public portfolio: Portfolio|null = null;
     public currencies?: Currency[];
     public labels?: Label[];
+    public sectors?: Sector[];
     private selectedPosition?: Position;
     private selectedBankAccount?: BankAccount;
     public selectedCurrency?: Currency;
     public selectedWatchlistEntry?: WatchlistEntry;
     public selectedManualDividend?: ManualDividend;
     public selectedLabel?: Label;
+    public selectedSector?: Sector;
     private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions', 'listings'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
@@ -84,12 +89,17 @@ export class MyDashboardComponent implements OnInit {
         color: new UntypedFormControl('', Validators.required),
     });
 
+    sectorForm = new FormGroup({
+        name: new UntypedFormControl('', Validators.required),
+    });
+
     constructor(
         public tranService: TranslationService,
         private portfolioService: PortfolioService,
         private positionService: PositionService,
         private currencyService: CurrencyService,
         private labelService: LabelService,
+        private sectorService: SectorService,
         private bankAccountService: BankAccountService,
         private modalService: NgbModal,
         private shareheadService: ShareheadService,
@@ -167,6 +177,10 @@ export class MyDashboardComponent implements OnInit {
                     this.currencies = currencies;
                     localStorage.setItem('currencies', JSON.stringify(this.currencies));
                 });
+            this.sectorService.getAllSectors()
+                .subscribe(sectors => {
+                    this.sectors = sectors;
+                });
         } else {
             // todo: redirect back to landingpage. probably the solution: implement guards
         }
@@ -233,6 +247,22 @@ export class MyDashboardComponent implements OnInit {
             this.labelForm.get('name')?.setValue('');
             this.labelForm.get('color')?.setValue('');
             this.color = '';
+        }
+        this.modalRef = this.modalService.open(template);
+    }
+
+    openSectorConfirmModal(template: TemplateRef<any>, entry: Sector|undefined) {
+        this.selectedSector = entry;
+        this.modalRef = this.modalService.open(template);
+    }
+
+    openSectorFormModal(template: TemplateRef<any>, entry: Sector|undefined) {
+        if (entry) {
+            this.sectorForm.get('name')?.setValue(entry.name);
+            this.selectedSector = entry;
+        } else {
+            this.selectedSector = SectorCreator.createNewSector();
+            this.sectorForm.get('name')?.setValue('');
         }
         this.modalRef = this.modalService.open(template);
     }
@@ -322,6 +352,33 @@ export class MyDashboardComponent implements OnInit {
         this.modalRef?.close();
     }
 
+    persistSector(): void {
+        if (this.selectedSector) {
+            this.selectedSector.name = this.sectorForm.get('name')?.value;
+            if (this.selectedSector.id > 0) {
+                this.sectorService.update(this.selectedSector)
+                    .subscribe(sector => {
+                        this.sectors?.forEach( (sectr, index) => {
+                            if (sectr.id === this.selectedSector?.id) {
+                                if (this.sectors) {
+                                    this.sectors[index] = sectr;
+                                }
+                            }
+                        });
+                    });
+            } else {
+                this.sectorService.create(this.selectedSector)
+                    .subscribe(sector => {
+                        if (this.sectors && sector) {
+                            this.sectors.push(sector);
+                        }
+                    });
+            }
+            this.selectedSector = undefined;
+        }
+        this.modalRef?.close();
+    }
+
     confirmDeleteAccount(): void {
         if (this.selectedBankAccount) {
             this.deleteBankAccount(this.selectedBankAccount);
@@ -360,6 +417,23 @@ export class MyDashboardComponent implements OnInit {
         console.log(label);
         this.labelService.delete(label.id).subscribe(() => {
             this.getAllLabels();
+        });
+    }
+
+    confirmDeleteSector(): void {
+        if (this.selectedSector) {
+            this.deleteSector(this.selectedSector);
+        }
+        this.modalRef?.close();
+    }
+
+    deleteSector(sector: Sector): void {
+        this.sectorService.delete(sector.id).subscribe(() => {
+            this.sectors?.forEach( (sectr, index) => {
+                if (sectr.id === sector.id) {
+                    this.sectors?.splice(index, 1);
+                }
+            });
         });
     }
 
