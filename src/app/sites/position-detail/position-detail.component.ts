@@ -273,6 +273,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(posi => {
                     if (posi) {
                         this.position = posi;
+                        this.loadData(this.position.id);
                     }
                 });
         }
