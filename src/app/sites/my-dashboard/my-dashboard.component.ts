@@ -472,6 +472,18 @@ export class MyDashboardComponent implements OnInit {
         this.filterUltimateList();
     }
 
+    setThisFilterAsOnlyFilter(label: Label): void {
+        this.ultimateBalanceFilter?.forEach(filter => {
+            if (filter.id === label.id) {
+                filter.checked = true;
+            } else {
+                filter.checked = false;
+            }
+        });
+        localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
+        this.filterUltimateList();
+    }
+
     filterUltimateList(): void {
         this.ultimateBalanceList?.forEach(entry => {
             if (entry.labels && this.ultimateBalanceFilter) {

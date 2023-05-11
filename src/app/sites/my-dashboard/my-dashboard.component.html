@@ -363,8 +363,8 @@
                 <h4>Ultimate balance</h4>
                 <div>
                     <div *ngFor="let label of ultimateBalanceFilter" class="mb-3 form-check label-checklist">
-                        <input (change)="toggleUltimateBalanceFilter(label)" type="checkbox" class="form-check-input" id="label-{{ label.name }}" [checked]="label.checked">
-                        <label class="form-check-label" for="label-{{ label.name }}">{{ label.name }}</label>
+                        <input (dblclick)="setThisFilterAsOnlyFilter(label)" (change)="toggleUltimateBalanceFilter(label)" type="checkbox" class="form-check-input" id="label-{{ label.name }}" [checked]="label.checked">
+                        <label (dblclick)="setThisFilterAsOnlyFilter(label)" class="form-check-label" for="label-{{ label.name }}">{{ label.name }}</label>
                     </div>
                 </div>
                 <table class="table table-striped table-sm">

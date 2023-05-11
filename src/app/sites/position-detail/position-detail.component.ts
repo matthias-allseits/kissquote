@@ -24,7 +24,6 @@ import {TranslationService} from "../../services/translation.service";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {Label} from "../../models/label";
 import {Observable} from "rxjs";
-import {DateHelper} from "../../core/datehelper";
 import {Sector} from "../../models/sector";
 import {SectorService} from "../../services/sector.service";
 
@@ -64,10 +63,10 @@ export class PositionDetailComponent implements OnInit {
     public allSectors?: Sector[];
 
     public chartData?: ChartData;
-    public lineChartData?: ChartData;
     public historicRates: StockRate[] = [];
     public historicStockRates: StockRate[] = [];
     public daysTillNextEx?: number;
+    public daysTillNextReport?: number;
 
     manualDrawdownForm = new FormGroup({
         amount: new UntypedFormControl('', Validators.required),
@@ -323,6 +322,7 @@ export class PositionDetailComponent implements OnInit {
         this.historicStockRates = [];
         this.maxDrawdownSummary = undefined;
         this.daysTillNextEx = undefined;
+        this.daysTillNextReport = undefined;
         this.positionService.getPosition(positionId)
             .subscribe(position => {
                 if (position) {
@@ -384,6 +384,10 @@ export class PositionDetailComponent implements OnInit {
                                         const currentDate = new Date();
                                         const nextExDate = share.plannedDividends[0].exDate;
                                         this.daysTillNextEx = Math.floor((Date.UTC(nextExDate.getFullYear(), nextExDate.getMonth(), nextExDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) ) /(1000 * 60 * 60 * 24));
+                                        if (share.nextReportDate) {
+                                            const nextReportDate = share.nextReportDate;
+                                            this.daysTillNextReport = Math.floor((Date.UTC(nextReportDate.getFullYear(), nextReportDate.getMonth(), nextReportDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
+                                        }
                                     }
                                 }
                             })
