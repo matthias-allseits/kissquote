@@ -66,6 +66,7 @@ export class PositionDetailComponent implements OnInit {
     public historicRates: StockRate[] = [];
     public historicStockRates: StockRate[] = [];
     public daysTillNextEx?: number;
+    public daysTillNextPayment?: number;
     public daysTillNextReport?: number;
 
     manualDrawdownForm = new FormGroup({
@@ -322,6 +323,7 @@ export class PositionDetailComponent implements OnInit {
         this.historicStockRates = [];
         this.maxDrawdownSummary = undefined;
         this.daysTillNextEx = undefined;
+        this.daysTillNextPayment = undefined;
         this.daysTillNextReport = undefined;
         this.positionService.getPosition(positionId)
             .subscribe(position => {
@@ -383,7 +385,9 @@ export class PositionDetailComponent implements OnInit {
                                     if (share.plannedDividends && share.plannedDividends.length > 0) {
                                         const currentDate = new Date();
                                         const nextExDate = share.plannedDividends[0].exDate;
+                                        const nextPayDate = share.plannedDividends[0].payDate;
                                         this.daysTillNextEx = Math.floor((Date.UTC(nextExDate.getFullYear(), nextExDate.getMonth(), nextExDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) ) /(1000 * 60 * 60 * 24));
+                                        this.daysTillNextPayment = Math.floor((Date.UTC(nextPayDate.getFullYear(), nextPayDate.getMonth(), nextPayDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) ) /(1000 * 60 * 60 * 24));
                                         if (share.nextReportDate) {
                                             const nextReportDate = share.nextReportDate;
                                             this.daysTillNextReport = Math.floor((Date.UTC(nextReportDate.getFullYear(), nextReportDate.getMonth(), nextReportDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));

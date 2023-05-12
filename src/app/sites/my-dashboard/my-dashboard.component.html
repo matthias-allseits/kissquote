@@ -405,6 +405,7 @@
                     <thead>
                         <tr>
                             <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+                            <th scope="col" class="d-none d-md-table-cell">Sector</th>
                             <th scope="col">Method</th>
                             <th scope="col"><span class="float-end">{{ tranService.trans('GLOB_VALUE') }}</span></th>
                             <th scope="col"><span class="float-end" ngbTooltip="{{ tranService.trans('LISTNGS_FROM_INVESTMENT') }}">frmInv</span></th>
@@ -414,6 +415,7 @@
                     <tbody>
                         <tr *ngFor="let entry of lombardValueList">
                             <td>{{ entry.position.share?.name }}</td>
+                            <td class="d-none d-md-table-cell"><span *ngIf="entry.position.sector">{{ entry.position.sector.name }}</span></td>
                             <td>{{ entry.maxDrawdownSummary.method }}</td>
                             <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValue|number: '1.0' }}</span></td>
                             <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValueFromInvestment }}%</span></td>
