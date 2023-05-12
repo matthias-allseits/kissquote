@@ -1,0 +1,9 @@
+<div style="display: block;">
+    <canvas baseChart height="{{ height }}"
+            [data]="chartData"
+            [options]="lineChartOptions"
+            [type]="lineChartType"
+            (chartHover)="chartHovered($event)"
+            (chartClick)="chartClicked($event)">
+    </canvas>
+</div>

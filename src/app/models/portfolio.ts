@@ -5,6 +5,8 @@ import {ChartData} from "chart.js";
 import {DividendTotal, MaxDrawdownSummary, Position} from "./position";
 import {WatchlistEntry} from "./watchlistEntry";
 import {DateHelper} from "../core/datehelper";
+import {Sector} from "./sector";
+import {Forexhelper} from "../core/forexhelper";
 
 
 export interface DividendTotals {
@@ -18,6 +20,14 @@ export interface DividendTotals {
 export interface LombardValuesSummary {
     position: Position;
     maxDrawdownSummary: MaxDrawdownSummary;
+}
+
+export interface DiversitySummary {
+    sector: Sector;
+    investment: number;
+    value: number;
+    dividends: number;
+    color: string;
 }
 
 export class Portfolio {
@@ -334,6 +344,84 @@ export class Portfolio {
     }
 
 
+    diversityByInvestmentChartData(): ChartData {
+        const summaries = this.diversitySummary();
+        summaries.sort((a,b) => (a.investment < b.investment) ? 1 : ((b.investment < a.investment) ? -1 : 0))
+        const data: number[] = [];
+        const colors: string[] = [];
+        const labels: string[] = [];
+        summaries.forEach(summary => {
+            data.push(summary.investment);
+            colors.push(summary.color);
+            labels.push(summary.sector.name);
+        });
+        const chartData: ChartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Sector',
+                    data: data,
+                    backgroundColor: colors,
+                }
+            ]
+        };
+
+        return chartData;
+    }
+
+
+    diversityByValueChartData(): ChartData {
+        const summaries = this.diversitySummary();
+        summaries.sort((a,b) => (a.value < b.value) ? 1 : ((b.value < a.value) ? -1 : 0))
+        const data: number[] = [];
+        const colors: string[] = [];
+        const labels: string[] = [];
+        summaries.forEach(summary => {
+            data.push(summary.value);
+            colors.push(summary.color);
+            labels.push(summary.sector.name);
+        });
+        const chartData: ChartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Sector',
+                    data: data,
+                    backgroundColor: colors,
+                }
+            ]
+        };
+
+        return chartData;
+    }
+
+
+    diversityByDividendChartData(): ChartData {
+        const summaries = this.diversitySummary();
+        summaries.sort((a,b) => (a.dividends < b.dividends) ? 1 : ((b.dividends < a.dividends) ? -1 : 0))
+        const data: number[] = [];
+        const colors: string[] = [];
+        const labels: string[] = [];
+        summaries.forEach(summary => {
+            data.push(+summary.dividends.toFixed(0));
+            colors.push(summary.color);
+            labels.push(summary.sector.name);
+        });
+        const chartData: ChartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Sector',
+                    data: data,
+                    backgroundColor: colors,
+                }
+            ]
+        };
+
+        return chartData;
+    }
+
+
     incomeChartDataImproved(): ChartData {
         const chartData: ChartData = {
             labels: [],
@@ -470,6 +558,62 @@ export class Portfolio {
         });
 
         return ids;
+    }
+
+
+    private diversitySummary() {
+        const colors = ['rgb(255, 99, 132, 1)', 'rgb(54, 162, 235, 1)', 'rgb(255, 206, 86, 1)', 'rgb(75, 192, 192, 1)', 'rgb(153, 102, 255, 1)', 'rgb(255, 159, 64, 1)', 'rgb(99, 255, 234, 1)', 'rgb(200, 255, 99, 1)', 'rgb(210, 105, 30, 1)', 'rgb(220, 20, 60, 1)', 'rgb(255, 99, 71, 1)', 'rgb(255, 215, 0, 1)', 'rgb(139, 0, 139, 1)', 'rgb(106, 90, 205, 1)', 'rgb(160, 82, 45, 1)', 'rgb(218, 165, 32, 1)', 'rgb(152, 251, 152, 1)', 'rgb(143, 188, 143, 1)'];
+
+        const summaries: DiversitySummary[] = [];
+        const positions = this.getActiveNonCashPositions();
+        let index = 0;
+        positions.forEach(position => {
+            if (position.sector && position.balance && position.balance.lastRate) {
+                const summary = this.getSummaryBySector(summaries, position.sector);
+                let dividend = +position.shareheadDividendPayment();
+                if (position.shareheadShare?.currency) {
+                    const usersCurrency = Forexhelper.getUsersCurrencyByName(position.shareheadShare?.currency?.name);
+                    if (usersCurrency) {
+                        dividend = usersCurrency.rate * dividend;
+                        if (position.currency && position.currency?.name !== 'CHF') {
+                            dividend = dividend / position.currency?.rate;
+                        }
+                    }
+                }
+                if (position.sector.name === 'Luxusgüter') {
+                    console.log(position.share?.name + ': ' + dividend);
+                }
+                if (summary) {
+                    summary.investment += position.balance?.investment;
+                    summary.value += +position.actualValue();
+                    summary.dividends += dividend;
+                } else {
+                    const summary = {
+                        sector: position.sector,
+                        investment: position.balance?.investment,
+                        value: +position.actualValue(),
+                        dividends: dividend,
+                        color: colors[index]
+                    };
+                    index++;
+                    summaries.push(summary);
+                }
+            }
+        });
+
+        return summaries;
+    }
+
+
+    private getSummaryBySector(summaries: DiversitySummary[], sector: Sector): DiversitySummary|null {
+        let result = null;
+        summaries.forEach(summary => {
+            if (summary.sector.id === sector.id) {
+                result = summary;
+            }
+        });
+
+        return result;
     }
 
 

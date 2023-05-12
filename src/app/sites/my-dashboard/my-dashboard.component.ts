@@ -71,6 +71,9 @@ export class MyDashboardComponent implements OnInit {
     public lastMinuteList?: ShareheadShare[];
     public newestRatingsList?: AnalystRating[];
     public nextReportsList?: ShareheadShare[];
+    public diversityByInvestmentChartData?: ChartData;
+    public diversityByValueChartData?: ChartData;
+    public diversityByDividendChartData?: ChartData;
     public lombardTotal = 0;
     public color = 'ffffff';
     modalRef?: NgbModalRef;
@@ -151,6 +154,9 @@ export class MyDashboardComponent implements OnInit {
                                     this.lombardValueList.forEach(entry => {
                                         this.lombardTotal += +entry.maxDrawdownSummary.lombardValue;
                                     });
+                                    this.diversityByInvestmentChartData = this.portfolio.diversityByInvestmentChartData();
+                                    this.diversityByValueChartData = this.portfolio.diversityByValueChartData();
+                                    this.diversityByDividendChartData = this.portfolio.diversityByDividendChartData();
                                 }
                             });
                         this.shareheadService.getLastMinuteList()
