@@ -42,6 +42,7 @@ import { ShareChartComponent } from './components/share-chart/share-chart.compon
 import { ShareBarChartComponent } from './components/share-bar-chart/share-bar-chart.component';
 import {ColorPickerModule} from "ngx-color-picker";
 import {PieChartComponent} from "./components/pie-chart/pie-chart.component";
+import {ShareheadShareContainerComponent} from "./components/sharehead-share-container/sharehead-share-container.component";
 registerLocaleData(localeCH);
 
 
@@ -72,6 +73,7 @@ registerLocaleData(localeCH);
         CashPositionFormComponent,
         CashTransactionFormComponent,
         ShareheadShareInfoComponent,
+        ShareheadShareContainerComponent,
         ShareheadShareSearchComponent,
         ShareheadShareDetailComponent,
         ShareChartComponent,

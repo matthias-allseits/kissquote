@@ -284,7 +284,7 @@
     </div>
     <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="positionTab !== 'sharehead'">
         <ng-container *ngIf="position.shareheadShare">
-            <app-sharehead-share-info [shareheadShare]="position.shareheadShare" (removeInquiry)="openShareheadConfirmModal(removeShareheadConfirmModal)"></app-sharehead-share-info>
+            <app-sharehead-share-container [shareheadShare]="position.shareheadShare" (removeInquiry)="openShareheadConfirmModal(removeShareheadConfirmModal)"></app-sharehead-share-container>
         </ng-container>
         <ng-container *ngIf="!position.shareheadShare">
             Verbinden Sie Ihre Position mit einem Sharehead-Share

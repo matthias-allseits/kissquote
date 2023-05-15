@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShareheadShare} from "../../models/sharehead-share";
-import {faExternalLinkAlt} from "@fortawesome/free-solid-svg-icons";
 import {ShareheadService} from "../../services/sharehead.service";
 import {StockRate} from "../../models/stock-rate";
 
@@ -13,10 +12,10 @@ import {StockRate} from "../../models/stock-rate";
 export class ShareheadShareInfoComponent implements OnInit {
 
     @Input() shareheadShare?: ShareheadShare;
+    @Input() title?: string;
+    @Input() timeWarpMode?: boolean;
     @Output() removeInquiry: EventEmitter<any> = new EventEmitter();
     public stockRate?: StockRate;
-
-    externalLinkIcon = faExternalLinkAlt;
 
     public nextEstimationYear = new Date().getFullYear() + 1;
     public overNextEstimationYear = new Date().getFullYear() + 3;

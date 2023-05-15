@@ -1,29 +1,5 @@
 <ng-container *ngIf="shareheadShare">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-        <h4 class="pt-2">Sharehead Infos</h4>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-toolbar mb-2 mb-md-0">
-                <div class="btn-group me-2 source-btn">
-                    <a href="{{ shareheadShare.urlWikipedia }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> Wikipedia</a>
-                </div>
-                <div *ngIf="shareheadShare.swissquoteUrl()" class="btn-group me-2 source-btn">
-                    <a href="{{ shareheadShare.swissquoteUrl() }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> swissquote.ch</a>
-                </div>
-                <div class="btn-group me-2 source-btn">
-                    <a href="{{ shareheadShare.urlDiviMax }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> dividendmax.com</a>
-                </div>
-                <div class="btn-group me-2 source-btn">
-                    <a href="{{ shareheadShare.urlFinanznet }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> finanzen.net</a>
-                </div>
-                <div class="btn-group me-2 source-btn">
-                    <a href="{{ shareheadShare.urlInvesting }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> investing.com</a>
-                </div>
-                <div class="btn-group me-2 source-btn">
-                    <a href="{{ shareheadShare.urlYahoo }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> yahoo.com</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <h3 *ngIf="title">{{ title }}</h3>
     <div class="info-container" style="margin: 0;">
         <div class="info-box-wrapper">
             <div class="info-box">
@@ -153,7 +129,7 @@
                     <div class="col-4" style="text-align: right;"><span *ngIf="rating.priceTarget && rating.priceTarget > 0">{{ rating.priceTarget }}</span> {{ rating.currency }}</div>
                 </div>
             </div>
-            <div class="info-box">
+            <div *ngIf="!timeWarpMode" class="info-box">
                 <h5>Termine</h5>
                 <div class="row">
                     <div class="col-9">Next Report:</div>
@@ -207,7 +183,7 @@
                 <h5>Shares number ({{ shareheadShare.shareNumbersChanges() }}%)</h5>
                 <app-line-chart [data]="shareheadShare.shareNumbersChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
-            <div class="info-box info-box-lg">
+            <div *ngIf="!timeWarpMode" class="info-box info-box-lg">
                 <button (click)="sendRemoveInquiry()" class="btn btn-sm btn-outline-primary">Remove this Sharehead Share</button>
             </div>
         </div>

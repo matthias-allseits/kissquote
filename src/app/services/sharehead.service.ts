@@ -28,8 +28,8 @@ export class ShareheadService {
     ) {
         if (+window.location.port === 4300) {
             this.baseUrl = 'http://sharehead.local/api';
-        } else if (+window.location.port === 4500) {
-            this.baseUrl = 'http://localhost:8009/api';
+            // } else if (+window.location.port === 4500) {
+            //     this.baseUrl = 'http://localhost:8009/api';
         }
     }
 
