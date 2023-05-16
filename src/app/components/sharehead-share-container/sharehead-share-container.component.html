@@ -25,17 +25,17 @@
         </div>
         <div class="col-3 col-md-3 d-none d-md-block text-end">
             <div *ngIf="!timeWarpMode" ngbDropdown class="d-inline-block">
-                <button type="button" class="btn btn-sm btn-outline-primary" id="dropdownTimeWarp" ngbDropdownToggle>
+                <button type="button" class="btn btn-sm btn-outline-primary source-btn" id="dropdownTimeWarp" ngbDropdownToggle>
                     Time warp
                 </button>
                 <div ngbDropdownMenu aria-labelledby="dropdownTimeWarp">
-                    <button (click)="timeWarp(1)" ngbDropdownItem>1 year</button>
-                    <button (click)="timeWarp(2)" ngbDropdownItem>2 years</button>
-                    <button (click)="timeWarp(3)" ngbDropdownItem>3 years</button>
+                    <button (click)="startTimeWarp(1)" ngbDropdownItem>1 year</button>
+                    <button (click)="startTimeWarp(2)" ngbDropdownItem>2 years</button>
+                    <button (click)="startTimeWarp(3)" ngbDropdownItem>3 years</button>
                 </div>
             </div>
             <div *ngIf="timeWarpMode" ngbDropdown class="d-inline-block">
-                <button (click)="stopTimeWarp()" type="button" class="btn btn-sm btn-outline-primary active" id="stopTimeWarp">
+                <button (click)="stopTimeWarp()" type="button" class="btn btn-sm btn-outline-primary active source-btn" id="stopTimeWarp">
                     Stop Time warp mode
                 </button>
             </div>
@@ -47,10 +47,10 @@
     </div>
     <div class="row" *ngIf="timeWarpMode">
         <div class="col-6">
-            <app-sharehead-share-info [shareheadShare]="shareheadShare" (removeInquiry)="sendRemoveInquiry()" title="Today" [timeWarpMode]="true"></app-sharehead-share-info>
+            <app-sharehead-share-info [shareheadShare]="shareheadShare" (removeInquiry)="sendRemoveInquiry()" componentTitle="Today" [timeWarpMode]="true"></app-sharehead-share-info>
         </div>
         <div class="col-6">
-            <app-sharehead-share-info [shareheadShare]="shareheadShare" (removeInquiry)="sendRemoveInquiry()" title="2 years ago" [timeWarpMode]="true"></app-sharehead-share-info>
+            <app-sharehead-share-info *ngIf="timeWarpedShare" [shareheadShare]="timeWarpedShare" (removeInquiry)="sendRemoveInquiry()" [componentTitle]="timeWarpTitle" [timeWarpMode]="true" [timeWarpDate]="this.timeWarpDate"></app-sharehead-share-info>
         </div>
     </div>
 

@@ -12,8 +12,9 @@ import {StockRate} from "../../models/stock-rate";
 export class ShareheadShareInfoComponent implements OnInit {
 
     @Input() shareheadShare?: ShareheadShare;
-    @Input() title?: string;
+    @Input() componentTitle?: string;
     @Input() timeWarpMode?: boolean;
+    @Input() timeWarpDate?: Date|undefined;
     @Output() removeInquiry: EventEmitter<any> = new EventEmitter();
     public stockRate?: StockRate;
 

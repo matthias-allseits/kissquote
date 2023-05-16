@@ -580,9 +580,6 @@ export class Portfolio {
                         }
                     }
                 }
-                if (position.sector.name === 'Luxusgüter') {
-                    console.log(position.share?.name + ': ' + dividend);
-                }
                 if (summary) {
                     summary.investment += position.balance?.investment;
                     summary.value += +position.actualValue();

@@ -241,7 +241,7 @@ export class ShareheadShare {
     }
 
 
-    salesChartData(): ChartData {
+    salesChartData(date?: Date): ChartData {
         const chartData: ChartData = {
             labels: [],
             datasets: [
@@ -268,6 +268,9 @@ export class ShareheadShare {
             }
         });
         let year = new Date().getFullYear();
+        if (date) {
+            year = date.getFullYear();
+        }
         for (let x = 1; x <= 3; x++) {
             const estimationYear = year + x;
             const estimationDate = new Date(estimationYear, 1, 1);
@@ -291,7 +294,7 @@ export class ShareheadShare {
     }
 
 
-    profitChartData(): ChartData {
+    profitChartData(date?: Date): ChartData {
         const chartData: ChartData = {
             labels: [],
             datasets: [
@@ -349,6 +352,9 @@ export class ShareheadShare {
         chartData.datasets[3].data[chartData.datasets[3].data.length - 1] = chartData.datasets[2].data[chartData.datasets[2].data.length - 1];
 
         let year = new Date().getFullYear();
+        if (date) {
+            year = date.getFullYear();
+        }
         for (let x = 1; x <= 3; x++) {
             const estimationYear = year + x;
             const estimationDate = new Date(estimationYear, 1, 1);

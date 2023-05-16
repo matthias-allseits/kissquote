@@ -1,7 +1,7 @@
 <ng-container *ngIf="shareheadShare">
-    <h3 *ngIf="title">{{ title }}</h3>
+    <h3 *ngIf="componentTitle">{{ componentTitle }}</h3>
     <div class="info-container" style="margin: 0;">
-        <div class="info-box-wrapper">
+        <div class="info-box-wrapper" [class.height-equalizer]="timeWarpMode">
             <div class="info-box">
                 <div class="row">
                     <div class="col-4">Name:</div>
@@ -68,7 +68,7 @@
                     </div>
                 </div>
             </div>
-            <div class="info-box">
+            <div *ngIf="!timeWarpMode" class="info-box">
                 <h5>Financial crisis</h5>
                 <ng-container *ngIf="shareheadShare.financialCrisisDrawdown()">
                     <div class="row">
@@ -115,7 +115,7 @@
                 </ng-container>
             </div>
         </div>
-        <div class="info-box-wrapper">
+        <div class="info-box-wrapper" [class.height-equalizer]="timeWarpMode">
             <div class="info-box">
                 <h5>Analyst Ratings</h5>
                 <div *ngFor="let rating of shareheadShare.filteredRatings()" class="row">
@@ -153,11 +153,11 @@
         <div>
             <div class="info-box info-box-lg">
                 <h5>Sales (in Mio. {{ shareheadShare.balancesCurrency() }})</h5>
-                <app-bar-chart [data]="shareheadShare.salesChartData()" [height]="150"></app-bar-chart>
+                <app-bar-chart [data]="shareheadShare.salesChartData(timeWarpDate)" [height]="150"></app-bar-chart>
             </div>
             <div class="info-box info-box-lg">
                 <h5>Profit + Dividend per Share</h5>
-                <app-line-chart [data]="shareheadShare.profitChartData()" [height]="150" [forceBeginAtZero]="!shareheadShare.hadNegativeBalances()" [pointRadius]="3.5"></app-line-chart>
+                <app-line-chart [data]="shareheadShare.profitChartData(timeWarpDate)" [height]="150" [forceBeginAtZero]="!shareheadShare.hadNegativeBalances()" [pointRadius]="3.5"></app-line-chart>
             </div>
             <div class="info-box info-box-lg">
                 <h5>Avg Rates</h5>
@@ -167,11 +167,11 @@
                 <h5>Equity Ratio</h5>
                 <app-line-chart [data]="shareheadShare.equityRatesChartData()" [height]="150" [forceBeginAtZero]="true" [percentageChart]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
-            <div class="info-box info-box-lg">
+            <div *ngIf="!timeWarpMode" class="info-box info-box-lg">
                 <h5>{{ nextEstimationYear }} Estimation Changes</h5>
                 <app-line-chart [data]="shareheadShare.estimationChangesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
-            <div *ngIf="shareheadShare.analysisResults && shareheadShare.analysisResults.estimationChangesOverNext && shareheadShare.analysisResults.estimationChangesOverNext.length > 2" class="info-box info-box-lg">
+            <div *ngIf="!timeWarpMode && shareheadShare.analysisResults && shareheadShare.analysisResults.estimationChangesOverNext && shareheadShare.analysisResults.estimationChangesOverNext.length > 2" class="info-box info-box-lg">
                 <h5>{{ overNextEstimationYear }} Estimation Changes</h5>
                 <app-line-chart [data]="shareheadShare.estimationChangesChartData(true)" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>

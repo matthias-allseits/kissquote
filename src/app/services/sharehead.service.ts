@@ -13,6 +13,7 @@ import {AnalystRatingCreator} from "../creators/analyst-rating-creator";
 import {WatchlistCreator} from "../creators/watchlist-creator";
 import {Position} from "../models/position";
 import {Portfolio} from "../models/portfolio";
+import {DateHelper} from "../core/datehelper";
 
 
 @Injectable({
@@ -39,9 +40,15 @@ export class ShareheadService {
         return this.http.get<ShareheadShare>(this.baseUrl + '/share/' + id)
             .pipe(
                 map(res => ShareheadShareCreator.oneFromApiArray(res))
-                // map(this.extractData),
-                // catchError(this.handleError('addHero', portfolio))
-                // catchError(this.handleError('addHero', portfolio))
+            );
+    }
+
+
+    public getTimeWarpedShare(id: number, date: Date): Observable<ShareheadShare|undefined>
+    {
+        return this.http.get<ShareheadShare>(this.baseUrl + '/share/' + id + '/' + DateHelper.convertDateToMysql(date))
+            .pipe(
+                map(res => ShareheadShareCreator.oneFromApiArray(res))
             );
     }
 
