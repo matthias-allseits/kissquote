@@ -269,7 +269,7 @@ export class ShareheadShare {
         });
         let year = new Date().getFullYear();
         if (date) {
-            year = date.getFullYear();
+            year = date.getFullYear() - 1;
         }
         for (let x = 1; x <= 3; x++) {
             const estimationYear = year + x;
@@ -353,7 +353,7 @@ export class ShareheadShare {
 
         let year = new Date().getFullYear();
         if (date) {
-            year = date.getFullYear();
+            year = date.getFullYear() - 1;
         }
         for (let x = 1; x <= 3; x++) {
             const estimationYear = year + x;
