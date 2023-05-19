@@ -9,6 +9,7 @@ export class AnalystRating {
         public date: Date,
         public priceTarget: number|null,
         public rating?: string,
+        public source?: string,
         public share?: ShareheadShare,
         public positionId?: number,
     ) { }

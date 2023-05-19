@@ -118,7 +118,7 @@
         <div class="info-box-wrapper" [class.height-equalizer]="timeWarpMode">
             <div class="info-box">
                 <h5>Analyst Ratings</h5>
-                <div *ngFor="let rating of shareheadShare.filteredRatings()" class="row">
+                <div *ngFor="let rating of shareheadShare.filteredRatings()" class="row" title="{{ rating.source }}">
                     <div class="col-2">{{ rating.date|date:'dd.MM.YY' }}</div>
                     <div class="col-5" style="padding-left: 20px;">{{ rating.analyst }}</div>
                     <div class="col-1"

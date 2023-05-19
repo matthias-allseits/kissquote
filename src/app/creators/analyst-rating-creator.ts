@@ -31,6 +31,7 @@ export class AnalystRatingCreator {
                 new Date(apiArray.date),
                 apiArray.priceTarget,
                 apiArray.rating,
+                apiArray.source,
                 apiArray.share ? ShareheadShareCreator.oneFromApiArray(apiArray.share) : undefined,
             );
         } else {
