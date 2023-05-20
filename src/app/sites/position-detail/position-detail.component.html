@@ -22,7 +22,7 @@
             <a class="nav-link" [class.active]="positionTab === 'sharehead'" (click)="changeTab('sharehead')">Sharehead Infos</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.active]="positionTab === 'transactions'" (click)="changeTab('transactions')">{{ tranService.trans('GLOB_TRANSACTIONS') }}</a>
+            <a class="nav-link" [class.active]="positionTab === 'logbook'" (click)="changeTab('logbook')">Logbook</a>
         </li>
     </ul>
     <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="positionTab !== 'balance'">
@@ -294,13 +294,14 @@
             </div>
         </ng-container>
     </div>
-    <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="positionTab !== 'transactions'">
+    <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="positionTab !== 'logbook'">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-            <h4 class="pt-2">{{ tranService.trans('GLOB_TRANSACTIONS') }}</h4>
+            <h4 class="pt-2">Logbook</h4>
             <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group me-2">
                     <button *ngIf="!position.isCash" [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary">Add Transaction</button>
                     <button *ngIf="position.isCash" [routerLink]="'/position/' + position.id + '/cash-transaction-form'" type="button" class="btn btn-sm btn-outline-primary">Add Transaction</button>
+                    <button (click)="openLogEntryModal(logEntryModal, undefined)" type="button" class="btn btn-sm btn-outline-primary">Add Log entry</button>
                 </div>
             </div>
         </div>
@@ -319,16 +320,32 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let transaction of position.transactions">
-                    <td>{{ transaction.date|date:'dd.MM.y' }}</td>
-                    <td>{{ transaction.title }}</td>
-                    <td><span class="float-end">{{ transaction.quantity }}</span></td>
-                    <td><span class="float-end">{{ transaction.rate }}</span></td>
-                    <td class="d-none d-md-table-cell"><span class="float-end">{{ transaction.fee }}</span></td>
-                    <td class="d-none d-md-table-cell"><span>{{ transaction.currency?.name }}</span></td>
-                    <td *ngIf="!position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/transaction-form/' + transaction.id" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
-                    <td *ngIf="position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/cash-transaction-form/' + transaction.id" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
-                    <td><span class="float-end"><button (click)="openModal(removeTransactionConfirmModal, transaction)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></span></td>
+                <tr *ngFor="let entry of logBook">
+                    <ng-container *ngIf="entry.hasOwnProperty('log')">
+                        <td>
+                            <span class="d-none d-md-table-cell">{{ entry.date|date:'dd.MM.y' }}</span>
+                            <span class="d-table-cell d-md-none">{{ entry.date|date:'dd.MM.YY' }}</span>
+                        </td>
+                        <td colspan="3">({{ entry.emoticon }}) {{ entry.log }}</td>
+                        <td class="d-none d-md-table-cell"></td>
+                        <td class="d-none d-md-table-cell"></td>
+                        <td><span class="float-end"><button (click)="openLogEntryModal(logEntryModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
+                        <td><span class="float-end"><button (click)="openLogEntryConfirmModal(removeLogEntryConfirmModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></span></td>
+                    </ng-container>
+                    <ng-container *ngIf="entry.hasOwnProperty('quantity')">
+                        <td>
+                            <span class="d-none d-md-table-cell">{{ entry.date|date:'dd.MM.y' }}</span>
+                            <span class="d-table-cell d-md-none">{{ entry.date|date:'dd.MM.YY' }}</span>
+                        </td>
+                        <td>{{ entry.title }}</td>
+                        <td><span class="float-end">{{ entry.quantity }}</span></td>
+                        <td><span class="float-end">{{ entry.rate }}</span></td>
+                        <td class="d-none d-md-table-cell"><span class="float-end">{{ entry.fee }}</span></td>
+                        <td class="d-none d-md-table-cell"><span>{{ entry.currency?.name }}</span></td>
+                        <td *ngIf="!position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/transaction-form/' + entry.id" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
+                        <td *ngIf="position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/cash-transaction-form/' + entry.id" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
+                        <td><span class="float-end"><button (click)="openModal(removeTransactionConfirmModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></span></td>
+                    </ng-container>
                 </tr>
                 </tbody>
             </table>
@@ -348,6 +365,14 @@
     <div class="modal-body text-center">
         <p>Wollen Sie diese Verknüpfung wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirmShareheadRemoving()">{{ tranService.trans('GLOB_YES') }}</button>
+        <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
+    </div>
+</ng-template>
+
+<ng-template #removeLogEntryConfirmModal>
+    <div class="modal-body text-center">
+        <p>Wollen Sie diesen Log-Eintrag wirklich löschen?</p>
+        <button type="button" class="btn btn-default" (click)="confirmLogEntryRemoving()">{{ tranService.trans('GLOB_YES') }}</button>
         <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>
@@ -410,5 +435,32 @@
                 <li class="dropdown-item" (click)="setSector(undefined)">Clear</li>
             </ul>
         </div>
+    </div>
+</ng-template>
+
+<ng-template #logEntryModal>
+    <div class="modal-body">
+        <form *ngIf="selectedLogEntry" [formGroup]="logEntryForm">
+            <div class="mb-3">
+                <label class="form-label">Date</label>
+                <input formControlName="date" class="form-control" type="date" name="date" value="{{ selectedLogEntry.date|date:'yyyy-MM-dd' }}">
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Log</label>
+                <input style="max-width: 100%;" formControlName="log" class="form-control" type="text" name="log" value="">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Emoticon</label>
+                <input formControlName="emoticon" class="form-control" type="text" name="emoticon" value="">
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="btn btn-primary float-end" (click)="persistLogEntry()">{{ tranService.trans('GLOB_SAVE') }}</button>
+                </div>
+            </div>
+        </form>
     </div>
 </ng-template>

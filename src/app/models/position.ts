@@ -16,6 +16,7 @@ import {ManualDividend} from "./manual-dividend";
 import {ShareheadTurningPoint} from "./sharehead-turning-point";
 import {Label} from "./label";
 import {Sector} from "./sector";
+import {PositionLog} from "./position-log";
 
 
 export interface DividendTotal {
@@ -48,6 +49,7 @@ export class Position {
         public activeFrom: Date|string,
         public activeUntil: Date|null|string,
         public transactions: Transaction[],
+        public logEntries: PositionLog[],
         public isCash: boolean = false,
         public dividendPeriodicity: string,
         public shareFromTotal: number,

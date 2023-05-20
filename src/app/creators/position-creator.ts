@@ -6,12 +6,13 @@ import {BalanceCreator} from "./balance-creator";
 import {BankAccountCreator} from "./bank-account-creator";
 import {LabelCreator} from "./label-creator";
 import {SectorCreator} from "./sector-creator";
+import {PositionLogCreator} from "./position-log-creator";
 
 
 export class PositionCreator {
 
     public static createNewPosition(): Position {
-        return new Position(0, null, true, new Date(), null, [], false, '', 0);
+        return new Position(0, null, true, new Date(), null, [], [], false, '', 0);
     }
 
     public static fromApiArray(apiArray: Position[]): Position[] {
@@ -39,6 +40,7 @@ export class PositionCreator {
                 new Date(apiArray.activeFrom),
                 apiArray.activeUntil ? new Date(apiArray.activeUntil) : null,
                 apiArray.transactions ? TransactionCreator.fromApiArray(apiArray.transactions) : [],
+                apiArray.logEntries ? PositionLogCreator.fromApiArray(apiArray.logEntries) : [],
                 apiArray.isCash,
                 apiArray.dividendPeriodicity,
                 0,

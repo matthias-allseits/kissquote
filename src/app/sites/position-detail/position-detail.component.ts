@@ -26,6 +26,11 @@ import {Label} from "../../models/label";
 import {Observable} from "rxjs";
 import {Sector} from "../../models/sector";
 import {SectorService} from "../../services/sector.service";
+import {PositionLog} from "../../models/position-log";
+import {PositionLogService} from "../../services/position-log.service";
+import {LabelCreator} from "../../creators/label-creator";
+import {PositionLogCreator} from "../../creators/position-log-creator";
+import {formatDate} from "@angular/common";
 
 
 @Component({
@@ -61,7 +66,9 @@ export class PositionDetailComponent implements OnInit {
     public showLabelsDropdown = false;
     public allLabels?: Label[];
     public allSectors?: Sector[];
+    public logBook?: any[];
 
+    public selectedLogEntry?: PositionLog;
     public chartData?: ChartData;
     public historicRates: StockRate[] = [];
     public historicStockRates: StockRate[] = [];
@@ -73,6 +80,12 @@ export class PositionDetailComponent implements OnInit {
         amount: new UntypedFormControl('', Validators.required),
     });
 
+    logEntryForm = new FormGroup({
+        date: new UntypedFormControl(new Date(), Validators.required),
+        log: new UntypedFormControl('', Validators.required),
+        emoticon: new UntypedFormControl(''),
+    });
+
     constructor(
         public tranService: TranslationService,
         private route: ActivatedRoute,
@@ -80,6 +93,7 @@ export class PositionDetailComponent implements OnInit {
         private positionService: PositionService,
         private currencyService: CurrencyService,
         private sectorService: SectorService,
+        private positionLogService: PositionLogService,
         private transactionService: TransactionService,
         private shareService: ShareService,
         private shareheadService: ShareheadService,
@@ -130,6 +144,11 @@ export class PositionDetailComponent implements OnInit {
         this.shareheadModalRef = this.modalService.open(template);
     }
 
+    openLogEntryConfirmModal(template: TemplateRef<any>, logEntry: PositionLog) {
+        this.selectedLogEntry = logEntry;
+        this.modalRef = this.modalService.open(template);
+    }
+
 
     confirm(): void {
         if (this.selectedTransaction) {
@@ -137,7 +156,6 @@ export class PositionDetailComponent implements OnInit {
         }
         this.modalRef?.close();
     }
-
 
     confirmShareheadRemoving(): void {
         if (this.position) {
@@ -151,6 +169,13 @@ export class PositionDetailComponent implements OnInit {
                 });
         }
         this.shareheadModalRef?.close();
+    }
+
+    confirmLogEntryRemoving(): void {
+        if (this.selectedLogEntry) {
+            this.deleteLogEntry(this.selectedLogEntry);
+        }
+        this.modalRef?.close();
     }
 
 
@@ -199,6 +224,24 @@ export class PositionDetailComponent implements OnInit {
         this.shareheadModalRef = this.modalService.open(template);
     }
 
+    openLogEntryModal(template: TemplateRef<any>, entry: PositionLog|undefined): void {
+        if (entry) {
+            const dateString = formatDate(entry.date, 'yyyy-MM-dd', 'en');
+            this.logEntryForm.get('date')?.setValue(dateString);
+            this.logEntryForm.get('log')?.setValue(entry.log);
+            this.logEntryForm.get('emoticon')?.setValue(entry.emoticon);
+            this.selectedLogEntry = entry;
+        } else {
+            const now = new Date();
+            const dateString = formatDate(now, 'yyyy-MM-dd', 'en');
+            this.logEntryForm.get('date')?.setValue(dateString);
+            this.logEntryForm.get('log')?.setValue('');
+            this.logEntryForm.get('emoticon')?.setValue('');
+            this.selectedLogEntry = PositionLogCreator.createNewPositionLog();
+        }
+        this.modalRef = this.modalService.open(template);
+    }
+
     confirmManualDrawdownRemoving(): void {
         if (this.position) {
             this.position.manualDrawdown = undefined;
@@ -227,6 +270,31 @@ export class PositionDetailComponent implements OnInit {
         this.modalRef?.close();
     }
 
+    persistLogEntry(): void {
+        if (this.selectedLogEntry && this.position) {
+            this.selectedLogEntry.positionId = this.position.id;
+            this.selectedLogEntry.date = this.logEntryForm.get('date')?.value;
+            this.selectedLogEntry.log = this.logEntryForm.get('log')?.value;
+            this.selectedLogEntry.emoticon = this.logEntryForm.get('emoticon')?.value;
+            if (this.selectedLogEntry.id > 0) {
+                this.positionLogService.update(this.selectedLogEntry)
+                    .subscribe(entry => {
+                        this.refreshLog();
+                    });
+            } else {
+                this.positionLogService.create(this.selectedLogEntry)
+                    .subscribe(entry => {
+                        if (entry) {
+                            this.position?.logEntries.push(entry);
+                            this.refreshLog();
+                        }
+                    });
+            }
+            this.selectedLogEntry = undefined;
+        }
+        this.modalRef?.close();
+    }
+
 
     deleteTransaction(transaction: Transaction): void {
         this.transactionService.delete(transaction.id).subscribe(() => {
@@ -250,6 +318,12 @@ export class PositionDetailComponent implements OnInit {
                 }
             });
         }
+    }
+
+    deleteLogEntry(logEntry: PositionLog): void {
+        this.positionLogService.delete(logEntry.id).subscribe(() => {
+            this.refreshLog();
+        });
     }
 
 
@@ -316,6 +390,14 @@ export class PositionDetailComponent implements OnInit {
         this.showLabelsDropdown = !this.showLabelsDropdown;
     }
 
+    private refreshLog(): void
+    {
+        // todo: implement a shiny solution
+        if (this.position) {
+            this.loadData(this.position.id);
+        }
+    }
+
 
     private loadData(positionId: number): void {
         this.diviProjectionYears = [];
@@ -329,8 +411,11 @@ export class PositionDetailComponent implements OnInit {
             .subscribe(position => {
                 if (position) {
                     this.position = position;
+                    this.logBook = this.position.logEntries;
+                    this.logBook = this.logBook.concat(this.position.transactions);
+                    this.logBook.sort((a, b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0));
                     if (this.position.isCash) {
-                        this.positionTab = 'transactions';
+                        this.positionTab = 'logbook';
                     }
                     if (this.position.balance?.lastRate) {
                         this.currentYieldOnValue = (100 / this.position.balance.lastRate.rate * this.position.balance.projectedNextDividendPerShare()).toFixed(1);

@@ -52,7 +52,6 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
     ngOnInit(): void {
         const now = new Date();
         const dateString = formatDate(now, 'yyyy-MM-dd', 'en');
-        console.log(dateString);
         this.transactionForm.get('date')?.setValue(dateString);
         this.route.params.subscribe((params: Params) => {
             const positionId = +params['pid'];

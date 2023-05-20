@@ -3,8 +3,8 @@ import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {ApiService} from "./api-service";
-import {Label} from "../models/label";
-import {LabelCreator} from "../creators/label-creator";
+import {PositionLog} from "../models/position-log";
+import {DateHelper} from "../core/datehelper";
 
 
 const httpOptions = {
@@ -17,42 +17,35 @@ const httpOptions = {
     providedIn: 'root'
 })
 
-export class LabelService extends ApiService {
+export class PositionLogService extends ApiService {
 
     constructor(
         public override http: HttpClient,
     ) {
-        super('/label', http);
+        super('/position-log', http);
     }
 
 
-    create(label: Label): Observable<Label|null> {
+    create(logEntry: PositionLog): Observable<PositionLog|null> {
+        logEntry.date = DateHelper.convertDateToMysql(logEntry.date);
         const url = `${this.apiUrl}`;
         return this.http
-            .post(url, JSON.stringify(label), httpOptions)
+            .post(url, JSON.stringify(logEntry), httpOptions)
             .pipe(
-                map(() => label),
+                map(() => logEntry),
                 // catchError(this.handleError)
             );
     }
 
 
-    update(label: Label): Observable<Label|null> {
-        const url = `${this.apiUrl}/${label.id}`;
+    update(logEntry: PositionLog): Observable<PositionLog|null> {
+        logEntry.date = DateHelper.convertDateToMysql(logEntry.date);
+        const url = `${this.apiUrl}/${logEntry.id}`;
         return this.http
-            .put(url, JSON.stringify(label), httpOptions)
+            .put(url, JSON.stringify(logEntry), httpOptions)
             .pipe(
-                map(() => label),
+                map(() => logEntry),
                 // catchError(this.handleError)
-            );
-    }
-
-
-    public getAllLabels(): Observable<Label[]>
-    {
-        return this.http.get<Label[]>(this.apiUrl)
-            .pipe(
-                map(res => LabelCreator.fromApiArray(res))
             );
     }
 
@@ -61,7 +54,7 @@ export class LabelService extends ApiService {
         const url = `${this.apiUrl}/${id}`;
         return this.http.delete(url, httpOptions)
             .pipe(
-                // map(res => LabelCreator.fromApiArray(res)),
+                // map(res => PositionLogCreator.fromApiArray(res)),
                 // catchError(this.handleError)
             );
     }
