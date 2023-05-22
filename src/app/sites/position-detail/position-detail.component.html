@@ -326,7 +326,7 @@
                             <span class="d-none d-md-table-cell">{{ entry.date|date:'dd.MM.y' }}</span>
                             <span class="d-table-cell d-md-none">{{ entry.date|date:'dd.MM.YY' }}</span>
                         </td>
-                        <td colspan="3">({{ entry.emoticon }}) {{ entry.log }}</td>
+                        <td colspan="3">{{ entry.emoticon }} {{ entry.log }}</td>
                         <td class="d-none d-md-table-cell"></td>
                         <td class="d-none d-md-table-cell"></td>
                         <td><span class="float-end"><button (click)="openLogEntryModal(logEntryModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
@@ -450,8 +450,13 @@
                 <input style="max-width: 100%;" formControlName="log" class="form-control" type="text" name="log" value="">
             </div>
             <div class="mb-3">
-                <label class="form-label">Emoticon</label>
-                <input formControlName="emoticon" class="form-control" type="text" name="emoticon" value="">
+                <label class="form-label">Emoticon 2</label>
+                <select formControlName="emoticon" id="emoticon" name="emoticon" class="form-select form-select mb-3">
+                    <option disabled selected></option>
+                    <option [value]="'🙂'">🙂</option>
+                    <option [value]="'😑'">😑</option>
+                    <option [value]="'😡'">😡</option>
+                </select>
             </div>
             <div class="row">
                 <div class="col-6">
