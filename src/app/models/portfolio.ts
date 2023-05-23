@@ -27,6 +27,7 @@ export interface DiversitySummary {
     investment: number;
     value: number;
     dividends: number;
+    percentage: number;
     color: string;
 }
 
@@ -346,6 +347,15 @@ export class Portfolio {
 
     diversityByInvestmentChartData(): ChartData {
         const summaries = this.diversitySummary();
+
+        let total = 0;
+        summaries.forEach(summary => {
+            total += summary.investment;
+        });
+        summaries.forEach(summary => {
+            summary.percentage = +(100 / total * summary.investment).toFixed(1);
+        });
+
         summaries.sort((a,b) => (a.investment < b.investment) ? 1 : ((b.investment < a.investment) ? -1 : 0))
         const data: number[] = [];
         const colors: string[] = [];
@@ -353,7 +363,7 @@ export class Portfolio {
         summaries.forEach(summary => {
             data.push(summary.investment);
             colors.push(summary.color);
-            labels.push(summary.sector.name);
+            labels.push(`${summary.sector.name} ${summary.percentage}%`);
         });
         const chartData: ChartData = {
             labels: labels,
@@ -372,6 +382,15 @@ export class Portfolio {
 
     diversityByValueChartData(): ChartData {
         const summaries = this.diversitySummary();
+
+        let total = 0;
+        summaries.forEach(summary => {
+            total += summary.value;
+        });
+        summaries.forEach(summary => {
+            summary.percentage = +(100 / total * summary.value).toFixed(1);
+        });
+
         summaries.sort((a,b) => (a.value < b.value) ? 1 : ((b.value < a.value) ? -1 : 0))
         const data: number[] = [];
         const colors: string[] = [];
@@ -379,7 +398,7 @@ export class Portfolio {
         summaries.forEach(summary => {
             data.push(summary.value);
             colors.push(summary.color);
-            labels.push(summary.sector.name);
+            labels.push(`${summary.sector.name} ${summary.percentage}%`);
         });
         const chartData: ChartData = {
             labels: labels,
@@ -398,6 +417,15 @@ export class Portfolio {
 
     diversityByDividendChartData(): ChartData {
         const summaries = this.diversitySummary();
+
+        let total = 0;
+        summaries.forEach(summary => {
+            total += summary.dividends;
+        });
+        summaries.forEach(summary => {
+            summary.percentage = +(100 / total * summary.dividends).toFixed(1);
+        });
+
         summaries.sort((a,b) => (a.dividends < b.dividends) ? 1 : ((b.dividends < a.dividends) ? -1 : 0))
         const data: number[] = [];
         const colors: string[] = [];
@@ -405,7 +433,7 @@ export class Portfolio {
         summaries.forEach(summary => {
             data.push(+summary.dividends.toFixed(0));
             colors.push(summary.color);
-            labels.push(summary.sector.name);
+            labels.push(`${summary.sector.name} ${summary.percentage}%`);
         });
         const chartData: ChartData = {
             labels: labels,
@@ -561,7 +589,7 @@ export class Portfolio {
     }
 
 
-    private diversitySummary() {
+    private diversitySummary(): DiversitySummary[] {
         const colors = ['rgb(255, 99, 132, 1)', 'rgb(54, 162, 235, 1)', 'rgb(255, 206, 86, 1)', 'rgb(75, 192, 192, 1)', 'rgb(153, 102, 255, 1)', 'rgb(255, 159, 64, 1)', 'rgb(99, 255, 234, 1)', 'rgb(200, 255, 99, 1)', 'rgb(210, 105, 30, 1)', 'rgb(220, 20, 60, 1)', 'rgb(255, 99, 71, 1)', 'rgb(255, 215, 0, 1)', 'rgb(139, 0, 139, 1)', 'rgb(106, 90, 205, 1)', 'rgb(160, 82, 45, 1)', 'rgb(218, 165, 32, 1)', 'rgb(152, 251, 152, 1)', 'rgb(143, 188, 143, 1)'];
 
         const summaries: DiversitySummary[] = [];
@@ -590,6 +618,7 @@ export class Portfolio {
                         investment: position.balance?.investment,
                         value: +position.actualValue(),
                         dividends: dividend,
+                        percentage: 0,
                         color: colors[index]
                     };
                     index++;
