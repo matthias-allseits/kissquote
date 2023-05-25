@@ -545,6 +545,9 @@
                     <li class="nav-item">
                         <a class="nav-link" [class.active]="performanceListTab === '1year'" (click)="changePerformanceListTab('1year')" aria-current="page">1 year</a>
                     </li>
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" [class.active]="performanceListTab === '3years'" (click)="changePerformanceListTab('3years')" aria-current="page">3 years</a>-->
+<!--                    </li>-->
                 </ul>
                 <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded">
                     <table class="table table-striped table-sm">
@@ -552,27 +555,13 @@
                             <ng-container *ngFor="let position of performanceList">
                                 <tr>
                                     <td><a [routerLink]="['/position-detail/' + position.id]">{{ position.share?.name }}</a></td>
-                                    <td><span class="float-end">{{ position.tempPerformanceValue|number: '1.0-1' }}%</span></td>
+                                    <td><span *ngIf="position.sector">{{ position.sector.name }}</span></td>
+                                    <td><span *ngIf="position.tempPerformanceValue !== undefined" class="float-end" [class.red-text]="position.tempPerformanceValue < 0" [class.green-text]="position.tempPerformanceValue > 0">{{ position.tempPerformanceValue|number: '1.0-1' }}%</span></td>
                                 </tr>
                             </ng-container>
                         </tbody>
                     </table>
                 </div>
-<!--                <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="performanceListTab !== '1week'">-->
-<!--                    <h6>1 week</h6>-->
-<!--                </div>-->
-<!--                <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="performanceListTab !== '1month'">-->
-<!--                    <h6>1 month</h6>-->
-<!--                </div>-->
-<!--                <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="performanceListTab !== '3month'">-->
-<!--                    <h6>3 months</h6>-->
-<!--                </div>-->
-<!--                <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="performanceListTab !== '6month'">-->
-<!--                    <h6>6 months</h6>-->
-<!--                </div>-->
-<!--                <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="performanceListTab !== '1year'">-->
-<!--                    <h6>1 year</h6>-->
-<!--                </div>-->
             </div>
             <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'diviGrowthSummary'">
                 <h4>Dividend growth summary</h4>

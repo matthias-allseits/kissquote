@@ -60,7 +60,7 @@ export class MyDashboardComponent implements OnInit {
     public dividendListTab = new Date().getFullYear();
     private availableListingTabs = ['ultimate', 'lombard', 'lastMinute', 'newestRatings', 'nextReports', 'diversification', 'performance', 'diviGrowthSummary'];
     public listingTab = 'ultimate';
-    private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year'];
+    private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year', '3years'];
     public performanceListTab = '1day';
     public performanceList?: Position[];
     public dividendLists?: DividendTotals[];
@@ -141,6 +141,7 @@ export class MyDashboardComponent implements OnInit {
                         } else {
                             this.listingTab = 'ultimate';
                         }
+                        this.changePerformanceListTab('1day');
                         this.ultimateBalanceList = this.portfolio.getActiveNonCashPositions();
                         this.ultimateBalanceList.sort((a,b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
                         this.getAllLabels();
@@ -235,6 +236,7 @@ export class MyDashboardComponent implements OnInit {
                 this.performanceList.push(position);
             }
         });
+        this.performanceList.sort((a, b) => (a.tempPerformanceValue !== undefined && b.tempPerformanceValue !== undefined && a.tempPerformanceValue < b.tempPerformanceValue) ? 1 : ((a.tempPerformanceValue !== undefined && b.tempPerformanceValue !== undefined && b.tempPerformanceValue < a.tempPerformanceValue) ? -1 : 0));
     }
 
     openPositionConfirmModal(template: TemplateRef<any>, position: Position) {
