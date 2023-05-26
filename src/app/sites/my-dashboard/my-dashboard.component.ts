@@ -58,8 +58,11 @@ export class MyDashboardComponent implements OnInit {
     private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions', 'listings'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
-    private availableListingTabs = ['ultimate', 'lombard', 'lastMinute', 'newestRatings', 'nextReports', 'diversification', 'targets', 'diviGrowthSummary'];
+    private availableListingTabs = ['ultimate', 'lombard', 'lastMinute', 'newestRatings', 'nextReports', 'diversification', 'performance', 'diviGrowthSummary'];
     public listingTab = 'ultimate';
+    private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year'];
+    public performanceListTab = '1day';
+    public performanceList?: Position[];
     public dividendLists?: DividendTotals[];
     public closedPositionsBalance = 0;
     public incomeChartDataImproved?: ChartData;
@@ -220,6 +223,18 @@ export class MyDashboardComponent implements OnInit {
     changeListingTab(selectedTab: string): void {
         this.listingTab = selectedTab;
         localStorage.setItem('listingTab', selectedTab);
+    }
+
+    changePerformanceListTab(selectedTab: string): void {
+        this.performanceListTab = selectedTab;
+        this.performanceList = [];
+        const tabIndex = this.availablePerformanceTabs.indexOf(selectedTab);
+        this.portfolio?.getActiveNonCashPositions().forEach(position => {
+            position.tempPerformanceValue = position.balance?.performance[tabIndex];
+            if (this.performanceList) {
+                this.performanceList.push(position);
+            }
+        });
     }
 
     openPositionConfirmModal(template: TemplateRef<any>, position: Position) {

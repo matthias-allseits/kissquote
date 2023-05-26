@@ -20,6 +20,7 @@ export class BalanceCreator {
                 apiArray.projectedNextDividendCurrency,
                 apiArray.collectedInterest,
                 apiArray.collectedCoupons,
+                apiArray.performance,
                 apiArray.lastRate ? StockRateCreator.oneFromApiArray(apiArray.lastRate) : undefined,
                 apiArray.cashValue,
                 apiArray.closedResult,

@@ -62,6 +62,7 @@ export class Position {
         public labels?: Label[],
         public shareheadShare?: ShareheadShare,
         public visible?: boolean, // for filtering purposes
+        public tempPerformanceValue?: number, // for filtering purposes
     ) {}
 
 
