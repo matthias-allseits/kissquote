@@ -183,6 +183,10 @@
                 <h5>Shares number ({{ shareheadShare.shareNumbersChanges() }}%)</h5>
                 <app-line-chart [data]="shareheadShare.shareNumbersChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
+            <div class="info-box info-box-lg">
+                <h5>Historic dividends</h5>
+                <app-bar-chart [data]="shareheadShare.historicDividendsChartData()" [height]="150"></app-bar-chart>
+            </div>
             <div *ngIf="!timeWarpMode" class="info-box info-box-lg">
                 <button (click)="sendRemoveInquiry()" class="btn btn-sm btn-outline-primary">Remove this Sharehead Share</button>
             </div>

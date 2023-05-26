@@ -9,6 +9,8 @@ import {ShareheadPlannedDividend} from "./sharehead-planned-dividend";
 import {AnalystRating} from "./analyst-rating";
 import {ShareheadTurningPoint} from "./sharehead-turning-point";
 import {StockRate} from "./stock-rate";
+import {Dividend} from "./dividend";
+import {ShareheadHistoricDividend} from "./sharehead-historic-dividend";
 
 
 export class ShareheadShare {
@@ -39,6 +41,7 @@ export class ShareheadShare {
         public plannedDividends?: ShareheadPlannedDividend[],
         public analystRatings?: AnalystRating[],
         public turningPoints?: ShareheadTurningPoint[],
+        public historicDividends?: ShareheadHistoricDividend[],
         public lastRate?: StockRate,
         public positionId?: number,
         public isOnWatchlist?: boolean,
@@ -541,6 +544,34 @@ export class ShareheadShare {
                 chartData.labels?.push(balance.year);
                 chartData.datasets[0].data.push(balance.ordinarySharesNumber);
                 chartData.datasets[1].data.push(balance.treasurySharesNumber);
+            }
+        });
+
+        return chartData;
+    }
+
+
+    historicDividendsChartData(): ChartData {
+        const chartData: ChartData = {
+            labels: [],
+            datasets: [
+                {
+                    data: [],
+                    label: 'Dividend',
+                    borderColor: 'rgb(51, 102, 204, 1)',
+                    backgroundColor: 'rgb(51, 102, 204, 1)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)',
+                    pointBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBorderColor: 'rgba(51, 102, 204, 1)',
+                }
+            ]
+        };
+
+        this.historicDividends?.forEach(dividend => {
+            if (dividend.dividend !== undefined) {
+                chartData.labels?.push(dividend.year);
+                chartData.datasets[0].data.push(dividend.dividend);
             }
         });
 
