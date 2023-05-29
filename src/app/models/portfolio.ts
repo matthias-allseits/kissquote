@@ -2,7 +2,7 @@ import {BankAccount} from './bank-account';
 import {BankAccountCreator} from "../creators/bank-account-creator";
 import {Currency} from "./currency";
 import {ChartData} from "chart.js";
-import {DividendTotal, MaxDrawdownSummary, Position} from "./position";
+import {DividendDropSummary, DividendTotal, MaxDrawdownSummary, Position} from "./position";
 import {WatchlistEntry} from "./watchlistEntry";
 import {DateHelper} from "../core/datehelper";
 import {Sector} from "./sector";
@@ -20,6 +20,11 @@ export interface DividendTotals {
 export interface LombardValuesSummary {
     position: Position;
     maxDrawdownSummary: MaxDrawdownSummary;
+}
+
+export interface CrisisDividendSummary {
+    position: Position;
+    crisisDropSummary: DividendDropSummary;
 }
 
 export interface DiversitySummary {
@@ -202,6 +207,24 @@ export class Portfolio {
             }
         });
         positions.sort((a,b) => (a.maxDrawdownSummary.lombardValue < b.maxDrawdownSummary.lombardValue) ? 1 : ((b.maxDrawdownSummary.lombardValue < a.maxDrawdownSummary.lombardValue) ? -1 : 0));
+
+        return positions;
+    }
+
+
+    crisisDividendProjections(): CrisisDividendSummary[] {
+        const positions: CrisisDividendSummary[] = [];
+        const relevantPositions = this.getActiveNonCashPositions();
+        relevantPositions.forEach(position => {
+            const summary = position.getDividendDropSummary();
+            if (summary) {
+                positions.push({
+                    position: position,
+                    crisisDropSummary: summary,
+                });
+            }
+        });
+        positions.sort((a,b) => (a.crisisDropSummary.dividendAfterDrop < b.crisisDropSummary.dividendAfterDrop) ? 1 : ((b.crisisDropSummary.dividendAfterDrop < a.crisisDropSummary.dividendAfterDrop) ? -1 : 0));
 
         return positions;
     }

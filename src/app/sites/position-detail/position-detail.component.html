@@ -306,6 +306,30 @@
                         <div class="col-2"><span class="float-end">{{ maxDrawdownSummary.lombardValueFromPostCoronaTop }}%</span></div>
                     </div>
                 </div>
+                <div class="info-box" *ngIf="dividendDropSummary">
+                    <h5>
+                        Krisen Dividenden Prognose
+                        <button *ngIf="position.manualDividendDrop !== undefined" (click)="openManualDividendDropConfirmModal(removeManualDividendDropConfirmModal)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Remove manual dividend drop"><fa-icon [icon]="deleteIcon"></fa-icon></button>
+                        <button *ngIf="position.manualDividendDrop === undefined" (click)="openManualDividendDropModal(manualDividendDropFormModal)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Set manual dividend drop"><fa-icon [icon]="addIcon"></fa-icon></button>
+                    </h5>
+                    <div class="row">
+                        <div class="col-9">Max. dividend drop:</div>
+                        <div class="col-3"><span class="float-end">{{ dividendDropSummary.maxDrop }}%</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">Method:</div>
+                        <div class="col-9"><span class="float-end">{{ dividendDropSummary.method }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-7">Dividend after drop:</div>
+                        <div class="col-5"><span class="float-end">{{ dividendDropSummary.dividendAfterDrop }} {{ position.currency?.name }}</span></div>
+                    </div>
+                    <div class="row mb-2" *ngIf="position.balance">
+                        <div class="col-4"></div>
+                        <div class="col-6">Yield on investment: </div>
+                        <div class="col-2"><span class="float-end">{{ (100 / position.balance.investment * dividendDropSummary.dividendAfterDrop).toFixed(1) }}%</span></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -428,6 +452,34 @@
     <div class="modal-body text-center">
         <p>Wollen Sie diesen manuellen Drawdown wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirmManualDrawdownRemoving()">{{ tranService.trans('GLOB_YES') }}</button>
+        <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
+    </div>
+</ng-template>
+
+<ng-template #manualDividendDropFormModal>
+    <div *ngIf="position && position.share" class="modal-body">
+        <p>Set your manual maximum dividend drop for your position &laquo;{{ position.share.name }}&raquo;:</p>
+        <form [formGroup]="manualDividendDropForm">
+            <div class="mb-3">
+                <label for="drop-amount-input" class="form-label"></label>
+                <input formControlName="amount" id="drop-amount-input" class="form-control" type="text" name="amount" value="">
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="btn btn-primary float-end" (click)="persistManualDividendDrop()">{{ tranService.trans('GLOB_SAVE') }}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #removeManualDividendDropConfirmModal>
+    <div class="modal-body text-center">
+        <p>Wollen Sie diesen manuellen Dividend Drop wirklich löschen?</p>
+        <button type="button" class="btn btn-default" (click)="confirmManualDividendDropRemoving()">{{ tranService.trans('GLOB_YES') }}</button>
         <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>

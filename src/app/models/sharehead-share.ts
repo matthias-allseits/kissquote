@@ -744,4 +744,78 @@ export class ShareheadShare {
         return result;
     }
 
+
+    dividendByYear(year: number): number|undefined
+    {
+        let result = undefined;
+        this.historicDividends?.forEach(histDivi => {
+            if (histDivi.year === year) {
+                result = histDivi.dividend;
+            }
+        });
+
+        return result;
+    }
+
+
+    financialCrisisDividendDrop(): number|undefined
+    {
+        const top = this.dividendByYear(2007);
+        const bottom = this.dividendByYear(2008);
+        if (top !== undefined && bottom !== undefined) {
+
+            return +(((100 / top * bottom) - 100) * -1).toFixed(0);
+        }
+
+        return undefined;
+    }
+
+
+    coronaCrisisDividendDrop(): number|undefined
+    {
+        const top = this.dividendByYear(2018);
+        const bottom = this.dividendByYear(2019);
+        if (top !== undefined && bottom !== undefined) {
+
+            return +(((100 / top * bottom) - 100) * -1).toFixed(0);
+        }
+
+        return undefined;
+    }
+
+
+    worstEverDividendDrop(): any[]
+    {
+        let result = 0;
+        let resultNote = 'no drop happened';
+        let last = 0;
+        let lastYear = 0;
+        if (this.historicDividends && this.historicDividends.length > 0) {
+            last = this.historicDividends[0].dividend;
+            lastYear = this.historicDividends[0].year;
+            this.historicDividends?.forEach(histDivi => {
+                if (last > histDivi.dividend) {
+                    const tempResult = +(((100 / last * histDivi.dividend) - 100) * -1).toFixed(0);
+                    if (tempResult > result) {
+                        result = tempResult;
+                        resultNote = lastYear + ' - ' + histDivi.year;
+                        if ([2001, 2002, 2003].indexOf(histDivi.year) > -1) {
+                            resultNote = 'by dot-com bubble';
+                        }
+                        if ([2008, 2009].indexOf(histDivi.year) > -1) {
+                            resultNote = 'by financial crisis';
+                        }
+                        if ([2019, 2020].indexOf(histDivi.year) > -1) {
+                            resultNote = 'by corona pandemic';
+                        }
+                    }
+                }
+                last = histDivi.dividend;
+                lastYear = histDivi.year;
+            });
+        }
+
+        return [result, resultNote];
+    }
+
 }

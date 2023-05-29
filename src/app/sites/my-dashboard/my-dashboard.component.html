@@ -343,6 +343,9 @@
                     <a class="nav-link" [class.active]="listingTab === 'lombard'" (click)="changeListingTab('lombard')" aria-current="page">Lombard</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" [class.active]="listingTab === 'crisisDividendProjection'" (click)="changeListingTab('crisisDividendProjection')" aria-current="page">DiviDropProj</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" [class.active]="listingTab === 'lastMinute'" (click)="changeListingTab('lastMinute')" aria-current="page">Last Minute</a>
                 </li>
                 <li class="nav-item">
@@ -421,6 +424,40 @@
                             <td>{{ entry.maxDrawdownSummary.method }}</td>
                             <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValue|number: '1.0' }}</span></td>
                             <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValueFromInvestment }}%</span></td>
+                            <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'crisisDividendProjection'">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
+                    <h4>Crisis dividend projection</h4>
+                </div>
+                <h6>Dividend projection: {{ crisisDividendTotal|number: '1.0' }}</h6>
+                <h6>Drop: {{ (100 - 100 / portfolio.thisYearsDividendsTotal() * crisisDividendTotal).toFixed() }}%</h6>
+                <h6>ROI by projected dividends: {{ (100 / portfolio.investmentTotal() * crisisDividendTotal).toFixed(1) }}%</h6>
+                <table class="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+                            <th scope="col" class="d-none d-md-table-cell">Sector</th>
+                            <th scope="col" class="d-none d-md-table-cell"><span class="float-end" ngbTooltip="Amount of data">Data</span></th>
+                            <th scope="col">Method</th>
+                            <th scope="col"><span class="float-end">Drop</span></th>
+                            <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Actual</span></th>
+                            <th scope="col"><span class="float-end">After</span></th>
+                            <th scope="col" style="width: 35px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let entry of crisisDividendList">
+                            <td>{{ entry.position.share?.name }}</td>
+                            <td class="d-none d-md-table-cell"><span *ngIf="entry.position.sector">{{ entry.position.sector.name }}</span></td>
+                            <td class="d-none d-md-table-cell"><span *ngIf="entry.position.shareheadShare && entry.position.shareheadShare.historicDividends" class="float-end">{{ entry.position.shareheadShare.historicDividends.length }}</span></td>
+                            <td>{{ entry.crisisDropSummary.method }}</td>
+                            <td><span class="float-end">{{ entry.crisisDropSummary.maxDrop|number: '1.0' }}%</span></td>
+                            <td class="d-none d-md-table-cell"><span class="float-end">{{ entry.crisisDropSummary.actualDividend|number: '1.0-0' }}</span></td>
+                            <td><span class="float-end">{{ entry.crisisDropSummary.dividendAfterDrop|number: '1.0' }}</span></td>
                             <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
                         </tr>
                     </tbody>

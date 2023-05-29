@@ -50,6 +50,7 @@ export class PositionCreator {
                 apiArray.balance ? BalanceCreator.oneFromApiArray(apiArray.balance) : undefined,
                 apiArray.shareheadId,
                 apiArray.manualDrawdown ? apiArray.manualDrawdown : undefined,
+                apiArray.manualDividendDrop !== undefined && !isNaN(apiArray.manualDividendDrop) ? apiArray.manualDividendDrop : undefined,
                 apiArray.labels ? LabelCreator.fromApiArray(apiArray.labels) : undefined
             );
         } else {

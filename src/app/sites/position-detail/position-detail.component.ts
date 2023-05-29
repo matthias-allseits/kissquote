@@ -1,6 +1,6 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {MaxDrawdownSummary, Position} from '../../models/position';
+import {DividendDropSummary, MaxDrawdownSummary, Position} from '../../models/position';
 import {PositionService} from '../../services/position.service';
 import {
     faChevronLeft, faChevronRight,
@@ -19,7 +19,7 @@ import {ShareService} from "../../services/share.service";
 import {CurrencyService} from "../../services/currency.service";
 import {StockRate} from "../../models/stock-rate";
 import {StockRateCreator} from "../../creators/stock-rate-creator";
-import {FormControl, FormGroup, UntypedFormControl, Validators} from "@angular/forms";
+import {FormGroup, UntypedFormControl, Validators} from "@angular/forms";
 import {TranslationService} from "../../services/translation.service";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {Label} from "../../models/label";
@@ -28,7 +28,6 @@ import {Sector} from "../../models/sector";
 import {SectorService} from "../../services/sector.service";
 import {PositionLog} from "../../models/position-log";
 import {PositionLogService} from "../../services/position-log.service";
-import {LabelCreator} from "../../creators/label-creator";
 import {PositionLogCreator} from "../../creators/position-log-creator";
 import {formatDate} from "@angular/common";
 
@@ -61,6 +60,7 @@ export class PositionDetailComponent implements OnInit {
     public currentYieldOnValue = '';
     public currentYieldOnValueSource = '';
     public maxDrawdownSummary?: MaxDrawdownSummary;
+    public dividendDropSummary?: DividendDropSummary;
     modalRef?: NgbModalRef;
     shareheadModalRef?: NgbModalRef;
     public showLabelsDropdown = false;
@@ -77,6 +77,10 @@ export class PositionDetailComponent implements OnInit {
     public daysTillNextReport?: number;
 
     manualDrawdownForm = new FormGroup({
+        amount: new UntypedFormControl('', Validators.required),
+    });
+
+    manualDividendDropForm = new FormGroup({
         amount: new UntypedFormControl('', Validators.required),
     });
 
@@ -212,11 +216,19 @@ export class PositionDetailComponent implements OnInit {
         this.modalRef = this.modalService.open(template);
     }
 
+    openManualDividendDropModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.open(template);
+    }
+
     cancelModal(): void {
         this.modalRef?.close();
     }
 
     openManualDrawdownConfirmModal(template: TemplateRef<any>): void {
+        this.shareheadModalRef = this.modalService.open(template);
+    }
+
+    openManualDividendDropConfirmModal(template: TemplateRef<any>): void {
         this.shareheadModalRef = this.modalService.open(template);
     }
 
@@ -259,6 +271,34 @@ export class PositionDetailComponent implements OnInit {
     persistManualDrawdown(): void {
         if (this.position) {
             this.position.manualDrawdown = +this.manualDrawdownForm.get('amount')?.value;
+            this.positionService.update(this.position)
+                .subscribe(position => {
+                    if (position) {
+                        this.position = position;
+                        this.loadData(this.position.id);
+                    }
+                });
+        }
+        this.modalRef?.close();
+    }
+
+    confirmManualDividendDropRemoving(): void {
+        if (this.position) {
+            this.position.manualDividendDrop = undefined;
+            this.positionService.update(this.position)
+                .subscribe(position => {
+                    if (position) {
+                        this.position = position;
+                        this.loadData(this.position.id);
+                    }
+                });
+        }
+        this.decline();
+    }
+
+    persistManualDividendDrop(): void {
+        if (this.position) {
+            this.position.manualDividendDrop = +this.manualDividendDropForm.get('amount')?.value;
             this.positionService.update(this.position)
                 .subscribe(position => {
                     if (position) {
@@ -404,6 +444,7 @@ export class PositionDetailComponent implements OnInit {
         this.historicRates = [];
         this.historicStockRates = [];
         this.maxDrawdownSummary = undefined;
+        this.dividendDropSummary = undefined;
         this.daysTillNextEx = undefined;
         this.daysTillNextPayment = undefined;
         this.daysTillNextReport = undefined;
@@ -411,6 +452,7 @@ export class PositionDetailComponent implements OnInit {
             .subscribe(position => {
                 if (position) {
                     this.position = position;
+                    console.log(this.position);
                     this.logBook = this.position.logEntries;
                     this.logBook = this.logBook.concat(this.position.transactions);
                     this.logBook.sort((a, b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0));
@@ -467,6 +509,7 @@ export class PositionDetailComponent implements OnInit {
                                         }
                                     }
                                     this.maxDrawdownSummary = this.position?.getMaxDrawdownSummary();
+                                    this.dividendDropSummary = this.position?.getDividendDropSummary();
                                     if (share.plannedDividends && share.plannedDividends.length > 0) {
                                         const currentDate = new Date();
                                         const nextExDate = share.plannedDividends[0].exDate;
@@ -589,4 +632,5 @@ export class PositionDetailComponent implements OnInit {
         return result;
     }
 
+    protected readonly DividendProjection = DividendProjection;
 }

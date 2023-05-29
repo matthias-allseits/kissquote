@@ -1,5 +1,5 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
-import {DividendTotals, LombardValuesSummary, Portfolio} from '../../models/portfolio';
+import {CrisisDividendSummary, DividendTotals, LombardValuesSummary, Portfolio} from '../../models/portfolio';
 import {PortfolioService} from '../../services/portfolio.service';
 import {faEdit, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
@@ -58,7 +58,7 @@ export class MyDashboardComponent implements OnInit {
     private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions', 'listings'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
-    private availableListingTabs = ['ultimate', 'lombard', 'lastMinute', 'newestRatings', 'nextReports', 'diversification', 'performance', 'diviGrowthSummary'];
+    private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'newestRatings', 'nextReports', 'diversification', 'performance', 'diviGrowthSummary'];
     public listingTab = 'ultimate';
     private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year', '3years'];
     public performanceListTab = '1day';
@@ -71,13 +71,15 @@ export class MyDashboardComponent implements OnInit {
     public ultimateBalanceList?: Position[];
     public ultimateBalanceFilter?: Label[];
     public lombardValueList?: LombardValuesSummary[];
+    public lombardTotal = 0;
+    public crisisDividendList?: CrisisDividendSummary[];
+    public crisisDividendTotal = 0;
     public lastMinuteList?: ShareheadShare[];
     public newestRatingsList?: AnalystRating[];
     public nextReportsList?: ShareheadShare[];
     public diversityByInvestmentChartData?: ChartData;
     public diversityByValueChartData?: ChartData;
     public diversityByDividendChartData?: ChartData;
-    public lombardTotal = 0;
     public color = 'ffffff';
     modalRef?: NgbModalRef;
 
@@ -157,6 +159,10 @@ export class MyDashboardComponent implements OnInit {
                                     this.lombardValueList = this.portfolio.lombardValuePositions();
                                     this.lombardValueList.forEach(entry => {
                                         this.lombardTotal += +entry.maxDrawdownSummary.lombardValue;
+                                    });
+                                    this.crisisDividendList = this.portfolio.crisisDividendProjections();
+                                    this.crisisDividendList.forEach(entry => {
+                                        this.crisisDividendTotal += +entry.crisisDropSummary.dividendAfterDrop;
                                     });
                                     this.diversityByInvestmentChartData = this.portfolio.diversityByInvestmentChartData();
                                     this.diversityByValueChartData = this.portfolio.diversityByValueChartData();
