@@ -238,7 +238,7 @@ export class MyDashboardComponent implements OnInit {
         const tabIndex = this.availablePerformanceTabs.indexOf(selectedTab);
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
             position.tempPerformanceValue = position.balance?.performance[tabIndex];
-            if (this.performanceList) {
+            if (this.performanceList && position.tempPerformanceValue) {
                 this.performanceList.push(position);
             }
         });

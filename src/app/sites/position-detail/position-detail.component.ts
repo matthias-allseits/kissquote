@@ -452,7 +452,6 @@ export class PositionDetailComponent implements OnInit {
             .subscribe(position => {
                 if (position) {
                     this.position = position;
-                    console.log(this.position);
                     this.logBook = this.position.logEntries;
                     this.logBook = this.logBook.concat(this.position.transactions);
                     this.logBook.sort((a, b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0));
