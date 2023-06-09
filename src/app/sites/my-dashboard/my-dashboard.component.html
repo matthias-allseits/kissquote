@@ -365,7 +365,12 @@
                 </li>
             </ul>
             <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'ultimate'">
-                <h4>Ultimate balance</h4>
+                <div class="row">
+                    <div class="col-9"><h4>Ultimate balance</h4></div>
+                    <div class="col-3">
+                        <span (click)="setAllLabelsActive()" class="float-end" style="cursor: pointer">Select all</span>
+                    </div>
+                </div>
                 <div>
                     <div *ngFor="let label of ultimateBalanceFilter" class="mb-3 form-check label-checklist">
                         <input (dblclick)="setThisFilterAsOnlyFilter(label)" (change)="toggleUltimateBalanceFilter(label)" type="checkbox" class="form-check-input" id="label-{{ label.name }}" [checked]="label.checked">

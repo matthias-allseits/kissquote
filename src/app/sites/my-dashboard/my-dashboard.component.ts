@@ -513,6 +513,14 @@ export class MyDashboardComponent implements OnInit {
         this.filterUltimateList();
     }
 
+    setAllLabelsActive(): void {
+        this.ultimateBalanceFilter?.forEach(filter => {
+            filter.checked = true;
+        });
+        localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
+        this.filterUltimateList();
+    }
+
     filterUltimateList(): void {
         this.ultimateBalanceList?.forEach(entry => {
             if (entry.labels && this.ultimateBalanceFilter) {
