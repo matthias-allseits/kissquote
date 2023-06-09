@@ -51,13 +51,24 @@ export class PositionService extends ApiService {
     }
 
 
+    public getActivePositions(): Observable<Position[]>
+    {
+        return this.http.get<Position[]>(this.apiUrl + '/active')
+            .pipe(
+                map(res => PositionCreator.fromApiArray(res))
+                // map(this.extractData),
+                // catchError(this.handleError('addHero', portfolio))
+                // catchError(this.handleError('addHero', portfolio))
+            );
+    }
+
+
     public getNonCashAndActivePositions(): Observable<Position[]>
     {
         return new Observable(psitons => {
-            const positions: Position[] = [];
-            this.getPositions().subscribe(positions => {
+            this.getActivePositions().subscribe(positions => {
                 positions.forEach(position => {
-                    if (!position.isCash && position.active) {
+                    if (!position.isCash) {
                         positions.push(position);
                     }
                 });
