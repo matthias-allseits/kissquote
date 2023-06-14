@@ -4,6 +4,7 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {ShareheadService} from "../../services/sharehead.service";
 import {WatchlistService} from "../../services/watchlist.service";
 import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
+import {StockRate} from "../../models/stock-rate";
 
 
 @Component({
@@ -15,6 +16,7 @@ export class ShareheadShareDetailComponent implements OnInit {
 
     public shareheadShare?: ShareheadShare;
     public positionTab = 'sharehead';
+    public historicStockRates: StockRate[] = [];
 
     naviForwardIcon = faChevronRight;
     naviBackIcon = faChevronLeft;
@@ -78,6 +80,14 @@ export class ShareheadShareDetailComponent implements OnInit {
             .subscribe(share => {
                 if (share) {
                     this.shareheadShare = share;
+                    this.shareheadShare.getStockRates()
+                        .subscribe((rates => {
+                            if (screen.width < 400) {
+                                this.historicStockRates = rates.slice(-250);
+                            } else {
+                                this.historicStockRates = rates.slice(-555);
+                            }
+                        }));
                 }
             });
     }

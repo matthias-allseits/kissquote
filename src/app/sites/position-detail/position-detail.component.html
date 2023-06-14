@@ -1,6 +1,6 @@
 <main *ngIf="position" class="col-md-12 col-lg-12 px-md-4">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 p-1 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Position {{ position.getName() }}</h1>
+        <h1 class="h2">Position &laquo;{{ position.getName() }}&raquo;</h1>
         <div class="mb-2 mb-md-0">
             <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
             <button (click)="openLabelModal(labelModal)" type="button" class="btn btn-tiny btn-outline-primary" ngbTooltip="Labels bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button>

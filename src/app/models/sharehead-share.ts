@@ -11,6 +11,8 @@ import {ShareheadTurningPoint} from "./sharehead-turning-point";
 import {StockRate} from "./stock-rate";
 import {Dividend} from "./dividend";
 import {ShareheadHistoricDividend} from "./sharehead-historic-dividend";
+import {Observable} from "rxjs";
+import {SwissquoteHelper} from "../core/swissquote-helper";
 
 
 export class ShareheadShare {
@@ -576,6 +578,27 @@ export class ShareheadShare {
         });
 
         return chartData;
+    }
+
+
+    public getStockRates(): Observable<StockRate[]> {
+        return new Observable(obsData => {
+            if (this.currency) {
+                let currencyName = this.currency.name;
+                if (currencyName === 'GBP') {
+                    currencyName = 'GBX';
+                }
+                let request = new XMLHttpRequest();
+                const ratesUrl = `https://www.swissquote.ch/sqi_ws/HistoFromServlet?format=pipe&key=${this.isin}_${this.marketplace?.urlKey}_${currencyName}&ftype=day&fvalue=1&ptype=a&pvalue=1`;
+                request.open("GET", ratesUrl, false);
+                request.send(null);
+                let content = request.responseText;
+                // console.log(content);
+                const rates = SwissquoteHelper.parseRates(content, new Date(1970, 1, 1), 10000);
+
+                obsData.next(rates);
+            }
+        });
     }
 
 
