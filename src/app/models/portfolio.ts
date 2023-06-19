@@ -188,7 +188,8 @@ export class Portfolio {
             });
             positions = positions.concat(accountsPositions);
         });
-        positions = positions.reverse();
+        // positions = positions.reverse();
+        positions.sort((a,b) => (a.activeUntil && b.activeUntil && a.activeUntil < b.activeUntil) ? 1 : ((a.activeUntil && b.activeUntil && b.activeUntil < a.activeUntil) ? -1 : 0));
 
         return positions;
     }
