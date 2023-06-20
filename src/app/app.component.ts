@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        localStorage.removeItem('ultimateFilter');
         if (null !== localStorage.getItem('lang')) {
             this.language = localStorage.getItem('lang');
         }
