@@ -104,8 +104,9 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">Stop-Loss:</div>
-                        <div class="col-6" (click)="openStopLossModal(stopLossModal)">
+                        <div class="col-4">Stop-Loss:</div>
+                        <div class="col-4"><span *ngIf="position.stopLoss" ngbTooltip="Stop-Loss Wastage">({{ position.stopLossWastage()|number: '1.0' }})</span></div>
+                        <div class="col-4" (click)="openStopLossModal(stopLossModal)">
                             <span *ngIf="position.stopLoss" class="float-end modal-opener">{{ position.stopLoss|number: '1.0-3' }}</span>
                             <span *ngIf="!position.stopLoss" class="float-end modal-opener">
                                 <button type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Set stop-loss"><fa-icon [icon]="addIcon"></fa-icon></button>

@@ -100,6 +100,19 @@ export class Position {
     }
 
 
+    stopLossWastage(): number
+    {
+        let result = 0;
+        const actualValue = this.actualValue();
+        if (this.balance && this.stopLoss && actualValue) {
+            const stopLossResult = this.stopLoss * this.balance?.amount;
+            result = +(stopLossResult - +actualValue).toFixed(0);
+        }
+
+        return result;
+    }
+
+
     investmentAtDate(date: Date): number
     {
         let value = 0;
