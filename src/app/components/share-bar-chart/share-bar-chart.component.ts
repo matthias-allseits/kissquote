@@ -26,6 +26,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
     private strokeColor = '#3366cc';
     private redColor = 'red';
     private greenColor = 'green';
+    private blackColor = 'black';
     private helplineColor = '#dee2e6';
     private monthColor = '#a4a4a4';
     private textColor = '#4e4e4e';
@@ -205,10 +206,20 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                     avgPriceForChart /= 10;
                 }
                 const buyValue = ((topEnd - avgPriceForChart) * verticalFactor) + this.offsetTop;
-                // console.log('average-price: ' + this.position?.balance?.averagePayedPriceNet);
-                // console.log('buyValue: ' + buyValue);
                 this.context.moveTo(this.offsetLeft, buyValue);
                 this.context.lineTo(this.canvasWidth, buyValue);
+                this.context.stroke();
+            }
+
+            // stop-loss
+            if (this.position?.balance && this.position.stopLoss) {
+                this.context.beginPath();
+                this.context.strokeStyle = this.blackColor;
+                this.context.setLineDash([5, 5]);
+                let stopLossForChart = this.position.stopLoss;
+                const stopLossValue = ((topEnd - stopLossForChart) * verticalFactor) + this.offsetTop;
+                this.context.moveTo(this.offsetLeft, stopLossValue);
+                this.context.lineTo(this.canvasWidth, stopLossValue);
                 this.context.stroke();
             }
 

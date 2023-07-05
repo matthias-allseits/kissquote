@@ -67,6 +67,7 @@ export class Position {
         public currency?: Currency,
         public balance?: Balance,
         public shareheadId?: number,
+        public stopLoss?: number,
         public manualDrawdown?: number,
         public manualDividendDrop?: number,
         public labels?: Label[],

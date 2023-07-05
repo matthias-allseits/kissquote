@@ -84,6 +84,10 @@ export class PositionDetailComponent implements OnInit {
         amount: new UntypedFormControl('', Validators.required),
     });
 
+    stopLossForm = new FormGroup({
+        amount: new UntypedFormControl('', Validators.required),
+    });
+
     logEntryForm = new FormGroup({
         date: new UntypedFormControl(new Date(), Validators.required),
         log: new UntypedFormControl('', Validators.required),
@@ -216,6 +220,11 @@ export class PositionDetailComponent implements OnInit {
         this.modalRef = this.modalService.open(template);
     }
 
+    openStopLossModal(template: TemplateRef<any>) {
+        this.stopLossForm.get('amount')?.setValue(this.position?.stopLoss);
+        this.modalRef = this.modalService.open(template);
+    }
+
     openManualDividendDropModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.open(template);
     }
@@ -299,6 +308,20 @@ export class PositionDetailComponent implements OnInit {
     persistManualDividendDrop(): void {
         if (this.position) {
             this.position.manualDividendDrop = +this.manualDividendDropForm.get('amount')?.value;
+            this.positionService.update(this.position)
+                .subscribe(position => {
+                    if (position) {
+                        this.position = position;
+                        this.loadData(this.position.id);
+                    }
+                });
+        }
+        this.modalRef?.close();
+    }
+
+    persistStopLoss(): void {
+        if (this.position) {
+            this.position.stopLoss = +this.stopLossForm.get('amount')?.value;
             this.positionService.update(this.position)
                 .subscribe(position => {
                     if (position) {

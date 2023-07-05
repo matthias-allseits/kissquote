@@ -49,6 +49,7 @@ export class PositionCreator {
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.balance ? BalanceCreator.oneFromApiArray(apiArray.balance) : undefined,
                 apiArray.shareheadId,
+                apiArray.stopLoss ? apiArray.stopLoss : undefined,
                 apiArray.manualDrawdown ? apiArray.manualDrawdown : undefined,
                 apiArray.manualDividendDrop !== undefined && !isNaN(apiArray.manualDividendDrop) ? apiArray.manualDividendDrop : undefined,
                 apiArray.labels ? LabelCreator.fromApiArray(apiArray.labels) : undefined
