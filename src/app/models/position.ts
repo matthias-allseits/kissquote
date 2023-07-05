@@ -105,7 +105,10 @@ export class Position {
         let result = 0;
         const actualValue = this.actualValue();
         if (this.balance && this.stopLoss && actualValue) {
-            const stopLossResult = this.stopLoss * this.balance?.amount;
+            let stopLossResult = this.stopLoss * this.balance?.amount;
+            if (this.currency && this.currency.name === 'GBP') {
+                (stopLossResult /= 100).toFixed(0);
+            }
             result = +(stopLossResult - +actualValue).toFixed(0);
         }
 
