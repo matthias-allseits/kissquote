@@ -116,6 +116,23 @@ export class Position {
     }
 
 
+    stopLossBroken(): boolean
+    {
+        let result = false;
+        if (this.stopLoss && this.stopLoss > 0 && this.balance && this.balance.lastRate?.rate) {
+            let stopLoss = this.stopLoss;
+            if (this.currency?.name === 'GBP') {
+                stopLoss = stopLoss / 100;
+            }
+            if (this.balance.lastRate?.rate < stopLoss) {
+                result = true;
+            }
+        }
+
+        return result;
+    }
+
+
     investmentAtDate(date: Date): number
     {
         let value = 0;

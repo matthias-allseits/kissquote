@@ -95,7 +95,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let position of bankAccount.getActiveNonCashPositions()">
+                        <tr *ngFor="let position of bankAccount.getActiveNonCashPositions()" [class.red20]="position.stopLossBroken()">
                             <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
                             <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>
                             <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
@@ -391,7 +391,7 @@
                     <tbody>
                         <ng-container *ngFor="let position of ultimateBalanceList" [style.visibility]="position.visible">
                             <ng-container *ngIf="position.share && position.visible">
-                                <tr>
+                                <tr [class.red20]="position.stopLossBroken()">
                                     <td>{{ position.share.name }}</td>
                                     <td class="d-none d-md-table-cell">
                                         <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
