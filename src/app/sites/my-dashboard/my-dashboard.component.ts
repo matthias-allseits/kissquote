@@ -60,7 +60,7 @@ export class MyDashboardComponent implements OnInit {
     public dividendListTab = new Date().getFullYear();
     private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'newestRatings', 'nextReports', 'diversification', 'performance', 'diviGrowthSummary'];
     public listingTab = 'ultimate';
-    private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year', '3years'];
+    private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year', '3years', '5years', '10years'];
     public performanceListTab = '1day';
     public performanceList?: Position[];
     public dividendLists?: DividendTotals[];
