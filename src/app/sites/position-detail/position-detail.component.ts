@@ -75,6 +75,7 @@ export class PositionDetailComponent implements OnInit {
     public daysTillNextEx?: number;
     public daysTillNextPayment?: number;
     public daysTillNextReport?: number;
+    public stopLossBroken = false;
 
     manualDrawdownForm = new FormGroup({
         amount: new UntypedFormControl('', Validators.required),
@@ -471,6 +472,7 @@ export class PositionDetailComponent implements OnInit {
         this.daysTillNextEx = undefined;
         this.daysTillNextPayment = undefined;
         this.daysTillNextReport = undefined;
+        this.stopLossBroken = false;
         this.positionService.getPosition(positionId)
             .subscribe(position => {
                 if (position) {
@@ -544,7 +546,10 @@ export class PositionDetailComponent implements OnInit {
                                         }
                                     }
                                 }
-                            })
+                            });
+                        if (this.position.stopLossBroken()) {
+                            this.stopLossBroken = true;
+                        }
                     }
 
                     this.position.getStockRates()
@@ -655,4 +660,5 @@ export class PositionDetailComponent implements OnInit {
     }
 
     protected readonly DividendProjection = DividendProjection;
+    protected readonly stop = stop;
 }
