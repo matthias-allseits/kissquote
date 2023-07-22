@@ -43,6 +43,8 @@ import { ShareBarChartComponent } from './components/share-bar-chart/share-bar-c
 import {ColorPickerModule} from "ngx-color-picker";
 import {PieChartComponent} from "./components/pie-chart/pie-chart.component";
 import {ShareheadShareContainerComponent} from "./components/sharehead-share-container/sharehead-share-container.component";
+import { DashboardBalanceComponent } from './components/dashboard-balance/dashboard-balance.component';
+import { DashboardListingsComponent } from './components/dashboard-listings/dashboard-listings.component';
 registerLocaleData(localeCH);
 
 
@@ -78,6 +80,8 @@ registerLocaleData(localeCH);
         ShareheadShareDetailComponent,
         ShareChartComponent,
         ShareBarChartComponent,
+        DashboardBalanceComponent,
+        DashboardListingsComponent,
     ],
     imports: [
         BrowserModule,

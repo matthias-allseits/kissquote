@@ -1,16 +1,15 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
-import {CrisisDividendSummary, DividendTotals, LombardValuesSummary, Portfolio} from '../../models/portfolio';
+import {DividendTotals, Portfolio} from '../../models/portfolio';
 import {PortfolioService} from '../../services/portfolio.service';
 import {faEdit, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {TranslationService} from "../../services/translation.service";
-import {DividendTotal, Position} from "../../models/position";
+import {Position} from "../../models/position";
 import {PositionService} from "../../services/position.service";
 import {BankAccount} from "../../models/bank-account";
 import {BankAccountService} from "../../services/bank-account.service";
-import {ChartData} from "chart.js";
 import {Currency} from "../../models/currency";
-import {FormControl, FormGroup, UntypedFormControl, Validators} from "@angular/forms";
+import {FormGroup, UntypedFormControl, Validators} from "@angular/forms";
 import {CurrencyService} from "../../services/currency.service";
 import {ShareheadService} from "../../services/sharehead.service";
 import {WatchlistEntry} from "../../models/watchlistEntry";
@@ -21,7 +20,6 @@ import {ManualDividendService} from "../../services/manual-dividend.service";
 import {DividendCreator} from "../../creators/dividend-creator";
 import {Observable} from "rxjs";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
-import {AnalystRating} from "../../models/analyst-rating";
 import {Label} from "../../models/label";
 import {LabelService} from "../../services/label.service";
 import {LabelCreator} from "../../creators/label-creator";
@@ -58,29 +56,13 @@ export class MyDashboardComponent implements OnInit {
     private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions', 'listings'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
-    private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'newestRatings', 'nextReports', 'diversification', 'performance', 'diviGrowthSummary'];
-    public listingTab = 'ultimate';
-    private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year', '3years', '5years', '10years'];
-    public performanceListTab = '1day';
-    public performanceList?: Position[];
     public dividendLists?: DividendTotals[];
     public closedPositionsBalance = 0;
-    public incomeChartDataImproved?: ChartData;
-    public incomeChartDataImprovedBoxHeight = 143;
     public years = [2023, 2024, 2025, 2026];
     public ultimateBalanceList?: Position[];
     public ultimateBalanceFilter?: Label[];
-    public lombardValueList?: LombardValuesSummary[];
-    public lombardTotal = 0;
-    public crisisDividendList?: CrisisDividendSummary[];
-    public crisisDividendTotal = 0;
-    public lastMinuteList?: ShareheadShare[];
-    public newestRatingsList?: AnalystRating[];
-    public nextReportsList?: ShareheadShare[];
-    public diversityByInvestmentChartData?: ChartData;
-    public diversityByValueChartData?: ChartData;
-    public diversityByDividendChartData?: ChartData;
     public color = 'ffffff';
+    public shareheadSharesLoaded = false;
     modalRef?: NgbModalRef;
 
     exchangeRateForm = new FormGroup({
@@ -117,9 +99,6 @@ export class MyDashboardComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        if (screen.width < 400) {
-            this.incomeChartDataImprovedBoxHeight = 300;
-        }
         this.myKey = localStorage.getItem('my-key');
         if (null !== this.myKey) {
             // let us get the portfolio again with all its interesting data
@@ -137,13 +116,6 @@ export class MyDashboardComponent implements OnInit {
                         } else {
                             this.dashboardTab = '0';
                         }
-                        const storedListingTab = localStorage.getItem('listingTab');
-                        if (storedListingTab && this.availableListingTabs.indexOf(storedListingTab) > -1) {
-                            this.listingTab = storedListingTab;
-                        } else {
-                            this.listingTab = 'ultimate';
-                        }
-                        this.changePerformanceListTab('1day');
                         this.ultimateBalanceList = this.portfolio.getActiveNonCashPositions();
                         this.ultimateBalanceList.sort((a,b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
                         this.getAllLabels();
@@ -154,35 +126,11 @@ export class MyDashboardComponent implements OnInit {
                         });
                         this.loadShareheadShares()
                             .subscribe(result => {
+                                this.shareheadSharesLoaded = true;
                                 if (this.portfolio) {
                                     this.dividendLists = this.portfolio.collectDividendLists();
-                                    this.lombardValueList = this.portfolio.lombardValuePositions();
-                                    this.lombardValueList.forEach(entry => {
-                                        this.lombardTotal += +entry.maxDrawdownSummary.lombardValue;
-                                    });
-                                    this.crisisDividendList = this.portfolio.crisisDividendProjections();
-                                    this.crisisDividendList.forEach(entry => {
-                                        this.crisisDividendTotal += +entry.crisisDropSummary.dividendAfterDrop;
-                                    });
-                                    this.diversityByInvestmentChartData = this.portfolio.diversityByInvestmentChartData();
-                                    this.diversityByValueChartData = this.portfolio.diversityByValueChartData();
-                                    this.diversityByDividendChartData = this.portfolio.diversityByDividendChartData();
                                 }
                             });
-                        this.shareheadService.getLastMinuteList()
-                            .subscribe(shares => {
-                                this.lastMinuteList = shares;
-                                this.markSharesOnList(this.lastMinuteList, returnedPortfolio);
-                            });
-                        this.shareheadService.getNewestRatingsList(this.portfolio)
-                            .subscribe(shares => {
-                                this.newestRatingsList = shares;
-                            });
-                        this.shareheadService.getNextReportsList(this.portfolio)
-                            .subscribe(shares => {
-                                this.nextReportsList = shares;
-                            });
-                        this.incomeChartDataImproved = this.portfolio?.incomeChartDataImproved();
                     } else {
                         alert('Something went wrong!');
                         // todo: redirect back to landingpage. probably the solution: implement guards
@@ -202,22 +150,6 @@ export class MyDashboardComponent implements OnInit {
         }
     }
 
-    getBalanceChartDataByAccount(account: BankAccount): ChartData {
-        return {
-            labels: [ 'Kontogebühren vs Einnahmen' ],
-            datasets: [
-                {
-                    label: 'Kontogebühren',
-                    data: [account.getAccountFeesTotal()]
-                },
-                {
-                    label: 'Einnahmen',
-                    data: [account.getEarningsTotal()]
-                },
-            ]
-        };
-    }
-
     changeTab(selectedTab: string): void {
         this.dashboardTab = selectedTab;
         localStorage.setItem('dashboardTab', selectedTab);
@@ -225,24 +157,6 @@ export class MyDashboardComponent implements OnInit {
 
     changeDividenListTab(selectedTab: number): void {
         this.dividendListTab = selectedTab;
-    }
-
-    changeListingTab(selectedTab: string): void {
-        this.listingTab = selectedTab;
-        localStorage.setItem('listingTab', selectedTab);
-    }
-
-    changePerformanceListTab(selectedTab: string): void {
-        this.performanceListTab = selectedTab;
-        this.performanceList = [];
-        const tabIndex = this.availablePerformanceTabs.indexOf(selectedTab);
-        this.portfolio?.getActiveNonCashPositions().forEach(position => {
-            position.tempPerformanceValue = position.balance?.performance[tabIndex];
-            if (this.performanceList && position.tempPerformanceValue) {
-                this.performanceList.push(position);
-            }
-        });
-        this.performanceList.sort((a, b) => (a.tempPerformanceValue !== undefined && b.tempPerformanceValue !== undefined && a.tempPerformanceValue < b.tempPerformanceValue) ? 1 : ((a.tempPerformanceValue !== undefined && b.tempPerformanceValue !== undefined && b.tempPerformanceValue < a.tempPerformanceValue) ? -1 : 0));
     }
 
     openPositionConfirmModal(template: TemplateRef<any>, position: Position) {
@@ -491,36 +405,6 @@ export class MyDashboardComponent implements OnInit {
             });
     }
 
-    toggleUltimateBalanceFilter(label: Label): void {
-        this.ultimateBalanceFilter?.forEach(filter => {
-            if (filter.id === label.id) {
-                filter.checked = !filter.checked;
-            }
-        });
-        localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
-        this.filterUltimateList();
-    }
-
-    setThisFilterAsOnlyFilter(label: Label): void {
-        this.ultimateBalanceFilter?.forEach(filter => {
-            if (filter.id === label.id) {
-                filter.checked = true;
-            } else {
-                filter.checked = false;
-            }
-        });
-        localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
-        this.filterUltimateList();
-    }
-
-    setAllLabelsActive(): void {
-        this.ultimateBalanceFilter?.forEach(filter => {
-            filter.checked = true;
-        });
-        localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
-        this.filterUltimateList();
-    }
-
     filterUltimateList(): void {
         this.ultimateBalanceList?.forEach(entry => {
             if (entry.labels && this.ultimateBalanceFilter) {
@@ -574,24 +458,6 @@ export class MyDashboardComponent implements OnInit {
                     }
                 });
             }
-        });
-    }
-
-    private markSharesOnList(shareList: ShareheadShare[], portfolio: Portfolio): void
-    {
-        shareList.forEach(shareheadShare => {
-            portfolio.bankAccounts.forEach(account => {
-                account.getActiveNonCashPositions().forEach(position => {
-                    if (position.shareheadId === shareheadShare.id) {
-                        shareheadShare.positionId = position.id;
-                    }
-                });
-            });
-            portfolio.watchlistEntries.forEach(entry => {
-                if (entry.shareheadId === shareheadShare.id) {
-                    shareheadShare.isOnWatchlist = true;
-                }
-            });
         });
     }
 
