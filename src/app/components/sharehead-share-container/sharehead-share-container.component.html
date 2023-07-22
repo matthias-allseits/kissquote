@@ -24,7 +24,10 @@
             </div>
         </div>
         <div class="col-3 col-md-3 d-none d-md-block text-end">
-            <div *ngIf="!timeWarpMode" ngbDropdown class="d-inline-block">
+            <button (click)="startCompareMode()" *ngIf="!timeWarpMode && !compareMode" type="button" class="btn btn-sm btn-outline-primary source-btn me-2">
+                Compare
+            </button>
+            <div *ngIf="!timeWarpMode && !compareMode" ngbDropdown class="d-inline-block">
                 <button type="button" class="btn btn-sm btn-outline-primary source-btn" id="dropdownTimeWarp" ngbDropdownToggle>
                     Time warp
                 </button>
@@ -34,15 +37,20 @@
                     <button (click)="startTimeWarp(3)" ngbDropdownItem>3 years</button>
                 </div>
             </div>
-            <div *ngIf="timeWarpMode" ngbDropdown class="d-inline-block">
+            <div *ngIf="timeWarpMode && !compareMode" ngbDropdown class="d-inline-block">
                 <button (click)="stopTimeWarp()" type="button" class="btn btn-sm btn-outline-primary active source-btn" id="stopTimeWarp">
                     Stop Time warp mode
+                </button>
+            </div>
+            <div *ngIf="!timeWarpMode && compareMode" ngbDropdown class="d-inline-block">
+                <button (click)="stopCompareMode()" type="button" class="btn btn-sm btn-outline-primary active source-btn" id="stopTimeWarp">
+                    Stop Comparing
                 </button>
             </div>
         </div>
     </div>
 
-    <div *ngIf="!timeWarpMode" class="col-12">
+    <div *ngIf="!timeWarpMode && !compareMode" class="col-12">
         <app-sharehead-share-info [shareheadShare]="shareheadShare" (removeInquiry)="sendRemoveInquiry()" [timeWarpMode]="false"></app-sharehead-share-info>
     </div>
     <div class="row" *ngIf="timeWarpMode">
@@ -51,6 +59,15 @@
         </div>
         <div class="col-6">
             <app-sharehead-share-info *ngIf="timeWarpedShare" [shareheadShare]="timeWarpedShare" (removeInquiry)="sendRemoveInquiry()" [componentTitle]="timeWarpTitle" [timeWarpMode]="true" [timeWarpDate]="this.timeWarpDate"></app-sharehead-share-info>
+        </div>
+    </div>
+    <div class="row" *ngIf="compareMode">
+        <div class="col-6" *ngIf="shareheadShare.name">
+            <app-sharehead-share-info [shareheadShare]="shareheadShare" (removeInquiry)="sendRemoveInquiry()" [componentTitle]="shareheadShare.name" [timeWarpMode]="true"></app-sharehead-share-info>
+        </div>
+        <div class="col-6">
+            <app-sharehead-share-info *ngIf="compareShare && compareShare.name" [shareheadShare]="compareShare" (removeInquiry)="sendRemoveInquiry()" [componentTitle]="compareShare.name" [timeWarpMode]="true"></app-sharehead-share-info>
+            <app-sharehead-share-search *ngIf="!compareShare" (selectedShare)="setComparedShare($event)"></app-sharehead-share-search>
         </div>
     </div>
 

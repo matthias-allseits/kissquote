@@ -37,7 +37,6 @@ export class ShareheadShareSearchComponent implements OnInit {
                 }
             });
         }
-        console.log(this.selectableShares.length);
     }
 
     selectShare(shareheadShare: ShareheadShare): void {

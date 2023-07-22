@@ -14,8 +14,10 @@ export class ShareheadShareContainerComponent implements OnInit {
     @Input() shareheadShare?: ShareheadShare;
     @Output() removeInquiry: EventEmitter<any> = new EventEmitter();
     public timeWarpMode = false;
+    public compareMode = false;
     public timeWarpDate?: Date;
     public timeWarpedShare?: ShareheadShare;
+    public compareShare?: ShareheadShare;
     public timeWarpTitle = '';
 
     externalLinkIcon = faExternalLinkAlt;
@@ -27,6 +29,24 @@ export class ShareheadShareContainerComponent implements OnInit {
 
     ngOnInit(): void {
 
+    }
+
+    startCompareMode(): void {
+        this.compareMode = true;
+    }
+
+    setComparedShare(shareheadShare: ShareheadShare): void {
+        this.shareheadService.getShare(shareheadShare.shareheadId)
+            .subscribe(share => {
+                if (share) {
+                    this.compareShare = share;
+                }
+            });
+    }
+
+    stopCompareMode(): void {
+        this.compareMode = false;
+        this.compareShare = undefined;
     }
 
 
@@ -42,7 +62,6 @@ export class ShareheadShareContainerComponent implements OnInit {
                 })
         }
     }
-
 
     stopTimeWarp(): void {
         this.timeWarpMode = false;
