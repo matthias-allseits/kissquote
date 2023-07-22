@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {TranslationService} from "../../services/translation.service";
 import {Label} from "../../models/label";
 import {Position} from "../../models/position";
@@ -15,7 +15,7 @@ import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
   templateUrl: './dashboard-listings.component.html',
   styleUrls: ['./dashboard-listings.component.scss']
 })
-export class DashboardListingsComponent implements OnInit {
+export class DashboardListingsComponent implements OnInit, OnChanges {
 
     @Input() portfolio?: Portfolio;
     @Input() ultimateBalanceList?: Position[];
@@ -79,6 +79,12 @@ export class DashboardListingsComponent implements OnInit {
             this.lombardValueList.forEach(entry => {
                 this.lombardTotal += +entry.maxDrawdownSummary.lombardValue;
             });
+        }
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.hasOwnProperty('ultimateBalanceFilter') && changes['ultimateBalanceFilter'].currentValue instanceof Array) {
+            this.ultimateBalanceFilter = changes['ultimateBalanceFilter'].currentValue;
         }
     }
 

@@ -8,7 +8,6 @@ import {Position} from "../../models/position";
 import {PositionService} from "../../services/position.service";
 import {BankAccount} from "../../models/bank-account";
 import {BankAccountService} from "../../services/bank-account.service";
-import {Currency} from "../../models/currency";
 import {FormGroup, UntypedFormControl, Validators} from "@angular/forms";
 import {CurrencyService} from "../../services/currency.service";
 import {ShareheadService} from "../../services/sharehead.service";
@@ -22,10 +21,7 @@ import {Observable} from "rxjs";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {Label} from "../../models/label";
 import {LabelService} from "../../services/label.service";
-import {LabelCreator} from "../../creators/label-creator";
-import {Sector} from "../../models/sector";
 import {SectorService} from "../../services/sector.service";
-import {SectorCreator} from "../../creators/sector-creator";
 
 
 @Component({
@@ -35,24 +31,19 @@ import {SectorCreator} from "../../creators/sector-creator";
 })
 export class MyDashboardComponent implements OnInit {
 
-    eyeIcon = faEye;
-    deleteIcon = faTrashAlt;
-    addIcon = faPlus;
-    editIcon = faEdit;
+    protected readonly eyeIcon = faEye;
+    protected readonly deleteIcon = faTrashAlt;
+    protected readonly addIcon = faPlus;
+    protected readonly editIcon = faEdit;
 
     public myKey: string|null = null;
     // todo: the portfolio has to be ready at this time. probably the solution: resolvers!
     public portfolio: Portfolio|null = null;
-    public currencies?: Currency[];
     public labels?: Label[];
-    public sectors?: Sector[];
     private selectedPosition?: Position;
     private selectedBankAccount?: BankAccount;
-    public selectedCurrency?: Currency;
     public selectedWatchlistEntry?: WatchlistEntry;
     public selectedManualDividend?: ManualDividend;
-    public selectedLabel?: Label;
-    public selectedSector?: Sector;
     private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions', 'listings'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
@@ -61,26 +52,12 @@ export class MyDashboardComponent implements OnInit {
     public years = [2023, 2024, 2025, 2026];
     public ultimateBalanceList?: Position[];
     public ultimateBalanceFilter?: Label[];
-    public color = 'ffffff';
     public shareheadSharesLoaded = false;
     modalRef?: NgbModalRef;
-
-    exchangeRateForm = new FormGroup({
-        rate: new UntypedFormControl('', Validators.required),
-    });
 
     manualDividendForm = new FormGroup({
         year: new UntypedFormControl(new Date().getFullYear(), Validators.required),
         amount: new UntypedFormControl('', Validators.required),
-    });
-
-    labelForm = new FormGroup({
-        name: new UntypedFormControl('', Validators.required),
-        color: new UntypedFormControl('', Validators.required),
-    });
-
-    sectorForm = new FormGroup({
-        name: new UntypedFormControl('', Validators.required),
     });
 
     constructor(
@@ -136,15 +113,6 @@ export class MyDashboardComponent implements OnInit {
                         // todo: redirect back to landingpage. probably the solution: implement guards
                     }
                 });
-            this.currencyService.getAllCurrencies()
-                .subscribe(currencies => {
-                    this.currencies = currencies;
-                    localStorage.setItem('currencies', JSON.stringify(this.currencies));
-                });
-            this.sectorService.getAllSectors()
-                .subscribe(sectors => {
-                    this.sectors = sectors;
-                });
         } else {
             // todo: redirect back to landingpage. probably the solution: implement guards
         }
@@ -174,42 +142,6 @@ export class MyDashboardComponent implements OnInit {
         this.modalRef = this.modalService.open(template);
     }
 
-    openLabelConfirmModal(template: TemplateRef<any>, entry: Label|undefined) {
-        this.selectedLabel = entry;
-        this.modalRef = this.modalService.open(template);
-    }
-
-    openLabelFormModal(template: TemplateRef<any>, entry: Label|undefined) {
-        if (entry) {
-            this.labelForm.get('name')?.setValue(entry.name);
-            this.labelForm.get('color')?.setValue(entry.color);
-            this.color = entry.color;
-            this.selectedLabel = entry;
-        } else {
-            this.selectedLabel = LabelCreator.createNewLabel();
-            this.labelForm.get('name')?.setValue('');
-            this.labelForm.get('color')?.setValue('');
-            this.color = '';
-        }
-        this.modalRef = this.modalService.open(template);
-    }
-
-    openSectorConfirmModal(template: TemplateRef<any>, entry: Sector|undefined) {
-        this.selectedSector = entry;
-        this.modalRef = this.modalService.open(template);
-    }
-
-    openSectorFormModal(template: TemplateRef<any>, entry: Sector|undefined) {
-        if (entry) {
-            this.sectorForm.get('name')?.setValue(entry.name);
-            this.selectedSector = entry;
-        } else {
-            this.selectedSector = SectorCreator.createNewSector();
-            this.sectorForm.get('name')?.setValue('');
-        }
-        this.modalRef = this.modalService.open(template);
-    }
-
 
     confirmDeletePosition(): void {
         if (this.selectedPosition) {
@@ -234,24 +166,6 @@ export class MyDashboardComponent implements OnInit {
         this.modalRef = this.modalService.open(template);
     }
 
-    openExchangeRateModal(template: TemplateRef<any>, currency: Currency) {
-        this.selectedCurrency = currency;
-        this.exchangeRateForm.get('rate')?.setValue(currency.rate);
-        this.modalRef = this.modalService.open(template);
-    }
-
-    persistExchangeRate(): void {
-        if (this.selectedCurrency) {
-            this.selectedCurrency.rate = this.exchangeRateForm.get('rate')?.value;
-            this.currencyService.update(this.selectedCurrency)
-                .subscribe(currency => {
-                    // todo: implement a data updater
-                    document.location.reload();
-                });
-        }
-        this.modalRef?.close();
-    }
-
     openManualDividendModal(template: TemplateRef<any>, positionId: number) {
         const position = this.portfolio?.positionById(positionId);
         if (position) {
@@ -271,53 +185,6 @@ export class MyDashboardComponent implements OnInit {
                     // todo: implement a data updater
                     document.location.reload();
                 });
-        }
-        this.modalRef?.close();
-    }
-
-    persistLabel(): void {
-        if (this.selectedLabel) {
-            this.selectedLabel.name = this.labelForm.get('name')?.value;
-            // this.selectedLabel.color = this.labelForm.get('color')?.value;
-            if (this.selectedLabel.id > 0) {
-                this.labelService.update(this.selectedLabel)
-                    .subscribe(label => {
-                        this.getAllLabels();
-                    });
-            } else {
-                this.labelService.create(this.selectedLabel)
-                    .subscribe(label => {
-                        this.getAllLabels();
-                    });
-            }
-            this.selectedLabel = undefined;
-        }
-        this.modalRef?.close();
-    }
-
-    persistSector(): void {
-        if (this.selectedSector) {
-            this.selectedSector.name = this.sectorForm.get('name')?.value;
-            if (this.selectedSector.id > 0) {
-                this.sectorService.update(this.selectedSector)
-                    .subscribe(sector => {
-                        this.sectors?.forEach( (sectr, index) => {
-                            if (sectr.id === this.selectedSector?.id) {
-                                if (this.sectors) {
-                                    this.sectors[index] = sectr;
-                                }
-                            }
-                        });
-                    });
-            } else {
-                this.sectorService.create(this.selectedSector)
-                    .subscribe(sector => {
-                        if (this.sectors && sector) {
-                            this.sectors.push(sector);
-                        }
-                    });
-            }
-            this.selectedSector = undefined;
         }
         this.modalRef?.close();
     }
@@ -346,37 +213,6 @@ export class MyDashboardComponent implements OnInit {
     deleteManualDividend(dividend: ManualDividend): void {
         this.manualDividendService.delete(dividend.id).subscribe(() => {
             document.location.reload();
-        });
-    }
-
-    confirmDeleteLabel(): void {
-        if (this.selectedLabel) {
-            this.deleteLabel(this.selectedLabel);
-        }
-        this.modalRef?.close();
-    }
-
-    deleteLabel(label: Label): void {
-        console.log(label);
-        this.labelService.delete(label.id).subscribe(() => {
-            this.getAllLabels();
-        });
-    }
-
-    confirmDeleteSector(): void {
-        if (this.selectedSector) {
-            this.deleteSector(this.selectedSector);
-        }
-        this.modalRef?.close();
-    }
-
-    deleteSector(sector: Sector): void {
-        this.sectorService.delete(sector.id).subscribe(() => {
-            this.sectors?.forEach( (sectr, index) => {
-                if (sectr.id === sector.id) {
-                    this.sectors?.splice(index, 1);
-                }
-            });
         });
     }
 
@@ -430,6 +266,27 @@ export class MyDashboardComponent implements OnInit {
         return result;
     }
 
+    getAllLabels(): void
+    {
+        this.labelService.getAllLabels()
+            .subscribe(labels => {
+                this.labels = labels;
+                localStorage.setItem('labels', JSON.stringify(this.labels));
+
+                const ultimateFilter = localStorage.getItem('ultimateFilter');
+                if (ultimateFilter === null) {
+                    this.ultimateBalanceFilter = this.labels;
+                    this.ultimateBalanceFilter?.forEach((label) => {
+                        label.checked = true;
+                    });
+                    localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
+                } else {
+                    this.ultimateBalanceFilter = JSON.parse(ultimateFilter);
+                }
+                this.filterUltimateList();
+            });
+    }
+
     private loadShareheadShares(): Observable<boolean>
     {
         return new Observable(psitons => {
@@ -459,27 +316,6 @@ export class MyDashboardComponent implements OnInit {
                 });
             }
         });
-    }
-
-    private getAllLabels(): void
-    {
-        this.labelService.getAllLabels()
-            .subscribe(labels => {
-                this.labels = labels;
-                localStorage.setItem('labels', JSON.stringify(this.labels));
-
-                const ultimateFilter = localStorage.getItem('ultimateFilter');
-                if (ultimateFilter === null) {
-                    this.ultimateBalanceFilter = this.labels;
-                    this.ultimateBalanceFilter?.forEach((label) => {
-                        label.checked = true;
-                    });
-                    localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
-                } else {
-                    this.ultimateBalanceFilter = JSON.parse(ultimateFilter);
-                }
-                this.filterUltimateList();
-            });
     }
 
 }

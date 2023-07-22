@@ -45,6 +45,7 @@ import {PieChartComponent} from "./components/pie-chart/pie-chart.component";
 import {ShareheadShareContainerComponent} from "./components/sharehead-share-container/sharehead-share-container.component";
 import { DashboardBalanceComponent } from './components/dashboard-balance/dashboard-balance.component';
 import { DashboardListingsComponent } from './components/dashboard-listings/dashboard-listings.component';
+import { DashboardSettingsComponent } from './components/dashboard-settings/dashboard-settings.component';
 registerLocaleData(localeCH);
 
 
@@ -82,6 +83,7 @@ registerLocaleData(localeCH);
         ShareBarChartComponent,
         DashboardBalanceComponent,
         DashboardListingsComponent,
+        DashboardSettingsComponent,
     ],
     imports: [
         BrowserModule,
