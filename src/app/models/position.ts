@@ -457,56 +457,6 @@ export class Position {
     }
 
 
-    public getRatesChartData(): Observable<ChartData> {
-        return new Observable(obsData => {
-            const historicRates: number[] = [];
-            const historicLabels: string[] = [];
-            if (this.share && this.currency) {
-                let currencyName = this.currency.name;
-                if (currencyName === 'GBP') {
-                    currencyName = 'GBX';
-                }
-                let request = new XMLHttpRequest();
-                const ratesUrl = `https://www.swissquote.ch/sqi_ws/HistoFromServlet?format=pipe&key=${this.share.isin}_${this.share.marketplace?.urlKey}_${currencyName}&ftype=day&fvalue=1&ptype=a&pvalue=1`;
-                request.open("GET", ratesUrl, false);
-                request.send(null);
-                let content = request.responseText;
-                // console.log(content);
-                let rates: StockRate[] = [];
-                if (this.activeFrom instanceof Date) {
-                    rates = SwissquoteHelper.parseRates(content, this.activeFrom, this.daysSinceStart());
-                }
-
-                rates.forEach(rate => {
-                    if (rate.date) {
-                        historicRates.push(rate.rate);
-                        historicLabels.push(DateHelper.convertDateToGerman(rate.date));
-                    }
-                });
-            }
-
-            const data = {
-                datasets: [
-                    {
-                        data: historicRates,
-                        label: 'Kurs seit Start der Position',
-                        backgroundColor: 'rgba(255,102,51,0)',
-                        borderColor: '#ff6633',
-                        pointBackgroundColor: '#c9461a',
-                        pointBorderColor: '#ff6633',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#ff6633',
-                        fill: 'origin',
-                    }
-                ],
-                labels: historicLabels
-            };
-
-            obsData.next(data);
-        });
-    }
-
-
     public getStockRates(): Observable<StockRate[]> {
         return new Observable(obsData => {
             if (this.share && this.currency) {

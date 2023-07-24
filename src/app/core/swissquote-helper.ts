@@ -9,8 +9,14 @@ export class SwissquoteHelper {
         const rates: StockRate[] = [];
         const lines = content.split("\n");
         let startDate = new Date(activeFrom);
-        if (daysSinceStart < 150) {
-            startDate.setMonth(startDate.getMonth() - 4);
+        let addedMonthsToShow = 12;
+        let daysSinceStartLimit = 400;
+        if (screen.width < 400) {
+            addedMonthsToShow = 4;
+            daysSinceStartLimit = 150
+        }
+        if (daysSinceStart < daysSinceStartLimit) {
+            startDate.setMonth(startDate.getMonth() - addedMonthsToShow);
         }
         startDate.setHours(0);
         lines.forEach((line: any, index: number) => {

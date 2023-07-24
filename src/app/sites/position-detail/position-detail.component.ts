@@ -489,7 +489,7 @@ export class PositionDetailComponent implements OnInit {
                     }
                     if (this.position && this.position.balance) {
                         this.chartData = {
-                            labels: ['Kosten vs Einnahmen'],
+                            labels: ['Transakationskosten vs Einnahmen'],
                             datasets: [
                                 {
                                     label: 'Kosten',
