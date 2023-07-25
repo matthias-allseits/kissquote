@@ -108,22 +108,22 @@
     </div>
     <div *ngIf="dividendLists" class="info-box">
         <h5>{{ tranService.trans('MYDA_DIVI_INCOME') }}</h5>
-        <app-stacked-bar-chart [data]="portfolio.dividendIncomeChartData()"></app-stacked-bar-chart>
+        <app-stacked-bar-chart [data]="dividendIncomeChartData"></app-stacked-bar-chart>
     </div>
     <div *ngIf="dividendLists" class="info-box">
         <h5>Investment per 1. Juli</h5>
-        <app-line-chart [data]="portfolio.investmentChartData()" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
+        <app-line-chart [data]="investmentChartData" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
     </div>
     <div *ngIf="dividendLists" class="info-box">
         <h5>ROI per 1. Juli</h5>
-        <app-line-chart [data]="portfolio.yieldChartData()" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
+        <app-line-chart [data]="yieldChartData" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
     </div>
     <div *ngIf="incomeChartDataImproved" class="info-box info-box-doubled">
         <h5>{{ tranService.trans('MYDA_INCOME_PER_MONTH') }}</h5>
         <app-bar-chart [data]="incomeChartDataImproved" [height]="incomeChartDataImprovedBoxHeight"></app-bar-chart>
     </div>
-    <div *ngFor="let account of portfolio.bankAccounts" class="info-box">
-        <h5>{{ account.name }}</h5>
-        <app-bar-chart [data]="getBalanceChartDataByAccount(account)"></app-bar-chart>
+    <div *ngFor="let balance of accountBalances" class="info-box">
+        <h5>{{ balance.account.name }}</h5>
+        <app-bar-chart [data]="balance.chartData"></app-bar-chart>
     </div>
 </div>
