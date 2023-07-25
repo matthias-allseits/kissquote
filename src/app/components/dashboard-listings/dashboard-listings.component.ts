@@ -24,7 +24,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
 
     eyeIcon = faEye;
 
-    private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'newestRatings', 'nextReports', 'diversification', 'performance', 'diviGrowthSummary'];
+    private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'newestRatings', 'nextReports', 'diversification', 'performance', 'risks'];
     public listingTab = 'ultimate';
     private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year', '3years', '5years', '10years'];
     public performanceListTab = '1day';
@@ -39,6 +39,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public crisisDividendTotal = 0;
     public lombardValueList?: LombardValuesSummary[];
     public lombardTotal = 0;
+    public risksList?: LombardValuesSummary[];
+    public riskTotal = 0;
 
     constructor(
         public tranService: TranslationService,
@@ -78,7 +80,10 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
             this.lombardValueList = this.portfolio.lombardValuePositions();
             this.lombardValueList.forEach(entry => {
                 this.lombardTotal += +entry.maxDrawdownSummary.lombardValue;
+                this.riskTotal += +entry.maxDrawdownSummary.risk;
             });
+            this.risksList = structuredClone(this.lombardValueList);
+            this.risksList.sort((a,b) => (a.maxDrawdownSummary.risk < b.maxDrawdownSummary.risk) ? 1 : (b.maxDrawdownSummary.risk < a.maxDrawdownSummary.risk) ? -1 : 0);
         }
     }
 

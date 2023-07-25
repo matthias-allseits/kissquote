@@ -315,6 +315,10 @@
                         <div class="col-10">Lombard value from post corona top:</div>
                         <div class="col-2"><span class="float-end">{{ maxDrawdownSummary.lombardValueFromPostCoronaTop }}%</span></div>
                     </div>
+                    <div class="row" [class.red-text]="+position.actualValue() < maxDrawdownSummary.maxDrawdownValue">
+                        <div class="col-6">Risk:</div>
+                        <div class="col-6"><span class="float-end">{{ maxDrawdownSummary.risk|number: '1.0' }} {{ position.currency?.name }}</span></div>
+                    </div>
                 </div>
                 <div class="info-box" *ngIf="dividendDropSummary">
                     <h5>

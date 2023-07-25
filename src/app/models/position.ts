@@ -39,6 +39,7 @@ export interface MaxDrawdownSummary {
     lombardValue: number;
     lombardValueFromInvestment: number;
     lombardValueFromPostCoronaTop: number;
+    risk: number;
 }
 
 export interface DividendDropSummary {
@@ -528,6 +529,7 @@ export class Position {
                 let lombardValue = +(maxDrawDownValue / 2).toFixed();
                 let fromInvestment = +(100 / this.balance.investment * lombardValue).toFixed();
                 let fromTop = +(100 / topValue * lombardValue).toFixed();
+                const risk = +(+this.actualValue() - maxDrawDownValue).toFixed();
                 const summary = {
                     postCoronaTop: postCoronaTop,
                     postCoronaTopValue: +topValue.toFixed(),
@@ -537,6 +539,7 @@ export class Position {
                     lombardValue: lombardValue,
                     lombardValueFromInvestment: fromInvestment,
                     lombardValueFromPostCoronaTop: fromTop,
+                    risk: risk
                 };
 
                 return summary
