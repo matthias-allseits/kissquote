@@ -103,27 +103,52 @@
             </div>
         </div>
     </ng-container>
+
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-        <h4 class="pt-2">{{ tranService.trans('GLOB_BALANCES') }}</h4>
+        <h4 class="col-6">{{ tranService.trans('GLOB_BALANCES') }}</h4>
+        <div class="col-6 text-end">
+            <div *ngIf="!timeWarpMode" ngbDropdown class="d-inline-block">
+                <button type="button" class="btn btn-sm btn-outline-primary source-btn" id="dropdownTimeWarp" ngbDropdownToggle>
+                    Time warp
+                </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownTimeWarp">
+                    <button (click)="startTimeWarp(3)" ngbDropdownItem>3 months</button>
+                    <button (click)="startTimeWarp(6)" ngbDropdownItem>6 months</button>
+                    <button (click)="startTimeWarp(12)" ngbDropdownItem>12 months</button>
+                </div>
+            </div>
+            <div *ngIf="timeWarpMode" ngbDropdown class="d-inline-block">
+                <button (click)="stopTimeWarp()" type="button" class="btn btn-sm btn-outline-primary active source-btn" id="stopTimeWarp">
+                    Stop Time warp mode
+                </button>
+            </div>
+        </div>
     </div>
-    <div *ngIf="dividendLists" class="info-box">
-        <h5>{{ tranService.trans('MYDA_DIVI_INCOME') }}</h5>
-        <app-stacked-bar-chart [data]="dividendIncomeChartData"></app-stacked-bar-chart>
+
+    <div *ngIf="!timeWarpMode" class="col-12">
+        <app-dashboard-balance-charts
+            [portfolio]="portfolio"
+            [dividendLists]="dividendLists"
+            [timeWarpMode]="false"
+        ></app-dashboard-balance-charts>
     </div>
-    <div *ngIf="dividendLists" class="info-box">
-        <h5>Investment per 1. Juli</h5>
-        <app-line-chart [data]="investmentChartData" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
-    </div>
-    <div *ngIf="dividendLists" class="info-box">
-        <h5>ROI per 1. Juli</h5>
-        <app-line-chart [data]="yieldChartData" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
-    </div>
-    <div *ngIf="incomeChartDataImproved" class="info-box info-box-doubled">
-        <h5>{{ tranService.trans('MYDA_INCOME_PER_MONTH') }}</h5>
-        <app-bar-chart [data]="incomeChartDataImproved" [height]="incomeChartDataImprovedBoxHeight"></app-bar-chart>
-    </div>
-    <div *ngFor="let balance of accountBalances" class="info-box">
-        <h5>{{ balance.account.name }}</h5>
-        <app-bar-chart [data]="balance.chartData"></app-bar-chart>
+    <div *ngIf="timeWarpMode" class="row">
+        <div class="col-6">
+            <app-dashboard-balance-charts
+                [portfolio]="portfolio"
+                [dividendLists]="dividendLists"
+                [timeWarpMode]="true"
+                componentTitle="Today"
+            ></app-dashboard-balance-charts>
+        </div>
+        <div class="col-6">
+            <app-dashboard-balance-charts
+                [portfolio]="timeWarpedPortfolio"
+                [dividendLists]="timeWarpedDividendLists"
+                [timeWarpMode]="true"
+                [timeWarpDate]="timeWarpDate"
+                [componentTitle]="timeWarpTitle"
+            ></app-dashboard-balance-charts>
+        </div>
     </div>
 </div>

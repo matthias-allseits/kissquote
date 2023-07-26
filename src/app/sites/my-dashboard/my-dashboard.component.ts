@@ -295,6 +295,7 @@ export class MyDashboardComponent implements OnInit {
                 const allPositions = this.portfolio.getAllPositions();
                 // console.log('length: ' + allPositions.length);
                 let counter = 0;
+                // todo: use a shares-collection endpoint from sharehead to reduce number of requests
                 allPositions.forEach((position, index) => {
                     if (position.shareheadId !== undefined && position.shareheadId > 0 && position.active) {
                         this.shareheadService.getShare(position.shareheadId)

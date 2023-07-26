@@ -5,7 +5,7 @@ import {WatchlistCreator} from "./watchlist-creator";
 
 export class PortfolioCreator {
 
-    public static oneFromApiArray(apiArray: Portfolio): Portfolio|null
+    public static oneFromApiArray(apiArray: Portfolio): Portfolio|undefined
     {
         if (apiArray !== undefined) {
             return new Portfolio(
@@ -18,7 +18,7 @@ export class PortfolioCreator {
                 apiArray.watchlistEntries ? WatchlistCreator.fromApiArray(apiArray.watchlistEntries).reverse() : [],
             );
         } else {
-            return null;
+            return undefined;
         }
     }
 
