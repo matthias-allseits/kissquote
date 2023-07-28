@@ -1,0 +1,23 @@
+<h3 *ngIf="componentTitle">{{ componentTitle }}</h3>
+<div *ngIf="dividendLists && dividendIncomeChartData" class="info-box">
+    <h5>{{ tranService.trans('MYDA_DIVI_INCOME') }}</h5>
+    <app-stacked-bar-chart [data]="dividendIncomeChartData"></app-stacked-bar-chart>
+</div>
+<div *ngIf="dividendLists && !timeWarpMode" class="info-box">
+    <h5>Investment per 1. Juli</h5>
+    <app-line-chart [data]="investmentChartData" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
+</div>
+<div *ngIf="dividendLists && yieldChartData" class="info-box">
+    <h5>ROI per 1. Juli</h5>
+    <app-line-chart [data]="yieldChartData" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
+</div>
+<div *ngIf="!timeWarpMode" class="info-box info-box-doubled">
+    <h5>{{ tranService.trans('MYDA_INCOME_PER_MONTH') }}</h5>
+    <app-bar-chart [data]="incomeChartDataImproved" [height]="incomeChartDataImprovedBoxHeight"></app-bar-chart>
+</div>
+<ng-container *ngIf="!timeWarpMode">
+    <div *ngFor="let balance of accountBalances" class="info-box">
+        <h5>{{ balance.account.name }}</h5>
+        <app-bar-chart [data]="balance.chartData"></app-bar-chart>
+    </div>
+</ng-container>

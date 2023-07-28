@@ -29,7 +29,7 @@ import {formatDate, Location} from "@angular/common";
 export class PositionFormComponent extends MotherFormComponent implements OnInit {
 
     public position: Position;
-    public portfolio: Portfolio|null = null;
+    public portfolio?: Portfolio;
     public bankAccounts: BankAccount[] = [];
     private bankAccountIndex: number = 0;
     public shareheadShares: ShareheadShare[] = [];

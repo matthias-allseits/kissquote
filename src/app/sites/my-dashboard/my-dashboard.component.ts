@@ -293,27 +293,29 @@ export class MyDashboardComponent implements OnInit {
             let result = false;
             if (this.portfolio) {
                 const allPositions = this.portfolio.getAllPositions();
-                // console.log('length: ' + allPositions.length);
-                let counter = 0;
-                allPositions.forEach((position, index) => {
-                    if (position.shareheadId !== undefined && position.shareheadId > 0 && position.active) {
-                        this.shareheadService.getShare(position.shareheadId)
-                            .subscribe(share => {
-                                if (share) {
-                                    position.shareheadShare = share;
-                                }
+                // console.log('all posis length: ' + allPositions.length);
+                this.shareheadService.getSharesCollection(this.portfolio)
+                    .subscribe(shares => {
+                        let counter = 0;
+                        allPositions.forEach((position, index) => {
+                            if (position.shareheadId !== undefined && position.shareheadId > 0 && position.active) {
+                                shares.forEach(share => {
+                                    if (share.id === position.shareheadId) {
+                                        position.shareheadShare = share;
+                                        counter++;
+                                    }
+                                });
+                            } else {
                                 counter++;
-                                // console.log(counter);
-                                if (counter == allPositions.length) {
-                                    result = true;
-                                    psitons.next(result);
-                                }
-                            });
-                    } else {
-                        counter++;
-                        // console.log(counter);
-                    }
-                });
+                            }
+                            // console.log(counter);
+                            if (counter == allPositions.length) {
+                                result = true;
+                                // console.log('we are done');
+                                psitons.next(result);
+                            }
+                        });
+                    });
             }
         });
     }

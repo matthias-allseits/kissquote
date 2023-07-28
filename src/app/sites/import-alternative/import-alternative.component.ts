@@ -29,7 +29,7 @@ export class ImportAlternativeComponent implements OnInit {
         this.portfolioService.create(portfolio)
             .subscribe(returnedPortfolio => {
                 console.log(returnedPortfolio);
-                if (null !== returnedPortfolio && null !== returnedPortfolio.hashKey) {
+                if (returnedPortfolio && null !== returnedPortfolio.hashKey) {
                     localStorage.setItem('my-key', returnedPortfolio.hashKey);
                 }
                 document.location.href = '/my-dashboard';

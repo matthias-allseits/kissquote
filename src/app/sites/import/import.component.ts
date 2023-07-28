@@ -126,7 +126,7 @@ export class ImportComponent implements OnInit {
             this.portfolioService.create(portfolio)
                 .subscribe(returnedPortfolio => {
                     console.log(returnedPortfolio);
-                    if (null !== returnedPortfolio && null !== returnedPortfolio.hashKey) {
+                    if (returnedPortfolio && null !== returnedPortfolio.hashKey) {
                         localStorage.setItem('my-key', returnedPortfolio.hashKey);
                         this.persistPositions(returnedPortfolio.bankAccounts[0]);
                     }

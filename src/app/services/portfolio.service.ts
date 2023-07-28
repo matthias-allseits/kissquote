@@ -7,6 +7,7 @@ import {catchError, map} from 'rxjs/operators';
 import {BankAccount} from '../models/bank-account';
 import {PortfolioCreator} from "../creators/portfolio-creator";
 import {ApiService} from "./api-service";
+import {DateHelper} from "../core/datehelper";
 
 
 const httpOptions = {
@@ -28,7 +29,7 @@ export class PortfolioService extends ApiService {
     }
 
 
-    public create(portfolio: Portfolio): Observable<Portfolio|null>
+    public create(portfolio: Portfolio): Observable<Portfolio|undefined>
     {
         return this.http.post<Portfolio>(this.apiUrl, portfolio, httpOptions)
             .pipe(
@@ -40,7 +41,7 @@ export class PortfolioService extends ApiService {
     }
 
 
-    public portfolioByKey(key: string|null): Observable<Portfolio|null>
+    public portfolioByKey(key: string|null): Observable<Portfolio|undefined>
     {
         const body = {
             hashKey: key
@@ -49,14 +50,25 @@ export class PortfolioService extends ApiService {
             .pipe(
                 map(res => PortfolioCreator.oneFromApiArray(res)),
                 catchError(this.handleError)
-                // map(this.extractData),
-                // catchError(this.handleError('addHero', portfolio))
-                // catchError(this.handleError('addHero', portfolio))
             );
     }
 
 
-    public portfolioForDemo(): Observable<Portfolio|null>
+    public portfolioByKeyAndDate(key: string|null, date: Date): Observable<Portfolio|undefined>
+    {
+        const body = {
+            hashKey: key,
+            date: DateHelper.convertDateToMysql(date)
+        };
+        return this.http.post<Portfolio>(this.apiUrl + '/time-warp', JSON.stringify(body), httpOptions )
+            .pipe(
+                map(res => PortfolioCreator.oneFromApiArray(res)),
+                catchError(this.handleError)
+            );
+    }
+
+
+    public portfolioForDemo(): Observable<Portfolio|undefined>
     {
         return this.http.get<Portfolio>(this.apiUrl + '/demo')
             .pipe(
@@ -75,7 +87,7 @@ export class PortfolioService extends ApiService {
             const myKey = localStorage.getItem('my-key');
             this.portfolioByKey(myKey)
                 .subscribe(portfolio => {
-                    if (null !== portfolio) {
+                    if (portfolio) {
                         portfolio.bankAccounts.forEach(account => {
                             if (account.id === bankAccountId) {
                                 bankAccount.next(account);

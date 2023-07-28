@@ -23,7 +23,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 export class CashPositionFormComponent extends MotherFormComponent implements OnInit {
 
     public position: Position;
-    public portfolio: Portfolio | null = null;
+    public portfolio?: Portfolio;
     public bankAccounts: BankAccount[] = [];
     private bankAccountIndex: number = 0;
     public currencies: Currency[] = [];
