@@ -29,8 +29,10 @@ export class ShareheadService {
     ) {
         if (+window.location.port === 4300) {
             this.baseUrl = 'http://sharehead.local/api';
-            // } else if (+window.location.port === 4500) {
-            //     this.baseUrl = 'http://localhost:8009/api';
+        } else if (+window.location.port === 4500) {
+            // this.baseUrl = 'http://localhost:8009/api';
+            this.baseUrl = 'http://head.local/api';
+            // this.baseUrl = 'http://head.om/api';
         }
     }
 
@@ -49,6 +51,42 @@ export class ShareheadService {
         return this.http.get<ShareheadShare>(this.baseUrl + '/share/' + id + '/' + DateHelper.convertDateToMysql(date))
             .pipe(
                 map(res => ShareheadShareCreator.oneFromApiArray(res))
+            );
+    }
+
+    public getSharesCollection(portfolio: Portfolio): Observable<ShareheadShare[]>
+    {
+        const shareheadIds: number[] = [];
+        portfolio.getActiveNonCashPositions().forEach(position => {
+            if (position.shareheadId) {
+                shareheadIds.push(position.shareheadId);
+            }
+        });
+        return this.http.post(this.baseUrl + '/share/collection', JSON.stringify(shareheadIds))
+            .pipe(
+                map(res => {
+                    const collection = ShareheadShareCreator.fromApiArray(res);
+
+                    return collection;
+                }),
+            );
+    }
+
+    public getTimeWarpedSharesCollection(portfolio: Portfolio, date: Date): Observable<ShareheadShare[]>
+    {
+        const shareheadIds: number[] = [];
+        portfolio.getActiveNonCashPositions().forEach(position => {
+            if (position.shareheadId) {
+                shareheadIds.push(position.shareheadId);
+            }
+        });
+        return this.http.post(this.baseUrl + '/share/collection/' + DateHelper.convertDateToMysql(date), JSON.stringify(shareheadIds))
+            .pipe(
+                map(res => {
+                    const collection = ShareheadShareCreator.fromApiArray(res);
+
+                    return collection;
+                }),
             );
     }
 

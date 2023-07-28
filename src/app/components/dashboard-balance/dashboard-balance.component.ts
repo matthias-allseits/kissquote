@@ -73,28 +73,28 @@ export class DashboardBalanceComponent implements OnInit {
             let result = false;
             if (this.timeWarpedPortfolio) {
                 const allPositions = this.timeWarpedPortfolio.getAllPositions();
-                // console.log('length: ' + allPositions.length);
-                let counter = 0;
-                // todo: use a shares-collection endpoint from sharehead to reduce number of requests
-                allPositions.forEach((position, index) => {
-                    if (position.shareheadId !== undefined && position.shareheadId > 0 && position.active) {
-                        this.shareheadService.getTimeWarpedShare(position.shareheadId, timeWarpDate)
-                            .subscribe(share => {
-                                if (share) {
-                                    position.shareheadShare = share;
-                                }
+                this.shareheadService.getTimeWarpedSharesCollection(this.timeWarpedPortfolio, timeWarpDate)
+                    .subscribe(shares => {
+                        let counter = 0;
+                        allPositions.forEach((position, index) => {
+                            if (position.shareheadId !== undefined && position.shareheadId > 0 && position.active) {
+                                shares.forEach(share => {
+                                    if (share.id === position.shareheadId) {
+                                        position.shareheadShare = share;
+                                        counter++;
+                                    }
+                                });
+                            } else {
                                 counter++;
-                                // console.log(counter);
-                                if (counter == allPositions.length) {
-                                    result = true;
-                                    psitons.next(result);
-                                }
-                            });
-                    } else {
-                        counter++;
-                        // console.log(counter);
-                    }
-                });
+                            }
+                            // console.log(counter);
+                            if (counter == allPositions.length) {
+                                result = true;
+                                // console.log('we are done');
+                                psitons.next(result);
+                            }
+                        });
+                    });
             }
         });
     }
