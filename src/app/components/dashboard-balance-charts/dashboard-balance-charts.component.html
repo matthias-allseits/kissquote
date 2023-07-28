@@ -1,13 +1,13 @@
 <h3 *ngIf="componentTitle">{{ componentTitle }}</h3>
-<div *ngIf="dividendLists" class="info-box">
+<div *ngIf="dividendLists && dividendIncomeChartData" class="info-box">
     <h5>{{ tranService.trans('MYDA_DIVI_INCOME') }}</h5>
     <app-stacked-bar-chart [data]="dividendIncomeChartData"></app-stacked-bar-chart>
 </div>
-<div *ngIf="dividendLists" class="info-box">
+<div *ngIf="dividendLists && !timeWarpMode" class="info-box">
     <h5>Investment per 1. Juli</h5>
     <app-line-chart [data]="investmentChartData" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
 </div>
-<div *ngIf="dividendLists" class="info-box">
+<div *ngIf="dividendLists && yieldChartData" class="info-box">
     <h5>ROI per 1. Juli</h5>
     <app-line-chart [data]="yieldChartData" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
 </div>

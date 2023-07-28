@@ -40,6 +40,7 @@ export class DashboardBalanceComponent implements OnInit {
 
 
     startTimeWarp(months: number): void {
+        this.timeWarpedDividendLists = undefined;
         this.timeWarpTitle = `${months} months ago`;
         this.timeWarpDate = new Date();
         this.timeWarpDate.setMonth(this.timeWarpDate.getMonth() - months);

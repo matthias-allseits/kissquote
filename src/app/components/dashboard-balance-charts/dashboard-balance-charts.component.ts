@@ -36,7 +36,6 @@ export class DashboardBalanceChartsComponent implements OnInit, OnChanges {
         if (screen.width < 400) {
             this.incomeChartDataImprovedBoxHeight = 300;
         }
-        console.log('timeWarpDate: ' + this.timeWarpDate);
 
         this.incomeChartDataImproved = this.portfolio?.incomeChartDataImproved();
         if (this.portfolio) {
@@ -54,7 +53,6 @@ export class DashboardBalanceChartsComponent implements OnInit, OnChanges {
         this.yieldChartData = this.portfolio?.yieldChartData();
         if (this.portfolio) {
             this.investmentChartData = this.portfolio.investmentChartData();
-            console.log(this.investmentChartData);
         }
     }
 
