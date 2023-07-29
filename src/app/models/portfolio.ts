@@ -591,6 +591,8 @@ export class Portfolio {
         }
         allYears.forEach(year => {
             const collection = this.collectDividendForYear(year, thisYear);
+            collection.payedList.sort((a,b) => (a.total < b.total) ? 1 : ((b.total < a.total) ? -1 : 0));
+            collection.plannedList.sort((a,b) => (a.total < b.total) ? 1 : ((b.total < a.total) ? -1 : 0));
             totals.push(collection);
         });
 

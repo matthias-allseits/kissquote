@@ -76,6 +76,7 @@ export class PositionDetailComponent implements OnInit {
     public daysTillNextPayment?: number;
     public daysTillNextReport?: number;
     public stopLossBroken = false;
+    public hasReachedTargetPrice = false;
 
     manualDrawdownForm = new FormGroup({
         amount: new UntypedFormControl('', Validators.required),
@@ -87,6 +88,11 @@ export class PositionDetailComponent implements OnInit {
 
     stopLossForm = new FormGroup({
         amount: new UntypedFormControl('', Validators.required),
+    });
+
+    targetPriceForm = new FormGroup({
+        amount: new UntypedFormControl('', Validators.required),
+        type: new UntypedFormControl('', Validators.required),
     });
 
     logEntryForm = new FormGroup({
@@ -226,6 +232,12 @@ export class PositionDetailComponent implements OnInit {
         this.modalRef = this.modalService.open(template);
     }
 
+    openTargetPriceModal(template: TemplateRef<any>) {
+        this.targetPriceForm.get('amount')?.setValue(this.position?.targetPrice);
+        this.targetPriceForm.get('type')?.setValue(this.position?.targetType);
+        this.modalRef = this.modalService.open(template);
+    }
+
     openManualDividendDropModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.open(template);
     }
@@ -323,6 +335,21 @@ export class PositionDetailComponent implements OnInit {
     persistStopLoss(): void {
         if (this.position) {
             this.position.stopLoss = +this.stopLossForm.get('amount')?.value;
+            this.positionService.update(this.position)
+                .subscribe(position => {
+                    if (position) {
+                        this.position = position;
+                        this.loadData(this.position.id);
+                    }
+                });
+        }
+        this.modalRef?.close();
+    }
+
+    persistTargetPrice(): void {
+        if (this.position) {
+            this.position.targetPrice = +this.targetPriceForm.get('amount')?.value;
+            this.position.targetType = this.targetPriceForm.get('type')?.value;
             this.positionService.update(this.position)
                 .subscribe(position => {
                     if (position) {
@@ -473,6 +500,7 @@ export class PositionDetailComponent implements OnInit {
         this.daysTillNextPayment = undefined;
         this.daysTillNextReport = undefined;
         this.stopLossBroken = false;
+        this.hasReachedTargetPrice = false;
         this.positionService.getPosition(positionId)
             .subscribe(position => {
                 if (position) {
@@ -549,6 +577,9 @@ export class PositionDetailComponent implements OnInit {
                             });
                         if (this.position.stopLossBroken()) {
                             this.stopLossBroken = true;
+                        }
+                        if (this.position.hasReachedTargetPrice()) {
+                            this.hasReachedTargetPrice = true;
                         }
                     }
 

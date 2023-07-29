@@ -114,6 +114,15 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-5">Target-Price:</div>
+                        <div class="col-7" (click)="openTargetPriceModal(targetPriceModal)">
+                            <span *ngIf="position.targetPrice" class="float-end modal-opener">{{ position.targetPrice|number: '1.0-3' }} ({{ position.targetType }})</span>
+                            <span *ngIf="!position.targetPrice" class="float-end modal-opener">
+                                <button type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Set stop-loss"><fa-icon [icon]="addIcon"></fa-icon></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-9">Erster Kurs:</div>
                         <div class="col-3"><span class="float-end">{{ position.balance.firstRate }}</span></div>
                     </div>
@@ -482,6 +491,34 @@
     </div>
 </ng-template>
 
+<ng-template #targetPriceModal>
+    <div *ngIf="position && position.share" class="modal-body">
+        <p>Set your price-target for your position &laquo;{{ position.share.name }}&raquo;:</p>
+        <form [formGroup]="targetPriceForm">
+            <div class="mb-3">
+                <label for="targetprice-amount-input" class="form-label">Kursziel</label>
+                <input formControlName="amount" id="targetprice-amount-input" class="form-control" type="text" name="amount" value="">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Type</label>
+                <select formControlName="type" id="targetprice-type-input" name="type" class="form-select form-select mb-3">
+                    <option selected></option>
+                    <option [value]="'buy'">Nachkaufen</option>
+                    <option [value]="'sell'">Verkaufen</option>
+                </select>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="btn btn-primary float-end" (click)="persistTargetPrice()">{{ tranService.trans('GLOB_SAVE') }}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
 <ng-template #removeManualDrawdownConfirmModal>
     <div class="modal-body text-center">
         <p>Wollen Sie diesen manuellen Drawdown wirklich löschen?</p>
@@ -563,7 +600,7 @@
                 <input style="max-width: 100%;" formControlName="log" class="form-control" type="text" name="log" value="">
             </div>
             <div class="mb-3">
-                <label class="form-label">Emoticon 2</label>
+                <label class="form-label">Emoticon</label>
                 <select formControlName="emoticon" id="emoticon" name="emoticon" class="form-select form-select mb-3">
                     <option disabled selected></option>
                     <option [value]="'🙂'">🙂</option>

@@ -48,6 +48,7 @@
             <thead>
             <tr>
                 <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+                <th scope="col" class="d-none d-md-table-cell">Sector</th>
                 <th scope="col" class="d-none d-md-table-cell">Labels</th>
                 <th scope="col"><span class="float-end">{{ tranService.trans('LISTNGS_DAYS') }}</span></th>
                 <th scope="col"><span class="float-end" ngbTooltip="Total return per day">TRpd</span></th>
@@ -58,8 +59,9 @@
             <tbody>
             <ng-container *ngFor="let position of ultimateBalanceList" [style.visibility]="position.visible">
                 <ng-container *ngIf="position.share && position.visible">
-                    <tr [class.red20]="position.stopLossBroken()">
+                    <tr [class.red20]="position.stopLossBroken()" [class.green20]="position.hasReachedTargetPrice()">
                         <td>{{ position.share.name }}</td>
+                        <td class="d-none d-md-table-cell"><span *ngIf="position.sector">{{ position.sector.name }}</span></td>
                         <td class="d-none d-md-table-cell">
                             <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
                         </td>
@@ -268,7 +270,7 @@
             <table class="table table-striped table-sm">
                 <tbody>
                 <ng-container *ngFor="let position of performanceList">
-                    <tr>
+                    <tr [class.red20]="position.stopLossBroken()" [class.green20]="position.hasReachedTargetPrice()">
                         <td><a [routerLink]="['/position-detail/' + position.id]">{{ position.share?.name }}</a></td>
                         <td><span *ngIf="position.sector">{{ position.sector.name }}</span></td>
                         <td><span *ngIf="position.tempPerformanceValue !== undefined" class="float-end" [class.red-text]="position.tempPerformanceValue < 0" [class.green-text]="position.tempPerformanceValue > 0">{{ position.tempPerformanceValue|number: '1.0-1' }}%</span></td>

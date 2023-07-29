@@ -69,6 +69,8 @@ export class Position {
         public balance?: Balance,
         public shareheadId?: number,
         public stopLoss?: number,
+        public targetPrice?: number,
+        public targetType?: string,
         public manualDrawdown?: number,
         public manualDividendDrop?: number,
         public labels?: Label[],
@@ -126,6 +128,26 @@ export class Position {
                 stopLoss = stopLoss / 100;
             }
             if (this.balance.lastRate?.rate < stopLoss) {
+                result = true;
+            }
+        }
+
+        return result;
+    }
+
+
+    hasReachedTargetPrice(): boolean
+    {
+        let result = false;
+        if (this.targetPrice && this.targetPrice > 0 && this.balance && this.balance.lastRate?.rate) {
+            let targetPrice = this.targetPrice;
+            if (this.currency?.name === 'GBP') {
+                targetPrice = targetPrice / 100;
+            }
+            if (
+                (this.targetType === 'sell' && this.balance.lastRate?.rate > targetPrice) ||
+                (this.targetType === 'buy' && this.balance.lastRate?.rate < targetPrice)
+            ) {
                 result = true;
             }
         }

@@ -45,8 +45,8 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         if (this.myCanvas && this.rates) {
             this.context = this.myCanvas.nativeElement.getContext('2d');
-            const topRate = this.calculateTopEnd(this.rates);
-            const lowRate = this.calculateLowEnd(this.rates);
+            const topRate = this.calculateTopEnd(this.rates, this.position?.targetPrice);
+            const lowRate = this.calculateLowEnd(this.rates, this.position?.stopLoss);
             // console.log('topRate: ' + topRate);
             // console.log('lowRate: ' + lowRate);
             const verticalSteps = this.calculateVerticalSteps(topRate, lowRate);
@@ -223,6 +223,18 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                 this.context.stroke();
             }
 
+            // target-price
+            if (this.position?.balance && this.position.targetPrice) {
+                this.context.beginPath();
+                this.context.strokeStyle = this.greenColor;
+                this.context.setLineDash([5, 5]);
+                let targetPriceForChart = this.position.targetPrice;
+                const stopLossValue = ((topEnd - targetPriceForChart) * verticalFactor) + this.offsetTop;
+                this.context.moveTo(this.offsetLeft, stopLossValue);
+                this.context.lineTo(this.canvasWidth, stopLossValue);
+                this.context.stroke();
+            }
+
             // rates
             this.context.beginPath();
             this.context.strokeStyle = this.strokeColor;
@@ -283,8 +295,11 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
         return verticalSteps;
     }
 
-    private calculateTopEnd(rates: StockRate[]) {
+    private calculateTopEnd(rates: StockRate[], targetPrice: number|undefined) {
         let topRate = 0;
+        if (targetPrice && targetPrice > 0) {
+            topRate = targetPrice;
+        }
         rates.forEach(entry => {
             if (entry.high > topRate) {
                 topRate = entry.high;
@@ -295,8 +310,11 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
         return topRate;
     }
 
-    private calculateLowEnd(rates: StockRate[]) {
+    private calculateLowEnd(rates: StockRate[], stopLoss: number|undefined) {
         let lowRate = 10000000000;
+        if (stopLoss && stopLoss > 0) {
+            lowRate = stopLoss;
+        }
         rates.forEach(entry => {
             if (entry.low < lowRate) {
                 lowRate = entry.low;

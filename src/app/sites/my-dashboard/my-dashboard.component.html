@@ -95,7 +95,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let position of bankAccount.getActiveNonCashPositions()" [class.red20]="position.stopLossBroken()">
+                        <tr *ngFor="let position of bankAccount.getActiveNonCashPositions()" [class.red20]="position.stopLossBroken()" [class.green20]="position.hasReachedTargetPrice()">
                             <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
                             <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>
                             <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
