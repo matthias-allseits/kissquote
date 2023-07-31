@@ -11,6 +11,9 @@ import {Sector} from "../../models/sector";
 import {SectorCreator} from "../../creators/sector-creator";
 import {LabelService} from "../../services/label.service";
 import {SectorService} from "../../services/sector.service";
+import {Strategy} from "../../models/strategy";
+import {StrategyService} from "../../services/strategy.service";
+import {StrategyCreator} from "../../creators/strategy-creator";
 
 
 @Component({
@@ -29,9 +32,11 @@ export class DashboardSettingsComponent implements OnInit {
 
     public currencies?: Currency[];
     public sectors?: Sector[];
+    public strategies?: Strategy[];
     public selectedCurrency?: Currency;
     public selectedLabel?: Label;
     public selectedSector?: Sector;
+    public selectedStrategy?: Strategy;
     public color = 'ffffff';
 
     modalRef?: NgbModalRef;
@@ -49,11 +54,16 @@ export class DashboardSettingsComponent implements OnInit {
         name: new UntypedFormControl('', Validators.required),
     });
 
+    strategyForm = new FormGroup({
+        name: new UntypedFormControl('', Validators.required),
+    });
+
     constructor(
         public tranService: TranslationService,
         private currencyService: CurrencyService,
         private labelService: LabelService,
         private sectorService: SectorService,
+        private strategyService: StrategyService,
         private modalService: NgbModal,
     ) {
     }
@@ -67,6 +77,10 @@ export class DashboardSettingsComponent implements OnInit {
         this.sectorService.getAllSectors()
             .subscribe(sectors => {
                 this.sectors = sectors;
+            });
+        this.strategyService.getAllStrategies()
+            .subscribe(strategies => {
+                this.strategies = strategies;
             });
     }
 
@@ -197,6 +211,66 @@ export class DashboardSettingsComponent implements OnInit {
             this.sectors?.forEach( (sectr, index) => {
                 if (sectr.id === sector.id) {
                     this.sectors?.splice(index, 1);
+                }
+            });
+        });
+    }
+
+    openStrategyConfirmModal(template: TemplateRef<any>, entry: Strategy|undefined) {
+        this.selectedStrategy = entry;
+        this.modalRef = this.modalService.open(template);
+    }
+
+    openStrategyFormModal(template: TemplateRef<any>, entry: Strategy|undefined) {
+        if (entry) {
+            this.strategyForm.get('name')?.setValue(entry.name);
+            this.selectedStrategy = entry;
+        } else {
+            this.selectedStrategy = StrategyCreator.createNewStrategy();
+            this.strategyForm.get('name')?.setValue('');
+        }
+        this.modalRef = this.modalService.open(template);
+    }
+
+    persistStrategy(): void {
+        if (this.selectedStrategy) {
+            this.selectedStrategy.name = this.strategyForm.get('name')?.value;
+            if (this.selectedStrategy.id > 0) {
+                this.strategyService.update(this.selectedStrategy)
+                    .subscribe(strategy => {
+                        this.strategies?.forEach( (strtegy, index) => {
+                            if (strtegy.id === this.selectedStrategy?.id) {
+                                if (this.strategies) {
+                                    this.strategies[index] = strtegy;
+                                }
+                            }
+                        });
+                    });
+            } else {
+                this.strategyService.create(this.selectedStrategy)
+                    .subscribe(strategy => {
+                        if (this.strategies && strategy) {
+                            this.strategies.push(strategy);
+                        }
+                    });
+            }
+            this.selectedStrategy = undefined;
+        }
+        this.modalRef?.close();
+    }
+
+    confirmDeleteStrategy(): void {
+        if (this.selectedStrategy) {
+            this.deleteStrategy(this.selectedStrategy);
+        }
+        this.modalRef?.close();
+    }
+
+    deleteStrategy(strategy: Strategy): void {
+        this.strategyService.delete(strategy.id).subscribe(() => {
+            this.strategies?.forEach( (strtegy, index) => {
+                if (strtegy.id === strategy.id) {
+                    this.strategies?.splice(index, 1);
                 }
             });
         });
