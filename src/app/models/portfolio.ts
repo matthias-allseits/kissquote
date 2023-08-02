@@ -774,9 +774,9 @@ export class Portfolio {
 
     private strategiesSummary(): StrategySummary[] {
         const colors = [
-            'rgb(75, 192, 192, 1)',
-            'rgb(255, 215, 0, 1)',
-            'rgb(220, 20, 60, 1)',
+            'rgb(0,253,0)',
+            'rgb(220,0,0)',
+            'rgb(255,255,0)',
             'rgb(255, 99, 132, 1)',
             'rgb(54, 162, 235, 1)',
             'rgb(255, 206, 86, 1)',
