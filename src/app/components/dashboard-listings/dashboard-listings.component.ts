@@ -134,7 +134,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         const tabIndex = this.availablePerformanceTabs.indexOf(selectedTab);
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
             position.tempPerformanceValue = position.balance?.performance[tabIndex];
-            if (this.performanceList && position.tempPerformanceValue) {
+            if (this.performanceList && position.tempPerformanceValue !== undefined) {
                 this.performanceList.push(position);
             }
         });
