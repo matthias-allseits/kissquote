@@ -65,6 +65,7 @@ export class Position {
         public shareFromTotal: number,
         public bankAccount?: BankAccount,
         public sector?: Sector,
+        public strategy?: Sector,
         public currency?: Currency,
         public balance?: Balance,
         public shareheadId?: number,

@@ -104,6 +104,15 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-5">Strategy:</div>
+                        <div class="col-7" (click)="openStrategyModal(strategyModal)">
+                            <span *ngIf="position.strategy" class="float-end modal-opener">{{ position.strategy.name }}</span>
+                            <span *ngIf="!position.strategy" class="float-end modal-opener">
+                                <button type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Set strategy"><fa-icon [icon]="addIcon"></fa-icon></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-4">Stop-Loss:</div>
                         <div class="col-4"><span *ngIf="position.stopLoss" ngbTooltip="Stop-Loss Wastage">({{ position.stopLossWastage()|number: '1.0' }})</span></div>
                         <div class="col-4" (click)="openStopLossModal(stopLossModal)">
@@ -583,6 +592,18 @@
             <ul class="select-list">
                 <li *ngFor="let sector of allSectors" [class.selected-item]="position.sector && position.sector.id === sector.id"><span (click)="setSector(sector)" class="dropdown-item">{{ sector.name }}</span></li>
                 <li class="dropdown-item" (click)="setSector(undefined)">Clear</li>
+            </ul>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #strategyModal>
+    <div *ngIf="position && position.share" class="modal-body">
+        <p>Change the strategy for your position &laquo;{{ position.share.name }}&raquo;</p>
+        <div>
+            <ul class="select-list">
+                <li *ngFor="let strategy of allStrategies" [class.selected-item]="position.strategy && position.strategy.id === strategy.id"><span (click)="setStrategy(strategy)" class="dropdown-item">{{ strategy.name }}</span></li>
+                <li class="dropdown-item" (click)="setStrategy(undefined)">Clear</li>
             </ul>
         </div>
     </div>

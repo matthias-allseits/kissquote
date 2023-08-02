@@ -30,6 +30,8 @@ import {PositionLog} from "../../models/position-log";
 import {PositionLogService} from "../../services/position-log.service";
 import {PositionLogCreator} from "../../creators/position-log-creator";
 import {formatDate} from "@angular/common";
+import {Strategy} from "../../models/strategy";
+import {StrategyService} from "../../services/strategy.service";
 
 
 @Component({
@@ -66,6 +68,7 @@ export class PositionDetailComponent implements OnInit {
     public showLabelsDropdown = false;
     public allLabels?: Label[];
     public allSectors?: Sector[];
+    public allStrategies?: Strategy[];
     public logBook?: any[];
 
     public selectedLogEntry?: PositionLog;
@@ -108,6 +111,7 @@ export class PositionDetailComponent implements OnInit {
         private positionService: PositionService,
         private currencyService: CurrencyService,
         private sectorService: SectorService,
+        private strategyService: StrategyService,
         private positionLogService: PositionLogService,
         private transactionService: TransactionService,
         private shareService: ShareService,
@@ -218,6 +222,16 @@ export class PositionDetailComponent implements OnInit {
             this.sectorService.getAllSectors()
                 .subscribe(sectors => {
                     this.allSectors = sectors;
+                });
+        }
+        this.modalRef = this.modalService.open(template);
+    }
+
+    openStrategyModal(template: TemplateRef<any>) {
+        if (this.allStrategies === undefined) {
+            this.strategyService.getAllStrategies()
+                .subscribe(strategies => {
+                    this.allStrategies = strategies;
                 });
         }
         this.modalRef = this.modalService.open(template);
@@ -434,6 +448,21 @@ export class PositionDetailComponent implements OnInit {
     setSector(sector: Sector|undefined): void {
         if (this.position) {
             this.position.sector = sector;
+            this.positionService.update(this.position)
+                .subscribe(posi => {
+                    if (posi) {
+                        this.position = posi;
+                        this.loadData(this.position.id);
+                    }
+                });
+        }
+        this.cancelModal();
+    }
+
+
+    setStrategy(strategy: Strategy|undefined): void {
+        if (this.position) {
+            this.position.strategy = strategy;
             this.positionService.update(this.position)
                 .subscribe(posi => {
                     if (posi) {

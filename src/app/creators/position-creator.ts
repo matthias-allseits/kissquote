@@ -7,6 +7,7 @@ import {BankAccountCreator} from "./bank-account-creator";
 import {LabelCreator} from "./label-creator";
 import {SectorCreator} from "./sector-creator";
 import {PositionLogCreator} from "./position-log-creator";
+import {StrategyCreator} from "./strategy-creator";
 
 
 export class PositionCreator {
@@ -46,6 +47,7 @@ export class PositionCreator {
                 0,
                 apiArray.bankAccount ? BankAccountCreator.oneFromApiArray(apiArray.bankAccount) : undefined,
                 apiArray.sector ? SectorCreator.oneFromApiArray(apiArray.sector) : undefined,
+                apiArray.strategy ? StrategyCreator.oneFromApiArray(apiArray.strategy) : undefined,
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.balance ? BalanceCreator.oneFromApiArray(apiArray.balance) : undefined,
                 apiArray.shareheadId,
