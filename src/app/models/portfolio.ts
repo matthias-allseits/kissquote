@@ -7,6 +7,7 @@ import {WatchlistEntry} from "./watchlistEntry";
 import {DateHelper} from "../core/datehelper";
 import {Sector} from "./sector";
 import {Forexhelper} from "../core/forexhelper";
+import {Strategy} from "./strategy";
 
 
 export interface DividendTotals {
@@ -29,6 +30,15 @@ export interface CrisisDividendSummary {
 
 export interface DiversitySummary {
     sector: Sector;
+    investment: number;
+    value: number;
+    dividends: number;
+    percentage: number;
+    color: string;
+}
+
+export interface StrategySummary {
+    strategy: Strategy;
     investment: number;
     value: number;
     dividends: number;
@@ -474,6 +484,111 @@ export class Portfolio {
     }
 
 
+    strategiesByInvestmentChartData(): ChartData {
+        const summaries = this.strategiesSummary();
+
+        let total = 0;
+        summaries.forEach(summary => {
+            total += summary.investment;
+        });
+        summaries.forEach(summary => {
+            summary.percentage = +(100 / total * summary.investment).toFixed(1);
+        });
+
+        summaries.sort((a,b) => (a.investment < b.investment) ? 1 : ((b.investment < a.investment) ? -1 : 0))
+        const data: number[] = [];
+        const colors: string[] = [];
+        const labels: string[] = [];
+        summaries.forEach(summary => {
+            data.push(summary.investment);
+            colors.push(summary.color);
+            labels.push(`${summary.strategy.name} ${summary.percentage}%`);
+        });
+        const chartData: ChartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Sector',
+                    data: data,
+                    backgroundColor: colors,
+                }
+            ]
+        };
+
+        return chartData;
+    }
+
+
+    strategiesByValueChartData(): ChartData {
+        const summaries = this.strategiesSummary();
+
+        let total = 0;
+        summaries.forEach(summary => {
+            total += summary.value;
+        });
+        summaries.forEach(summary => {
+            summary.percentage = +(100 / total * summary.value).toFixed(1);
+        });
+
+        summaries.sort((a,b) => (a.value < b.value) ? 1 : ((b.value < a.value) ? -1 : 0))
+        const data: number[] = [];
+        const colors: string[] = [];
+        const labels: string[] = [];
+        summaries.forEach(summary => {
+            data.push(summary.value);
+            colors.push(summary.color);
+            labels.push(`${summary.strategy.name} ${summary.percentage}%`);
+        });
+        const chartData: ChartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Sector',
+                    data: data,
+                    backgroundColor: colors,
+                }
+            ]
+        };
+
+        return chartData;
+    }
+
+
+    strategiesByDividendChartData(): ChartData {
+        const summaries = this.strategiesSummary();
+
+        let total = 0;
+        summaries.forEach(summary => {
+            total += summary.dividends;
+        });
+        summaries.forEach(summary => {
+            summary.percentage = +(100 / total * summary.dividends).toFixed(1);
+        });
+
+        summaries.sort((a,b) => (a.dividends < b.dividends) ? 1 : ((b.dividends < a.dividends) ? -1 : 0))
+        const data: number[] = [];
+        const colors: string[] = [];
+        const labels: string[] = [];
+        summaries.forEach(summary => {
+            data.push(+summary.dividends.toFixed(0));
+            colors.push(summary.color);
+            labels.push(`${summary.strategy.name} ${summary.percentage}%`);
+        });
+        const chartData: ChartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Sector',
+                    data: data,
+                    backgroundColor: colors,
+                }
+            ]
+        };
+
+        return chartData;
+    }
+
+
     incomeChartDataImproved(): ChartData {
         const chartData: ChartData = {
             labels: [],
@@ -657,10 +772,83 @@ export class Portfolio {
     }
 
 
+    private strategiesSummary(): StrategySummary[] {
+        const colors = [
+            'rgb(75, 192, 192, 1)',
+            'rgb(255, 215, 0, 1)',
+            'rgb(220, 20, 60, 1)',
+            'rgb(255, 99, 132, 1)',
+            'rgb(54, 162, 235, 1)',
+            'rgb(255, 206, 86, 1)',
+            'rgb(153, 102, 255, 1)',
+            'rgb(255, 159, 64, 1)',
+            'rgb(99, 255, 234, 1)',
+            'rgb(200, 255, 99, 1)',
+            'rgb(210, 105, 30, 1)',
+            'rgb(255, 99, 71, 1)',
+            'rgb(139, 0, 139, 1)',
+            'rgb(106, 90, 205, 1)',
+            'rgb(160, 82, 45, 1)',
+            'rgb(218, 165, 32, 1)',
+            'rgb(152, 251, 152, 1)',
+            'rgb(143, 188, 143, 1)'
+        ];
+
+        const summaries: StrategySummary[] = [];
+        const positions = this.getActiveNonCashPositions();
+        let index = 0;
+        positions.forEach(position => {
+            if (position.strategy && position.balance && position.balance.lastRate) {
+                const summary = this.getStrategyByStrategy(summaries, position.strategy);
+                let dividend = +position.shareheadDividendPayment();
+                if (position.shareheadShare?.currency) {
+                    const usersCurrency = Forexhelper.getUsersCurrencyByName(position.shareheadShare?.currency?.name);
+                    if (usersCurrency) {
+                        dividend = usersCurrency.rate * dividend;
+                        if (position.currency && position.currency?.name !== 'CHF') {
+                            dividend = dividend / position.currency?.rate;
+                        }
+                    }
+                }
+                if (summary) {
+                    summary.investment += position.balance?.investment;
+                    summary.value += +position.actualValue();
+                    summary.dividends += dividend;
+                } else {
+                    const summary = {
+                        strategy: position.strategy,
+                        investment: position.balance?.investment,
+                        value: +position.actualValue(),
+                        dividends: dividend,
+                        percentage: 0,
+                        color: colors[index]
+                    };
+                    index++;
+                    summaries.push(summary);
+                }
+            }
+        });
+
+        return summaries;
+    }
+
+
     private getSummaryBySector(summaries: DiversitySummary[], sector: Sector): DiversitySummary|null {
         let result = null;
         summaries.forEach(summary => {
             if (summary.sector.id === sector.id) {
+                result = summary;
+            }
+        });
+
+        return result;
+    }
+
+
+    private getStrategyByStrategy(summaries: StrategySummary[], strategy: Strategy): StrategySummary|null {
+        let result = null;
+        summaries.forEach(summary => {
+            if (summary.strategy.id === strategy.id) {
                 result = summary;
             }
         });

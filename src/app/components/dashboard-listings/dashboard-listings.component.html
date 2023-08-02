@@ -22,10 +22,13 @@
             <a class="nav-link" [class.active]="listingTab === 'nextReports'" (click)="changeListingTab('nextReports')" aria-current="page">Next Reports</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" [class.active]="listingTab === 'performance'" (click)="changeListingTab('performance')" aria-current="page">Performance</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" [class.active]="listingTab === 'diversification'" (click)="changeListingTab('diversification')" aria-current="page">Diversification</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.active]="listingTab === 'performance'" (click)="changeListingTab('performance')" aria-current="page">Performance</a>
+            <a class="nav-link" [class.active]="listingTab === 'strategies'" (click)="changeListingTab('strategies')" aria-current="page">Strategies</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" [class.active]="listingTab === 'risks'" (click)="changeListingTab('risks')" aria-current="page">Risks</a>
@@ -215,26 +218,6 @@
             </tbody>
         </table>
     </div>
-    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'diversification'">
-        <div class="info-box">
-            <h5>by investment</h5>
-            <ng-container *ngIf="diversityByInvestmentChartData">
-                <app-pie-chart [data]="diversityByInvestmentChartData" [height]="400"></app-pie-chart>
-            </ng-container>
-        </div>
-        <div class="info-box">
-            <h5>by value</h5>
-            <ng-container *ngIf="diversityByValueChartData">
-                <app-pie-chart [data]="diversityByValueChartData" [height]="400"></app-pie-chart>
-            </ng-container>
-        </div>
-        <div class="info-box">
-            <h5>by dividend</h5>
-            <ng-container *ngIf="diversityByDividendChartData">
-                <app-pie-chart [data]="diversityByDividendChartData" [height]="400"></app-pie-chart>
-            </ng-container>
-        </div>
-    </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'performance'">
         <h4>Performance</h4>
         <ul class="nav nav-tabs">
@@ -278,6 +261,46 @@
                 </ng-container>
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'diversification'">
+        <div class="info-box">
+            <h5>by investment</h5>
+            <ng-container *ngIf="diversityByInvestmentChartData">
+                <app-pie-chart [data]="diversityByInvestmentChartData" [height]="400"></app-pie-chart>
+            </ng-container>
+        </div>
+        <div class="info-box">
+            <h5>by value</h5>
+            <ng-container *ngIf="diversityByValueChartData">
+                <app-pie-chart [data]="diversityByValueChartData" [height]="400"></app-pie-chart>
+            </ng-container>
+        </div>
+        <div class="info-box">
+            <h5>by dividend</h5>
+            <ng-container *ngIf="diversityByDividendChartData">
+                <app-pie-chart [data]="diversityByDividendChartData" [height]="400"></app-pie-chart>
+            </ng-container>
+        </div>
+    </div>
+    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'strategies'">
+        <div class="info-box">
+            <h5>by investment</h5>
+            <ng-container *ngIf="strategiesByInvestmentChartData">
+                <app-pie-chart [data]="strategiesByInvestmentChartData" [height]="400"></app-pie-chart>
+            </ng-container>
+        </div>
+        <div class="info-box">
+            <h5>by value</h5>
+            <ng-container *ngIf="strategiesByValueChartData">
+                <app-pie-chart [data]="strategiesByValueChartData" [height]="400"></app-pie-chart>
+            </ng-container>
+        </div>
+        <div class="info-box">
+            <h5>by dividend</h5>
+            <ng-container *ngIf="strategiesByDividendChartData">
+                <app-pie-chart [data]="strategiesByDividendChartData" [height]="400"></app-pie-chart>
+            </ng-container>
         </div>
     </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'risks'">

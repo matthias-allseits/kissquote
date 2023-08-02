@@ -18,6 +18,7 @@ import {Label} from "./label";
 import {Sector} from "./sector";
 import {PositionLog} from "./position-log";
 import {SwissquoteHelper} from "../core/swissquote-helper";
+import {Strategy} from "./strategy";
 
 
 export interface DividendTotal {
@@ -65,7 +66,7 @@ export class Position {
         public shareFromTotal: number,
         public bankAccount?: BankAccount,
         public sector?: Sector,
-        public strategy?: Sector,
+        public strategy?: Strategy,
         public currency?: Currency,
         public balance?: Balance,
         public shareheadId?: number,

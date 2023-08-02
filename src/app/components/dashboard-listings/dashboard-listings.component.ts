@@ -24,7 +24,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
 
     eyeIcon = faEye;
 
-    private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'newestRatings', 'nextReports', 'diversification', 'performance', 'risks'];
+    private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'newestRatings', 'nextReports', 'diversification', 'performance', 'risks', 'strategies'];
     public listingTab = 'ultimate';
     private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year', '3years', '5years', '10years'];
     public performanceListTab = '1day';
@@ -33,6 +33,9 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public diversityByInvestmentChartData?: ChartData;
     public diversityByValueChartData?: ChartData;
     public diversityByDividendChartData?: ChartData;
+    public strategiesByInvestmentChartData?: ChartData;
+    public strategiesByValueChartData?: ChartData;
+    public strategiesByDividendChartData?: ChartData;
     public lastMinuteList?: ShareheadShare[];
     public newestRatingsList?: AnalystRating[];
     public crisisDividendList?: CrisisDividendSummary[];
@@ -69,6 +72,9 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
             this.diversityByInvestmentChartData = this.portfolio.diversityByInvestmentChartData();
             this.diversityByValueChartData = this.portfolio.diversityByValueChartData();
             this.diversityByDividendChartData = this.portfolio.diversityByDividendChartData();
+            this.strategiesByInvestmentChartData = this.portfolio.strategiesByInvestmentChartData();
+            this.strategiesByValueChartData = this.portfolio.strategiesByValueChartData();
+            this.strategiesByDividendChartData = this.portfolio.strategiesByDividendChartData();
             this.shareheadService.getNewestRatingsList(this.portfolio)
                 .subscribe(shares => {
                     this.newestRatingsList = shares;
