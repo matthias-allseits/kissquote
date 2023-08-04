@@ -55,7 +55,7 @@ export class PositionDetailComponent implements OnInit {
     public selectedTransaction?: Transaction;
     public diviProjectionYears: DividendProjection[] = [];
     public positionTab = 'balance';
-    public chartTab = 'bar';
+    public chartTab = 'weeks';
     public shareheadDividendPayment?: string;
     public shareheadDividendPaymentCorrected?: string;
     public shareheadCurrencyCorrectedDividendPayment?: string;
@@ -135,8 +135,8 @@ export class PositionDetailComponent implements OnInit {
         if (storedChartTab) {
             this.chartTab = storedChartTab;
         } else {
-            this.chartTab = 'bar';
-            localStorage.setItem('positionChartTab', 'bar');
+            this.chartTab = 'weeks';
+            localStorage.setItem('positionChartTab', 'weeks');
         }
         const labels = localStorage.getItem('labels');
         if (labels !== null) {
@@ -616,10 +616,10 @@ export class PositionDetailComponent implements OnInit {
                         .subscribe((rates => {
                             this.addLatestRateToLineChart(rates);
                             if (screen.width < 400) {
-                                this.historicRates = rates.slice(-200);
+                                this.historicRates = rates.slice(-50);
                                 this.historicStockRates = rates.slice(-250);
                             } else {
-                                this.historicRates = rates.slice(-440);
+                                this.historicRates = rates.slice(-110);
                                 this.historicStockRates = rates.slice(-555);
                             }
                         }));

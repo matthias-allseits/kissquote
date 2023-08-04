@@ -42,20 +42,21 @@
                 <div class="share-chart-wrapper">
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
-                            <a class="nav-link" [class.active]="chartTab === 'line'" (click)="changeChartTab('line')">Line</a>
+                            <a class="nav-link" [class.active]="chartTab === 'days'" (click)="changeChartTab('days')">Days</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" [class.active]="chartTab === 'bar'" (click)="changeChartTab('bar')">Bar</a>
+                            <a class="nav-link" [class.active]="chartTab === 'weeks'" (click)="changeChartTab('weeks')">Weeks</a>
                         </li>
                     </ul>
-                    <div class="mb-3 bg-body" [class.visually-hidden]="chartTab !== 'line'">
+                    <div class="mb-3 bg-body" [class.visually-hidden]="chartTab !== 'days'">
                         <div class="info-box info-box-doubled" style="margin-right: 0; margin-bottom: 0;">
-                            <app-share-chart [rates]="historicRates" [position]="position"></app-share-chart>
+<!--                            <app-share-chart [rates]="historicRates" [position]="position"></app-share-chart>-->
+                            <app-share-bar-chart [rates]="historicRates" [position]="position" [barSpan]="1"></app-share-bar-chart>
                         </div>
                     </div>
-                    <div class="mb-3 bg-body" [class.visually-hidden]="chartTab !== 'bar'">
+                    <div class="mb-3 bg-body" [class.visually-hidden]="chartTab !== 'weeks'">
                         <div class="info-box info-box-doubled" style="margin-right: 0; margin-bottom: 0;">
-                            <app-share-bar-chart [rates]="historicStockRates" [position]="position"></app-share-bar-chart>
+                            <app-share-bar-chart [rates]="historicStockRates" [position]="position" [barSpan]="5"></app-share-bar-chart>
                         </div>
                     </div>
                 </div>

@@ -15,6 +15,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
 
     @Input() rates?: StockRate[];
     @Input() position?: Position;
+    @Input() barSpan = 5;
 
     public canvasWidth = 700;
     public canvasHeight = 320;
@@ -31,7 +32,6 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
     private monthColor = '#a4a4a4';
     private textColor = '#4e4e4e';
     private stepWidth = 6;
-    private barSpan = 5;
 
     constructor() {
     }
@@ -247,7 +247,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
             chunkedRates.forEach((rates, i) => {
                 const firstRate = rates[0];
                 const lastRate = rates[rates.length - 1];
-                const yValue = ((topEnd - firstRate.rate) * verticalFactor) + this.offsetTop;
+                const yValue = ((topEnd - firstRate.open) * verticalFactor) + this.offsetTop;
                 this.context.moveTo(xValue, yValue);
                 this.context.lineTo(xValue + 3, yValue);
                 this.context.stroke();
