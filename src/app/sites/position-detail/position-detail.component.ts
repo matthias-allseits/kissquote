@@ -620,11 +620,11 @@ export class PositionDetailComponent implements OnInit {
                             if (screen.width < 400) {
                                 this.historicRatesDays = rates.slice(-50);
                                 this.historicRatesWeeks = rates.slice(-250);
-                                this.historicRatesMonths = rates.slice(-900);
+                                this.historicRatesMonths = rates.slice(-620);
                             } else {
                                 this.historicRatesDays = rates.slice(-110);
                                 this.historicRatesWeeks = rates.slice(-555);
-                                this.historicRatesMonths = rates.slice(-2000);
+                                this.historicRatesMonths = rates.slice(-1450);
                             }
                         }));
                 }
