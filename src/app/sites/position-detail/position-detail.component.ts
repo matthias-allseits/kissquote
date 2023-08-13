@@ -73,8 +73,9 @@ export class PositionDetailComponent implements OnInit {
 
     public selectedLogEntry?: PositionLog;
     public chartData?: ChartData;
-    public historicRates: StockRate[] = [];
-    public historicStockRates: StockRate[] = [];
+    public historicRatesDays: StockRate[] = [];
+    public historicRatesWeeks: StockRate[] = [];
+    public historicRatesMonths: StockRate[] = [];
     public daysTillNextEx?: number;
     public daysTillNextPayment?: number;
     public daysTillNextReport?: number;
@@ -521,8 +522,9 @@ export class PositionDetailComponent implements OnInit {
 
     private loadData(positionId: number): void {
         this.diviProjectionYears = [];
-        this.historicRates = [];
-        this.historicStockRates = [];
+        this.historicRatesDays = [];
+        this.historicRatesWeeks = [];
+        this.historicRatesMonths = [];
         this.maxDrawdownSummary = undefined;
         this.dividendDropSummary = undefined;
         this.daysTillNextEx = undefined;
@@ -616,11 +618,13 @@ export class PositionDetailComponent implements OnInit {
                         .subscribe((rates => {
                             this.addLatestRateToLineChart(rates);
                             if (screen.width < 400) {
-                                this.historicRates = rates.slice(-50);
-                                this.historicStockRates = rates.slice(-250);
+                                this.historicRatesDays = rates.slice(-50);
+                                this.historicRatesWeeks = rates.slice(-250);
+                                this.historicRatesMonths = rates.slice(-900);
                             } else {
-                                this.historicRates = rates.slice(-110);
-                                this.historicStockRates = rates.slice(-555);
+                                this.historicRatesDays = rates.slice(-110);
+                                this.historicRatesWeeks = rates.slice(-555);
+                                this.historicRatesMonths = rates.slice(-2000);
                             }
                         }));
                 }

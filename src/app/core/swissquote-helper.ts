@@ -3,18 +3,19 @@ import {StockRateCreator} from "../creators/stock-rate-creator";
 
 export class SwissquoteHelper {
 
+    // todo: activeFrom is obsolete!?
     public static parseRates(content: string, activeFrom: Date, daysSinceStart: number): StockRate[] {
         // 20220603 | 286.0 | 277.6 | 286.0 | 278.4   | 27525
         // Datum    | Hoch  | Tief  | Start | Schluss | Volumen
         const rates: StockRate[] = [];
         const lines = content.split("\n");
         let startDate = new Date(activeFrom);
-        let addedMonthsToShow = 12;
-        let daysSinceStartLimit = 400;
-        if (screen.width < 400) {
-            addedMonthsToShow = 4;
-            daysSinceStartLimit = 150
-        }
+        let addedMonthsToShow = 120;
+        let daysSinceStartLimit = 4000;
+        // if (screen.width < 400) {
+        //     addedMonthsToShow = 4;
+        //     daysSinceStartLimit = 150
+        // }
         if (daysSinceStart < daysSinceStartLimit) {
             startDate.setMonth(startDate.getMonth() - addedMonthsToShow);
         }

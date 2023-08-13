@@ -40,6 +40,9 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
         if (screen.width < 400) {
             this.canvasWidth = 335;
         }
+        if (this.barSpan > 10) {
+            this.stepWidth = 10;
+        }
     }
 
     ngAfterViewInit(): void {
@@ -106,26 +109,28 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
             for (let i = 0; i < this.rates.length; i += this.barSpan) {
                 chunkedRates.push(this.rates.slice(i, i + this.barSpan));
             }
-            chunkedRates.forEach((rates, i) => {
-                const lastRate = rates[rates.length - 1];
-                if (lastYear !== undefined && lastYear !== lastRate.date.getFullYear()) {
-                    this.context.strokeStyle = this.monthColor;
-                    this.context.beginPath();
-                    const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
-                    this.context.moveTo(xValue, this.offsetTop);
-                    this.context.lineTo(xValue, this.canvasHeight);
-                    this.context.stroke();
-                } else if (lastMonth !== undefined && lastMonth !== lastRate.date.getMonth()) {
-                    this.context.strokeStyle = this.helplineColor;
-                    this.context.beginPath();
-                    const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
-                    this.context.moveTo(xValue, this.offsetTop);
-                    this.context.lineTo(xValue, this.canvasHeight);
-                    this.context.stroke();
-                }
-                lastMonth = lastRate.date.getMonth();
-                lastYear = lastRate.date.getFullYear();
-            });
+                chunkedRates.forEach((rates, i) => {
+                    const lastRate = rates[rates.length - 1];
+                    if (lastYear !== undefined && lastYear !== lastRate.date.getFullYear()) {
+                        this.context.strokeStyle = this.monthColor;
+                        this.context.beginPath();
+                        const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
+                        this.context.moveTo(xValue, this.offsetTop);
+                        this.context.lineTo(xValue, this.canvasHeight);
+                        this.context.stroke();
+                    } else if (lastMonth !== undefined && lastMonth !== lastRate.date.getMonth()) {
+                        if (this.barSpan < 11) {
+                            this.context.strokeStyle = this.helplineColor;
+                            this.context.beginPath();
+                            const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
+                            this.context.moveTo(xValue, this.offsetTop);
+                            this.context.lineTo(xValue, this.canvasHeight);
+                            this.context.stroke();
+                        }
+                    }
+                    lastMonth = lastRate.date.getMonth();
+                    lastYear = lastRate.date.getFullYear();
+                });
 
             // transaction lines
             this.context.beginPath();
