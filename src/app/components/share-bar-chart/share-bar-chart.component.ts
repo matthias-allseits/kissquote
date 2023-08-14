@@ -91,7 +91,11 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                 this.context.font = '14px sans-serif';
                 this.context.textBaseline = 'middle';
                 this.context.direction = 'rtl';
-                this.context.fillText(yRate.toString(), 25, yValue);
+                if (yRate < 1000) {
+                    this.context.fillText(yRate.toString(), 25, yValue);
+                } else {
+                    this.context.fillText((yRate/1000).toFixed(0) + 'k', 25, yValue);
+                }
                 yRate -= verticalSteps;
                 if (verticalSteps < 1) {
                     yRate = Math.round(yRate * 10) / 10;
@@ -297,7 +301,15 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
         } else if (delta < 200) {
             verticalSteps = 20;
         } else if (delta < 300) {
-            verticalSteps = 25;
+            verticalSteps = 50;
+        } else if (delta < 1000) {
+            verticalSteps = 100;
+        } else if (delta < 2000) {
+            verticalSteps = 200;
+        } else if (delta < 3000) {
+            verticalSteps = 500;
+        } else {
+            verticalSteps = 5000;
         }
 
         return verticalSteps;

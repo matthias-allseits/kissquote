@@ -229,7 +229,15 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
         } else if (delta < 200) {
             verticalSteps = 20;
         } else if (delta < 300) {
-            verticalSteps = 25;
+            verticalSteps = 50;
+        } else if (delta < 1000) {
+            verticalSteps = 100;
+        } else if (delta < 2000) {
+            verticalSteps = 200;
+        } else if (delta < 3000) {
+            verticalSteps = 500;
+        } else {
+            verticalSteps = 5000;
         }
 
         return verticalSteps;
