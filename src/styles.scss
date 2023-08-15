@@ -161,11 +161,17 @@ a:hover, .nav-link:hover {
 }
 
 .green20 {
-  background-color: rgba(144, 238, 144, 0.2) !important;
+    background-color: rgba(144, 238, 144, 0.2) !important;
+    td {
+        box-shadow: none;
+    }
 }
 
 .red20 {
-  background-color: rgba(256, 0, 0, 0.2) !important;
+    background-color: rgba(256, 0, 0, 0.2) !important;
+    td {
+        box-shadow: none;
+    }
 }
 
 .yellow {
