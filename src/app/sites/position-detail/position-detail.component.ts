@@ -614,8 +614,9 @@ export class PositionDetailComponent implements OnInit {
                         }
                     }
 
+                    // this.positionService.getOfflineStockRates(this.position.share, this.position.currency)
                     this.position.getStockRates()
-                        .subscribe((rates => {
+                        .subscribe(rates => {
                             this.addLatestRateToLineChart(rates);
                             if (screen.width < 400) {
                                 this.historicRatesDays = rates.slice(-50);
@@ -626,7 +627,7 @@ export class PositionDetailComponent implements OnInit {
                                 this.historicRatesWeeks = rates.slice(-555);
                                 this.historicRatesMonths = rates.slice(-1450);
                             }
-                        }));
+                        });
                 }
             });
     }

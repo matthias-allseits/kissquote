@@ -6,6 +6,10 @@ import {Position} from '../models/position';
 import {PositionCreator} from "../creators/position-creator";
 import {DateHelper} from "../core/datehelper";
 import {ApiService} from "./api-service";
+import {StockRate} from "../models/stock-rate";
+import {SwissquoteHelper} from "../core/swissquote-helper";
+import {Share} from "../models/share";
+import {Currency} from "../models/currency";
 
 
 const httpOptions = {
@@ -24,6 +28,35 @@ export class PositionService extends ApiService {
         public override http: HttpClient,
     ) {
         super('/position', http);
+    }
+
+
+    public getOfflineStockRates(share: Share|null, currency: Currency|undefined): Observable<StockRate[]> {
+        if (share && currency) {
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Content-Type': 'text/plain',
+                })
+            };
+            return new Observable(obsData => {
+                let currencyName = currency.name;
+                    if (currencyName === 'GBP') {
+                        currencyName = 'GBX';
+                    }
+                const ratesUrl = `assets/${share.isin}_${share.marketplace?.urlKey}_${currencyName}`;
+                // const ratesUrl = `assets/banana`;
+                this.http.get(ratesUrl, { responseType: 'text' })
+                    .subscribe(data => {
+                        console.log(data);
+                            let rates: StockRate[] = [];
+                            rates = SwissquoteHelper.parseRates(data, new Date(), 1000);
+
+                            obsData.next(rates);
+                    })
+            });
+        }
+
+        return new Observable<StockRate[]>();
     }
 
 
