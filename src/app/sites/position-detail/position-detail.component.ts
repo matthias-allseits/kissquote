@@ -73,9 +73,7 @@ export class PositionDetailComponent implements OnInit {
 
     public selectedLogEntry?: PositionLog;
     public chartData?: ChartData;
-    public historicRatesDays: StockRate[] = [];
-    public historicRatesWeeks: StockRate[] = [];
-    public historicRatesMonths: StockRate[] = [];
+    public historicRates: StockRate[] = [];
     public daysTillNextEx?: number;
     public daysTillNextPayment?: number;
     public daysTillNextReport?: number;
@@ -522,9 +520,7 @@ export class PositionDetailComponent implements OnInit {
 
     private loadData(positionId: number): void {
         this.diviProjectionYears = [];
-        this.historicRatesDays = [];
-        this.historicRatesWeeks = [];
-        this.historicRatesMonths = [];
+        this.historicRates = [];
         this.maxDrawdownSummary = undefined;
         this.dividendDropSummary = undefined;
         this.daysTillNextEx = undefined;
@@ -618,15 +614,7 @@ export class PositionDetailComponent implements OnInit {
                     this.position.getStockRates()
                         .subscribe(rates => {
                             this.addLatestRateToLineChart(rates);
-                            if (screen.width < 400) {
-                                this.historicRatesDays = rates.slice(-50);
-                                this.historicRatesWeeks = rates.slice(-250);
-                                this.historicRatesMonths = rates.slice(-620);
-                            } else {
-                                this.historicRatesDays = rates.slice(-110);
-                                this.historicRatesWeeks = rates.slice(-555);
-                                this.historicRatesMonths = rates.slice(-1450);
-                            }
+                            this.historicRates = rates;
                         });
                 }
             });

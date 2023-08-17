@@ -49,7 +49,9 @@ export class PositionService extends ApiService {
                     .subscribe(data => {
                         console.log(data);
                             let rates: StockRate[] = [];
-                            rates = SwissquoteHelper.parseRates(data, new Date(), 1000);
+                            const date = new Date();
+                            date.setFullYear(2022);
+                            rates = SwissquoteHelper.parseRates(data, date, 1000);
 
                             obsData.next(rates);
                     })

@@ -3,6 +3,7 @@ import {Position} from "../../models/position";
 import {Transaction} from "../../models/transaction";
 import {DateHelper} from "../../core/datehelper";
 import {StockRate} from "../../models/stock-rate";
+import {isDefined} from "@ng-bootstrap/ng-bootstrap/util/util";
 
 @Component({
     selector: 'app-share-bar-chart',
@@ -15,7 +16,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
 
     @Input() rates?: StockRate[];
     @Input() position?: Position;
-    @Input() barSpan = 5;
+    @Input() type = 'daily';
 
     public canvasWidth = 700;
     public canvasHeight = 320;
@@ -40,16 +41,15 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
         if (screen.width < 400) {
             this.canvasWidth = 335;
         }
-        if (this.barSpan > 10) {
-            this.stepWidth = 10;
-        }
     }
 
     ngAfterViewInit(): void {
         if (this.myCanvas && this.rates) {
+            const chunkedRates = this.chunkRates();
+
             this.context = this.myCanvas.nativeElement.getContext('2d');
-            const topRate = this.calculateTopEnd(this.rates, this.position?.targetPrice);
-            const lowRate = this.calculateLowEnd(this.rates, this.position?.stopLoss);
+            const topRate = this.calculateTopEnd(chunkedRates, this.position?.targetPrice);
+            const lowRate = this.calculateLowEnd(chunkedRates, this.position?.stopLoss);
             // console.log('topRate: ' + topRate);
             // console.log('lowRate: ' + lowRate);
             const verticalSteps = this.calculateVerticalSteps(topRate, lowRate);
@@ -109,24 +109,20 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
             let lastMonth: number;
             let lastYear: number;
 
-            const chunkedRates = [];
-            for (let i = 0; i < this.rates.length; i += this.barSpan) {
-                chunkedRates.push(this.rates.slice(i, i + this.barSpan));
-            }
             chunkedRates.forEach((rates, i) => {
                 const lastRate = rates[rates.length - 1];
                 if (lastYear !== undefined && lastYear !== lastRate.date.getFullYear()) {
                     this.context.strokeStyle = this.monthColor;
                     this.context.beginPath();
                     let xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
-                    if (this.barSpan > 10) {
-                        xValue = this.offsetLeft + ((i * this.stepWidth) - 2);
+                    if (this.type === 'monthly') {
+                        xValue = this.offsetLeft + ((i * this.stepWidth));
                     }
                     this.context.moveTo(xValue, this.offsetTop);
                     this.context.lineTo(xValue, this.canvasHeight);
                     this.context.stroke();
                 } else if (lastMonth !== undefined && lastMonth !== lastRate.date.getMonth()) {
-                    if (this.barSpan < 11) {
+                    if (this.type !== 'monthly') {
                         this.context.strokeStyle = this.helplineColor;
                         this.context.beginPath();
                         const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
@@ -282,6 +278,51 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
     }
 
 
+    private chunkRates(): StockRate[][] {
+        let chunkedRates = [];
+        if (this.rates) {
+            let chunk: StockRate[] = [];
+            if (this.type === 'monthly') {
+                this.rates.forEach((rate, index) => {
+                    chunk.push(rate);
+                    let nextRate;
+                    if (this.rates && typeof this.rates[index + 1] !== undefined) {
+                        nextRate = this.rates[index + 1];
+                    }
+                    if (nextRate && nextRate.date.getDate() < rate.date.getDate()) {
+                        chunkedRates.push(chunk);
+                        chunk = [];
+                    }
+                });
+            } else if (this.type === 'weekly') {
+                this.rates.forEach((rate, index) => {
+                    chunk.push(rate);
+                    let nextRate;
+                    if (this.rates && typeof this.rates[index + 1] !== undefined) {
+                        nextRate = this.rates[index + 1];
+                    }
+                    if (nextRate && nextRate.date.getDay() < rate.date.getDay()) {
+                        chunkedRates.push(chunk);
+                        chunk = [];
+                    }
+                });
+            } else {
+                let barSpan = 1;
+                for (let i = 0; i < this.rates.length; i += barSpan) {
+                    chunkedRates.push(this.rates.slice(i, i + barSpan));
+                }
+            }
+        }
+        if (screen.width < 400) {
+            chunkedRates = chunkedRates.slice(-50);
+        } else {
+            chunkedRates = chunkedRates.slice(-111);
+        }
+
+        return chunkedRates;
+    }
+
+
     private calculateVerticalSteps(topRate: number, lowRate: number) {
         let verticalSteps = 50;
         const delta = topRate - lowRate;
@@ -319,30 +360,34 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
         return verticalSteps;
     }
 
-    private calculateTopEnd(rates: StockRate[], targetPrice: number|undefined) {
+    private calculateTopEnd(chunkedRates: StockRate[][], targetPrice: number|undefined) {
         let topRate = 0;
         if (targetPrice && targetPrice > 0) {
             topRate = targetPrice;
         }
-        rates.forEach(entry => {
-            if (entry.high > topRate) {
-                topRate = entry.high;
-            }
+        chunkedRates.forEach(rates => {
+            rates.forEach(entry => {
+                if (entry.high > topRate) {
+                    topRate = entry.high;
+                }
+            });
         });
 
         // console.log('topRate: ' + topRate);
         return topRate;
     }
 
-    private calculateLowEnd(rates: StockRate[], stopLoss: number|undefined) {
+    private calculateLowEnd(chunkedRates: StockRate[][], stopLoss: number|undefined) {
         let lowRate = 10000000000;
         if (stopLoss && stopLoss > 0) {
             lowRate = stopLoss;
         }
-        rates.forEach(entry => {
-            if (entry.low < lowRate) {
-                lowRate = entry.low;
-            }
+        chunkedRates.forEach(rates => {
+            rates.forEach(entry => {
+                if (entry.low < lowRate) {
+                    lowRate = entry.low;
+                }
+            });
         });
 
         // console.log('lowRate: ' + lowRate);
