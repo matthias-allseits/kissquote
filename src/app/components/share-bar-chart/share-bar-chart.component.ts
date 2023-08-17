@@ -294,6 +294,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                         chunk = [];
                     }
                 });
+                chunkedRates.push(chunk);
             } else if (this.type === 'weekly') {
                 this.rates.forEach((rate, index) => {
                     chunk.push(rate);
@@ -306,6 +307,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                         chunk = [];
                     }
                 });
+                chunkedRates.push(chunk);
             } else {
                 let barSpan = 1;
                 for (let i = 0; i < this.rates.length; i += barSpan) {
@@ -318,6 +320,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
         } else {
             chunkedRates = chunkedRates.slice(-111);
         }
+        // console.log(chunkedRates);
 
         return chunkedRates;
     }
