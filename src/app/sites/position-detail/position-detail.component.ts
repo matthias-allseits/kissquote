@@ -55,7 +55,6 @@ export class PositionDetailComponent implements OnInit {
     public selectedTransaction?: Transaction;
     public diviProjectionYears: DividendProjection[] = [];
     public positionTab = 'balance';
-    public chartTab = 'weeks';
     public shareheadDividendPayment?: string;
     public shareheadDividendPaymentCorrected?: string;
     public shareheadCurrencyCorrectedDividendPayment?: string;
@@ -130,13 +129,6 @@ export class PositionDetailComponent implements OnInit {
         if (storedTab) {
             this.positionTab = storedTab;
         }
-        const storedChartTab = localStorage.getItem('positionChartTab');
-        if (storedChartTab) {
-            this.chartTab = storedChartTab;
-        } else {
-            this.chartTab = 'weeks';
-            localStorage.setItem('positionChartTab', 'weeks');
-        }
         const labels = localStorage.getItem('labels');
         if (labels !== null) {
             this.allLabels = JSON.parse(labels);
@@ -146,11 +138,6 @@ export class PositionDetailComponent implements OnInit {
     changeTab(selectedTab: string): void {
         this.positionTab = selectedTab;
         localStorage.setItem('positionTab', selectedTab);
-    }
-
-    changeChartTab(selectedTab: string): void {
-        this.chartTab = selectedTab;
-        localStorage.setItem('positionChartTab', selectedTab);
     }
 
     openModal(template: TemplateRef<any>, transaction: Transaction) {

@@ -47,6 +47,7 @@ import { DashboardBalanceComponent } from './components/dashboard-balance/dashbo
 import { DashboardListingsComponent } from './components/dashboard-listings/dashboard-listings.component';
 import { DashboardSettingsComponent } from './components/dashboard-settings/dashboard-settings.component';
 import { DashboardBalanceChartsComponent } from './components/dashboard-balance-charts/dashboard-balance-charts.component';
+import { ShareBarChartContainerComponent } from './components/share-bar-chart-container/share-bar-chart-container.component';
 registerLocaleData(localeCH);
 
 
@@ -86,6 +87,7 @@ registerLocaleData(localeCH);
         DashboardListingsComponent,
         DashboardSettingsComponent,
         DashboardBalanceChartsComponent,
+        ShareBarChartContainerComponent,
     ],
     imports: [
         BrowserModule,

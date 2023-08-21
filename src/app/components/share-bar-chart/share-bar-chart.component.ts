@@ -3,7 +3,7 @@ import {Position} from "../../models/position";
 import {Transaction} from "../../models/transaction";
 import {DateHelper} from "../../core/datehelper";
 import {StockRate} from "../../models/stock-rate";
-import {isDefined} from "@ng-bootstrap/ng-bootstrap/util/util";
+
 
 @Component({
     selector: 'app-share-bar-chart',

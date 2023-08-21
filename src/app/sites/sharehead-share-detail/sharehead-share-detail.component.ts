@@ -82,11 +82,7 @@ export class ShareheadShareDetailComponent implements OnInit {
                     this.shareheadShare = share;
                     this.shareheadShare.getStockRates()
                         .subscribe((rates => {
-                            if (screen.width < 400) {
-                                this.historicStockRates = rates.slice(-250);
-                            } else {
-                                this.historicStockRates = rates.slice(-555);
-                            }
+                            this.historicStockRates = rates;
                         }));
                 }
             });

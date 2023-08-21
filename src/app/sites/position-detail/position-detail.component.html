@@ -39,34 +39,7 @@
         </div>
         <div class="info-container">
             <div *ngIf="historicRates.length > 0">
-                <div class="share-chart-wrapper">
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link" [class.active]="chartTab === 'days'" (click)="changeChartTab('days')">Days</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" [class.active]="chartTab === 'weeks'" (click)="changeChartTab('weeks')">Weeks</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" [class.active]="chartTab === 'months'" (click)="changeChartTab('months')">Months</a>
-                        </li>
-                    </ul>
-                    <div class="mb-3 bg-body" [class.visually-hidden]="chartTab !== 'days'">
-                        <div class="info-box info-box-doubled" style="margin-right: 0; margin-bottom: 0;">
-                            <app-share-bar-chart [rates]="historicRates" [position]="position" [type]="'daily'"></app-share-bar-chart>
-                        </div>
-                    </div>
-                    <div class="mb-3 bg-body" [class.visually-hidden]="chartTab !== 'weeks'">
-                        <div class="info-box info-box-doubled" style="margin-right: 0; margin-bottom: 0;">
-                            <app-share-bar-chart [rates]="historicRates" [position]="position" [type]="'weekly'"></app-share-bar-chart>
-                        </div>
-                    </div>
-                    <div class="mb-3 bg-body" [class.visually-hidden]="chartTab !== 'months'">
-                        <div class="info-box info-box-doubled" style="margin-right: 0; margin-bottom: 0;">
-                            <app-share-bar-chart [rates]="historicRates" [position]="position" [type]="'monthly'"></app-share-bar-chart>
-                        </div>
-                    </div>
-                </div>
+                <app-share-bar-chart-container [historicRates]="historicRates" [position]="position"></app-share-bar-chart-container>
                 <div class="info-box" style="margin-top: 41px;">
                     <app-bar-chart [data]="chartData"></app-bar-chart>
                 </div>
