@@ -79,7 +79,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
             if (positionId) {
                 this.positionService.getPosition(positionId)
                     .subscribe(position => {
-                        console.log(position);
+                        // console.log(position);
                         if (position instanceof Position) {
                             this.position = position;
                             this.positionForm.get('shareName')?.setValue(position.share?.name);
@@ -104,7 +104,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
 
 
     searchShare(event: any): void {
-        console.log(event.target.value);
+        // console.log(event.target.value);
         if (this.position.id === 0) {
             this.selectableShares = [];
             if (event.target.value) {
@@ -114,7 +114,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                     }
                 });
             }
-            console.log(this.selectableShares.length);
+            // console.log(this.selectableShares.length);
         }
     }
 
@@ -159,7 +159,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
             }
         }
         this.position.share = newShare;
-        console.log(this.position);
+        // console.log(this.position);
         if (this.position.id > 0) {
             this.positionService.update(this.position)
                 .subscribe(position => {
@@ -190,7 +190,6 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         // todo: migrate this to use the kissquote-api
         this.shareheadService.getAllCurrencies()
             .subscribe(currencies => {
-                console.log(currencies);
                 this.currencies = currencies;
                 this.setCurrency();
             });
@@ -203,7 +202,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
 
 
     private setCurrency(): void {
-        console.log('set currency');
+        // console.log('set currency');
         this.currencies.forEach(currency => {
             if (this.position.currency?.name === currency.name) {
                 this.positionForm.get('currency')?.setValue(currency);
