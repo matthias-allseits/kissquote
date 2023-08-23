@@ -62,7 +62,7 @@ export class PositionService extends ApiService {
     }
 
 
-    public getPosition(id: number): Observable<Position|null>
+    public getPosition(id: number): Observable<Position|undefined>
     {
         return this.http.get<Position>(this.apiUrl + '/' + id)
             .pipe(

@@ -21,7 +21,7 @@ export class PositionCreator {
 
         for (const PositionList of apiArray) {
             const position = this.oneFromApiArray(PositionList);
-            if (null !== position) {
+            if (undefined !== position) {
                 array.push(position);
             }
         }
@@ -31,7 +31,7 @@ export class PositionCreator {
     }
 
 
-    public static oneFromApiArray(apiArray: Position): Position|null
+    public static oneFromApiArray(apiArray?: Position): Position|undefined
     {
         if (apiArray !== undefined) {
             return new Position(
@@ -46,6 +46,8 @@ export class PositionCreator {
                 apiArray.dividendPeriodicity,
                 0,
                 apiArray.bankAccount ? BankAccountCreator.oneFromApiArray(apiArray.bankAccount) : undefined,
+                apiArray.underlying ? PositionCreator.oneFromApiArray(apiArray.underlying) : undefined,
+                apiArray.motherId,
                 apiArray.sector ? SectorCreator.oneFromApiArray(apiArray.sector) : undefined,
                 apiArray.strategy ? StrategyCreator.oneFromApiArray(apiArray.strategy) : undefined,
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
@@ -59,7 +61,7 @@ export class PositionCreator {
                 apiArray.labels ? LabelCreator.fromApiArray(apiArray.labels) : undefined
             );
         } else {
-            return null;
+            return undefined;
         }
     }
 

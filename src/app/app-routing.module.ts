@@ -34,6 +34,7 @@ const routes: Routes = [
     { path: 'sharehead-share-detail/:id', component: ShareheadShareDetailComponent },
     { path: 'bank-account/:aid/position-form/:id', component: PositionFormComponent },
     { path: 'bank-account/:aid/position-form', component: PositionFormComponent },
+    { path: 'position/:pid/position-form', component: PositionFormComponent },
     { path: 'bank-account/:aid/cash-position-form', component: CashPositionFormComponent },
     { path: 'position/:pid/transaction-form/:id', component: TransactionFormComponent },
     { path: 'position/:pid/transaction-form', component: TransactionFormComponent },

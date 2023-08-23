@@ -154,6 +154,15 @@ export class PositionDetailComponent implements OnInit {
         this.modalRef = this.modalService.open(template);
     }
 
+    openUnderlyingConfirmModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.open(template);
+    }
+
+    goToUnderlying() {
+        if (this.position?.underlying) {
+            this.router.navigate(['/position-detail/' + this.position?.underlying.id]);
+        }
+    }
 
     confirm(): void {
         if (this.selectedTransaction) {
@@ -174,6 +183,20 @@ export class PositionDetailComponent implements OnInit {
                 });
         }
         this.shareheadModalRef?.close();
+    }
+
+    confirmUnderlyingRemoving(): void {
+        if (this.position) {
+            this.position.underlying = undefined;
+            this.positionService.update(this.position)
+                .subscribe(position => {
+                    if (position) {
+                        this.position = position;
+                        this.loadData(this.position.id);
+                    }
+                });
+        }
+        this.modalRef?.close();
     }
 
     confirmLogEntryRemoving(): void {
@@ -589,12 +612,12 @@ export class PositionDetailComponent implements OnInit {
                                     }
                                 }
                             });
-                        if (this.position.stopLossBroken()) {
-                            this.stopLossBroken = true;
-                        }
-                        if (this.position.hasReachedTargetPrice()) {
-                            this.hasReachedTargetPrice = true;
-                        }
+                    }
+                    if (this.position.stopLossBroken()) {
+                        this.stopLossBroken = true;
+                    }
+                    if (this.position.hasReachedTargetPrice()) {
+                        this.hasReachedTargetPrice = true;
                     }
 
                     // this.positionService.getOfflineStockRates(this.position.share, this.position.currency)

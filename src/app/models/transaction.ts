@@ -6,7 +6,6 @@ export class Transaction {
 
     constructor(
         public id: number,
-        public position: Position|null,
         public title: string = '',
         public date: Date|string,
         public quantity: number,
@@ -14,6 +13,7 @@ export class Transaction {
         public fee: number|null,
         public isFee: boolean = false,
         public isInterest: boolean = false,
+        public position?: Position,
         public currency?: Currency,
     ) {}
 
