@@ -102,6 +102,20 @@ export class Position {
     }
 
 
+    realTransactions(): Transaction[]
+    {
+        const result: Transaction[] = [];
+        const realTransactions = ['Kauf', 'Verkauf'];
+        for (const transaction of this.transactions) {
+            if (realTransactions.indexOf(transaction.title) > -1) {
+                result.push(transaction);
+            }
+        }
+
+        return result;
+    }
+
+
     stopLossWastage(): number
     {
         let result = 0;

@@ -87,6 +87,7 @@
                             <th scope="col" class="text-center d-none d-md-table-cell">Anteil</th>
                             <th scope="col" class="d-none d-md-table-cell" style="width: 125px;">Active From</th>
                             <th scope="col" class="d-none d-md-table-cell" style="width: 125px;">Active Until</th>
+                            <th scope="col" class="d-none d-md-table-cell" style="width: 55px;"></th>
                             <th scope="col" class="text-center d-none d-md-table-cell" style="width: 105px;"><span ngbTooltip="Log entries">Le</span></th>
                             <th scope="col" class="text-center d-none d-md-table-cell" style="width: 105px;"><span ngbTooltip="{{ tranService.trans('GLOB_TRANSACTIONS') }}">Ta</span></th>
                             <th scope="col" style="width: 35px;"></th>
@@ -106,10 +107,13 @@
                             <td class="text-center d-none d-md-table-cell">{{ position.shareFromTotal|number: '1.0-1' }}%</td>
                             <td class="d-none d-md-table-cell"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
                             <td class="d-none d-md-table-cell"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
+                            <td class="d-none d-md-table-cell">
+                                <button *ngIf="position.stopLoss && position.stopLoss > 0" type="button" class="btn btn-tiny btn-outline-primary" ngbTooltip="Has stop-loss" style="margin-right: 2px;">SL</button>
+                                <button *ngIf="position.targetPrice && position.targetPrice > 0" type="button" class="btn btn-tiny btn-outline-primary" ngbTooltip="Has target-price">TP</button>
+                            </td>
                             <td class="text-center d-none d-md-table-cell">{{ position.logEntries.length }}</td>
-                            <td class="text-center d-none d-md-table-cell">{{ position.transactions.length }}</td>
+                            <td class="text-center d-none d-md-table-cell">{{ position.realTransactions().length }}</td>
                             <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-<!--                            <td><button [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Add Transaction"><fa-icon [icon]="addIcon"></fa-icon></button></td>-->
                             <td><button [routerLink]="['/bank-account/' + accountIndex + '/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Edit Position"><fa-icon [icon]="editIcon"></fa-icon></button></td>
                             <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
                         </tr>
