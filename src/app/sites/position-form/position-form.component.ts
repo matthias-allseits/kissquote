@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {PositionService} from '../../services/position.service';
 import {Position} from '../../models/position';
 import {ShareService} from '../../services/share.service';
-import {Share} from '../../models/share';
 import {CurrencyService} from '../../services/currency.service';
 import {Currency} from '../../models/currency';
 import {ShareheadService} from '../../services/sharehead.service';
@@ -32,6 +31,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
     public portfolio?: Portfolio;
     public bankAccounts: BankAccount[] = [];
     private bankAccountIndex: number = 0;
+    private motherPositionId: number = 0;
     public shareheadShares: ShareheadShare[] = [];
     public marketplaces: Marketplace[] = [];
     public currencies: Currency[] = [];
@@ -75,6 +75,8 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         this.route.params.subscribe((params: Params) => {
             const accountIndex = +params['aid'];
             this.bankAccountIndex = accountIndex;
+            const motherPositionId = +params['pid'];
+            this.motherPositionId = motherPositionId;
             const positionId = +params['id'];
             if (positionId) {
                 this.positionService.getPosition(positionId)
@@ -147,7 +149,12 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
 
     onSubmit(): void {
         this.patchValuesBack(this.positionForm, this.position);
-        this.position.bankAccount = this.bankAccounts[this.bankAccountIndex];
+        if (this.bankAccountIndex > 0) {
+            this.position.bankAccount = this.bankAccounts[this.bankAccountIndex];
+        }
+        if (this.motherPositionId > 0) {
+            this.position.motherId = this.motherPositionId;
+        }
         const newShare = ShareCreator.createNewShare();
         newShare.name = this.positionForm.get('shareName')?.value;
         newShare.marketplace = this.positionForm.get('marketplace')?.value;

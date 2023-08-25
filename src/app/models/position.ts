@@ -62,6 +62,8 @@ export class Position {
         public dividendPeriodicity: string,
         public shareFromTotal: number,
         public bankAccount?: BankAccount,
+        public underlying?: Position,
+        public motherId?: number,
         public sector?: Sector,
         public strategy?: Strategy,
         public currency?: Currency,
@@ -144,6 +146,9 @@ export class Position {
                 result = true;
             }
         }
+        if (this.underlying?.stopLossBroken()) {
+            result = true;
+        }
 
         return result;
     }
@@ -163,6 +168,9 @@ export class Position {
             ) {
                 result = true;
             }
+        }
+        if (this.underlying?.hasReachedTargetPrice()) {
+            result = true;
         }
 
         return result;

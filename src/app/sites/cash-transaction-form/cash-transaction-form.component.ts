@@ -22,7 +22,7 @@ import {Currency} from "../../models/currency";
 export class CashTransactionFormComponent extends MotherFormComponent implements OnInit {
 
     public transaction: Transaction;
-    public position: Position|null = null;
+    public position: Position|undefined = undefined;
     public currencies: Currency[] = [];
     public titleOptions = ['Kauf', 'Fx-Gutschrift Comp.', 'Zins', 'Negativzins', 'Verkauf', 'Auszahlung', 'Dividende', 'Capital Gain', 'Forex-Gutschrift', 'Vergütung', 'Einzahlung', 'Depotgebühren', 'Fx-Belastung Comp.', 'Kapitalrückzahlung', 'Forex-Belastung', 'Corporate Action', 'Split'];
 
