@@ -22,4 +22,29 @@ export class Transaction {
         return dividendTitles.indexOf(this.title) > -1;
     }
 
+    total(): number {
+        let result = 0;
+
+        if (this.rate) {
+            result = (this.quantity * this.rate);
+        }
+        if (this.fee) {
+            result += this.fee;
+        }
+
+        return result;
+    }
+
+    isRealTransaction(): boolean
+    {
+        let result = false;
+        const realTransactions = ['Kauf', 'Verkauf'];
+
+        if (realTransactions.indexOf(this.title) > -1) {
+            result = true;
+        }
+
+        return result;
+    }
+
 }

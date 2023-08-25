@@ -483,6 +483,13 @@ export class PositionDetailComponent implements OnInit {
         this.cancelModal();
     }
 
+    getColspan(): number {
+        if (screen.width < 400) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
 
     navigateCross(direction: string): void {
         let positionIndex: number = -1;

@@ -395,6 +395,7 @@
                     <th scope="col"><span class="float-end">Quantity</span></th>
                     <th scope="col"><span class="float-end">Rate</span></th>
                     <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Fee/Tax</span></th>
+                    <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Total</span></th>
                     <th scope="col" class="d-none d-md-table-cell">Currency</th>
                     <th scope="col" style="width: 35px;"></th>
                     <th scope="col" style="width: 35px;"></th>
@@ -407,7 +408,7 @@
                             <span class="d-none d-md-table-cell">{{ entry.date|date:'dd.MM.y' }}</span>
                             <span class="d-table-cell d-md-none">{{ entry.date|date:'dd.MM.YY' }}</span>
                         </td>
-                        <td colspan="3">{{ entry.emoticon }} {{ entry.log }}</td>
+                        <td [colSpan]="getColspan()">{{ entry.emoticon }} {{ entry.log }}</td>
                         <td class="d-none d-md-table-cell"></td>
                         <td class="d-none d-md-table-cell"></td>
                         <td><span class="float-end"><button (click)="openLogEntryModal(logEntryModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
@@ -422,7 +423,8 @@
                         <td><span class="float-end">{{ entry.quantity }}</span></td>
                         <td><span class="float-end">{{ entry.rate }}</span></td>
                         <td class="d-none d-md-table-cell"><span class="float-end">{{ entry.fee }}</span></td>
-                        <td class="d-none d-md-table-cell"><span>{{ entry.currency?.name }}</span></td>
+                        <td class="d-none d-md-table-cell"><span *ngIf="entry.isRealTransaction()" class="float-end">{{ entry.total()|number: '1.0' }}</span></td>
+                        <td class="d-none d-md-table-cell">{{ entry.currency?.name }}</td>
                         <td *ngIf="!position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/transaction-form/' + entry.id" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
                         <td *ngIf="position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/cash-transaction-form/' + entry.id" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
                         <td><span class="float-end"><button (click)="openModal(removeTransactionConfirmModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen"><fa-icon [icon]="deleteIcon"></fa-icon></button></span></td>
