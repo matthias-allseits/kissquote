@@ -149,7 +149,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
 
     onSubmit(): void {
         this.patchValuesBack(this.positionForm, this.position);
-        if (this.bankAccountIndex > 0) {
+        if (this.bankAccountIndex !== undefined) {
             this.position.bankAccount = this.bankAccounts[this.bankAccountIndex];
         }
         if (this.motherPositionId > 0) {
