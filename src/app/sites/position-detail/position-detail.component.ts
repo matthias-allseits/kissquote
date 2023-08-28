@@ -388,6 +388,7 @@ export class PositionDetailComponent implements OnInit {
             if (this.selectedLogEntry.id > 0) {
                 this.positionLogService.update(this.selectedLogEntry)
                     .subscribe(entry => {
+                        this.positionLogService.replaceEntry(this.position?.logEntries, entry);
                         this.refreshLog();
                     });
             } else {
@@ -431,6 +432,7 @@ export class PositionDetailComponent implements OnInit {
 
     deleteLogEntry(logEntry: PositionLog): void {
         this.positionLogService.delete(logEntry.id).subscribe(() => {
+            this.positionLogService.removeEntry(this.position?.logEntries, logEntry);
             this.refreshLog();
         });
     }
@@ -523,7 +525,11 @@ export class PositionDetailComponent implements OnInit {
 
     private refreshLog(): void
     {
-        this.loadData('refreshLog');
+        if (this.position) {
+            this.logBook = this.position.logEntries;
+            this.logBook = this.logBook.concat(this.position.transactions);
+            this.logBook.sort((a, b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0));
+        }
     }
 
 
@@ -545,9 +551,7 @@ export class PositionDetailComponent implements OnInit {
             if (this.position) {
                 this.checkAndResetPositionFilter(this.position.id);
 
-                this.logBook = this.position.logEntries;
-                this.logBook = this.logBook.concat(this.position.transactions);
-                this.logBook.sort((a, b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0));
+                this.refreshLog();
                 if (this.position.isCash) {
                     this.positionTab = 'logbook';
                 }

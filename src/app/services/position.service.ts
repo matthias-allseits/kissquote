@@ -124,6 +124,7 @@ export class PositionService extends ApiService {
             transaction.date = DateHelper.convertDateToMysql(transaction.date);
         });
         const url = `${this.apiUrl}`;
+        // todo: cast this as we do in position-log-service
         return this.http
             .post(url, JSON.stringify(position), httpOptions)
             .pipe(
@@ -140,6 +141,7 @@ export class PositionService extends ApiService {
             transaction.date = DateHelper.convertDateToMysql(transaction.date);
         });
         const url = `${this.apiUrl}/cash`;
+        // todo: cast this as we do in position-log-service
         return this.http
             .post(url, JSON.stringify(position), httpOptions)
             .pipe(
@@ -176,6 +178,7 @@ export class PositionService extends ApiService {
             position.activeUntil = null;
         }
         const url = `${this.apiUrl}/${position.id}`;
+        // todo: cast this as we do in position-log-service
         return this.http
             .put(url, JSON.stringify(position), httpOptions)
             .pipe(

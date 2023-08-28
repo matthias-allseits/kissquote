@@ -28,6 +28,7 @@ export class BankAccountService extends ApiService {
 
     create(bankAccount: BankAccount): Observable<BankAccount> {
         const url = `${this.apiUrl}`;
+        // todo: cast this as we do in position-log-service
         return this.http
             .post(url, JSON.stringify(bankAccount), httpOptions)
             .pipe(
@@ -39,6 +40,7 @@ export class BankAccountService extends ApiService {
 
     update(bankAccount: BankAccount): Observable<BankAccount> {
         const url = `${this.apiUrl}/${bankAccount.id}`;
+        // todo: cast this as we do in position-log-service
         return this.http
             .put(url, JSON.stringify(bankAccount), httpOptions)
             .pipe(

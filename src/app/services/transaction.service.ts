@@ -53,6 +53,7 @@ export class TransactionService extends ApiService {
             });
         }
         const url = `${this.apiUrl}`;
+        // todo: cast this as we do in position-log-service
         return this.http
             .post(url, JSON.stringify(transaction), httpOptions)
             .pipe(
@@ -76,6 +77,7 @@ export class TransactionService extends ApiService {
             });
         }
         const url = `${this.apiUrl}/${transaction.id}`;
+        // todo: cast this as we do in position-log-service
         return this.http
             .put(url, JSON.stringify(transaction), httpOptions)
             .pipe(

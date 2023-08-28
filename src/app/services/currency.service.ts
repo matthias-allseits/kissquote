@@ -28,6 +28,7 @@ export class CurrencyService extends ApiService {
 
     create(currency: Currency): Observable<Currency|null> {
         const url = `${this.apiUrl}`;
+        // todo: cast this as we do in position-log-service
         return this.http
             .post(url, JSON.stringify(currency), httpOptions)
             .pipe(
@@ -39,6 +40,7 @@ export class CurrencyService extends ApiService {
 
     update(currency: Currency): Observable<Currency|null> {
         const url = `${this.apiUrl}/${currency.id}`;
+        // todo: cast this as we do in position-log-service
         return this.http
             .put(url, JSON.stringify(currency), httpOptions)
             .pipe(

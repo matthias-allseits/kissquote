@@ -28,6 +28,7 @@ export class ManualDividendService extends ApiService {
 
     create(dividend: ManualDividend): Observable<ManualDividend|null> {
         const url = `${this.apiUrl}`;
+        // todo: cast this as we do in position-log-service
         return this.http
             .post(url, JSON.stringify(dividend), httpOptions)
             .pipe(

@@ -5,6 +5,8 @@ import {map} from 'rxjs/operators';
 import {ApiService} from "./api-service";
 import {Sector} from "../models/sector";
 import {SectorCreator} from "../creators/sector-creator";
+import {Strategy} from "../models/strategy";
+import {StrategyCreator} from "../creators/strategy-creator";
 
 
 const httpOptions = {
@@ -26,33 +28,35 @@ export class StrategyService extends ApiService {
     }
 
 
-    create(sector: Sector): Observable<Sector|null> {
+    create(strategy: Strategy): Observable<Strategy|null> {
         const url = `${this.apiUrl}`;
+        // todo: cast this as we do in position-log-service
         return this.http
-            .post(url, JSON.stringify(sector), httpOptions)
+            .post(url, JSON.stringify(strategy), httpOptions)
             .pipe(
-                map(() => sector),
+                map(() => strategy),
                 // catchError(this.handleError)
             );
     }
 
 
-    update(sector: Sector): Observable<Sector|null> {
-        const url = `${this.apiUrl}/${sector.id}`;
+    update(strategy: Strategy): Observable<Strategy|null> {
+        const url = `${this.apiUrl}/${strategy.id}`;
+        // todo: cast this as we do in position-log-service
         return this.http
-            .put(url, JSON.stringify(sector), httpOptions)
+            .put(url, JSON.stringify(strategy), httpOptions)
             .pipe(
-                map(() => sector),
+                map(() => strategy),
                 // catchError(this.handleError)
             );
     }
 
 
-    public getAllStrategies(): Observable<Sector[]>
+    public getAllStrategies(): Observable<Strategy[]>
     {
-        return this.http.get<Sector[]>(this.apiUrl)
+        return this.http.get<Strategy[]>(this.apiUrl)
             .pipe(
-                map(res => SectorCreator.fromApiArray(res))
+                map(res => StrategyCreator.fromApiArray(res))
             );
     }
 

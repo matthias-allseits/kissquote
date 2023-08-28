@@ -28,6 +28,7 @@ export class LabelService extends ApiService {
 
     create(label: Label): Observable<Label|null> {
         const url = `${this.apiUrl}`;
+        // todo: cast this as we do in position-log-service
         return this.http
             .post(url, JSON.stringify(label), httpOptions)
             .pipe(
@@ -39,6 +40,7 @@ export class LabelService extends ApiService {
 
     update(label: Label): Observable<Label|null> {
         const url = `${this.apiUrl}/${label.id}`;
+        // todo: cast this as we do in position-log-service
         return this.http
             .put(url, JSON.stringify(label), httpOptions)
             .pipe(
