@@ -1,5 +1,5 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {DividendDropSummary, MaxDrawdownSummary, Position} from '../../models/position';
 import {PositionService} from '../../services/position.service';
 import {
@@ -118,13 +118,8 @@ export class PositionDetailComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.route.params.subscribe((params: Params) => {
-            const positionId = +params['id'];
-            if (positionId) {
-                this.loadData(positionId);
-                this.checkAndResetPositionFilter(positionId);
-            }
-        });
+        this.loadData('ngOnInit');
+
         const storedTab = localStorage.getItem('positionTab');
         if (storedTab) {
             this.positionTab = storedTab;
@@ -178,7 +173,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(position => {
                     if (position) {
                         this.position = position;
-                        this.loadData(this.position.id);
+                        this.loadData('confirmShareheadRemoving');
                     }
                 });
         }
@@ -192,7 +187,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(position => {
                     if (position) {
                         this.position = position;
-                        this.loadData(this.position.id);
+                        this.loadData('confirmUnderlyingRemoving');
                     }
                 });
         }
@@ -220,7 +215,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(position => {
                     if (position) {
                         this.position = position;
-                        this.loadData(this.position.id);
+                        this.loadData('selectShareheadShare');
                     }
                 });
         }
@@ -306,7 +301,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(position => {
                     if (position) {
                         this.position = position;
-                        this.loadData(this.position.id);
+                        this.loadData('confirmManualDrawdownRemoving');
                     }
                 });
         }
@@ -320,7 +315,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(position => {
                     if (position) {
                         this.position = position;
-                        this.loadData(this.position.id);
+                        this.loadData('persistManualDrawdown');
                     }
                 });
         }
@@ -334,7 +329,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(position => {
                     if (position) {
                         this.position = position;
-                        this.loadData(this.position.id);
+                        this.loadData('confirmManualDividendDropRemoving');
                     }
                 });
         }
@@ -348,7 +343,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(position => {
                     if (position) {
                         this.position = position;
-                        this.loadData(this.position.id);
+                        this.loadData('persistManualDividendDrop');
                     }
                 });
         }
@@ -362,7 +357,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(position => {
                     if (position) {
                         this.position = position;
-                        this.loadData(this.position.id);
+                        this.loadData('persistStopLoss');
                     }
                 });
         }
@@ -377,7 +372,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(position => {
                     if (position) {
                         this.position = position;
-                        this.loadData(this.position.id);
+                        this.loadData('persistTargetPrice');
                     }
                 });
         }
@@ -413,7 +408,7 @@ export class PositionDetailComponent implements OnInit {
     deleteTransaction(transaction: Transaction): void {
         this.transactionService.delete(transaction.id).subscribe(() => {
             if (this.position instanceof Position) {
-                this.loadData(this.position.id);
+                this.loadData('deleteTransaction');
             }
         });
     }
@@ -461,7 +456,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(posi => {
                     if (posi) {
                         this.position = posi;
-                        this.loadData(this.position.id);
+                        this.loadData('setSector');
                     }
                 });
         }
@@ -476,7 +471,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(posi => {
                     if (posi) {
                         this.position = posi;
-                        this.loadData(this.position.id);
+                        this.loadData('setStrategy');
                     }
                 });
         }
@@ -517,7 +512,7 @@ export class PositionDetailComponent implements OnInit {
                 const nextPosition = positions[nextIndex];
                 this.position = undefined;
                 this.router.navigate(['/position-detail/' + nextPosition.id]);
-                this.loadData(nextPosition.id);
+                // this.loadData('navigateCross');
             });
     }
 
@@ -528,14 +523,13 @@ export class PositionDetailComponent implements OnInit {
 
     private refreshLog(): void
     {
-        // todo: implement a shiny solution
-        if (this.position) {
-            this.loadData(this.position.id);
-        }
+        this.loadData('refreshLog');
     }
 
 
-    private loadData(positionId: number): void {
+    private loadData(referer: string): void {
+        console.log('referer is: ' + referer);
+        this.position = undefined;
         this.diviProjectionYears = [];
         this.historicRates = [];
         this.maxDrawdownSummary = undefined;
@@ -545,96 +539,98 @@ export class PositionDetailComponent implements OnInit {
         this.daysTillNextReport = undefined;
         this.stopLossBroken = false;
         this.hasReachedTargetPrice = false;
-        this.positionService.getPosition(positionId)
-            .subscribe(position => {
-                if (position) {
-                    this.position = position;
-                    this.logBook = this.position.logEntries;
-                    this.logBook = this.logBook.concat(this.position.transactions);
-                    this.logBook.sort((a, b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0));
-                    if (this.position.isCash) {
-                        this.positionTab = 'logbook';
-                    }
-                    if (this.position.balance?.lastRate) {
-                        this.currentYieldOnValue = (100 / this.position.balance.lastRate.rate * this.position.balance.projectedNextDividendPerShare()).toFixed(1);
-                        this.currentYieldOnValueSource = '(from last payment)';
-                    }
-                    if (this.position && this.position.balance) {
-                        this.chartData = {
-                            labels: ['Transaktionskosten vs Einnahmen'],
-                            datasets: [
-                                {
-                                    label: 'Kosten',
-                                    data: [this.position.balance.transactionFeesTotal]
-                                },
-                                {
-                                    label: 'Einnahmen',
-                                    data: [this.position.balance.collectedDividends]
-                                },
-                            ]
-                        };
-                    }
-                    if (this.position && this.position.shareheadId && this.position.shareheadId > 0) {
-                        this.shareheadService.getShare(this.position.shareheadId)
-                            .subscribe(share => {
-                                if (share) {
-                                    if (this.position) {
-                                        this.position.shareheadShare = share;
-                                    }
-                                    this.diviProjectionYears = this.position?.dividendProjections();
-                                    this.shareheadDividendPayment = this.position?.shareheadDividendPayment();
-                                    this.shareheadDividendPaymentCorrected = this.position?.shareheadDividendPaymentCorrected();
-                                    if (this.position && this.position.balance?.lastRate && this.shareheadDividendPayment !== undefined && +this.shareheadDividendPayment > 0) {
-                                        this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadDividendPayment / this.position.balance.amount)).toFixed(1);
-                                        this.currentYieldOnValueSource = '(from sharehead)';
-                                    }
+        this.route.data.subscribe(data => {
+            this.position = data['position'];
+            console.log(this.position);
+            if (this.position) {
+                this.checkAndResetPositionFilter(this.position.id);
 
-                                    if (this.position?.balance && this.position.shareheadShare) {
-                                        if (this.position.currency?.name !== this.position.shareheadShare.currency?.name) {
-                                            if (this.position.shareheadShare.currency) {
-                                                const usersCurrency = this.currencyService.getUsersCurrencyByName(this.position.shareheadShare.currency?.name)
-                                                    .subscribe(currency => {
-                                                        if (this.shareheadDividendPayment && this.position?.currency) {
-                                                            this.shareheadCurrencyCorrectedDividendPayment = (+this.shareheadDividendPayment * currency.rate / this.position?.currency.rate).toFixed(0);
-                                                            if (this.position.balance?.lastRate) {
-                                                                this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadCurrencyCorrectedDividendPayment / this.position.balance.amount)).toFixed(1);
-                                                            }
+                this.logBook = this.position.logEntries;
+                this.logBook = this.logBook.concat(this.position.transactions);
+                this.logBook.sort((a, b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0));
+                if (this.position.isCash) {
+                    this.positionTab = 'logbook';
+                }
+                if (this.position.balance?.lastRate) {
+                    this.currentYieldOnValue = (100 / this.position.balance.lastRate.rate * this.position.balance.projectedNextDividendPerShare()).toFixed(1);
+                    this.currentYieldOnValueSource = '(from last payment)';
+                }
+                if (this.position && this.position.balance) {
+                    this.chartData = {
+                        labels: ['Transaktionskosten vs Einnahmen'],
+                        datasets: [
+                            {
+                                label: 'Kosten',
+                                data: [this.position.balance.transactionFeesTotal]
+                            },
+                            {
+                                label: 'Einnahmen',
+                                data: [this.position.balance.collectedDividends]
+                            },
+                        ]
+                    };
+                }
+                if (this.position && this.position.shareheadId && this.position.shareheadId > 0) {
+                    this.shareheadService.getShare(this.position.shareheadId)
+                        .subscribe(share => {
+                            if (share) {
+                                if (this.position) {
+                                    this.position.shareheadShare = share;
+                                }
+                                this.diviProjectionYears = this.position?.dividendProjections();
+                                this.shareheadDividendPayment = this.position?.shareheadDividendPayment();
+                                this.shareheadDividendPaymentCorrected = this.position?.shareheadDividendPaymentCorrected();
+                                if (this.position && this.position.balance?.lastRate && this.shareheadDividendPayment !== undefined && +this.shareheadDividendPayment > 0) {
+                                    this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadDividendPayment / this.position.balance.amount)).toFixed(1);
+                                    this.currentYieldOnValueSource = '(from sharehead)';
+                                }
+
+                                if (this.position?.balance && this.position.shareheadShare) {
+                                    if (this.position.currency?.name !== this.position.shareheadShare.currency?.name) {
+                                        if (this.position.shareheadShare.currency) {
+                                            const usersCurrency = this.currencyService.getUsersCurrencyByName(this.position.shareheadShare.currency?.name)
+                                                .subscribe(currency => {
+                                                    if (this.shareheadDividendPayment && this.position?.currency) {
+                                                        this.shareheadCurrencyCorrectedDividendPayment = (+this.shareheadDividendPayment * currency.rate / this.position?.currency.rate).toFixed(0);
+                                                        if (this.position.balance?.lastRate) {
+                                                            this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadCurrencyCorrectedDividendPayment / this.position.balance.amount)).toFixed(1);
                                                         }
-                                                    });
-                                            }
-                                        }
-                                    }
-                                    this.maxDrawdownSummary = this.position?.getMaxDrawdownSummary();
-                                    this.dividendDropSummary = this.position?.getDividendDropSummary();
-                                    if (share.plannedDividends && share.plannedDividends.length > 0) {
-                                        const currentDate = new Date();
-                                        const nextExDate = share.plannedDividends[0].exDate;
-                                        const nextPayDate = share.plannedDividends[0].payDate;
-                                        this.daysTillNextEx = Math.floor((Date.UTC(nextExDate.getFullYear(), nextExDate.getMonth(), nextExDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) ) /(1000 * 60 * 60 * 24));
-                                        this.daysTillNextPayment = Math.floor((Date.UTC(nextPayDate.getFullYear(), nextPayDate.getMonth(), nextPayDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) ) /(1000 * 60 * 60 * 24));
-                                        if (share.nextReportDate) {
-                                            const nextReportDate = share.nextReportDate;
-                                            this.daysTillNextReport = Math.floor((Date.UTC(nextReportDate.getFullYear(), nextReportDate.getMonth(), nextReportDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
+                                                    }
+                                                });
                                         }
                                     }
                                 }
-                            });
-                    }
-                    if (this.position.stopLossBroken()) {
-                        this.stopLossBroken = true;
-                    }
-                    if (this.position.hasReachedTargetPrice()) {
-                        this.hasReachedTargetPrice = true;
-                    }
-
-                    // this.positionService.getOfflineStockRates(this.position.share, this.position.currency)
-                    this.position.getStockRates()
-                        .subscribe(rates => {
-                            this.addLatestRateToLineChart(rates);
-                            this.historicRates = rates;
+                                this.maxDrawdownSummary = this.position?.getMaxDrawdownSummary();
+                                this.dividendDropSummary = this.position?.getDividendDropSummary();
+                                if (share.plannedDividends && share.plannedDividends.length > 0) {
+                                    const currentDate = new Date();
+                                    const nextExDate = share.plannedDividends[0].exDate;
+                                    const nextPayDate = share.plannedDividends[0].payDate;
+                                    this.daysTillNextEx = Math.floor((Date.UTC(nextExDate.getFullYear(), nextExDate.getMonth(), nextExDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
+                                    this.daysTillNextPayment = Math.floor((Date.UTC(nextPayDate.getFullYear(), nextPayDate.getMonth(), nextPayDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
+                                    if (share.nextReportDate) {
+                                        const nextReportDate = share.nextReportDate;
+                                        this.daysTillNextReport = Math.floor((Date.UTC(nextReportDate.getFullYear(), nextReportDate.getMonth(), nextReportDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
+                                    }
+                                }
+                            }
                         });
                 }
-            });
+                if (this.position.stopLossBroken()) {
+                    this.stopLossBroken = true;
+                }
+                if (this.position.hasReachedTargetPrice()) {
+                    this.hasReachedTargetPrice = true;
+                }
+
+                // this.positionService.getOfflineStockRates(this.position.share, this.position.currency)
+                this.position.getStockRates()
+                    .subscribe(rates => {
+                        this.addLatestRateToLineChart(rates);
+                        this.historicRates = rates;
+                    });
+            }
+        });
     }
 
 

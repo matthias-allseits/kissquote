@@ -17,6 +17,7 @@ import {TransactionFormComponent} from "./sites/transaction-form/transaction-for
 import {CashPositionFormComponent} from "./sites/cash-position-form/cash-position-form.component";
 import {CashTransactionFormComponent} from "./sites/cash-transaction-form/cash-transaction-form.component";
 import {ShareheadShareDetailComponent} from "./sites/sharehead-share-detail/sharehead-share-detail.component";
+import {PositionDetailResolverService} from "./resolver/position-detail-resolver.service";
 
 
 const routes: Routes = [
@@ -30,7 +31,13 @@ const routes: Routes = [
     { path: 'import-explanation', component: ImportExplanationComponent },
     { path: 'import-alternative', component: ImportAlternativeComponent },
     { path: 'faq', component: FaqComponent },
-    { path: 'position-detail/:id', component: PositionDetailComponent },
+    {
+        path: 'position-detail/:id',
+        component: PositionDetailComponent,
+        resolve: {
+            position: PositionDetailResolverService
+        }
+    },
     { path: 'sharehead-share-detail/:id', component: ShareheadShareDetailComponent },
     { path: 'bank-account/:aid/position-form/:id', component: PositionFormComponent },
     { path: 'bank-account/:aid/position-form', component: PositionFormComponent },
