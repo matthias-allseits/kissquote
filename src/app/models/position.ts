@@ -16,6 +16,7 @@ import {Sector} from "./sector";
 import {PositionLog} from "./position-log";
 import {SwissquoteHelper} from "../core/swissquote-helper";
 import {Strategy} from "./strategy";
+import {ChartData} from "chart.js";
 
 
 export interface DividendTotal {
@@ -637,6 +638,30 @@ export class Position {
         }
 
         return undefined;
+    }
+
+
+    costIncomeChartdata(): ChartData|undefined
+    {
+        if (this.balance) {
+
+            return {
+                labels: ['Transaktionskosten vs Einnahmen'],
+                datasets: [
+                    {
+                        label: 'Kosten',
+                        data: [this.balance.transactionFeesTotal]
+                    },
+                    {
+                        label: 'Einnahmen',
+                        data: [this.balance.collectedDividends]
+                    },
+                ]
+            };
+        } else {
+
+            return undefined;
+        }
     }
 
 

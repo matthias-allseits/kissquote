@@ -35,7 +35,7 @@ const routes: Routes = [
         path: 'position-detail/:id',
         component: PositionDetailComponent,
         resolve: {
-            position: PositionDetailResolverService
+            positionData: PositionDetailResolverService
         }
     },
     { path: 'sharehead-share-detail/:id', component: ShareheadShareDetailComponent },
