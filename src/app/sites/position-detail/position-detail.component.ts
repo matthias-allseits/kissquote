@@ -562,51 +562,44 @@ export class PositionDetailComponent implements OnInit {
                 this.currentYieldOnValueSource = '(from last payment)';
             }
 
-            if (this.position && this.position.shareheadId && this.position.shareheadId > 0) {
-                this.shareheadService.getShare(this.position.shareheadId)
-                    .subscribe(share => {
-                        if (share) {
-                            if (this.position) {
-                                this.position.shareheadShare = share;
-                            }
-                            this.diviProjectionYears = this.position?.dividendProjections();
-                            this.shareheadDividendPayment = this.position?.shareheadDividendPayment();
-                            this.shareheadDividendPaymentCorrected = this.position?.shareheadDividendPaymentCorrected();
-                            if (this.position && this.position.balance?.lastRate && this.shareheadDividendPayment !== undefined && +this.shareheadDividendPayment > 0) {
-                                this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadDividendPayment / this.position.balance.amount)).toFixed(1);
-                                this.currentYieldOnValueSource = '(from sharehead)';
-                            }
+            if (this.position.shareheadShare) {
+                const share = this.position.shareheadShare;
+                this.diviProjectionYears = this.position?.dividendProjections();
+                this.shareheadDividendPayment = this.position?.shareheadDividendPayment();
+                this.shareheadDividendPaymentCorrected = this.position?.shareheadDividendPaymentCorrected();
+                if (this.position && this.position.balance?.lastRate && this.shareheadDividendPayment !== undefined && +this.shareheadDividendPayment > 0) {
+                    this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadDividendPayment / this.position.balance.amount)).toFixed(1);
+                    this.currentYieldOnValueSource = '(from sharehead)';
+                }
 
-                            if (this.position?.balance && this.position.shareheadShare) {
-                                if (this.position.currency?.name !== this.position.shareheadShare.currency?.name) {
-                                    if (this.position.shareheadShare.currency) {
-                                        const usersCurrency = this.currencyService.getUsersCurrencyByName(this.position.shareheadShare.currency?.name)
-                                            .subscribe(currency => {
-                                                if (this.shareheadDividendPayment && this.position?.currency) {
-                                                    this.shareheadCurrencyCorrectedDividendPayment = (+this.shareheadDividendPayment * currency.rate / this.position?.currency.rate).toFixed(0);
-                                                    if (this.position.balance?.lastRate) {
-                                                        this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadCurrencyCorrectedDividendPayment / this.position.balance.amount)).toFixed(1);
-                                                    }
-                                                }
-                                            });
+                if (this.position?.balance && this.position.shareheadShare) {
+                    if (this.position.currency?.name !== this.position.shareheadShare.currency?.name) {
+                        if (this.position.shareheadShare.currency) {
+                            const usersCurrency = this.currencyService.getUsersCurrencyByName(this.position.shareheadShare.currency?.name)
+                                .subscribe(currency => {
+                                    if (this.shareheadDividendPayment && this.position?.currency) {
+                                        this.shareheadCurrencyCorrectedDividendPayment = (+this.shareheadDividendPayment * currency.rate / this.position?.currency.rate).toFixed(0);
+                                        if (this.position.balance?.lastRate) {
+                                            this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadCurrencyCorrectedDividendPayment / this.position.balance.amount)).toFixed(1);
+                                        }
                                     }
-                                }
-                            }
-                            this.maxDrawdownSummary = this.position?.getMaxDrawdownSummary();
-                            this.dividendDropSummary = this.position?.getDividendDropSummary();
-                            if (share.plannedDividends && share.plannedDividends.length > 0) {
-                                const currentDate = new Date();
-                                const nextExDate = share.plannedDividends[0].exDate;
-                                const nextPayDate = share.plannedDividends[0].payDate;
-                                this.daysTillNextEx = Math.floor((Date.UTC(nextExDate.getFullYear(), nextExDate.getMonth(), nextExDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
-                                this.daysTillNextPayment = Math.floor((Date.UTC(nextPayDate.getFullYear(), nextPayDate.getMonth(), nextPayDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
-                                if (share.nextReportDate) {
-                                    const nextReportDate = share.nextReportDate;
-                                    this.daysTillNextReport = Math.floor((Date.UTC(nextReportDate.getFullYear(), nextReportDate.getMonth(), nextReportDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
-                                }
-                            }
+                                });
                         }
-                    });
+                    }
+                }
+                this.maxDrawdownSummary = this.position?.getMaxDrawdownSummary();
+                this.dividendDropSummary = this.position?.getDividendDropSummary();
+                if (share.plannedDividends && share.plannedDividends.length > 0) {
+                    const currentDate = new Date();
+                    const nextExDate = share.plannedDividends[0].exDate;
+                    const nextPayDate = share.plannedDividends[0].payDate;
+                    this.daysTillNextEx = Math.floor((Date.UTC(nextExDate.getFullYear(), nextExDate.getMonth(), nextExDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
+                    this.daysTillNextPayment = Math.floor((Date.UTC(nextPayDate.getFullYear(), nextPayDate.getMonth(), nextPayDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
+                    if (share.nextReportDate) {
+                        const nextReportDate = share.nextReportDate;
+                        this.daysTillNextReport = Math.floor((Date.UTC(nextReportDate.getFullYear(), nextReportDate.getMonth(), nextReportDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
+                    }
+                }
             }
             if (this.position.stopLossBroken()) {
                 this.stopLossBroken = true;

@@ -6,6 +6,7 @@ import {Position} from "../models/position";
 import {StockRate} from "../models/stock-rate";
 import {StockRateCreator} from "../creators/stock-rate-creator";
 import {ChartData} from "chart.js";
+import {ShareheadService} from "../services/sharehead.service";
 
 
 export interface PositionData {
@@ -17,10 +18,11 @@ export interface PositionData {
 @Injectable({
   providedIn: 'root'
 })
-export class PositionDetailResolverService implements Resolve<PositionData>{
+export class PositionDetailResolver implements Resolve<PositionData>{
 
     constructor(
         private positionService: PositionService,
+        private shareheadService: ShareheadService,
     ) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<PositionData> {
@@ -46,6 +48,14 @@ export class PositionDetailResolverService implements Resolve<PositionData>{
                                 holder.next(data);
                             });
 
+                        if (position.shareheadId && position.shareheadId > 0) {
+                            this.shareheadService.getShare(position.shareheadId)
+                                .subscribe(share => {
+                                    if (share) {
+                                        position.shareheadShare = share;
+                                    }
+                                });
+                        }
                     }
                 });
         });

@@ -17,7 +17,7 @@ import {TransactionFormComponent} from "./sites/transaction-form/transaction-for
 import {CashPositionFormComponent} from "./sites/cash-position-form/cash-position-form.component";
 import {CashTransactionFormComponent} from "./sites/cash-transaction-form/cash-transaction-form.component";
 import {ShareheadShareDetailComponent} from "./sites/sharehead-share-detail/sharehead-share-detail.component";
-import {PositionDetailResolverService} from "./resolver/position-detail-resolver.service";
+import {PositionDetailResolver} from "./resolver/position-detail-resolver.service";
 
 
 const routes: Routes = [
@@ -35,7 +35,7 @@ const routes: Routes = [
         path: 'position-detail/:id',
         component: PositionDetailComponent,
         resolve: {
-            positionData: PositionDetailResolverService
+            positionData: PositionDetailResolver
         }
     },
     { path: 'sharehead-share-detail/:id', component: ShareheadShareDetailComponent },
