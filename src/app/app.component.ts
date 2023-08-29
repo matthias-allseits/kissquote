@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {TranslationService} from './services/translation.service';
-import {Router} from '@angular/router';
+import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
+import {Observable, of} from "rxjs";
+import {filter, map} from 'rxjs/operators';
 
 
 @Component({
@@ -15,6 +17,7 @@ export class AppComponent implements OnInit {
     language: string | null = 'de';
     myKey: string | null = null;
     public showUsersMenu = false;
+    public loading$: Observable<boolean> = of(false);
 
     constructor(
         public tranService: TranslationService,
@@ -23,6 +26,18 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        // this.router.events.subscribe(console.log);
+        this.loading$ = this.router.events.pipe(
+                filter(
+                    (e) =>
+                        e instanceof NavigationStart ||
+                        e instanceof NavigationEnd ||
+                        e instanceof NavigationCancel ||
+                        e instanceof NavigationError
+                ),
+                map((e) => e instanceof NavigationStart)
+            );
+
         localStorage.removeItem('ultimateFilter');
         if (null !== localStorage.getItem('lang')) {
             this.language = localStorage.getItem('lang');
