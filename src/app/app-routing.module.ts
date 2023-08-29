@@ -17,7 +17,7 @@ import {TransactionFormComponent} from "./sites/transaction-form/transaction-for
 import {CashPositionFormComponent} from "./sites/cash-position-form/cash-position-form.component";
 import {CashTransactionFormComponent} from "./sites/cash-transaction-form/cash-transaction-form.component";
 import {ShareheadShareDetailComponent} from "./sites/sharehead-share-detail/sharehead-share-detail.component";
-import {PositionDetailResolver} from "./resolver/position-detail-resolver.service";
+import {PositionDetailResolver} from "./resolver/position-detail-resolver";
 
 
 const routes: Routes = [

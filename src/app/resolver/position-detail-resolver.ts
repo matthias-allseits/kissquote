@@ -10,8 +10,8 @@ import {ShareheadService} from "../services/sharehead.service";
 
 
 export interface PositionData {
-    position: Position;
-    historicRates: StockRate[];
+    position?: Position;
+    historicRates?: StockRate[];
     costIncomeChartData?: ChartData;
 }
 
@@ -34,28 +34,31 @@ export class PositionDetailResolver implements Resolve<PositionData>{
             this.positionService.getPosition(positionId)
                 .subscribe(position => {
                     if (position) {
+                        const data: PositionData = {
+                            position: position,
+                            historicRates: undefined,
+                            costIncomeChartData: position.costIncomeChartdata()
+                        }
+
                         // this.positionService.getOfflineStockRates(this.position.share, this.position.currency)
                         position.getStockRates()
                             .subscribe(rates => {
                                 this.addLatestRateToLineChart(position, rates);
-                                historicRates = rates;
-                                const data = {
-                                    position: position,
-                                    historicRates: historicRates,
-                                    costIncomeChartData: position.costIncomeChartdata()
-                                }
+                                data.historicRates = rates;
 
-                                holder.next(data);
+                                if (position.shareheadId && position.shareheadId > 0) {
+                                    this.shareheadService.getShare(position.shareheadId)
+                                        .subscribe(share => {
+                                            if (share) {
+                                                position.shareheadShare = share;
+                                                holder.next(data);
+                                            }
+                                        });
+                                } else {
+                                    holder.next(data);
+                                }
                             });
 
-                        if (position.shareheadId && position.shareheadId > 0) {
-                            this.shareheadService.getShare(position.shareheadId)
-                                .subscribe(share => {
-                                    if (share) {
-                                        position.shareheadShare = share;
-                                    }
-                                });
-                        }
                     }
                 });
         });

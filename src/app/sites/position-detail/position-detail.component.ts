@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DividendDropSummary, MaxDrawdownSummary, Position} from '../../models/position';
 import {PositionService} from '../../services/position.service';
@@ -38,7 +38,7 @@ import {StrategyService} from "../../services/strategy.service";
     templateUrl: './position-detail.component.html',
     styleUrls: ['./position-detail.component.scss']
 })
-export class PositionDetailComponent implements OnInit {
+export class PositionDetailComponent implements OnInit, OnChanges {
 
     @ViewChild(LineChartComponent)
     private lineChartComponent!: LineChartComponent;
@@ -114,7 +114,12 @@ export class PositionDetailComponent implements OnInit {
         private shareService: ShareService,
         private shareheadService: ShareheadService,
         private modalService: NgbModal,
-    ) { }
+    ) {
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        this.loadData('ngOnChanges');
+    }
 
     ngOnInit(): void {
         this.route.data.subscribe(data => {
@@ -562,9 +567,13 @@ export class PositionDetailComponent implements OnInit {
                 this.currentYieldOnValueSource = '(from last payment)';
             }
 
+            console.log(this.position);
+            console.log(this.position.shareheadShare);
             if (this.position.shareheadShare) {
+                console.log('share is there');
                 const share = this.position.shareheadShare;
                 this.diviProjectionYears = this.position?.dividendProjections();
+                console.log(this.diviProjectionYears);
                 this.shareheadDividendPayment = this.position?.shareheadDividendPayment();
                 this.shareheadDividendPaymentCorrected = this.position?.shareheadDividendPaymentCorrected();
                 if (this.position && this.position.balance?.lastRate && this.shareheadDividendPayment !== undefined && +this.shareheadDividendPayment > 0) {
