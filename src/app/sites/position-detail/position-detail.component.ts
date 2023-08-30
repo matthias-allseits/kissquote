@@ -38,7 +38,7 @@ import {StrategyService} from "../../services/strategy.service";
     templateUrl: './position-detail.component.html',
     styleUrls: ['./position-detail.component.scss']
 })
-export class PositionDetailComponent implements OnInit, OnChanges {
+export class PositionDetailComponent implements OnInit {
 
     @ViewChild(LineChartComponent)
     private lineChartComponent!: LineChartComponent;
@@ -117,18 +117,14 @@ export class PositionDetailComponent implements OnInit, OnChanges {
     ) {
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        this.loadData('ngOnChanges');
-    }
-
     ngOnInit(): void {
         this.route.data.subscribe(data => {
-            console.log(data);
+            // console.log(data);
             this.position = data['positionData']['position'];
             this.historicRates = data['positionData']['historicRates'];
             this.chartData = data['positionData']['costIncomeChartData'];
+            this.loadData('ngOnInit');
         });
-        this.loadData('ngOnInit');
 
         const storedTab = localStorage.getItem('positionTab');
         if (storedTab) {
@@ -166,6 +162,7 @@ export class PositionDetailComponent implements OnInit, OnChanges {
     goToUnderlying() {
         if (this.position?.underlying) {
             this.router.navigate(['/position-detail/' + this.position?.underlying.id]);
+            // todo: implement a resolver for this route
         }
     }
 
@@ -184,6 +181,7 @@ export class PositionDetailComponent implements OnInit, OnChanges {
                     if (position) {
                         this.position = position;
                         this.loadData('confirmShareheadRemoving');
+                        // todo: find a solution to really reload the whole page
                     }
                 });
         }
@@ -198,6 +196,7 @@ export class PositionDetailComponent implements OnInit, OnChanges {
                     if (position) {
                         this.position = position;
                         this.loadData('confirmUnderlyingRemoving');
+                        // todo: find a solution to really reload the whole page
                     }
                 });
         }
@@ -226,6 +225,7 @@ export class PositionDetailComponent implements OnInit, OnChanges {
                     if (position) {
                         this.position = position;
                         this.loadData('selectShareheadShare');
+                        // todo: find a solution to really reload the whole page
                     }
                 });
         }
@@ -312,6 +312,7 @@ export class PositionDetailComponent implements OnInit, OnChanges {
                     if (position) {
                         this.position = position;
                         this.loadData('confirmManualDrawdownRemoving');
+                        // todo: find a solution to really reload the whole page
                     }
                 });
         }
@@ -326,6 +327,7 @@ export class PositionDetailComponent implements OnInit, OnChanges {
                     if (position) {
                         this.position = position;
                         this.loadData('persistManualDrawdown');
+                        // todo: find a solution to really reload the whole page
                     }
                 });
         }
@@ -340,6 +342,7 @@ export class PositionDetailComponent implements OnInit, OnChanges {
                     if (position) {
                         this.position = position;
                         this.loadData('confirmManualDividendDropRemoving');
+                        // todo: find a solution to really reload the whole page
                     }
                 });
         }
@@ -354,6 +357,7 @@ export class PositionDetailComponent implements OnInit, OnChanges {
                     if (position) {
                         this.position = position;
                         this.loadData('persistManualDividendDrop');
+                        // todo: find a solution to really reload the whole page
                     }
                 });
         }
@@ -368,6 +372,7 @@ export class PositionDetailComponent implements OnInit, OnChanges {
                     if (position) {
                         this.position = position;
                         this.loadData('persistStopLoss');
+                        this.refreshChart();
                     }
                 });
         }
@@ -383,6 +388,7 @@ export class PositionDetailComponent implements OnInit, OnChanges {
                     if (position) {
                         this.position = position;
                         this.loadData('persistTargetPrice');
+                        this.refreshChart();
                     }
                 });
         }
@@ -418,24 +424,18 @@ export class PositionDetailComponent implements OnInit, OnChanges {
 
     deleteTransaction(transaction: Transaction): void {
         this.transactionService.delete(transaction.id).subscribe(() => {
-            if (this.position instanceof Position) {
-                this.loadData('deleteTransaction');
-            }
+            this.transactionService.removeEntry(this.position?.transactions, transaction);
+            this.refreshLog();
         });
     }
 
 
     deleteLabel(label: Label): void {
+        this.showLabelsDropdown = false;
+        this.shareheadModalRef?.close();
         if (this.position) {
             this.positionService.deleteLabel(this.position.id, label.id).subscribe(() => {
-                // if (this.position instanceof Position) {
-                //     this.loadData(this.position.id);
-                // }
-            });
-            this.position.labels?.forEach((labl, index) => {
-                if (labl.id === label.id) {
-                    this.position?.labels?.splice(index, 1);
-                }
+                this.refreshLogHard();
             });
         }
     }
@@ -449,14 +449,12 @@ export class PositionDetailComponent implements OnInit, OnChanges {
 
 
     addLabel(label: Label): void {
+        this.showLabelsDropdown = false;
+        this.shareheadModalRef?.close();
         if (this.position) {
             this.positionService.addLabel(this.position.id, label.id).subscribe(() => {
-                // if (this.position instanceof Position) {
-                //     this.loadData(this.position.id);
-                // }
+                this.refreshLogHard();
             });
-            this.position.labels?.push(label);
-            this.showLabelsDropdown = false;
         }
     }
 
@@ -469,6 +467,7 @@ export class PositionDetailComponent implements OnInit, OnChanges {
                     if (posi) {
                         this.position = posi;
                         this.loadData('setSector');
+                        // todo: find a solution to really reload the whole page
                     }
                 });
         }
@@ -484,6 +483,7 @@ export class PositionDetailComponent implements OnInit, OnChanges {
                     if (posi) {
                         this.position = posi;
                         this.loadData('setStrategy');
+                        // todo: find a solution to really reload the whole page
                     }
                 });
         }
@@ -542,6 +542,45 @@ export class PositionDetailComponent implements OnInit, OnChanges {
         }
     }
 
+    private refreshLogHard(): void
+    {
+        if (this.position) {
+            this.refreshPosition(this.position.id)
+                .subscribe(result => {
+                    this.refreshLog();
+                });
+        }
+        // todo: find a solution to really reload the whole page
+        // todo: get logentries and transactions from backend
+    }
+
+
+    private refreshPosition(positionId: number): Observable<boolean> {
+        return new Observable(obs => {
+            this.positionService.getPosition(positionId)
+                .subscribe(position => {
+                    if (position) {
+                        const shareheadShare = this.position?.shareheadShare;
+                        this.position = position;
+                        this.position.shareheadShare = shareheadShare;
+                        this.loadData('refreshPosition');
+                    }
+
+                    return obs.next(true);
+                });
+        });
+    }
+
+
+    private refreshChart(): void {
+        // todo: find a better solution
+        const tempData = this.historicRates;
+        this.historicRates = [];
+        setTimeout(() => {
+            this.historicRates = tempData;
+        }, 100);
+    }
+
 
     private loadData(referer: string): void {
         console.log('referer is: ' + referer);
@@ -554,7 +593,6 @@ export class PositionDetailComponent implements OnInit, OnChanges {
         this.stopLossBroken = false;
         this.hasReachedTargetPrice = false;
 
-        console.log(this.position);
         if (this.position) {
             this.checkAndResetPositionFilter(this.position.id);
 
@@ -567,13 +605,9 @@ export class PositionDetailComponent implements OnInit, OnChanges {
                 this.currentYieldOnValueSource = '(from last payment)';
             }
 
-            console.log(this.position);
-            console.log(this.position.shareheadShare);
             if (this.position.shareheadShare) {
-                console.log('share is there');
                 const share = this.position.shareheadShare;
                 this.diviProjectionYears = this.position?.dividendProjections();
-                console.log(this.diviProjectionYears);
                 this.shareheadDividendPayment = this.position?.shareheadDividendPayment();
                 this.shareheadDividendPaymentCorrected = this.position?.shareheadDividendPaymentCorrected();
                 if (this.position && this.position.balance?.lastRate && this.shareheadDividendPayment !== undefined && +this.shareheadDividendPayment > 0) {

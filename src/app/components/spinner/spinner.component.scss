@@ -9,14 +9,14 @@
     left: 0;
     float: left;
     text-align: center;
-    padding-top: 25%;
+    padding-top: 35%;
     opacity: .80;
 }
 .spinner-loader {
     font-size: 32px;
     margin: 0 auto;
-    height: 64px;
-    width: 64px;
+    height: 48px;
+    width: 48px;
     animation: rotate 0.8s infinite linear;
     border: 5px solid var(--main-color);
     border-right-color: transparent;

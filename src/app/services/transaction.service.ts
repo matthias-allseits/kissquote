@@ -6,6 +6,7 @@ import {Transaction} from "../models/transaction";
 import {TransactionCreator} from "../creators/transaction-creator";
 import {ApiService} from "./api-service";
 import {DateHelper} from "../core/datehelper";
+import {PositionLog} from "../models/position-log";
 
 
 const httpOptions = {
@@ -84,6 +85,33 @@ export class TransactionService extends ApiService {
                 map(() => transaction),
                 // catchError(this.handleError)
             );
+    }
+
+
+    replaceEntry(allTransactions: Transaction[]|undefined, entry2Replace: Transaction|undefined): Transaction[]|undefined {
+        if (allTransactions && entry2Replace) {
+            allTransactions.forEach((entry, index) => {
+                if (entry.id === entry2Replace.id) {
+                    allTransactions.splice(index, 1);
+                }
+            });
+            allTransactions.push(entry2Replace);
+        }
+
+        return allTransactions;
+    }
+
+
+    removeEntry(allTransactions: Transaction[]|undefined, entry2Remove: Transaction|undefined): Transaction[]|undefined {
+        if (allTransactions && entry2Remove) {
+            allTransactions.forEach((entry, index) => {
+                if (entry.id === entry2Remove.id) {
+                    allTransactions.splice(index, 1);
+                }
+            });
+        }
+
+        return allTransactions;
     }
 
 
