@@ -1,6 +1,5 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
 import {DividendTotals, Portfolio} from '../../models/portfolio';
-import {PortfolioService} from '../../services/portfolio.service';
 import {faEdit, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {TranslationService} from "../../services/translation.service";
@@ -9,7 +8,6 @@ import {PositionService} from "../../services/position.service";
 import {BankAccount} from "../../models/bank-account";
 import {BankAccountService} from "../../services/bank-account.service";
 import {FormGroup, UntypedFormControl, Validators} from "@angular/forms";
-import {CurrencyService} from "../../services/currency.service";
 import {ShareheadService} from "../../services/sharehead.service";
 import {WatchlistEntry} from "../../models/watchlistEntry";
 import {ShareheadShare} from "../../models/sharehead-share";
@@ -17,11 +15,10 @@ import {WatchlistService} from "../../services/watchlist.service";
 import {ManualDividend} from "../../models/manual-dividend";
 import {ManualDividendService} from "../../services/manual-dividend.service";
 import {DividendCreator} from "../../creators/dividend-creator";
-import {Observable} from "rxjs";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {Label} from "../../models/label";
 import {LabelService} from "../../services/label.service";
-import {SectorService} from "../../services/sector.service";
+import {ActivatedRoute} from "@angular/router";
 
 
 @Component({
@@ -62,11 +59,9 @@ export class MyDashboardComponent implements OnInit {
 
     constructor(
         public tranService: TranslationService,
-        private portfolioService: PortfolioService,
+        private route: ActivatedRoute,
         private positionService: PositionService,
-        private currencyService: CurrencyService,
         private labelService: LabelService,
-        private sectorService: SectorService,
         private bankAccountService: BankAccountService,
         private modalService: NgbModal,
         private shareheadService: ShareheadService,
@@ -76,46 +71,33 @@ export class MyDashboardComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.myKey = localStorage.getItem('my-key');
-        if (null !== this.myKey) {
-            // let us get the portfolio again with all its interesting data
-            this.portfolioService.portfolioByKey(this.myKey)
-                .subscribe(returnedPortfolio => {
-                    if (returnedPortfolio instanceof Portfolio) {
-                        this.portfolio = returnedPortfolio;
-                        this.portfolio.calculatePositionsShareFromTotal();
-                        this.portfolio.bankAccounts.forEach((account, index) => {
-                            this.availableDashboardTabs.push(index.toString());
-                        });
-                        const storedTab = localStorage.getItem('dashboardTab');
-                        if (storedTab && this.availableDashboardTabs.indexOf(storedTab) > -1) {
-                            this.dashboardTab = storedTab;
-                        } else {
-                            this.dashboardTab = '0';
-                        }
-                        this.ultimateBalanceList = this.portfolio.getActiveNonCashPositions();
-                        this.ultimateBalanceList.sort((a,b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
-                        this.getAllLabels();
-                        this.portfolio.getClosedNonCashPositions().forEach(position => {
-                            if (position.balance?.closedResult) {
-                                this.closedPositionsBalance += +position.closedResultCorrected();
-                            }
-                        });
-                        this.loadShareheadShares()
-                            .subscribe(result => {
-                                this.shareheadSharesLoaded = true;
-                                if (this.portfolio) {
-                                    this.dividendLists = this.portfolio.collectDividendLists();
-                                }
-                            });
-                    } else {
-                        alert('Something went wrong!');
-                        // todo: redirect back to landingpage. probably the solution: implement guards
+        this.route.data.subscribe(data => {
+            // console.log(data);
+            if (data['portfolio'] instanceof Portfolio) {
+                this.portfolio = data['portfolio'];
+                this.shareheadSharesLoaded = true;
+                if (this.portfolio) {
+                    this.dividendLists = this.portfolio.collectDividendLists();
+                }
+                this.portfolio.bankAccounts.forEach((account, index) => {
+                    this.availableDashboardTabs.push(index.toString());
+                });
+                const storedTab = localStorage.getItem('dashboardTab');
+                if (storedTab && this.availableDashboardTabs.indexOf(storedTab) > -1) {
+                    this.dashboardTab = storedTab;
+                } else {
+                    this.dashboardTab = '0';
+                }
+                this.ultimateBalanceList = this.portfolio.getActiveNonCashPositions();
+                this.ultimateBalanceList.sort((a, b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
+                this.getAllLabels();
+                this.portfolio.getClosedNonCashPositions().forEach(position => {
+                    if (position.balance?.closedResult) {
+                        this.closedPositionsBalance += +position.closedResultCorrected();
                     }
                 });
-        } else {
-            // todo: redirect back to landingpage. probably the solution: implement guards
-        }
+            }
+        });
     }
 
     changeTab(selectedTab: string): void {
@@ -285,39 +267,6 @@ export class MyDashboardComponent implements OnInit {
                 }
                 this.filterUltimateList();
             });
-    }
-
-    private loadShareheadShares(): Observable<boolean>
-    {
-        return new Observable(psitons => {
-            let result = false;
-            if (this.portfolio) {
-                const allPositions = this.portfolio.getAllPositions();
-                // console.log('all posis length: ' + allPositions.length);
-                this.shareheadService.getSharesCollection(this.portfolio)
-                    .subscribe(shares => {
-                        let counter = 0;
-                        allPositions.forEach((position, index) => {
-                            if (position.shareheadId !== undefined && position.shareheadId > 0 && position.active) {
-                                shares.forEach(share => {
-                                    if (share.id === position.shareheadId) {
-                                        position.shareheadShare = share;
-                                        counter++;
-                                    }
-                                });
-                            } else {
-                                counter++;
-                            }
-                            // console.log(counter);
-                            if (counter == allPositions.length) {
-                                result = true;
-                                // console.log('we are done');
-                                psitons.next(result);
-                            }
-                        });
-                    });
-            }
-        });
     }
 
 }

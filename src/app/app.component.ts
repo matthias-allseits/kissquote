@@ -17,7 +17,8 @@ export class AppComponent implements OnInit {
     language: string | null = 'de';
     myKey: string | null = null;
     public showUsersMenu = false;
-    public loading$: Observable<boolean> = of(false);
+    // public loading$: Observable<boolean> = of(false);
+    public loading: boolean = false;
 
     constructor(
         public tranService: TranslationService,
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit {
 
     ngOnInit(): void {
         // this.router.events.subscribe(console.log);
-        this.loading$ = this.router.events.pipe(
+        this.router.events.pipe(
                 filter(
                     (e) =>
                         e instanceof NavigationStart ||
@@ -36,7 +37,11 @@ export class AppComponent implements OnInit {
                         e instanceof NavigationError
                 ),
                 map((e) => e instanceof NavigationStart)
-            );
+            )
+            .subscribe(result => {
+                this.loading = result;
+                console.log('spinning: ', result);
+            });
 
         localStorage.removeItem('ultimateFilter');
         if (null !== localStorage.getItem('lang')) {

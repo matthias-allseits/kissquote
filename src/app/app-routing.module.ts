@@ -18,12 +18,19 @@ import {CashPositionFormComponent} from "./sites/cash-position-form/cash-positio
 import {CashTransactionFormComponent} from "./sites/cash-transaction-form/cash-transaction-form.component";
 import {ShareheadShareDetailComponent} from "./sites/sharehead-share-detail/sharehead-share-detail.component";
 import {PositionDetailResolver} from "./resolver/position-detail-resolver";
+import {MyDashboardResolver} from "./resolver/my-dashboard-resolver";
 
 
 const routes: Routes = [
     { path: '', redirectTo: '/landingpage', pathMatch: 'full' },
     { path: 'landingpage', component: LandingpageComponent },
-    { path: 'my-dashboard', component: MyDashboardComponent },
+    {
+        path: 'my-dashboard',
+        component: MyDashboardComponent,
+        resolve: {
+            portfolio: MyDashboardResolver
+        }
+    },
     { path: 'more-info', component: MoreInfoComponent },
     { path: 'restore', component: SessionRestoreComponent },
     { path: 'import', component: ImportComponent },
