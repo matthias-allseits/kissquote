@@ -6,7 +6,6 @@ import {Transaction} from "../models/transaction";
 import {TransactionCreator} from "../creators/transaction-creator";
 import {ApiService} from "./api-service";
 import {DateHelper} from "../core/datehelper";
-import {PositionLog} from "../models/position-log";
 
 
 const httpOptions = {
@@ -52,6 +51,9 @@ export class TransactionService extends ApiService {
             transaction.position.transactions.forEach(trans => {
                 trans.date = DateHelper.convertDateToMysql(trans.date);
             });
+            if (transaction.position.underlying) {
+                transaction.position.underlying = undefined;
+            }
         }
         const url = `${this.apiUrl}`;
         // todo: cast this as we do in position-log-service
