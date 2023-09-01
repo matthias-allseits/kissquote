@@ -119,11 +119,17 @@ export class PositionDetailComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.data.subscribe(data => {
+            this.position = undefined;
+            this.historicRates = [];
+            this.chartData = undefined;
             // console.log(data);
-            this.position = data['positionData']['position'];
-            this.historicRates = data['positionData']['historicRates'];
-            this.chartData = data['positionData']['costIncomeChartData'];
-            this.loadData('ngOnInit');
+            // todo: find a better solution...
+            setTimeout(() => {
+                this.position = data['positionData']['position'];
+                this.historicRates = data['positionData']['historicRates'];
+                this.chartData = data['positionData']['costIncomeChartData'];
+                this.loadData('ngOnInit');
+            }, 100);
         });
 
         const storedTab = localStorage.getItem('positionTab');
@@ -161,8 +167,9 @@ export class PositionDetailComponent implements OnInit {
 
     goToUnderlying() {
         if (this.position?.underlying) {
-            this.router.navigate(['/position-detail/' + this.position?.underlying.id]);
-            // todo: implement a resolver for this route
+            const underLyingId = this.position.underlying.id;
+            this.position = undefined;
+            this.router.navigate(['/position-detail/' + underLyingId]);
         }
     }
 
