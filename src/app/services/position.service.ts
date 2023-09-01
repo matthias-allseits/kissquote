@@ -177,6 +177,9 @@ export class PositionService extends ApiService {
         } else {
             position.activeUntil = null;
         }
+        if (position.underlying) {
+            position.underlying = undefined;
+        }
         const url = `${this.apiUrl}/${position.id}`;
         // todo: cast this as we do in position-log-service
         return this.http
