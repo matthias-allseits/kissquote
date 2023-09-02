@@ -60,6 +60,36 @@ a:hover, .nav-link:hover {
   box-shadow: 0 0 0 0.25rem rgb(255 102 51 / 50%);
 }
 
+//outline red btn
+.btn-outline-red {
+  color: red;
+  border-color: red;
+}
+
+.btn-outline-red:hover, .btn-outline-red:active {
+  background-color: red !important;
+  border-color: red !important;
+}
+
+.btn-routline-red:focus, .btn-routline-red:active:focus {
+  box-shadow: 0 0 0 0.25rem rgb(255 0 0 / 50%);
+}
+
+//outline green btn
+.btn-outline-green {
+  color: green;
+  border-color: green;
+}
+
+.btn-outline-green:hover, .btn-outline-green:active {
+  background-color: green !important;
+  border-color: green !important;
+}
+
+.btn-routline-green:focus, .btn-routline-green:active:focus {
+  box-shadow: 0 0 0 0.25rem rgb(0 128 0 / 50%);
+}
+
 .bg-primary {
   background-color: #ff6633 !important;
 }
