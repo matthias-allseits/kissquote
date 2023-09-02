@@ -293,20 +293,20 @@
                 <thead>
                 <tr>
                     <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
-                    <th scope="col"><span class="float-end">Investment</span></th>
-                    <th scope="col"><span class="float-end">Value</span></th>
+                    <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Investment</span></th>
+                    <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Value</span></th>
                     <th scope="col"><span class="float-end">Dividend</span></th>
-                    <th scope="col"><span class="float-end">Currency</span></th>
+                    <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Currency</span></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let position of diversityList">
                     <ng-container>
                         <td><a [routerLink]="['/position-detail/' + position.id]">{{ position.getName() }}</a></td>
-                        <td><span class="float-end">{{ position.balance?.investment }}</span></td>
-                        <td><span class="float-end">{{ position.actualValue() }}</span></td>
+                        <td class="d-none d-md-table-cell"><span class="float-end">{{ position.balance?.investment }}</span></td>
+                        <td class="d-none d-md-table-cell"><span class="float-end">{{ position.actualValue() }}</span></td>
                         <td><span class="float-end">{{ position.bestSelectedDividendPayment() }}</span></td>
-                        <td><span class="float-end">{{ position.currency?.name }}</span></td>
+                        <td class="d-none d-md-table-cell"><span class="float-end">{{ position.currency?.name }}</span></td>
                     </ng-container>
                 </tr>
                 </tbody>
