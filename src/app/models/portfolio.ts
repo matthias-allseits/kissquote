@@ -731,7 +731,26 @@ export class Portfolio {
 
 
     private diversitySummary(): DiversitySummary[] {
-        const colors = ['rgb(255, 99, 132, 1)', 'rgb(54, 162, 235, 1)', 'rgb(255, 206, 86, 1)', 'rgb(75, 192, 192, 1)', 'rgb(153, 102, 255, 1)', 'rgb(255, 159, 64, 1)', 'rgb(99, 255, 234, 1)', 'rgb(200, 255, 99, 1)', 'rgb(210, 105, 30, 1)', 'rgb(220, 20, 60, 1)', 'rgb(255, 99, 71, 1)', 'rgb(255, 215, 0, 1)', 'rgb(139, 0, 139, 1)', 'rgb(106, 90, 205, 1)', 'rgb(160, 82, 45, 1)', 'rgb(218, 165, 32, 1)', 'rgb(152, 251, 152, 1)', 'rgb(143, 188, 143, 1)'];
+        const colors = [
+            'rgb(255, 99, 132, 1)',
+            'rgb(54, 162, 235, 1)',
+            'rgb(255, 206, 86, 1)',
+            'rgb(75, 192, 192, 1)',
+            'rgb(153, 102, 255, 1)',
+            'rgb(255, 159, 64, 1)',
+            'rgb(99, 255, 234, 1)',
+            'rgb(200, 255, 99, 1)',
+            'rgb(210, 105, 30, 1)',
+            'rgb(220, 20, 60, 1)',
+            'rgb(255, 99, 71, 1)',
+            // 'rgb(255, 215, 0, 1)',
+            'rgb(139, 0, 139, 1)',
+            'rgb(106, 90, 205, 1)',
+            'rgb(160, 82, 45, 1)',
+            'rgb(218, 165, 32, 1)',
+            'rgb(152, 251, 152, 1)',
+            'rgb(143, 188, 143, 1)'
+        ];
 
         const summaries: DiversitySummary[] = [];
         const positions = this.getActiveNonCashPositions();
@@ -739,7 +758,7 @@ export class Portfolio {
         positions.forEach(position => {
             if (position.sector && position.balance && position.balance.lastRate) {
                 const summary = this.getSummaryBySector(summaries, position.sector);
-                let dividend = +position.shareheadDividendPayment();
+                let dividend = +position.bestSelectedDividendPayment();
                 if (position.shareheadShare?.currency) {
                     const usersCurrency = Forexhelper.getUsersCurrencyByName(position.shareheadShare?.currency?.name);
                     if (usersCurrency) {
@@ -800,7 +819,7 @@ export class Portfolio {
         positions.forEach(position => {
             if (position.strategy && position.balance && position.balance.lastRate) {
                 const summary = this.getStrategyByStrategy(summaries, position.strategy);
-                let dividend = +position.shareheadDividendPayment();
+                let dividend = +position.bestSelectedDividendPayment();
                 if (position.shareheadShare?.currency) {
                     const usersCurrency = Forexhelper.getUsersCurrencyByName(position.shareheadShare?.currency?.name);
                     if (usersCurrency) {

@@ -73,6 +73,7 @@ export class Position {
         public stopLoss?: number,
         public targetPrice?: number,
         public targetType?: string,
+        public manualDividend?: number,
         public manualDrawdown?: number,
         public manualDividendDrop?: number,
         public labels?: Label[],
@@ -466,6 +467,18 @@ export class Position {
     }
 
 
+    public bestSelectedDividendPayment(): string {
+        let result = '';
+        if (this.shareheadShare && this.balance) {
+            result = this.shareheadDividendPaymentCorrected();
+        } else if (this.manualDividend) {
+            result = this.manualDividendPayment();
+        }
+
+        return result;
+    }
+
+
     public shareheadDividendPaymentCorrected(): string {
         let result = '';
         if (this.shareheadShare && this.balance) {
@@ -485,6 +498,27 @@ export class Position {
         }
 
         return result;
+    }
+
+
+    public manualDividendPayment(): string {
+        let result = '';
+        if (this.manualDividend && this.balance) {
+            result = (this.manualDividend * this.balance.amount).toFixed(0);
+        }
+
+        return result;
+    }
+
+
+    manualYieldOnInvestent(): string
+    {
+        let result = 0;
+        if (this.manualDividend && this.balance) {
+            result = (100 / this.balance.investment * +this.manualDividendPayment());
+        }
+
+        return result.toFixed(1);
     }
 
 

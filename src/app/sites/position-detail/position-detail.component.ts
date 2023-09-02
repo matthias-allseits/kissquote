@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DividendDropSummary, MaxDrawdownSummary, Position} from '../../models/position';
 import {PositionService} from '../../services/position.service';
@@ -84,6 +84,10 @@ export class PositionDetailComponent implements OnInit {
 
     manualDividendDropForm = new FormGroup({
         amount: new UntypedFormControl('', Validators.required),
+    });
+
+    manualDividendForm = new FormGroup({
+        dividend: new UntypedFormControl('', Validators.required),
     });
 
     stopLossForm = new FormGroup({
@@ -277,6 +281,11 @@ export class PositionDetailComponent implements OnInit {
         this.modalRef = this.modalService.open(template);
     }
 
+    openManualDividendModal(template: TemplateRef<any>) {
+        this.manualDividendForm.get('dividend')?.setValue(this.position?.manualDividend);
+        this.modalRef = this.modalService.open(template);
+    }
+
     cancelModal(): void {
         this.modalRef?.close();
     }
@@ -324,6 +333,21 @@ export class PositionDetailComponent implements OnInit {
                 });
         }
         this.decline();
+    }
+
+    persistManualDividend(): void {
+        if (this.position) {
+            this.position.manualDividend = +this.manualDividendForm.get('dividend')?.value;
+            this.positionService.update(this.position)
+                .subscribe(position => {
+                    if (position) {
+                        this.position = position;
+                        this.loadData('persistManualDividend');
+                        // todo: find a solution to really reload the whole page
+                    }
+                });
+        }
+        this.modalRef?.close();
     }
 
     persistManualDrawdown(): void {

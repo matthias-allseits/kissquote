@@ -216,7 +216,13 @@
             <div class="info-box-wrapper">
                 <h4>Chancen</h4>
                 <div *ngIf="position.balance" class="info-box" [class.green20]="position.balance.investment < 0 || hasReachedTargetPrice" [class.red20]="stopLossBroken">
-                    <h5>{{ tranService.trans('GLOB_DIVIDENDS') }}</h5>
+                    <h5>
+                        {{ tranService.trans('GLOB_DIVIDENDS') }}
+                        <button (click)="openManualDividendModal(manualDividendFormModal)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Set manual dividend">
+                            <fa-icon *ngIf="position.manualDividend" [icon]="editIcon"></fa-icon>
+                            <fa-icon *ngIf="!position.manualDividend" [icon]="addIcon"></fa-icon>
+                        </button>
+                    </h5>
                     <div class="row">
                         <div class="col-8">Collected dividends:</div>
                         <div class="col-4"><span class="float-end">{{ position.balance.collectedDividends|number: '1.0' }} {{ position.balance.collectedDividendsCurrency }}</span></div>
@@ -225,6 +231,17 @@
                         <div class="col-9">ROI by dividends:</div>
                         <div class="col-3"><span class="float-end" *ngIf="position.balance.investment > 0">{{ position.balance.returnOnInvestentByDividends() }}%</span></div>
                     </div>
+                    <ng-container *ngIf="position.manualDividend && position.currency">
+                        <h6>Projection from manual dividend</h6>
+                        <div class="row">
+                            <div class="col-8">Next payment:</div>
+                            <div class="col-4"><span class="float-end">{{ position.manualDividendPayment() }} {{ position.currency.name }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">Yield on investment:</div>
+                            <div class="col-6"><span class="float-end">{{ position.manualYieldOnInvestent() }}%</span></div>
+                        </div>
+                    </ng-container>
                     <h6>Projection from last payment(s)</h6>
                     <div class="row">
                         <div class="col-8">Next payment:</div>
@@ -558,6 +575,26 @@
                 </div>
                 <div class="col-6">
                     <button type="button" class="btn btn-primary float-end" (click)="persistManualDividendDrop()">{{ tranService.trans('GLOB_SAVE') }}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #manualDividendFormModal>
+    <div *ngIf="position && position.share" class="modal-body">
+        <p>Set your manual dividend for your position &laquo;{{ position.share.name }}&raquo;:</p>
+        <form [formGroup]="manualDividendForm">
+            <div class="mb-3">
+                <label for="dividend-input" class="form-label"></label>
+                <input formControlName="dividend" id="dividend-input" class="form-control" type="text" name="dividend" value="">
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="btn btn-primary float-end" (click)="persistManualDividend()">{{ tranService.trans('GLOB_SAVE') }}</button>
                 </div>
             </div>
         </form>

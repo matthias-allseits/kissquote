@@ -44,6 +44,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public lombardTotal = 0;
     public risksList?: LombardValuesSummary[];
     public riskTotal = 0;
+    public diversityListTitle = '';
+    public diversityList: Position[] = [];
 
     constructor(
         public tranService: TranslationService,
@@ -145,6 +147,17 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
             }
         });
         this.performanceList.sort((a, b) => (a.tempPerformanceValue !== undefined && b.tempPerformanceValue !== undefined && a.tempPerformanceValue < b.tempPerformanceValue) ? 1 : ((a.tempPerformanceValue !== undefined && b.tempPerformanceValue !== undefined && b.tempPerformanceValue < a.tempPerformanceValue) ? -1 : 0));
+    }
+
+    listDiversityPositions(event: any): void {
+        console.log(event);
+        this.diversityList = [];
+        this.diversityListTitle = event;
+        this.portfolio?.getActiveNonCashPositions().forEach(position => {
+                if (position.sector?.name === event) {
+                    this.diversityList.push(position);
+                }
+            });
     }
 
     private markSharesOnList(shareList: ShareheadShare[], portfolio?: Portfolio): void
