@@ -94,7 +94,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                 if (yRate < 1000) {
                     this.context.fillText(yRate.toString(), 25, yValue);
                 } else {
-                    this.context.fillText((yRate/1000).toFixed(0) + 'k', 25, yValue);
+                    this.context.fillText((yRate/1000).toFixed(1) + 'k', 25, yValue);
                 }
                 yRate -= verticalSteps;
                 if (verticalSteps < 1) {

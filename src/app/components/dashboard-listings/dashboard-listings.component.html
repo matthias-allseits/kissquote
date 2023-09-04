@@ -70,8 +70,8 @@
                             <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
                         </td>
                         <td class="d-none d-md-table-cell">
-                            <button *ngIf="position.stopLoss && position.stopLoss > 0" type="button" class="btn btn-tiny btn-outline-primary" ngbTooltip="Has stop-loss" style="margin-right: 2px;">SL</button>
-                            <button *ngIf="position.targetPrice && position.targetPrice > 0" type="button" class="btn btn-tiny btn-outline-primary" ngbTooltip="Has target-price">TP</button>
+                            <button *ngIf="position.stopLoss && position.stopLoss > 0" type="button" class="btn btn-tiny btn-outline-red" ngbTooltip="Has stop-loss" style="margin-right: 2px;">SL</button>
+                            <button *ngIf="position.targetPrice && position.targetPrice > 0" type="button" class="btn btn-tiny btn-outline-green" ngbTooltip="Has target-price">TP</button>
                         </td>
                         <td><span class="float-end">{{ position.daysSinceStart()|number: '1.0' }}</span></td>
                         <td><span class="float-end">{{ position.totalReturnPerDay() }}</span></td>
