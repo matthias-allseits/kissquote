@@ -27,7 +27,7 @@ export class PositionDetailResolver implements Resolve<PositionData>{
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<PositionData> {
         const positionId = route.params['id'];
-        console.log('positionId in resolver: ', positionId);
+        // console.log('positionId in resolver: ', positionId);
 
         return new Observable(holder => {
             let historicRates: StockRate[];
@@ -43,18 +43,23 @@ export class PositionDetailResolver implements Resolve<PositionData>{
                         // this.positionService.getOfflineStockRates(this.position.share, this.position.currency)
                         position.getStockRates()
                             .subscribe(rates => {
-                                this.addLatestRateToLineChart(position, rates);
-                                data.historicRates = rates;
+                                if (rates.length > 0) {
+                                    this.addLatestRateToLineChart(position, rates);
+                                    data.historicRates = rates;
 
-                                if (position.shareheadId && position.shareheadId > 0) {
-                                    this.shareheadService.getShare(position.shareheadId)
-                                        .subscribe(share => {
-                                            if (share) {
-                                                position.shareheadShare = share;
-                                                holder.next(data);
-                                            }
-                                        });
+                                    if (position.shareheadId && position.shareheadId > 0) {
+                                        this.shareheadService.getShare(position.shareheadId)
+                                            .subscribe(share => {
+                                                if (share) {
+                                                    position.shareheadShare = share;
+                                                    holder.next(data);
+                                                }
+                                            });
+                                    } else {
+                                        holder.next(data);
+                                    }
                                 } else {
+                                    data.historicRates = [];
                                     holder.next(data);
                                 }
                             });

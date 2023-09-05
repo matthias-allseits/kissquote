@@ -21,7 +21,7 @@ export class MyDashboardResolver implements Resolve<Portfolio>{
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Portfolio> {
         return new Observable(holder => {
             const myKey = localStorage.getItem('my-key');
-            console.log('myKey in resolver: ', myKey);
+            // console.log('myKey in resolver: ', myKey);
             if (null !== myKey) {
                 // let us get the portfolio again with all its interesting data
                 this.portfolioService.portfolioByKey(myKey)

@@ -614,7 +614,7 @@ export class PositionDetailComponent implements OnInit {
 
 
     private loadData(referer: string): void {
-        console.log('referer is: ' + referer);
+        // console.log('referer is: ' + referer);
         this.diviProjectionYears = [];
         this.maxDrawdownSummary = undefined;
         this.dividendDropSummary = undefined;

@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
             )
             .subscribe(result => {
                 this.loading = result;
-                console.log('spinning: ', result);
+                // console.log('spinning: ', result);
             });
 
         localStorage.removeItem('ultimateFilter');
