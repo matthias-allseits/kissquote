@@ -39,6 +39,9 @@ export class PositionDetailResolver implements Resolve<PositionData>{
                             historicRates: undefined,
                             costIncomeChartData: position.costIncomeChartdata()
                         }
+                        if (position.isCash) {
+                            holder.next(data);
+                        }
 
                         // this.positionService.getOfflineStockRates(this.position.share, this.position.currency)
                         position.getStockRates()
