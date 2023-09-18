@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {BaseChartDirective} from "ng2-charts";
 import {ChartConfiguration, ChartData, ChartEvent, ChartType} from "chart.js";
 
@@ -8,7 +8,7 @@ import {ChartConfiguration, ChartData, ChartEvent, ChartType} from "chart.js";
     templateUrl: './stacked-bar-chart.component.html',
     styleUrls: ['./stacked-bar-chart.component.scss']
 })
-export class StackedBarChartComponent implements OnInit {
+export class StackedBarChartComponent implements OnInit, OnChanges {
 
     @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
     @Input() data?: ChartData;
@@ -43,6 +43,10 @@ export class StackedBarChartComponent implements OnInit {
         if (this.data) {
             this.barChartData = this.data;
         }
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        this.barChartData = changes['data'].currentValue;
     }
 
     // events

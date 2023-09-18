@@ -15,6 +15,7 @@ export interface DividendTotals {
     payedList: DividendTotal[];
     plannedList: DividendTotal[];
     payedTotal: number;
+    payedTotalNet: number;
     plannedTotal: number;
 }
 
@@ -241,7 +242,7 @@ export class Portfolio {
     }
 
 
-    dividendIncomeChartData(): ChartData {
+    dividendIncomeChartData(netOrGross: string): ChartData {
         const chartData: ChartData = {
             labels: [],
             datasets: [
@@ -264,8 +265,12 @@ export class Portfolio {
 
         this.collectDividendLists()?.forEach(list => {
             chartData.labels?.push(list.year);
-            chartData.datasets[0].data.push(+list.payedTotal.toFixed(0));
-            chartData.datasets[1].data.push(+list.plannedTotal.toFixed(0));
+            if (netOrGross === 'gross') {
+                chartData.datasets[0].data.push(+list.payedTotal.toFixed(0));
+                chartData.datasets[1].data.push(+list.plannedTotal.toFixed(0));
+            } else if (netOrGross === 'net') {
+                chartData.datasets[0].data.push(+list.payedTotalNet.toFixed(0));
+            }
         });
 
         return chartData;
@@ -589,7 +594,7 @@ export class Portfolio {
     }
 
 
-    incomeChartDataImproved(): ChartData {
+    incomeChartDataImproved(netOrGross: string): ChartData {
         const chartData: ChartData = {
             labels: [],
             datasets: [
@@ -662,13 +667,29 @@ export class Portfolio {
                         const workDate = transaction.date;
                         workDate.setDate(1);
                         if (DateHelper.datesAreEqual(monthThisYear, workDate)) {
-                            incomeThisYear += transaction.rate;
+                            if (netOrGross === 'gross') {
+                                incomeThisYear += transaction.rate;
+                            } else if (netOrGross === 'net') {
+                                incomeThisYear += transaction.netTotal();
+                            }
                         } else if (DateHelper.datesAreEqual(monthLastYear, workDate)) {
-                            incomeLastYear += transaction.rate;
+                            if (netOrGross === 'gross') {
+                                incomeLastYear += transaction.rate;
+                            } else if (netOrGross === 'net') {
+                                incomeLastYear += transaction.netTotal();
+                            }
                         } else if (DateHelper.datesAreEqual(monthtwoYearsBefore, workDate)) {
-                            incomeTwoYearsBefore += transaction.rate;
+                            if (netOrGross === 'gross') {
+                                incomeTwoYearsBefore += transaction.rate;
+                            } else if (netOrGross === 'net') {
+                                incomeTwoYearsBefore += transaction.netTotal();
+                            }
                         } else if (DateHelper.datesAreEqual(monththreeYearsBefore, workDate)) {
-                            incomeThreeYearsBefore += transaction.rate;
+                            if (netOrGross === 'gross') {
+                                incomeThreeYearsBefore += transaction.rate;
+                            } else if (netOrGross === 'net') {
+                                incomeThreeYearsBefore += transaction.netTotal();
+                            }
                         }
                     }
                 });
@@ -880,6 +901,7 @@ export class Portfolio {
         const payedList: DividendTotal[] = [];
         const plannedList: DividendTotal[] = [];
         let payedTotal = 0;
+        let payedTotalNet = 0;
         let plannedTotal = 0;
         this.getAllPositions().forEach(position => {
             const payedResult = position.payedDividendsTotalByYear(year);
@@ -887,6 +909,7 @@ export class Portfolio {
             if (payedResult.total > 0) {
                 payedList.push(payedResult);
                 payedTotal += payedResult.total;
+                payedTotalNet += payedResult.totalNet;
                 +(plannedResult.total -= payedResult.total).toFixed(0);
             }
             if (plannedResult.manualDividend) {
@@ -898,6 +921,7 @@ export class Portfolio {
             }
         });
         const fixedPayedTotal = +payedTotal.toFixed(0);
+        const fixedPayedTotalNet = +payedTotalNet.toFixed(0);
         const fixedPlannedTotal = +plannedTotal.toFixed(0);
 
         return {
@@ -905,6 +929,7 @@ export class Portfolio {
             payedList: payedList,
             plannedList: plannedList,
             payedTotal: fixedPayedTotal,
+            payedTotalNet: fixedPayedTotalNet,
             plannedTotal: fixedPlannedTotal,
         }
     }

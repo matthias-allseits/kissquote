@@ -26,6 +26,7 @@ export class DashboardBalanceChartsComponent implements OnInit, OnChanges {
     public accountBalances: AccountBalance[] = [];
 
     public incomeChartDataImprovedBoxHeight = 143;
+    public netOrGross = 'gross';
 
     constructor(
         public tranService: TranslationService,
@@ -37,7 +38,6 @@ export class DashboardBalanceChartsComponent implements OnInit, OnChanges {
             this.incomeChartDataImprovedBoxHeight = 300;
         }
 
-        this.incomeChartDataImproved = this.portfolio?.incomeChartDataImproved();
         if (this.portfolio) {
             this.portfolio.bankAccounts.forEach(account => {
                 const data = this.getBalanceChartDataByAccount(account);
@@ -49,7 +49,7 @@ export class DashboardBalanceChartsComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        this.dividendIncomeChartData = this.portfolio?.dividendIncomeChartData();
+        this.loadData();
         this.yieldChartData = this.portfolio?.yieldChartData();
         if (this.portfolio) {
             this.investmentChartData = this.portfolio.investmentChartData();
@@ -72,4 +72,13 @@ export class DashboardBalanceChartsComponent implements OnInit, OnChanges {
         };
     }
 
+    toggleNetOrGross() {
+        this.netOrGross = this.netOrGross === 'gross' ? 'net' : 'gross';
+        this.loadData();
+    }
+
+    loadData() {
+        this.incomeChartDataImproved = this.portfolio?.incomeChartDataImproved(this.netOrGross);
+        this.dividendIncomeChartData = this.portfolio?.dividendIncomeChartData(this.netOrGross);
+    }
 }

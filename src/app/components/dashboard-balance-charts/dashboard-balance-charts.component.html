@@ -1,6 +1,9 @@
 <h3 *ngIf="componentTitle">{{ componentTitle }}</h3>
 <div *ngIf="dividendLists && dividendIncomeChartData" class="info-box">
-    <h5>{{ tranService.trans('MYDA_DIVI_INCOME') }}</h5>
+    <h5>
+        {{ tranService.trans('MYDA_DIVI_INCOME') }}
+        <button (click)="toggleNetOrGross()" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Net or gross">{{ netOrGross }}</button>
+    </h5>
     <app-stacked-bar-chart [data]="dividendIncomeChartData"></app-stacked-bar-chart>
 </div>
 <div *ngIf="dividendLists && !timeWarpMode" class="info-box">
@@ -12,7 +15,10 @@
     <app-line-chart [data]="yieldChartData" [height]="300" [forceBeginAtZero]="true" [pointRadius]="4"></app-line-chart>
 </div>
 <div *ngIf="!timeWarpMode" class="info-box info-box-doubled">
-    <h5>{{ tranService.trans('MYDA_INCOME_PER_MONTH') }}</h5>
+    <h5>
+        {{ tranService.trans('MYDA_INCOME_PER_MONTH') }}
+        <button (click)="toggleNetOrGross()" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Net or gross">{{ netOrGross }}</button>
+    </h5>
     <app-bar-chart [data]="incomeChartDataImproved" [height]="incomeChartDataImprovedBoxHeight"></app-bar-chart>
 </div>
 <ng-container *ngIf="!timeWarpMode">

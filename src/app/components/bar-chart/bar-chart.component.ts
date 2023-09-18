@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {BaseChartDirective} from "ng2-charts";
 import {ChartConfiguration, ChartData, ChartEvent, ChartType} from "chart.js";
 
@@ -8,7 +8,7 @@ import {ChartConfiguration, ChartData, ChartEvent, ChartType} from "chart.js";
     templateUrl: './bar-chart.component.html',
     styleUrls: ['./bar-chart.component.scss']
 })
-export class BarChartComponent implements OnInit {
+export class BarChartComponent implements OnInit, OnChanges {
 
     @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
     @Input() data?: ChartData;
@@ -39,6 +39,10 @@ export class BarChartComponent implements OnInit {
         if (this.data) {
             this.barChartData = this.data;
         }
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        this.barChartData = changes['data'].currentValue;
     }
 
     // events

@@ -23,6 +23,7 @@ export interface DividendTotal {
     positionId: number;
     name: string;
     total: number;
+    totalNet: number;
     currency: Currency|null;
     source: string;
     transactionCount: number;
@@ -206,6 +207,7 @@ export class Position {
     payedDividendsTotalByYear(year: number): DividendTotal
     {
         let total = 0;
+        let totalNet = 0;
         let transactionCount = 0;
         let currency = null;
         let lastTransactionDate: Date;
@@ -213,6 +215,7 @@ export class Position {
         this.transactions.forEach(transaction => {
             if (transaction.isDividend() && transaction.date instanceof Date && transaction.date.getFullYear() === year && transaction.rate) {
                 total += transaction.rate;
+                totalNet += transaction.netTotal();
                 currency = transaction.currency;
                 if (lastTransactionDate === undefined || transaction.date.getTime() !== lastTransactionDate.getTime()) {
                     transactionCount++;
@@ -228,6 +231,7 @@ export class Position {
             positionId: this.id,
             name: this.getName(),
             total: total,
+            totalNet: totalNet,
             currency: currency,
             source: '',
             transactionCount: transactionCount,
@@ -241,6 +245,7 @@ export class Position {
     plannedDividendsTotalByYear(year: number): DividendTotal
     {
         let total = 0;
+        let totalNet = 0;
         let currency = null;
         let source = 'From last payment(s)';
 
@@ -293,6 +298,7 @@ export class Position {
             positionId: this.id,
             name: this.getName(),
             total: total,
+            totalNet: totalNet,
             currency: currency,
             source: source,
             transactionCount: 0,

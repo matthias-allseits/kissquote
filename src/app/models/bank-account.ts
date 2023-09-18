@@ -159,6 +159,7 @@ export class BankAccount {
         const payedList: DividendTotal[] = [];
         const plannedList: DividendTotal[] = [];
         let payedTotal = 0;
+        let payedTotalNet = 0;
         let plannedTotal = 0;
         this.getActiveNonCashPositions().forEach(position => {
             const payedResult = position.payedDividendsTotalByYear(year);
@@ -166,6 +167,7 @@ export class BankAccount {
             if (payedResult.total > 0) {
                 payedList.push(payedResult);
                 payedTotal += payedResult.total;
+                payedTotalNet += payedResult.totalNet;
                 +(plannedResult.total -= payedResult.total).toFixed(0);
             }
             if (year >= thisYear && position.active && payedResult.transactionCount < position.maxDividendTransactionsByPeriodicy()) {
@@ -174,6 +176,7 @@ export class BankAccount {
             }
         });
         const fixedPayedTotal = +payedTotal.toFixed(0);
+        const fixedPayedTotalNet = +payedTotalNet.toFixed(0);
         const fixedPlannedTotal = +plannedTotal.toFixed(0);
 
         return {
@@ -181,6 +184,7 @@ export class BankAccount {
             payedList: payedList,
             plannedList: plannedList,
             payedTotal: fixedPayedTotal,
+            payedTotalNet: fixedPayedTotalNet,
             plannedTotal: fixedPlannedTotal,
         }
     }

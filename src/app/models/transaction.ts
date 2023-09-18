@@ -35,6 +35,19 @@ export class Transaction {
         return result;
     }
 
+    netTotal(): number {
+        let result = 0;
+
+        if (this.rate) {
+            result = (this.quantity * this.rate);
+        }
+        if (this.fee) {
+            result -= this.fee;
+        }
+
+        return result;
+    }
+
     isRealTransaction(): boolean
     {
         let result = false;
