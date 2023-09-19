@@ -46,6 +46,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public riskTotal = 0;
     public diversityListTitle = '';
     public diversityList: Position[] = [];
+    public ultimateBalance?: number;
 
     constructor(
         public tranService: TranslationService,
@@ -126,6 +127,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         });
         localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
         this.filterUltmateList.emit();
+        this.calculateUltimateBalance();
     }
 
     setAllLabelsActive(): void {
@@ -158,6 +160,22 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                     this.diversityList.push(position);
                 }
             });
+    }
+
+    private calculateUltimateBalance(): void
+    {
+        if (this.ultimateBalanceList) {
+            let balance = 0;
+            for (const position of this.ultimateBalanceList) {
+                if (position.balance && position.balance.investment > 0 && position.visible) {
+                    const result = +position.actualValue() - position.balance.investment;
+                    console.log(result);
+                    balance += result;
+                }
+            }
+            this.ultimateBalance = balance;
+            console.log(this.ultimateBalance);
+        }
     }
 
     private markSharesOnList(shareList: ShareheadShare[], portfolio?: Portfolio): void
