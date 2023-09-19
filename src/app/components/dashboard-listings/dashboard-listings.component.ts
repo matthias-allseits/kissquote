@@ -167,7 +167,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         if (this.ultimateBalanceList) {
             let balance = 0;
             for (const position of this.ultimateBalanceList) {
-                if (position.balance && position.balance.investment > 0 && position.visible) {
+                if (position.balance && position.visible) {
                     const result = +position.actualValue() - position.balance.investment;
                     console.log(result);
                     balance += result;
