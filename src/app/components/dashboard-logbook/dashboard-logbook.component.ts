@@ -74,7 +74,6 @@ export class DashboardLogbookComponent implements OnInit {
             } else {
                 this.logBook = this.logBook.slice(0, 50);
             }
-            console.log(this.logBook);
         }
     }
 
