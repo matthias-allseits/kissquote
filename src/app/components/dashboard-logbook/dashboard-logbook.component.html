@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-12">
+        <button *ngIf="!transactionsOnly" (click)="toggleFilter()" type="button" class="btn btn-sm btn-outline-primary">All Entries</button>
+        <button *ngIf="transactionsOnly" (click)="toggleFilter()" type="button" class="btn btn-sm btn-outline-primary">Transactions only</button>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+            <th scope="col">Title</th>
+            <th scope="col"><span class="float-end">Quantity</span></th>
+            <th scope="col"><span class="float-end">Rate</span></th>
+            <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Fee/Tax</span></th>
+            <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Total</span></th>
+            <th scope="col" class="d-none d-md-table-cell">Currency</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let entry of logBook">
+            <ng-container *ngIf="entry.hasOwnProperty('log')">
+                <td>
+                    <span class="d-none d-md-table-cell">{{ entry.date|date:'dd.MM.' }}</span>
+                    <span class="d-table-cell d-md-none">{{ entry.date|date:'dd.MM.YY' }}</span>
+                </td>
+                <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.assetName }}</a></td>
+                <td [colSpan]="getColspan()">{{ entry.emoticon }} {{ entry.log }}</td>
+                <td class="d-none d-md-table-cell"></td>
+                <td class="d-none d-md-table-cell"></td>
+            </ng-container>
+            <ng-container *ngIf="entry.hasOwnProperty('quantity')">
+                <td>
+                    <span class="d-none d-md-table-cell">{{ entry.date|date:'dd.MM.' }}</span>
+                    <span class="d-table-cell d-md-none">{{ entry.date|date:'dd.MM.YY' }}</span>
+                </td>
+                <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.assetName }}</a></td>
+                <td>{{ entry.title }}</td>
+                <td><span class="float-end">{{ entry.quantity }}</span></td>
+                <td><span class="float-end">{{ entry.rate }}</span></td>
+                <td class="d-none d-md-table-cell"><span class="float-end">{{ entry.fee }}</span></td>
+                <td class="d-none d-md-table-cell"><span *ngIf="entry.isRealTransaction()" class="float-end">{{ entry.total()|number: '1.0' }}</span></td>
+                <td class="d-none d-md-table-cell">{{ entry.currency?.name }}</td>
+            </ng-container>
+        </tr>
+        </tbody>
+    </table>
+</div>

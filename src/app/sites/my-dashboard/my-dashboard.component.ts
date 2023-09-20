@@ -41,7 +41,7 @@ export class MyDashboardComponent implements OnInit {
     private selectedBankAccount?: BankAccount;
     public selectedWatchlistEntry?: WatchlistEntry;
     public selectedManualDividend?: ManualDividend;
-    private availableDashboardTabs = ['balance', 'dividends', 'watchlist', 'settings', 'closedPositions', 'listings'];
+    private availableDashboardTabs = ['balance', 'logbook', 'dividends', 'watchlist', 'settings', 'closedPositions', 'listings'];
     public dashboardTab = '0';
     public dividendListTab = new Date().getFullYear();
     public dividendLists?: DividendTotals[];

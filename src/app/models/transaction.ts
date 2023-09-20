@@ -15,6 +15,8 @@ export class Transaction {
         public isInterest: boolean = false,
         public position?: Position,
         public currency?: Currency,
+        public positionId?: number,
+        public assetName?: string,
     ) {}
 
     isDividend(): boolean {

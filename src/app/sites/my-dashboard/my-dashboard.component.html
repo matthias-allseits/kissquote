@@ -17,6 +17,9 @@
                 <a class="nav-link" [class.active]="dashboardTab === 'balance'" (click)="changeTab('balance')"><span class="d-none d-md-inline">Portfolio</span> {{ tranService.trans('GLOB_BALANCES') }}</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" [class.active]="dashboardTab === 'logbook'" (click)="changeTab('logbook')">Logbook</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" [class.active]="dashboardTab === 'dividends'" (click)="changeTab('dividends')">{{ tranService.trans('GLOB_DIVIDENDS') }}</a>
             </li>
             <li class="nav-item">
@@ -126,6 +129,9 @@
         </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'balance'">
             <app-dashboard-balance [portfolio]="portfolio" [dividendLists]="dividendLists"></app-dashboard-balance>
+        </div>
+        <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'logbook'">
+            <app-dashboard-logbook [portfolio]="portfolio"></app-dashboard-logbook>
         </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'dividends'">
             <ul class="nav nav-tabs">

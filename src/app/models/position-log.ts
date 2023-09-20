@@ -1,5 +1,3 @@
-import {Position} from "./position";
-
 
 export class PositionLog {
 
@@ -9,6 +7,7 @@ export class PositionLog {
         public log: string,
         public emoticon: string,
         public positionId?: number,
+        public assetName?: string,
     ) {}
 
 }
