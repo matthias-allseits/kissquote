@@ -115,14 +115,14 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                     this.context.strokeStyle = this.monthColor;
                     this.context.beginPath();
                     let xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
-                    if (this.type === 'monthly') {
+                    if (this.type === 'monthly' || this.type === 'double-monthly') {
                         xValue = this.offsetLeft + ((i * this.stepWidth));
                     }
                     this.context.moveTo(xValue, this.offsetTop);
                     this.context.lineTo(xValue, this.canvasHeight);
                     this.context.stroke();
                 } else if (lastMonth !== undefined && lastMonth !== lastRate.date.getMonth()) {
-                    if (this.type !== 'monthly') {
+                    if (this.type !== 'monthly' && this.type !== 'double-monthly') {
                         this.context.strokeStyle = this.helplineColor;
                         this.context.beginPath();
                         const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
@@ -290,6 +290,23 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                         nextRate = this.rates[index + 1];
                     }
                     if (nextRate && nextRate.date.getDate() < rate.date.getDate()) {
+                        chunkedRates.push(chunk);
+                        chunk = [];
+                    }
+                });
+                chunkedRates.push(chunk);
+            } else if (this.type === 'double-monthly') {
+                const relevantMonthIndexes = [0, 2, 4, 6, 8, 10];
+                this.rates.forEach((rate, index) => {
+                    chunk.push(rate);
+                    let nextRate;
+                    if (this.rates && typeof this.rates[index + 1] !== undefined) {
+                        nextRate = this.rates[index + 1];
+                    }
+                    if (
+                        nextRate && nextRate.date.getDate() < rate.date.getDate()
+                        && relevantMonthIndexes.indexOf(nextRate.date.getMonth()) > -1
+                    ) {
                         chunkedRates.push(chunk);
                         chunk = [];
                     }

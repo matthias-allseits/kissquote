@@ -10,7 +10,7 @@ export class SwissquoteHelper {
         const rates: StockRate[] = [];
         const lines = content.split("\n");
         let startDate = new Date(activeFrom);
-        let addedMonthsToShow = 120;
+        let addedMonthsToShow = 276;
         let daysSinceStartLimit = 4000;
         // if (screen.width < 400) {
         //     addedMonthsToShow = 4;

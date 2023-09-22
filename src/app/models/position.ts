@@ -556,7 +556,7 @@ export class Position {
                 // console.log(content);
                 let rates: StockRate[] = [];
                 if (this.activeFrom instanceof Date) {
-                    rates = SwissquoteHelper.parseRates(content, this.activeFrom, this.daysSinceStart());
+                    rates = SwissquoteHelper.parseRates(content, new Date(1970, 1, 1), 10000);
                 }
 
                 obsData.next(rates);
