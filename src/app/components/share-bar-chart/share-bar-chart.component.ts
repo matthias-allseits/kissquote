@@ -3,6 +3,7 @@ import {Position} from "../../models/position";
 import {Transaction} from "../../models/transaction";
 import {DateHelper} from "../../core/datehelper";
 import {StockRate} from "../../models/stock-rate";
+import {CanvasHelper} from "../../core/canvas-helper";
 
 
 @Component({
@@ -83,7 +84,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
             }
             do {
                 // console.log('yRate: ', yRate);
-                const yValue = ((topEnd - yRate) * verticalFactor) + this.offsetTop;
+                const yValue = CanvasHelper.optimizeCoordinate(((topEnd - yRate) * verticalFactor) + this.offsetTop);
                 // console.log(yValue);
                 this.context.moveTo(this.offsetLeft, yValue);
                 this.context.lineTo(this.canvasWidth, yValue);
@@ -114,9 +115,9 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                 if (lastYear !== undefined && lastYear !== lastRate.date.getFullYear()) {
                     this.context.strokeStyle = this.monthColor;
                     this.context.beginPath();
-                    let xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
+                    let xValue = CanvasHelper.optimizeCoordinate(this.offsetLeft + ((i * this.stepWidth) + 3));
                     if (this.type === 'monthly' || this.type === 'double-monthly') {
-                        xValue = this.offsetLeft + ((i * this.stepWidth));
+                        xValue = CanvasHelper.optimizeCoordinate(this.offsetLeft + ((i * this.stepWidth)));
                     }
                     this.context.moveTo(xValue, this.offsetTop);
                     this.context.lineTo(xValue, this.canvasHeight);
@@ -125,7 +126,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                     if (this.type !== 'monthly' && this.type !== 'double-monthly') {
                         this.context.strokeStyle = this.helplineColor;
                         this.context.beginPath();
-                        const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
+                        const xValue = CanvasHelper.optimizeCoordinate(this.offsetLeft + ((i * this.stepWidth) + 3));
                         this.context.moveTo(xValue, this.offsetTop);
                         this.context.lineTo(xValue, this.canvasHeight);
                         this.context.stroke();
@@ -156,7 +157,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                         if (hit) {
                             this.context.strokeStyle = this.redColor;
                             this.context.beginPath();
-                            const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
+                            const xValue = CanvasHelper.optimizeCoordinate(this.offsetLeft + ((i * this.stepWidth) + 3));
                             let transactionsRate = transaction.rate;
                             if (this.position?.currency?.name === 'GBP') {
                                 transactionsRate *= 100;
@@ -182,7 +183,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                         if (hit) {
                             this.context.beginPath();
                             this.context.strokeStyle = this.greenColor;
-                            const xValue = this.offsetLeft + ((i * this.stepWidth) + 3);
+                            const xValue = CanvasHelper.optimizeCoordinate(this.offsetLeft + ((i * this.stepWidth) + 3));
                             let transactionsRate = transaction.rate;
                             if (this.position?.currency?.name === 'GBP') {
                                 transactionsRate *= 100;
@@ -213,7 +214,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                 if (this.position?.share?.name && this.position?.share?.name.indexOf('BRC') > -1) {
                     avgPriceForChart /= 10;
                 }
-                const buyValue = ((topEnd - avgPriceForChart) * verticalFactor) + this.offsetTop;
+                const buyValue = CanvasHelper.optimizeCoordinate(((topEnd - avgPriceForChart) * verticalFactor) + this.offsetTop);
                 this.context.moveTo(this.offsetLeft, buyValue);
                 this.context.lineTo(this.canvasWidth, buyValue);
                 this.context.stroke();
@@ -225,7 +226,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                 this.context.strokeStyle = this.blackColor;
                 this.context.setLineDash([5, 5]);
                 let stopLossForChart = this.position.stopLoss;
-                const stopLossValue = ((topEnd - stopLossForChart) * verticalFactor) + this.offsetTop;
+                const stopLossValue = CanvasHelper.optimizeCoordinate(((topEnd - stopLossForChart) * verticalFactor) + this.offsetTop);
                 this.context.moveTo(this.offsetLeft, stopLossValue);
                 this.context.lineTo(this.canvasWidth, stopLossValue);
                 this.context.stroke();
@@ -237,7 +238,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                 this.context.strokeStyle = this.greenColor;
                 this.context.setLineDash([5, 5]);
                 let targetPriceForChart = this.position.targetPrice;
-                const stopLossValue = ((topEnd - targetPriceForChart) * verticalFactor) + this.offsetTop;
+                const stopLossValue = CanvasHelper.optimizeCoordinate(((topEnd - targetPriceForChart) * verticalFactor) + this.offsetTop);
                 this.context.moveTo(this.offsetLeft, stopLossValue);
                 this.context.lineTo(this.canvasWidth, stopLossValue);
                 this.context.stroke();
@@ -255,12 +256,12 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
             chunkedRates.forEach((rates, i) => {
                 const firstRate = rates[0];
                 const lastRate = rates[rates.length - 1];
-                const yValue = ((topEnd - firstRate.open) * verticalFactor) + this.offsetTop;
+                const yValue = CanvasHelper.optimizeCoordinate(((topEnd - firstRate.open) * verticalFactor) + this.offsetTop);
                 this.context.moveTo(xValue, yValue);
                 this.context.lineTo(xValue + 3, yValue);
                 this.context.stroke();
 
-                const yLValue = ((topEnd - lastRate.rate) * verticalFactor) + this.offsetTop;
+                const yLValue = CanvasHelper.optimizeCoordinate(((topEnd - lastRate.rate) * verticalFactor) + this.offsetTop);
                 this.context.moveTo(xValue + 3, yLValue);
                 this.context.lineTo(xValue + 6, yLValue);
                 this.context.stroke();
@@ -269,8 +270,9 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                 const lowValue = this.extractLowValue(rates);
                 const yTopValue = ((topEnd - topValue) * verticalFactor) + this.offsetTop;
                 const yLowValue = ((topEnd - lowValue) * verticalFactor) + this.offsetTop;
-                this.context.moveTo(xValue + 3, yTopValue);
-                this.context.lineTo(xValue + 3, yLowValue);
+                const tempXValue = CanvasHelper.optimizeCoordinate(xValue);
+                this.context.moveTo(tempXValue + 3, yTopValue);
+                this.context.lineTo(tempXValue + 3, yLowValue);
                 this.context.stroke();
                 xValue += this.stepWidth;
             });
