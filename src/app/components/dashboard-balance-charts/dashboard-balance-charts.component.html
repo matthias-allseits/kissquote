@@ -19,7 +19,7 @@
         {{ tranService.trans('MYDA_INCOME_PER_MONTH') }}
         <button (click)="toggleNetOrGross()" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Net or gross">{{ netOrGross }}</button>
     </h5>
-    <app-bar-chart [data]="incomeChartDataImproved" [height]="incomeChartDataImprovedBoxHeight"></app-bar-chart>
+    <app-bar-chart [data]="incomeChartDataImproved" [height]="incomeChartDataImprovedBoxHeight" [reactOnChanges]="true"></app-bar-chart>
 </div>
 <ng-container *ngIf="!timeWarpMode">
     <div *ngFor="let balance of accountBalances" class="info-box">

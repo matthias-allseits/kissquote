@@ -13,6 +13,7 @@ export class BarChartComponent implements OnInit, OnChanges {
     @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
     @Input() data?: ChartData;
     @Input() height = 300;
+    @Input() reactOnChanges = false;
 
     public barChartType: ChartType = 'bar';
     public barChartOptions: ChartConfiguration['options'] = {
@@ -42,7 +43,10 @@ export class BarChartComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        this.barChartData = changes['data'].currentValue;
+        if (this.reactOnChanges) {
+            console.log(changes);
+            this.barChartData = changes['data'].currentValue;
+        }
     }
 
     // events
