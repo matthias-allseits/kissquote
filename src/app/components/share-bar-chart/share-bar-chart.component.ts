@@ -49,7 +49,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
 
             this.context = this.myCanvas.nativeElement.getContext('2d');
             const topRate = this.calculateTopEnd(chunkedRates, this.position?.targetPrice);
-            const lowRate = this.calculateLowEnd(chunkedRates, this.position?.stopLoss);
+            const lowRate = this.calculateLowEnd(chunkedRates, this.position?.stopLoss, this.position?.targetPrice);
             // console.log('topRate: ' + topRate);
             // console.log('lowRate: ' + lowRate);
             const verticalSteps = this.calculateVerticalSteps(topRate, lowRate);
@@ -380,10 +380,13 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
         return topRate;
     }
 
-    private calculateLowEnd(chunkedRates: StockRate[][], stopLoss: number|undefined) {
+    private calculateLowEnd(chunkedRates: StockRate[][], stopLoss: number|undefined, targetPrice: number|undefined) {
         let lowRate = 10000000000;
         if (stopLoss && stopLoss > 0) {
             lowRate = stopLoss;
+        }
+        if (targetPrice && targetPrice > 0) {
+            lowRate = targetPrice;
         }
         chunkedRates.forEach(rates => {
             rates.forEach(entry => {
