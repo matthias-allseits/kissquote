@@ -47,6 +47,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public diversityListTitle = '';
     public diversityList: Position[] = [];
     public ultimateBalance?: number;
+    public ultimateValue?: number;
 
     constructor(
         public tranService: TranslationService,
@@ -166,15 +167,16 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     {
         if (this.ultimateBalanceList) {
             let balance = 0;
+            let value = 0;
             for (const position of this.ultimateBalanceList) {
                 if (position.balance && position.visible) {
                     const result = +position.actualValue() - position.balance.investment;
-                    console.log(result);
                     balance += result;
+                    value += +position.actualValue();
                 }
             }
             this.ultimateBalance = balance;
-            console.log(this.ultimateBalance);
+            this.ultimateValue = value;
         }
     }
 

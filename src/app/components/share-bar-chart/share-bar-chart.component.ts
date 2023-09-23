@@ -249,21 +249,18 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
             this.context.strokeStyle = this.strokeColor;
             this.context.setLineDash([]);
             this.context.lineWidth = 1;
-            // const firstValue = ((topEnd - this.rates[0].rate) * verticalFactor) + this.offsetTop;
-            // console.log('firstValue: ' + firstValue);
-            // this.context.moveTo(this.offsetLeft, firstValue);
             let xValue = this.offsetLeft;
             chunkedRates.forEach((rates, i) => {
                 const firstRate = rates[0];
                 const lastRate = rates[rates.length - 1];
                 const yValue = CanvasHelper.optimizeCoordinate(((topEnd - firstRate.open) * verticalFactor) + this.offsetTop);
                 this.context.moveTo(xValue, yValue);
-                this.context.lineTo(xValue + 3, yValue);
+                this.context.lineTo(xValue + 4, yValue);
                 this.context.stroke();
 
                 const yLValue = CanvasHelper.optimizeCoordinate(((topEnd - lastRate.rate) * verticalFactor) + this.offsetTop);
-                this.context.moveTo(xValue + 3, yLValue);
-                this.context.lineTo(xValue + 6, yLValue);
+                this.context.moveTo(xValue + 4, yLValue);
+                this.context.lineTo(xValue + 6.5, yLValue);
                 this.context.stroke();
 
                 const topValue = this.extractTopValue(rates);

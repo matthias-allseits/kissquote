@@ -86,6 +86,11 @@
                 <h6>Balance: <span class="float-end">{{ ultimateBalance|number: '1.0-0' }}</span></h6>
             </div>
         </div>
+        <div *ngIf="ultimateValue" class="row">
+            <div class="col-12">
+                <h6>Value: <span class="float-end">{{ ultimateValue|number: '1.0-0' }}</span></h6>
+            </div>
+        </div>
     </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'lombard'">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
