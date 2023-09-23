@@ -96,6 +96,7 @@ export class MyDashboardComponent implements OnInit {
                         this.closedPositionsBalance += +position.closedResultCorrected();
                     }
                 });
+                this.loadWatchlist();
             }
         });
     }
@@ -203,6 +204,7 @@ export class MyDashboardComponent implements OnInit {
             .subscribe(newWatchlist => {
                 if (this.portfolio) {
                     this.portfolio.watchlistEntries = newWatchlist;
+                    this.loadWatchlist();
                 }
             });
     }
@@ -219,6 +221,7 @@ export class MyDashboardComponent implements OnInit {
             .subscribe(newWatchlist => {
                 if (this.portfolio) {
                     this.portfolio.watchlistEntries = newWatchlist;
+                    this.loadWatchlist();
                 }
             });
     }
@@ -267,6 +270,23 @@ export class MyDashboardComponent implements OnInit {
                 }
                 this.filterUltimateList();
             });
+    }
+
+    private loadWatchlist(): void
+    {
+        const shareheadIds: number[] = [];
+        this.portfolio?.watchlistEntries.forEach(entry => {
+            shareheadIds.push(entry.shareheadId);
+        });
+        this.shareheadService.getSharesCollection(shareheadIds).subscribe(shares => {
+            shares.forEach(share => {
+                this.portfolio?.watchlistEntries.forEach(entry => {
+                    if (share.id === entry.shareheadId) {
+                        entry.shareheadShare = share;
+                    }
+                });
+            });
+        });
     }
 
 }

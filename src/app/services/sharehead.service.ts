@@ -63,14 +63,8 @@ export class ShareheadService {
             );
     }
 
-    public getSharesCollection(portfolio: Portfolio): Observable<ShareheadShare[]>
+    public getSharesCollection(shareheadIds: number[]): Observable<ShareheadShare[]>
     {
-        const shareheadIds: number[] = [];
-        portfolio.getActiveNonCashPositions().forEach(position => {
-            if (position.shareheadId) {
-                shareheadIds.push(position.shareheadId);
-            }
-        });
         return this.http.post(this.baseUrl + '/share/collection', JSON.stringify(shareheadIds))
             .pipe(
                 map(res => {

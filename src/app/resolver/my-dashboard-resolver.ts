@@ -53,7 +53,13 @@ export class MyDashboardResolver implements Resolve<Portfolio>{
             if (this.portfolio) {
                 const allPositions = this.portfolio.getAllPositions();
                 // console.log('all posis length: ' + allPositions.length);
-                this.shareheadService.getSharesCollection(this.portfolio)
+                const shareheadIds: number[] = [];
+                this.portfolio.getActiveNonCashPositions().forEach(position => {
+                    if (position.shareheadId) {
+                        shareheadIds.push(position.shareheadId);
+                    }
+                });
+                this.shareheadService.getSharesCollection(shareheadIds)
                     .subscribe(shares => {
                         let counter = 0;
                         allPositions.forEach((position, index) => {

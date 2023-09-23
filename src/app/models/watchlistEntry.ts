@@ -6,7 +6,7 @@ export class WatchlistEntry {
         public shareheadId: number,
         public startDate: Date,
         public title: string,
-        // public shareheadShare?: ShareheadShare,
+        public shareheadShare?: ShareheadShare,
     ) { }
 
 }
