@@ -199,7 +199,7 @@ export class MyDashboardComponent implements OnInit {
     }
 
     addWatchlistEntry(shareheadShare: ShareheadShare): void {
-        this.watchlistService.addEntry(shareheadShare.shareheadId)
+        this.watchlistService.addEntry(shareheadShare.id)
             .subscribe(newWatchlist => {
                 if (this.portfolio) {
                     this.portfolio.watchlistEntries = newWatchlist;

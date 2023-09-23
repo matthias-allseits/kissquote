@@ -196,7 +196,7 @@ export class PositionDetailComponent implements OnInit {
                     if (position) {
                         this.position = position;
                         this.loadData('confirmShareheadRemoving');
-                        // todo: find a solution to really reload the whole page
+                        // todo: find a solution to really reload the whole page by resolver
                     }
                 });
         }
@@ -211,7 +211,7 @@ export class PositionDetailComponent implements OnInit {
                     if (position) {
                         this.position = position;
                         this.loadData('confirmUnderlyingRemoving');
-                        // todo: find a solution to really reload the whole page
+                        // todo: find a solution to really reload the whole page by resolver
                     }
                 });
         }
@@ -234,7 +234,7 @@ export class PositionDetailComponent implements OnInit {
 
     selectShareheadShare(shareheadShare: ShareheadShare): void {
         if (this.position) {
-            this.position.shareheadId = shareheadShare.shareheadId;
+            this.position.shareheadId = shareheadShare.id;
             this.positionService.update(this.position)
                 .subscribe(position => {
                     if (position) {

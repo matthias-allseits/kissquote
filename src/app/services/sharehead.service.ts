@@ -46,6 +46,15 @@ export class ShareheadService {
     }
 
 
+    public searchShare(search: string): Observable<ShareheadShare[]|undefined>
+    {
+        return this.http.post<ShareheadShare>(this.baseUrl + '/share/search', JSON.stringify(search))
+            .pipe(
+                map(res => ShareheadShareCreator.fromApiArray(res))
+            );
+    }
+
+
     public getTimeWarpedShare(id: number, date: Date): Observable<ShareheadShare|undefined>
     {
         return this.http.get<ShareheadShare>(this.baseUrl + '/share/' + id + '/' + DateHelper.convertDateToMysql(date))

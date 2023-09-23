@@ -44,7 +44,6 @@ export class BarChartComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (this.reactOnChanges) {
-            console.log(changes);
             this.barChartData = changes['data'].currentValue;
         }
     }
