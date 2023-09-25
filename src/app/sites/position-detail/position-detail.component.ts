@@ -632,7 +632,7 @@ export class PositionDetailComponent implements OnInit {
         this.hasReachedTargetPrice = false;
 
         if (this.position) {
-            this.checkAndResetPositionFilter(this.position.id);
+            this.checkAndResetPositionFilter(this.position);
 
             this.refreshLog();
             if (this.position.isCash) {
@@ -707,17 +707,18 @@ export class PositionDetailComponent implements OnInit {
     }
 
 
-    private checkAndResetPositionFilter(positionId: number): void
+    private checkAndResetPositionFilter(position: Position): void
     {
         let hit = false;
         this.getFilteredPositions()
             .subscribe(posis => {
                 posis.forEach(posi => {
-                    if (posi.id === positionId) {
+                    if (posi.id === position.id) {
                         hit = true;
                     }
                 });
-                if (!hit) {
+                if (!hit && this.position?.motherId === undefined) {
+                    // console.log('rasiere ultimate-filter');
                     localStorage.removeItem('ultimateFilter');
                 }
             });
@@ -768,7 +769,4 @@ export class PositionDetailComponent implements OnInit {
 
         return result;
     }
-
-    protected readonly DividendProjection = DividendProjection;
-    protected readonly stop = stop;
 }
