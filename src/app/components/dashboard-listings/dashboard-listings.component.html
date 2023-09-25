@@ -52,10 +52,10 @@
             <tr>
                 <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
                 <th scope="col" class="d-none d-md-table-cell">Sector</th>
-                <th scope="col" class="d-none d-md-table-cell">Labels</th>
+                <th scope="col" class="d-none d-sm-table-cell">Labels</th>
                 <th scope="col" class="d-none d-md-table-cell" style="width: 55px;"></th>
                 <th scope="col"><span class="float-end">{{ tranService.trans('LISTNGS_DAYS') }}</span></th>
-                <th scope="col"><span class="float-end" ngbTooltip="Total return per day">TRpd</span></th>
+                <th scope="col"><span class="float-end" ngbTooltip="Total return per day">Trpd</span></th>
                 <th scope="col" style="width: 35px;"></th>
                 <!--                            <th scope="col" style="width: 35px;"></th>-->
             </tr>
@@ -66,7 +66,7 @@
                     <tr [class.red20]="position.stopLossBroken()" [class.green20]="position.hasReachedTargetPrice()">
                         <td>{{ position.share.name }}</td>
                         <td class="d-none d-md-table-cell"><span *ngIf="position.sector">{{ position.sector.name }}</span></td>
-                        <td class="d-none d-md-table-cell">
+                        <td class="d-none d-sm-table-cell">
                             <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
                         </td>
                         <td class="d-none d-md-table-cell">
@@ -270,7 +270,10 @@
                 <ng-container *ngFor="let position of performanceList">
                     <tr [class.red20]="position.stopLossBroken()" [class.green20]="position.hasReachedTargetPrice()">
                         <td><a [routerLink]="['/position-detail/' + position.id]">{{ position.share?.name }}</a></td>
-                        <td><span *ngIf="position.sector">{{ position.sector.name }}</span></td>
+                        <td class="d-sm-none d-md-table-cell"><span *ngIf="position.sector">{{ position.sector.name }}</span></td>
+                        <td class="d-none d-sm-table-cell">
+                            <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
+                        </td>
                         <td><span *ngIf="position.tempPerformanceValue !== undefined" class="float-end" [class.red-text]="position.tempPerformanceValue < 0" [class.green-text]="position.tempPerformanceValue > 0">{{ position.tempPerformanceValue|number: '1.0-1' }}%</span></td>
                     </tr>
                 </ng-container>
@@ -361,7 +364,7 @@
             <tbody>
             <tr *ngFor="let entry of risksList">
                 <td>{{ entry.position.share?.name }}</td>
-                <td class="d-none d-md-table-cell"><span *ngIf="entry.position.sector">{{ entry.position.sector.name }}</span></td>
+                <td class="d-none d-sm-table-cell"><span *ngIf="entry.position.sector">{{ entry.position.sector.name }}</span></td>
                 <td><span class="float-end">{{ entry.maxDrawdownSummary.risk|number: '1.0' }}</span></td>
                 <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
             </tr>
