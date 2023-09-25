@@ -132,6 +132,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     }
 
     setAllLabelsActive(): void {
+        this.ultimateBalance = undefined;
+        this.ultimateValue = undefined;
         this.ultimateBalanceFilter?.forEach(filter => {
             filter.checked = true;
         });
