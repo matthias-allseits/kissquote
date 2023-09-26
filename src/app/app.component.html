@@ -1,9 +1,9 @@
 <body>
     <app-spinner *ngIf="loading === true"></app-spinner>
 <!--    <app-spinner></app-spinner>-->
-    <nav class="navbar navbar-expand-md fixed-top border-bottom bg-white">
+    <nav class="navbar navbar-expand-md fixed-top border-bottom">
         <div class="version-tape" ngbTooltip="Alpha-Release">Alpha</div>
-        <a (click)="handleHomeClick()" id="home-icon" class="me-3 text-dark text-decoration-none head-anchor">
+        <a (click)="handleHomeClick()" id="home-icon" class="me-3 text-decoration-none head-anchor">
             <img src="assets/kissquote.svg" width="35" ngbTooltip="{{ tranService.trans('GLOB_TITLE') }}">
         </a>
         <div class="container-fluid d-none d-md-inline">
@@ -20,11 +20,11 @@
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
         </div>
-        <a (click)="changeLanguage('de')" class="me-3 py-2 text-dark text-decoration-none head-anchor"
+        <a (click)="changeLanguage('de')" class="me-3 py-2 text-decoration-none head-anchor"
            [class.active]="language == 'de'">de</a>
-        <a (click)="changeLanguage('en')" class="me-3 py-2 text-dark text-decoration-none head-anchor"
+        <a (click)="changeLanguage('en')" class="me-3 py-2 text-decoration-none head-anchor"
            [class.active]="language == 'en'">en</a>
-        <a (click)="changeLanguage('fr')" class="me-3 py-2 text-dark text-decoration-none head-anchor"
+        <a (click)="changeLanguage('fr')" class="me-3 py-2 text-decoration-none head-anchor"
            [class.active]="language == 'fr'">fr</a>
     </nav>
 
