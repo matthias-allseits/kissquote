@@ -38,6 +38,7 @@ export class DashboardSettingsComponent implements OnInit {
     public selectedSector?: Sector;
     public selectedStrategy?: Strategy;
     public color = 'ffffff';
+    public darkMode = false;
 
     modalRef?: NgbModalRef;
 
@@ -69,6 +70,7 @@ export class DashboardSettingsComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.darkMode = localStorage.getItem('darkMode') === 'yes';
         this.currencyService.getAllCurrencies()
             .subscribe(currencies => {
                 this.currencies = currencies;
@@ -82,6 +84,12 @@ export class DashboardSettingsComponent implements OnInit {
             .subscribe(strategies => {
                 this.strategies = strategies;
             });
+    }
+
+    toggleDarkmode(): void {
+        this.darkMode = !this.darkMode;
+        localStorage.setItem('darkMode', this.darkMode ? 'yes' : 'no');
+        document.location.reload();
     }
 
     openExchangeRateModal(template: TemplateRef<any>, currency: Currency) {

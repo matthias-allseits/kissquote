@@ -27,6 +27,17 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        const darkMode = localStorage.getItem('darkMode');
+        if (darkMode && darkMode === 'yes') {
+            document.body.style.setProperty('--kq-background-color', '#000000');
+            document.body.style.setProperty('--bs-modal-bg', '#000000');
+            document.body.style.setProperty('--kq-main-color', '#ffffff');
+        } else {
+            document.body.style.setProperty('--kq-background-color', '#ffffff');
+            document.body.style.setProperty('--bs-modal-bg', '#ffffff');
+            document.body.style.setProperty('--kq-main-color', '#212529');
+        }
+
         // this.router.events.subscribe(console.log);
         this.router.events.pipe(
                 filter(

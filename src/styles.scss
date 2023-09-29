@@ -3,25 +3,38 @@
 
 body {
   padding-top: 40px;
-  background-color: rgba(0, 0, 0, 1);
-  color: white;
+  background-color: var(--kq-background-color);
+  color: var(--kq-main-color);
 }
 
 .bg-body {
-  background-color: rgba(0, 0, 0, 1) !important;
+  background-color: var(--kq-background-color) !important;
 }
 
 .table {
-    color: white;
+    color: var(--kq-main-color);
 }
 
 .table-striped > tbody > tr:nth-of-type(odd) > * {
-    color: white;
+    color: var(--kq-main-color);
 }
 
 .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
-    background-color: rgba(0, 0, 0, 1);
-    color: white;
+    background-color: var(--kq-background-color);
+    color: var(--kq-main-color);
+}
+
+.modal-content {
+    background-color: var(--kq-background-color);
+    color: var(--kq-main-color);
+}
+
+.btn {
+    color: var(--kq-main-color);
+}
+
+.form-control {
+    background-color: var(--kq-background-color);
 }
 
 h1.centered-header {
@@ -129,7 +142,7 @@ a:hover, .nav-link:hover {
   display: inline-block;
   vertical-align: top;
   border: solid 1px #ddd;
-    background-color: rgba(0, 0, 0, 1);
+  background-color: var(--kq-background-color);
   width: 355px;
   padding: 8px;
   margin-right: 20px;
@@ -201,7 +214,7 @@ a:hover, .nav-link:hover {
 }
 
 .red-text {
-  color: red;
+  color: #ce5a5a;
 }
 
 .yellow-text {
