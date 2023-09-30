@@ -14,6 +14,8 @@ import {WatchlistCreator} from "../creators/watchlist-creator";
 import {Position} from "../models/position";
 import {Portfolio} from "../models/portfolio";
 import {DateHelper} from "../core/datehelper";
+import {CacheHelper} from "../helper/cache.helper";
+import {SwissquoteHelper} from "../core/swissquote-helper";
 
 
 @Injectable({
@@ -69,10 +71,26 @@ export class ShareheadService {
             .pipe(
                 map(res => {
                     const collection = ShareheadShareCreator.fromApiArray(res);
+                    console.log('deliver collection from server');
+                    const name = JSON.stringify(shareheadIds);
+                    CacheHelper.cache(name, collection, 60 * 1000);
 
                     return collection;
                 }),
             );
+    }
+
+    public getCachedSharesCollection(shareheadIds: number[]): ShareheadShare[]|null
+    {
+        const name = JSON.stringify(shareheadIds);
+        console.log(name);
+        const cachedData = CacheHelper.get(name);
+        if (cachedData) {
+            console.log('deliver collection from cache');
+            return ShareheadShareCreator.fromApiArray(cachedData);
+        } else {
+            return null;
+        }
     }
 
     public getTimeWarpedSharesCollection(portfolio: Portfolio, date: Date): Observable<ShareheadShare[]>
