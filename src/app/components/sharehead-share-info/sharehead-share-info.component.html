@@ -151,23 +151,23 @@
             </div>
         </div>
         <div>
-            <div class="info-box info-box-lg">
+            <div class="info-box chart-box info-box-lg">
                 <h5>Sales (in Mio. {{ shareheadShare.balancesCurrency() }})</h5>
                 <app-bar-chart [data]="shareheadShare.salesChartData(timeWarpDate)" [height]="150"></app-bar-chart>
             </div>
-            <div class="info-box info-box-lg">
+            <div class="info-box chart-box info-box-lg">
                 <h5>Profit + Dividend per Share</h5>
                 <app-line-chart [data]="shareheadShare.profitChartData(timeWarpDate)" [height]="150" [forceBeginAtZero]="!shareheadShare.hadNegativeBalances()" [pointRadius]="3.5"></app-line-chart>
             </div>
-            <div class="info-box info-box-lg">
+            <div class="info-box chart-box info-box-lg">
                 <h5>Avg Rates</h5>
                 <app-line-chart [data]="shareheadShare.yearlyAverageRatesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
-            <div class="info-box info-box-lg">
+            <div class="info-box chart-box info-box-lg">
                 <h5>Equity Ratio</h5>
                 <app-line-chart [data]="shareheadShare.equityRatesChartData()" [height]="150" [forceBeginAtZero]="true" [percentageChart]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
-            <div *ngIf="!timeWarpMode" class="info-box info-box-lg">
+            <div *ngIf="!timeWarpMode" class="info-box chart-box info-box-lg">
                 <h5>{{ nextEstimationYear }} Estimation Changes</h5>
                 <app-line-chart [data]="shareheadShare.estimationChangesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
@@ -175,15 +175,15 @@
                 <h5>{{ overNextEstimationYear }} Estimation Changes</h5>
                 <app-line-chart [data]="shareheadShare.estimationChangesChartData(true)" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
-            <div *ngIf="shareheadShare.yahooBalances().length > 0" class="info-box info-box-lg">
+            <div *ngIf="shareheadShare.yahooBalances().length > 0" class="info-box chart-box info-box-lg">
                 <h5>Net Debt and Profit Ratio</h5>
                 <app-line-chart [data]="shareheadShare.debtChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
-            <div *ngIf="shareheadShare.yahooBalances().length > 0" class="info-box info-box-lg">
+            <div *ngIf="shareheadShare.yahooBalances().length > 0" class="info-box chart-box info-box-lg">
                 <h5>Shares number ({{ shareheadShare.shareNumbersChanges() }}%)</h5>
                 <app-line-chart [data]="shareheadShare.shareNumbersChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
-            <div *ngIf="!timeWarpMode" class="info-box info-box-lg">
+            <div *ngIf="!timeWarpMode" class="info-box chart-box info-box-lg">
                 <h5>Historic dividends</h5>
                 <app-bar-chart [data]="shareheadShare.historicDividendsChartData()" [height]="150"></app-bar-chart>
             </div>

@@ -30,11 +30,17 @@ export class AppComponent implements OnInit {
         const darkMode = localStorage.getItem('darkMode');
         if (darkMode && darkMode === 'yes') {
             document.body.style.setProperty('--kq-background-color', '#000000');
-            document.body.style.setProperty('--bs-modal-bg', '#000000');
+            document.body.style.setProperty('--kq-modal-bg-color', '#232323');
+            document.body.style.setProperty('--kq-dropdown-bg-color', '#232323');
+            document.body.style.setProperty('--kq-bg-opacity', '0.6');
+            document.body.style.setProperty('--kq-orange-anchor-color', '#ffffff');
             document.body.style.setProperty('--kq-main-color', '#ffffff');
         } else {
             document.body.style.setProperty('--kq-background-color', '#ffffff');
-            document.body.style.setProperty('--bs-modal-bg', '#ffffff');
+            document.body.style.setProperty('--kq-modal-bg-color', '#ffffff');
+            document.body.style.setProperty('--kq-dropdown-bg-color', '#ffffff');
+            document.body.style.setProperty('--kq-bg-opacity', '0.2');
+            document.body.style.setProperty('--kq-orange-anchor-color', '#ff6633');
             document.body.style.setProperty('--kq-main-color', '#212529');
         }
 
