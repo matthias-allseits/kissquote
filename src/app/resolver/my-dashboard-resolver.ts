@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
-import {Observable} from "rxjs";
+import {Observable, Subscriber} from "rxjs";
 import {ShareheadService} from "../services/sharehead.service";
 import {Portfolio} from "../models/portfolio";
 import {PortfolioService} from "../services/portfolio.service";
+import {Position} from "../models/position";
+import {ShareheadShare} from "../models/sharehead-share";
 
 
 @Injectable({
@@ -59,30 +61,40 @@ export class MyDashboardResolver implements Resolve<Portfolio>{
                         shareheadIds.push(position.shareheadId);
                     }
                 });
-                this.shareheadService.getSharesCollection(shareheadIds)
-                    .subscribe(shares => {
-                        let counter = 0;
-                        allPositions.forEach((position, index) => {
-                            if (position.shareheadId !== undefined && position.shareheadId > 0 && position.active) {
-                                shares.forEach(share => {
-                                    if (share.id === position.shareheadId) {
-                                        position.shareheadShare = share;
-                                        counter++;
-                                    }
-                                });
-                            } else {
-                                counter++;
-                            }
-                            // console.log(counter);
-                            if (counter == allPositions.length) {
-                                result = true;
-                                // console.log('we are done');
-                                psitons.next(result);
-                            }
-                        });
+                const shareheadSharesFromCache = this.shareheadService.getCachedSharesCollection(shareheadIds);
+                if (shareheadSharesFromCache) {
+                    this.assignShareheadShares(allPositions, shareheadSharesFromCache, result, psitons);
+                } else {
+                    this.shareheadService.getSharesCollection(shareheadIds).subscribe(shares => {
+                        this.shareheadService.getSharesCollection(shareheadIds)
+                            .subscribe(shares => {
+                                this.assignShareheadShares(allPositions, shares, result, psitons);
+                            });
                     });
+                }
             }
         });
     }
 
+    private assignShareheadShares(allPositions: Position[], shares: ShareheadShare[], result: boolean, psitons: Subscriber<boolean>) {
+        let counter = 0;
+        allPositions.forEach((position, index) => {
+            if (position.shareheadId !== undefined && position.shareheadId > 0 && position.active) {
+                shares.forEach(share => {
+                    if (share.id === position.shareheadId) {
+                        position.shareheadShare = share;
+                        counter++;
+                    }
+                });
+            } else {
+                counter++;
+            }
+            // console.log(counter);
+            if (counter == allPositions.length) {
+                result = true;
+                // console.log('we are done');
+                psitons.next(result);
+            }
+        });
+    }
 }

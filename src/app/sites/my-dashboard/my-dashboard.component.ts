@@ -278,15 +278,24 @@ export class MyDashboardComponent implements OnInit {
         this.portfolio?.watchlistEntries.forEach(entry => {
             shareheadIds.push(entry.shareheadId);
         });
-        this.shareheadService.getSharesCollection(shareheadIds).subscribe(shares => {
-            shares.forEach(share => {
-                this.portfolio?.watchlistEntries.forEach(entry => {
-                    if (share.id === entry.shareheadId) {
-                        entry.shareheadShare = share;
-                    }
-                });
+        const shareheadSharesFromCache = this.shareheadService.getCachedSharesCollection(shareheadIds);
+        if (shareheadSharesFromCache) {
+            this.assignShareheadShares(shareheadSharesFromCache);
+        } else {
+            this.shareheadService.getSharesCollection(shareheadIds).subscribe(shares => {
+                this.assignShareheadShares(shares);
+            });
+        }
+    }
+
+
+    private assignShareheadShares(shares: ShareheadShare[]) {
+        shares.forEach(share => {
+            this.portfolio?.watchlistEntries.forEach(entry => {
+                if (share.id === entry.shareheadId) {
+                    entry.shareheadShare = share;
+                }
             });
         });
     }
-
 }
