@@ -73,7 +73,7 @@ export class ShareheadService {
                     const collection = ShareheadShareCreator.fromApiArray(res);
                     console.log('deliver collection from server');
                     const name = JSON.stringify(shareheadIds);
-                    CacheHelper.cache(name, collection, 60 * 1000);
+                    CacheHelper.cache(name, collection, 60 * 60 * 1000);
 
                     return collection;
                 }),
