@@ -32,10 +32,10 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
     public bankAccounts: BankAccount[] = [];
     private bankAccountIndex: number = 0;
     private motherPositionId: number = 0;
-    public shareheadShares: ShareheadShare[] = [];
     public marketplaces: Marketplace[] = [];
     public currencies: Currency[] = [];
     public selectableShares?: ShareheadShare[];
+    private selectedShare?: ShareheadShare;
     public periodicies = [
         'yearly',
         'half-yearly',
@@ -106,22 +106,22 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
 
 
     searchShare(event: any): void {
-        // console.log(event.target.value);
-        if (this.position.id === 0) {
-            this.selectableShares = [];
-            if (event.target.value) {
-                this.shareheadShares?.forEach(share => {
-                    if (share.name && share.name.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1) {
-                        this.selectableShares?.push(share);
+        this.selectableShares = [];
+        if (event.target.value) {
+            const searchString = event.target.value.toLowerCase();
+            if (searchString.length > 2) {
+                this.shareheadService.searchShare(searchString).subscribe(shares => {
+                    if (shares) {
+                        this.selectableShares = shares;
                     }
                 });
             }
-            // console.log(this.selectableShares.length);
         }
     }
 
 
     selectShare(shareheadShare: ShareheadShare): void {
+        this.selectedShare = shareheadShare;
         const share = ShareCreator.createNewShare();
         share.isin = shareheadShare.isin;
         share.name = shareheadShare.name;
@@ -130,6 +130,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         this.positionForm.get('shareName')?.setValue(share.name);
         this.positionForm.get('isin')?.setValue(share.isin);
         this.position.share = share;
+        this.position.shareheadId = share.id;
         if (share.marketplace?.currency) {
             const currency = this.currencyService.getCachedCurrencyByName(share.marketplace.currency);
             this.position.currency = currency;
@@ -137,15 +138,6 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         this.setMarketplace();
         this.setCurrency();
     }
-
-    // onSelect(event: TypeaheadMatch): void {
-    //     console.log(event);
-    //     console.log(event.item);
-    //     this.position.share = event.item;
-    //     // this.positionForm.get('shareName')?.setValue(event.item.name);
-    //     console.log(this.position);
-    //     // this.position.share.name = event.name;
-    // }
 
     onSubmit(): void {
         this.patchValuesBack(this.positionForm, this.position);
@@ -159,11 +151,8 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         newShare.name = this.positionForm.get('shareName')?.value;
         newShare.marketplace = this.positionForm.get('marketplace')?.value;
         newShare.isin = this.positionForm.get('isin')?.value;
-        if (this.shareheadShares && newShare.isin) {
-            const shareheadShare = this.shareheadService.getShareByIsin(this.shareheadShares, newShare.isin);
-            if (shareheadShare) {
-                this.position.shareheadId = shareheadShare.shareheadId;
-            }
+        if (this.selectedShare) {
+            this.position.shareheadId = this.selectedShare.id;
         }
         this.position.share = newShare;
         // console.log(this.position);
@@ -189,10 +178,6 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                 if (this.portfolio instanceof Portfolio) {
                     this.bankAccounts = this.portfolio.getBankAccountsWithoutPositions();
                 }
-            });
-        this.shareService.getAllShareheadShares()
-            .subscribe(shares => {
-                this.shareheadShares = shares;
             });
         // todo: migrate this to use the kissquote-api
         this.shareheadService.getAllCurrencies()

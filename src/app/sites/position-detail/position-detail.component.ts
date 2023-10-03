@@ -195,6 +195,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(position => {
                     if (position) {
                         this.position = position;
+                        this.position.shareheadShare = undefined;
                         this.loadData('confirmShareheadRemoving');
                         // todo: find a solution to really reload the whole page by resolver
                     }
@@ -239,6 +240,7 @@ export class PositionDetailComponent implements OnInit {
                 .subscribe(position => {
                     if (position) {
                         this.position = position;
+                        this.position.shareheadShare = shareheadShare;
                         this.loadData('selectShareheadShare');
                         // todo: find a solution to really reload the whole page
                     }

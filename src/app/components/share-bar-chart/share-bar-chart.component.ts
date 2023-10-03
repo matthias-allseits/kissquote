@@ -117,6 +117,11 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                     this.context.beginPath();
                     let xValue = CanvasHelper.optimizeCoordinate(this.offsetLeft + ((i * this.stepWidth) + 3));
                     if (this.type === 'monthly' || this.type === 'double-monthly') {
+                        if (lastRate.date.getFullYear() % 10 === 0) {
+                            this.context.lineWidth = 1.5;
+                        } else {
+                            this.context.lineWidth = 1;
+                        }
                         xValue = CanvasHelper.optimizeCoordinate(this.offsetLeft + ((i * this.stepWidth)));
                     }
                     this.context.moveTo(xValue, this.offsetTop);
@@ -132,6 +137,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                         this.context.stroke();
                     }
                 }
+                this.context.lineWidth = 1;
                 lastMonth = lastRate.date.getMonth();
                 lastYear = lastRate.date.getFullYear();
             });
