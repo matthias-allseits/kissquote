@@ -65,6 +65,7 @@ export class Position {
         public shareFromTotal: number,
         public bankAccount?: BankAccount,
         public underlying?: Position,
+        public removeUnderlying?: boolean,
         public motherId?: number,
         public sector?: Sector,
         public strategy?: Strategy,

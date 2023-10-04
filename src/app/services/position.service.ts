@@ -177,7 +177,7 @@ export class PositionService extends ApiService {
         } else {
             position.activeUntil = null;
         }
-        if (position.underlying) {
+        if (position.removeUnderlying && position.underlying) {
             position.underlying = undefined;
         }
         const url = `${this.apiUrl}/${position.id}`;

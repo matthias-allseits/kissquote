@@ -47,6 +47,7 @@ export class PositionCreator {
                 0,
                 apiArray.bankAccount ? BankAccountCreator.oneFromApiArray(apiArray.bankAccount) : undefined,
                 apiArray.underlying ? PositionCreator.oneFromApiArray(apiArray.underlying) : undefined,
+                undefined,
                 apiArray.motherId,
                 apiArray.sector ? SectorCreator.oneFromApiArray(apiArray.sector) : undefined,
                 apiArray.strategy ? StrategyCreator.oneFromApiArray(apiArray.strategy) : undefined,
