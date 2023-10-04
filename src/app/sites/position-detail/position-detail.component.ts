@@ -81,6 +81,7 @@ export class PositionDetailComponent implements OnInit {
     public nextPaymentCorrected?: number;
     public stopLossBroken = false;
     public hasReachedTargetPrice = false;
+    public filteredPositions?: Position[];
 
     manualDrawdownForm = new FormGroup({
         amount: new UntypedFormControl('', Validators.required),
@@ -739,6 +740,9 @@ export class PositionDetailComponent implements OnInit {
                     } else {
                         positionsFilter = JSON.parse(positionsFilter);
                         const positions = this.filterPositions(posis, positionsFilter);
+                        if (screen.width > 400) {
+                            this.filteredPositions = positions;
+                        }
                         psitons.next(positions);
                     }
             });
