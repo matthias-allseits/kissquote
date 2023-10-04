@@ -1,5 +1,5 @@
 <div *ngIf="parsedTransactions.length === 0" class="px-4 py-5 my-5 text-center">
-    <img src="assets/kissquote.svg" width="65" ngbTooltip="{{ tranService.trans('GLOB_TITLE') }}">
+    <img src="assets/kissquote.svg" width="65" ngbTooltip="{{ tranService.trans('GLOB_TITLE') }}" tooltipClass="custom-tooltip">
     <h1 class="display-5 fw-bold centered-header">{{ tranService.trans('UPLO_TITLE') }}</h1>
     <div class="col-lg-6 mx-auto">
         <p class="lead mb-4">
@@ -17,7 +17,7 @@
     </div>
 </div>
 <div *ngIf="parsedTransactions.length > 0" class="px-4 text-center">
-    <img src="assets/kissquote.svg" width="65" ngbTooltip="{{ tranService.trans('GLOB_TITLE') }}">
+    <img src="assets/kissquote.svg" width="65" ngbTooltip="{{ tranService.trans('GLOB_TITLE') }}" tooltipClass="custom-tooltip">
     <p class="lead mb-4 py-4">
         Ihre Datei wurde ausgelesen und wir bitten Sie, das Resultat zu begutachten.<br>
         Wenn Sie der Meinung sind, das Resultat sei gut genug für den Start Ihres Portfolios, können Sie dies bestätigen und wir erstellen damit ein Portfolio für Sie.<br>

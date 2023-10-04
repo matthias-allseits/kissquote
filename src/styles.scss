@@ -59,6 +59,23 @@ nav, .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
     color: var(--kq-main-color);
 }
 
+.custom-tooltip .tooltip-inner {
+    background-color: var(--kq-main-color);
+    color: var(--kq-background-color);
+}
+.custom-tooltip.bs-tooltip-end .tooltip-arrow::before {
+    border-right-color: var(--kq-main-color);
+}
+.custom-tooltip.bs-tooltip-start .tooltip-arrow::before {
+    border-left-color: var(--kq-main-color);
+}
+.custom-tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: var(--kq-main-color);
+}
+.custom-tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+    border-bottom-color: var(--kq-main-color);
+}
+
 h1.centered-header {
   margin-top: 2.5rem;
   margin-bottom: 2.5rem;

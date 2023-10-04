@@ -55,7 +55,7 @@
                 <th scope="col" class="d-none d-sm-table-cell">Labels</th>
                 <th scope="col" class="d-none d-md-table-cell" style="width: 55px;"></th>
                 <th scope="col"><span class="float-end">{{ tranService.trans('LISTNGS_DAYS') }}</span></th>
-                <th scope="col"><span class="float-end" ngbTooltip="Total return per day">Trpd</span></th>
+                <th scope="col"><span class="float-end" ngbTooltip="Total return per day" tooltipClass="custom-tooltip">Trpd</span></th>
                 <th scope="col" style="width: 35px;"></th>
                 <!--                            <th scope="col" style="width: 35px;"></th>-->
             </tr>
@@ -70,12 +70,12 @@
                             <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
                         </td>
                         <td class="d-none d-md-table-cell">
-                            <button *ngIf="position.stopLoss && position.stopLoss > 0" type="button" class="btn btn-tiny btn-outline-red" ngbTooltip="Has stop-loss" style="margin-right: 2px;">SL</button>
-                            <button *ngIf="position.targetPrice && position.targetPrice > 0" type="button" class="btn btn-tiny btn-outline-green" ngbTooltip="Has target-price">TP</button>
+                            <button *ngIf="position.stopLoss && position.stopLoss > 0" type="button" class="btn btn-tiny btn-outline-red" ngbTooltip="Has stop-loss" tooltipClass="custom-tooltip" style="margin-right: 2px;">SL</button>
+                            <button *ngIf="position.targetPrice && position.targetPrice > 0" type="button" class="btn btn-tiny btn-outline-green" ngbTooltip="Has target-price" tooltipClass="custom-tooltip">TP</button>
                         </td>
                         <td><span class="float-end">{{ position.daysSinceStart()|number: '1.0' }}</span></td>
                         <td><span class="float-end">{{ position.totalReturnPerDay() }}</span></td>
-                        <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                        <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details" tooltipClass="custom-tooltip"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
                     </tr>
                 </ng-container>
             </ng-container>
@@ -105,7 +105,7 @@
                 <th scope="col" class="d-none d-md-table-cell">Sector</th>
                 <th scope="col">Method</th>
                 <th scope="col"><span class="float-end">{{ tranService.trans('GLOB_VALUE') }}</span></th>
-                <th scope="col"><span class="float-end" ngbTooltip="{{ tranService.trans('LISTNGS_FROM_INVESTMENT') }}">frmInv</span></th>
+                <th scope="col"><span class="float-end" ngbTooltip="{{ tranService.trans('LISTNGS_FROM_INVESTMENT') }}" tooltipClass="custom-tooltip">frmInv</span></th>
                 <th scope="col" style="width: 35px;"></th>
             </tr>
             </thead>
@@ -116,7 +116,7 @@
                 <td>{{ entry.maxDrawdownSummary.method }}</td>
                 <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValue|number: '1.0' }}</span></td>
                 <td><span class="float-end">{{ entry.maxDrawdownSummary.lombardValueFromInvestment }}%</span></td>
-                <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details" tooltipClass="custom-tooltip"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
             </tr>
             </tbody>
         </table>
@@ -133,7 +133,7 @@
             <tr>
                 <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
                 <th scope="col" class="d-none d-md-table-cell">Sector</th>
-                <th scope="col" class="d-none d-md-table-cell"><span class="float-end" ngbTooltip="Amount of data">Data</span></th>
+                <th scope="col" class="d-none d-md-table-cell"><span class="float-end" ngbTooltip="Amount of data" tooltipClass="custom-tooltip">Data</span></th>
                 <th scope="col">Method</th>
                 <th scope="col"><span class="float-end">Drop</span></th>
                 <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Actual</span></th>
@@ -150,7 +150,7 @@
                 <td><span class="float-end">{{ entry.crisisDropSummary.maxDrop|number: '1.0' }}%</span></td>
                 <td class="d-none d-md-table-cell"><span class="float-end">{{ entry.crisisDropSummary.actualDividend|number: '1.0-0' }}</span></td>
                 <td><span class="float-end">{{ entry.crisisDropSummary.dividendAfterDrop|number: '1.0' }}</span></td>
-                <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details" tooltipClass="custom-tooltip"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
             </tr>
             </tbody>
         </table>
@@ -172,8 +172,8 @@
             <tbody>
             <tr *ngFor="let entry of lastMinuteList" [class.orange]="entry.positionId || entry.isOnWatchlist">
                 <ng-container *ngIf="entry.plannedDividends">
-                    <td *ngIf="entry.positionId"><a [routerLink]="['/position-detail/' + entry.positionId]" ngbTooltip="Zur Position">{{ entry.name }}</a></td>
-                    <td *ngIf="!entry.positionId"><a [routerLink]="['/sharehead-share-detail/' + entry.id]" ngbTooltip="Details">{{ entry.name }}</a></td>
+                    <td *ngIf="entry.positionId"><a [routerLink]="['/position-detail/' + entry.positionId]" ngbTooltip="Zur Position" tooltipClass="custom-tooltip">{{ entry.name }}</a></td>
+                    <td *ngIf="!entry.positionId"><a [routerLink]="['/sharehead-share-detail/' + entry.id]" ngbTooltip="Details" tooltipClass="custom-tooltip">{{ entry.name }}</a></td>
                     <td class="d-none d-md-table-cell"><span *ngIf="entry.plannedDividends[0].amount">{{ entry.plannedDividends[0].amount }}</span></td>
                     <td><span *ngIf="entry.plannedDividends[0].amount && entry.lastRate">{{ (100 / entry.lastRate.rate * entry.plannedDividends[0].amount).toFixed(2) }}%</span></td>
                     <td>{{ entry.plannedDividends[0].exDate|date:'dd.MM.YY' }}</td>
@@ -201,7 +201,7 @@
             <tr *ngFor="let rating of newestRatingsList">
                 <ng-container *ngIf="rating.share">
                     <td>{{ rating.date|date:'dd.MM.' }}</td>
-                    <td *ngIf="rating.positionId"><a [routerLink]="['/position-detail/' + rating.positionId]" ngbTooltip="Details">{{ rating.share.name }}</a></td>
+                    <td *ngIf="rating.positionId"><a [routerLink]="['/position-detail/' + rating.positionId]" ngbTooltip="Details" tooltipClass="custom-tooltip">{{ rating.share.name }}</a></td>
                     <td *ngIf="!rating.positionId"><a [routerLink]="['/sharehead-share-detail/' + rating.share.id]" ngbTooltip="Details">{{ rating.share.name }}</a></td>
                     <td>{{ rating.analyst }}</td>
                     <td>{{ rating.rating }}</td>
@@ -226,8 +226,8 @@
             <tr *ngFor="let share of nextReportsList">
                 <ng-container>
                     <td>{{ share.nextReportDate|date:'dd.MM.YY' }}</td>
-                    <td *ngIf="share.positionId"><a [routerLink]="['/position-detail/' + share.positionId]" ngbTooltip="Details">{{ share.name }}</a></td>
-                    <td *ngIf="!share.positionId"><a [routerLink]="['/sharehead-share-detail/' + share.id]" ngbTooltip="Details">{{ share.name }}</a></td>
+                    <td *ngIf="share.positionId"><a [routerLink]="['/position-detail/' + share.positionId]" ngbTooltip="Details" tooltipClass="custom-tooltip">{{ share.name }}</a></td>
+                    <td *ngIf="!share.positionId"><a [routerLink]="['/sharehead-share-detail/' + share.id]" ngbTooltip="Details" tooltipClass="custom-tooltip">{{ share.name }}</a></td>
                 </ng-container>
             </tr>
             </tbody>
@@ -366,7 +366,7 @@
                 <td>{{ entry.position.share?.name }}</td>
                 <td class="d-none d-sm-table-cell"><span *ngIf="entry.position.sector">{{ entry.position.sector.name }}</span></td>
                 <td><span class="float-end">{{ entry.maxDrawdownSummary.risk|number: '1.0' }}</span></td>
-                <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                <td><button [routerLink]="['/position-detail/' + entry.position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details" tooltipClass="custom-tooltip"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
             </tr>
             </tbody>
         </table>

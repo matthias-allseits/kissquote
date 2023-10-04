@@ -2,12 +2,12 @@
     <app-spinner *ngIf="loading === true"></app-spinner>
 <!--    <app-spinner></app-spinner>-->
     <nav class="navbar navbar-expand-md fixed-top border-bottom">
-        <div class="version-tape" ngbTooltip="Alpha-Release">Alpha</div>
+        <div class="version-tape" ngbTooltip="Alpha-Release" tooltipClass="custom-tooltip">Alpha</div>
         <a (click)="handleHomeClick()" id="home-icon" class="me-3 text-decoration-none head-anchor">
-            <img src="assets/kissquote.svg" width="35" ngbTooltip="{{ tranService.trans('GLOB_TITLE') }}">
+            <img src="assets/kissquote.svg" width="35" ngbTooltip="{{ tranService.trans('GLOB_TITLE') }}" tooltipClass="custom-tooltip">
         </a>
         <div class="container-fluid d-none d-md-inline">
-            <span *ngIf="myKey !== null">Mein Schlüssel: <a routerLink="/my-dashboard" id="dashboard-anchor" ngbTooltip="Ihr Schlüssel. Unbedingt speichern!">{{ myKey }}</a></span>
+            <span *ngIf="myKey !== null">Mein Schlüssel: <a routerLink="/my-dashboard" id="dashboard-anchor" ngbTooltip="Ihr Schlüssel. Unbedingt speichern!" tooltipClass="custom-tooltip">{{ myKey }}</a></span>
         </div>
 
         <div *ngIf="myKey !== null" class="dropdown" style="margin-right: 15px;">
