@@ -101,13 +101,14 @@ export class PositionService extends ApiService {
     public getNonCashAndActivePositions(): Observable<Position[]>
     {
         return new Observable(psitons => {
+            const result: Position[] = [];
             this.getActivePositions().subscribe(positions => {
-                positions.forEach(position => {
+                for (const position of positions) {
                     if (!position.isCash) {
-                        positions.push(position);
+                        result.push(position);
                     }
-                });
-                psitons.next(positions);
+                }
+                psitons.next(result);
             });
         });
     }
@@ -177,7 +178,7 @@ export class PositionService extends ApiService {
         } else {
             position.activeUntil = null;
         }
-        if (position.underlying) {
+        if (position.removeUnderlying && position.underlying) {
             position.underlying = undefined;
         }
         const url = `${this.apiUrl}/${position.id}`;

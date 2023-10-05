@@ -81,6 +81,7 @@ export class PositionDetailComponent implements OnInit {
     public nextPaymentCorrected?: number;
     public stopLossBroken = false;
     public hasReachedTargetPrice = false;
+    public filteredPositions?: Position[];
 
     manualDrawdownForm = new FormGroup({
         amount: new UntypedFormControl('', Validators.required),
@@ -206,7 +207,7 @@ export class PositionDetailComponent implements OnInit {
 
     confirmUnderlyingRemoving(): void {
         if (this.position) {
-            this.position.underlying = undefined;
+            this.position.removeUnderlying = true;
             this.positionService.update(this.position)
                 .subscribe(position => {
                     if (position) {
@@ -621,6 +622,7 @@ export class PositionDetailComponent implements OnInit {
 
     private loadData(referer: string): void {
         // console.log('referer is: ' + referer);
+        // console.log(this.position);
         this.diviProjectionYears = [];
         this.maxDrawdownSummary = undefined;
         this.dividendDropSummary = undefined;
@@ -738,6 +740,9 @@ export class PositionDetailComponent implements OnInit {
                     } else {
                         positionsFilter = JSON.parse(positionsFilter);
                         const positions = this.filterPositions(posis, positionsFilter);
+                        if (screen.width > 400) {
+                            this.filteredPositions = positions;
+                        }
                         psitons.next(positions);
                     }
             });

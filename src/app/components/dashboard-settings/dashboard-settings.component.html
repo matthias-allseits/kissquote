@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
     <h4 class="pt-2">Settings</h4>
 </div>
-<div class="info-box">
+<div class="info-box" style="display: block;">
     <button *ngIf="!darkMode" (click)="toggleDarkmode()" type="button" class="btn btn-sm btn-outline-primary">Darkmode Off</button>
     <button *ngIf="darkMode" (click)="toggleDarkmode()" type="button" class="btn btn-sm btn-outline-primary">Darkmode On</button>
 </div>
@@ -20,7 +20,7 @@
             <td>{{ currency.name }}</td>
             <td align="right">{{ currency.rate }}</td>
             <td>
-                <button (click)="openExchangeRateModal(exchangeRateFormModal, currency)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Editieren">
+                <button (click)="openExchangeRateModal(exchangeRateFormModal, currency)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Editieren" tooltipClass="custom-tooltip">
                     <fa-icon [icon]="editIcon"></fa-icon>
                 </button>
             </td>
@@ -31,7 +31,7 @@
 <div class="info-box">
     <h5>
         Labels
-        <button (click)="openLabelFormModal(labelFormModal, undefined)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Add Label"><fa-icon [icon]="addIcon"></fa-icon></button>
+        <button (click)="openLabelFormModal(labelFormModal, undefined)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Add Label" tooltipClass="custom-tooltip"><fa-icon [icon]="addIcon"></fa-icon></button>
     </h5>
     <table class="table table-striped table-sm">
         <thead>
@@ -47,11 +47,11 @@
             <td>{{ label.name }}</td>
             <td [style.background]="label.color"></td>
             <td>
-                <button (click)="openLabelFormModal(labelFormModal, label)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Editieren">
+                <button (click)="openLabelFormModal(labelFormModal, label)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Editieren" tooltipClass="custom-tooltip">
                     <fa-icon [icon]="editIcon"></fa-icon>
                 </button>
             </td>
-            <td><button (click)="openLabelConfirmModal(removeLabelModal, label)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Entfernen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+            <td><button (click)="openLabelConfirmModal(removeLabelModal, label)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Entfernen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
         </tr>
         </tbody>
     </table>
@@ -59,7 +59,7 @@
 <div class="info-box">
     <h5>
         Sectors
-        <button (click)="openSectorFormModal(sectorFormModal, undefined)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Add Sector"><fa-icon [icon]="addIcon"></fa-icon></button>
+        <button (click)="openSectorFormModal(sectorFormModal, undefined)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Add Sector" tooltipClass="custom-tooltip"><fa-icon [icon]="addIcon"></fa-icon></button>
     </h5>
     <table class="table table-striped table-sm">
         <thead>
@@ -73,11 +73,11 @@
         <tr *ngFor="let sector of sectors">
             <td>{{ sector.name }}</td>
             <td>
-                <button (click)="openSectorFormModal(sectorFormModal, sector)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Editieren">
+                <button (click)="openSectorFormModal(sectorFormModal, sector)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Editieren" tooltipClass="custom-tooltip">
                     <fa-icon [icon]="editIcon"></fa-icon>
                 </button>
             </td>
-            <td><button (click)="openSectorConfirmModal(removeSectorModal, sector)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Entfernen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+            <td><button (click)="openSectorConfirmModal(removeSectorModal, sector)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Entfernen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
         </tr>
         </tbody>
     </table>
@@ -85,7 +85,7 @@
 <div class="info-box">
     <h5>
         Strategies
-        <button (click)="openStrategyFormModal(strategyFormModal, undefined)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Add Strategy"><fa-icon [icon]="addIcon"></fa-icon></button>
+        <button (click)="openStrategyFormModal(strategyFormModal, undefined)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Add Strategy" tooltipClass="custom-tooltip"><fa-icon [icon]="addIcon"></fa-icon></button>
     </h5>
     <table class="table table-striped table-sm">
         <thead>
@@ -99,11 +99,11 @@
         <tr *ngFor="let strategy of strategies">
             <td>{{ strategy.name }}</td>
             <td>
-                <button (click)="openStrategyFormModal(strategyFormModal, strategy)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Editieren">
+                <button (click)="openStrategyFormModal(strategyFormModal, strategy)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Editieren" tooltipClass="custom-tooltip">
                     <fa-icon [icon]="editIcon"></fa-icon>
                 </button>
             </td>
-            <td><button (click)="openStrategyConfirmModal(removeStrategyModal, strategy)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Entfernen"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+            <td><button (click)="openStrategyConfirmModal(removeStrategyModal, strategy)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Entfernen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
         </tr>
         </tbody>
     </table>

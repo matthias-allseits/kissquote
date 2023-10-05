@@ -2,7 +2,7 @@
 <div *ngIf="dividendLists && dividendIncomeChartData" class="info-box chart-box">
     <h5>
         {{ tranService.trans('MYDA_DIVI_INCOME') }}
-        <button (click)="toggleNetOrGross()" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Net or gross">{{ netOrGross }}</button>
+        <button (click)="toggleNetOrGross()" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Net or gross" tooltipClass="custom-tooltip">{{ netOrGross }}</button>
     </h5>
     <app-stacked-bar-chart [data]="dividendIncomeChartData"></app-stacked-bar-chart>
 </div>
@@ -17,7 +17,7 @@
 <div *ngIf="!timeWarpMode" class="info-box info-box-doubled chart-box">
     <h5>
         {{ tranService.trans('MYDA_INCOME_PER_MONTH') }}
-        <button (click)="toggleNetOrGross()" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Net or gross">{{ netOrGross }}</button>
+        <button (click)="toggleNetOrGross()" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Net or gross" tooltipClass="custom-tooltip">{{ netOrGross }}</button>
     </h5>
     <app-bar-chart [data]="incomeChartDataImproved" [height]="incomeChartDataImprovedBoxHeight" [reactOnChanges]="true"></app-bar-chart>
 </div>

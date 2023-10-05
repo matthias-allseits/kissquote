@@ -2,7 +2,7 @@
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 body {
-  padding-top: 40px;
+  padding-top: 30px;
   background-color: var(--kq-background-color);
   color: var(--kq-main-color);
 }
@@ -57,6 +57,23 @@ nav, .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
 .form-control, .form-select {
     background-color: var(--kq-background-color);
     color: var(--kq-main-color);
+}
+
+.custom-tooltip .tooltip-inner {
+    background-color: var(--kq-main-color);
+    color: var(--kq-background-color);
+}
+.custom-tooltip.bs-tooltip-end .tooltip-arrow::before {
+    border-right-color: var(--kq-main-color);
+}
+.custom-tooltip.bs-tooltip-start .tooltip-arrow::before {
+    border-left-color: var(--kq-main-color);
+}
+.custom-tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: var(--kq-main-color);
+}
+.custom-tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+    border-bottom-color: var(--kq-main-color);
 }
 
 h1.centered-header {

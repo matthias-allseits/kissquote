@@ -36,3 +36,24 @@ input {
 .selected-item {
     background-color: rgba(221, 221, 221, 1);
 }
+
+.direct-navi-icon {
+    display: inline-block;
+    width: 20px;
+    height: 10px;
+    margin: 0 1px 3px 1px;
+    background-color: #ff6633;
+    border: solid 1px;
+    transition: height 500ms, margin-bottom 500ms;
+}
+
+.direct-navi-icon:hover {
+    height: 16px;
+    margin-bottom: 0;
+}
+
+.direct-navi-active {
+    height: 16px;
+    margin-bottom: 0;
+    background-color: var(--kq-background-color);
+}
