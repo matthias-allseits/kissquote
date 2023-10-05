@@ -61,7 +61,7 @@
                 <div *ngIf="position.balance" class="info-box" [class.green20]="position.balance.investment < 0 || hasReachedTargetPrice" [class.red20]="stopLossBroken">
                     <div class="row">
                         <div class="col-9">Anzahl:</div>
-                        <div class="col-3"><span class="float-end">{{ position.balance.amount }}</span></div>
+                        <div class="col-3"><span class="float-end">{{ position.balance.amount|number: '1.0-2' }}</span></div>
                     </div>
                     <div class="row">
                         <div class="col-9">Start:</div>
