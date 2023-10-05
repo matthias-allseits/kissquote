@@ -37,23 +37,32 @@ input {
     background-color: rgba(221, 221, 221, 1);
 }
 
-.direct-navi-icon {
+.direct-navi-frame {
     display: inline-block;
     width: 20px;
-    height: 10px;
-    margin: 0 1px 3px 1px;
-    background-color: #ff6633;
-    border: solid 1px;
-    transition: height 500ms, margin-bottom 500ms;
+    height: 15px;
+    margin: 0 2px;
+    //border: solid 1px blue;
 }
 
-.direct-navi-icon:hover {
-    height: 16px;
-    margin-bottom: 0;
+.direct-navi-icon {
+    width: 100%;
+    height: 3px;
+    margin-top: 6px;
+    background-color: #ff6633;
+    transition: height 500ms, margin-top 500ms;
+}
+
+.direct-navi-a:hover {
+    .direct-navi-icon {
+        height: 15px;
+        margin-top: 0;
+    }
 }
 
 .direct-navi-active {
-    height: 16px;
-    margin-bottom: 0;
+    height: 15px;
+    margin-top: 0;
+    border: solid 1px;
     background-color: var(--kq-background-color);
 }
