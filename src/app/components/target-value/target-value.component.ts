@@ -88,8 +88,8 @@ export class TargetValueComponent {
             let actual = +position.actualValue();
             let target = +position.actualValue();
             const targetFromMostOptimistic = position.valueFromMostOptimisticAnalyst();
-            if (position.manualTargetPrice) {
-                target = position.manualTargetPrice;
+            if (position.manualTargetPrice && position.balance) {
+                target = position.balance?.amount * position.manualTargetPrice;
                 method = `from manual entry`;
                 methodShort = `from manual entry`;
             } else if (targetFromMostOptimistic && position.shareheadShare) {
