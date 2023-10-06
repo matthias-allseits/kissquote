@@ -18,7 +18,7 @@ export class TransactionCreator {
                 array.push(transaction);
             }
         }
-        array.sort((a,b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0))
+        array.sort((a,b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0));
 
         return array;
     }

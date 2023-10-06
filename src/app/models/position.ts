@@ -76,6 +76,7 @@ export class Position {
         public targetPrice?: number,
         public targetType?: string,
         public manualDividend?: number,
+        public manualTargetPrice?: number,
         public manualDrawdown?: number,
         public manualDividendDrop?: number,
         public labels?: Label[],
@@ -414,6 +415,19 @@ export class Position {
         }
 
         return '';
+    }
+
+
+    public valueFromMostOptimisticAnalyst(): number|undefined {
+        let result;
+        if (this.shareheadShare) {
+            const mostOptimisticRating = this.shareheadShare.mostOptimisticRating();
+            if (this.balance && mostOptimisticRating && mostOptimisticRating.priceTarget) {
+                result = this.balance.amount * mostOptimisticRating?.priceTarget;
+            }
+        }
+
+        return result;
     }
 
 

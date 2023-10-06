@@ -1,13 +1,16 @@
 import {ShareheadShare} from "./sharehead-share";
+import {Analyst} from "./analyst";
+import {Currency} from "./currency";
+
 
 export class AnalystRating {
 
     constructor(
         public id: number,
-        public analyst: string|any,
-        public currency: string|any,
         public date: Date,
         public priceTarget: number|null,
+        public analyst?: Analyst,
+        public currency?: Currency,
         public rating?: string,
         public source?: string,
         public share?: ShareheadShare,

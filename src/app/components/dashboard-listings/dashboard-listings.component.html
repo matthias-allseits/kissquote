@@ -33,6 +33,9 @@
         <li class="nav-item">
             <a class="nav-link" [class.active]="listingTab === 'risks'" (click)="changeListingTab('risks')" aria-current="page">Risks</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="listingTab === 'targetValue'" (click)="changeListingTab('targetValue')" aria-current="page">Target Value</a>
+        </li>
     </ul>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'ultimate'">
         <div class="row">
@@ -370,5 +373,8 @@
             </tr>
             </tbody>
         </table>
+    </div>
+    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'targetValue'">
+        <app-target-value [portfolio]="portfolio"></app-target-value>
     </div>
 </ng-container>

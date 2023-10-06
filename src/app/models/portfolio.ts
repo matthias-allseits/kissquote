@@ -206,6 +206,17 @@ export class Portfolio {
     }
 
 
+    replacePosition(position: Position) {
+        this.bankAccounts.forEach(account => {
+            account.positions.forEach((posi, index) => {
+                if (posi.id === position.id) {
+                    account.positions[index] = position;
+                }
+            });
+        });
+    }
+
+
     lombardValuePositions(): LombardValuesSummary[] {
         const positions: LombardValuesSummary[] = [];
         const relevantPositions = this.getActiveNonCashPositions();

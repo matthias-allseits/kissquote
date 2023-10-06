@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
+    <h4>Target Value</h4>
+</div>
+<h6>Actual: {{ actualTotal|number: '1.0-0' }}</h6>
+<h6>Target: {{ targetTotal|number: '1.0-0' }}</h6>
+<h6>Change: {{ chance|number: '1.0-0' }}%</h6>
+<table class="table table-striped table-sm">
+    <thead>
+    <tr>
+        <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+        <th scope="col" class="d-none d-md-table-cell">Sector</th>
+        <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Actual</span></th>
+        <th scope="col"><span class="float-end">Target</span></th>
+        <th scope="col">Method</th>
+        <th scope="col"><span class="float-end">Chance</span></th>
+        <th scope="col" style="width: 35px;"></th>
+        <th scope="col" style="width: 35px;"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let entry of targetList">
+        <td><a [routerLink]="['/position-detail/' + entry.position.id]" ngbTooltip="Zur Position" tooltipClass="custom-tooltip">{{ entry.position.share?.name }}</a></td>
+        <td class="d-none d-sm-table-cell"><span *ngIf="entry.position.sector">{{ entry.position.sector.name }}</span></td>
+        <td class="d-none d-md-table-cell"><span class="float-end">{{ entry.actual|number: '1.0-0' }}</span></td>
+        <td><span class="float-end">{{ entry.target|number: '1.0-0' }}</span></td>
+        <td>{{ entry.method }}</td>
+        <td><span class="float-end">{{ entry.chance|number: '1.0-0' }}%</span></td>
+        <td><button (click)="openManualModal(manualTargetPriceFormModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Set manual Price" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button></td>
+    </tr>
+    </tbody>
+</table>
+
+
+<ng-template #manualTargetPriceFormModal>
+    <div *ngIf="selectedTargetSummary" class="modal-body">
+        <p>Set your manual target-price for your position &laquo;{{ selectedTargetSummary.position.share?.name }}&raquo;:</p>
+        <form [formGroup]="manualTargetPriceForm">
+            <div class="mb-3">
+                <label for="target-input" class="form-label"></label>
+                <input formControlName="targetPrice" id="target-input" class="form-control" type="text" name="targetPrice" value="">
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="btn btn-primary float-end" (click)="persistManualTargetPrice()">{{ tranService.trans('GLOB_SAVE') }}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

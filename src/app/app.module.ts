@@ -50,6 +50,7 @@ import { DashboardBalanceChartsComponent } from './components/dashboard-balance-
 import { ShareBarChartContainerComponent } from './components/share-bar-chart-container/share-bar-chart-container.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { DashboardLogbookComponent } from './components/dashboard-logbook/dashboard-logbook.component';
+import { TargetValueComponent } from './components/target-value/target-value.component';
 registerLocaleData(localeCH);
 
 
@@ -92,6 +93,7 @@ registerLocaleData(localeCH);
         ShareBarChartContainerComponent,
         SpinnerComponent,
         DashboardLogbookComponent,
+        TargetValueComponent,
     ],
     imports: [
         BrowserModule,
