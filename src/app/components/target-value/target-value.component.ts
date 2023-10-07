@@ -6,7 +6,6 @@ import {Position} from "../../models/position";
 import {DateHelper} from "../../core/datehelper";
 import {FormGroup, UntypedFormControl, Validators} from "@angular/forms";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
-import {PositionLog} from "../../models/position-log";
 import {PositionService} from "../../services/position.service";
 
 
@@ -14,6 +13,7 @@ export interface TargetSummary {
     position: Position;
     actual: number;
     target: number;
+    targetPrice: number;
     chance: number;
     method: string;
     methodShort: string;
@@ -91,15 +91,18 @@ export class TargetValueComponent {
             let methodShort = 'none';
             let actual = +position.actualValue();
             let target = +position.actualValue();
+            let targetPrice = 0;
             const targetFromMostOptimistic = position.valueFromMostOptimisticAnalyst();
             if (position.manualTargetPrice && position.balance) {
                 target = position.balance?.amount * position.manualTargetPrice;
+                targetPrice = position.manualTargetPrice;
                 method = `from manual entry`;
                 methodShort = `from manual entry`;
             } else if (targetFromMostOptimistic && position.shareheadShare) {
                 const mostOptimisticRating = position.shareheadShare.mostOptimisticRating();
                 target = targetFromMostOptimistic;
-                if (mostOptimisticRating?.date) {
+                if (mostOptimisticRating?.date && mostOptimisticRating?.priceTarget) {
+                    targetPrice = +mostOptimisticRating?.priceTarget;
                     method = `from analyst (${mostOptimisticRating?.analyst?.shortName}, ` + DateHelper.convertDateToGerman(mostOptimisticRating?.date) + `)`;
                     methodShort = `from ${mostOptimisticRating?.analyst?.shortName}`;
                 }
@@ -109,6 +112,7 @@ export class TargetValueComponent {
                 position: position,
                 actual: actual,
                 target: target,
+                targetPrice: targetPrice,
                 chance: chance,
                 method: method,
                 methodShort: methodShort
@@ -119,7 +123,7 @@ export class TargetValueComponent {
             this.targetList.push(entry);
         });
 
-        this.targetList.sort((a, b) => (a.chance < b.chance) ? 1 : ((b.chance < a.chance) ? -1 : 0));
+        this.targetList.sort((a, b) => (+a.chance < +b.chance) ? 1 : ((+b.chance < +a.chance) ? -1 : 0));
     }
 
 }

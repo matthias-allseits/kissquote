@@ -12,18 +12,20 @@
         <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Actual</span></th>
         <th scope="col"><span class="float-end">Target</span></th>
         <th scope="col">Method</th>
+        <th scope="col" class="d-none d-sm-table-cell"><span class="float-end" ngbTooltip="Target price" tooltipClass="custom-tooltip">TP</span></th>
         <th scope="col"><span class="float-end">Chance</span></th>
-        <th scope="col" style="width: 35px;"></th>
         <th scope="col" style="width: 35px;"></th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let entry of targetList">
         <td><a [routerLink]="['/position-detail/' + entry.position.id]" ngbTooltip="Zur Position" tooltipClass="custom-tooltip">{{ entry.position.share?.name }}</a></td>
-        <td class="d-none d-sm-table-cell"><span *ngIf="entry.position.sector">{{ entry.position.sector.name }}</span></td>
+        <td class="d-none d-md-table-cell"><span *ngIf="entry.position.sector">{{ entry.position.sector.name }}</span></td>
         <td class="d-none d-md-table-cell"><span class="float-end">{{ entry.actual|number: '1.0-0' }}</span></td>
         <td><span class="float-end">{{ entry.target|number: '1.0-0' }}</span></td>
-        <td>{{ entry.method }}</td>
+        <td class="d-none d-md-table-cell">{{ entry.method }}</td>
+        <td class="d-table-cell d-md-none">{{ entry.methodShort }}</td>
+        <td class="d-none d-sm-table-cell"><span class="float-end">{{ entry.targetPrice }}</span></td>
         <td><span class="float-end">{{ entry.chance|number: '1.0-0' }}%</span></td>
         <td><button (click)="openManualModal(manualTargetPriceFormModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Set manual Price" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button></td>
     </tr>
