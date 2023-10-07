@@ -82,6 +82,10 @@ export class TargetValueComponent {
 
 
     prepareData() {
+        this.targetList = [];
+        this.actualTotal = 0;
+        this.targetTotal = 0;
+        this.chance = 0;
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
             let method = 'none';
             let methodShort = 'none';
