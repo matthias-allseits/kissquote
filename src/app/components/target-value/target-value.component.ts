@@ -107,7 +107,10 @@ export class TargetValueComponent {
                     methodShort = `from ${mostOptimisticRating?.analyst?.shortName}`;
                 }
             }
-            const chance = +((100 / actual * target) - 100).toFixed();
+            let chance = +((100 / actual * target) - 100).toFixed();
+            if (isNaN(chance)) {
+                chance = 0;
+            }
             const entry = {
                 position: position,
                 actual: actual,
@@ -119,10 +122,9 @@ export class TargetValueComponent {
             };
             this.actualTotal += actual;
             this.targetTotal += target;
-            this.chance = +((100 / this.actualTotal * this.targetTotal) - 100).toFixed();
             this.targetList.push(entry);
         });
-
+        this.chance = +((100 / this.actualTotal * this.targetTotal) - 100).toFixed();
         this.targetList.sort((a, b) => (+a.chance < +b.chance) ? 1 : ((+b.chance < +a.chance) ? -1 : 0));
     }
 
