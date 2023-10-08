@@ -31,6 +31,7 @@ import {PositionLogCreator} from "../../creators/position-log-creator";
 import {formatDate} from "@angular/common";
 import {Strategy} from "../../models/strategy";
 import {StrategyService} from "../../services/strategy.service";
+import {TargetSummary} from "../../components/target-value/target-value.component";
 
 
 @Component({
@@ -82,6 +83,7 @@ export class PositionDetailComponent implements OnInit {
     public stopLossBroken = false;
     public hasReachedTargetPrice = false;
     public filteredPositions?: Position[];
+    public rosaBrille?: TargetSummary;
 
     manualDrawdownForm = new FormGroup({
         amount: new UntypedFormControl('', Validators.required),
@@ -634,6 +636,7 @@ export class PositionDetailComponent implements OnInit {
         this.nextPaymentCurrency = undefined;
         this.stopLossBroken = false;
         this.hasReachedTargetPrice = false;
+        this.rosaBrille = undefined;
 
         if (this.position) {
             this.checkAndResetPositionFilter(this.position);
@@ -646,6 +649,8 @@ export class PositionDetailComponent implements OnInit {
                 this.currentYieldOnValue = (100 / this.position.balance.lastRate.rate * this.position.balance.projectedNextDividendPerShare()).toFixed(1);
                 this.currentYieldOnValueSource = '(from last payment)';
             }
+
+            this.rosaBrille = this.position.getTargetSummary();
 
             if (this.position.shareheadShare) {
                 const share = this.position.shareheadShare;
@@ -690,10 +695,8 @@ export class PositionDetailComponent implements OnInit {
                         if (share.plannedDividends[0].currency) {
                             this.nextPaymentCurrency = share.plannedDividends[0].currency.name;
                             if (this.position.currency?.name !== this.nextPaymentCurrency) {
-                                console.log('share.plannedDividends[0].currency.rate: ', share.plannedDividends[0].currency.rate);
                                 this.nextPaymentCorrected = this.nextPayment * share.plannedDividends[0].currency.rate;
                                 if (this.position.currency && this.position.currency?.name !== 'CHF') {
-                                    console.log('this.position.currency.rate: ', this.position.currency.rate);
                                     this.nextPaymentCorrected = this.nextPaymentCorrected / this.position.currency.rate;
                                 }
                             }

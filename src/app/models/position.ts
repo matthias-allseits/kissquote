@@ -17,6 +17,8 @@ import {PositionLog} from "./position-log";
 import {SwissquoteHelper} from "../core/swissquote-helper";
 import {Strategy} from "./strategy";
 import {ChartData} from "chart.js";
+import {DateHelper} from "../core/datehelper";
+import {TargetSummary} from "../components/target-value/target-value.component";
 
 
 export interface DividendTotal {
@@ -428,6 +430,45 @@ export class Position {
         }
 
         return result;
+    }
+
+
+    public getTargetSummary(): TargetSummary {
+        let method = 'none';
+        let methodShort = 'none';
+        let actual = +this.actualValue();
+        let target = +this.actualValue();
+        let targetPrice = 0;
+        const targetFromMostOptimistic = this.valueFromMostOptimisticAnalyst();
+        if (this.manualTargetPrice && this.balance) {
+            target = this.balance?.amount * this.manualTargetPrice;
+            targetPrice = this.manualTargetPrice;
+            method = `from manual entry`;
+            methodShort = `from manual entry`;
+        } else if (targetFromMostOptimistic && this.shareheadShare) {
+            const mostOptimisticRating = this.shareheadShare.mostOptimisticRating();
+            target = targetFromMostOptimistic;
+            if (mostOptimisticRating?.date && mostOptimisticRating?.priceTarget) {
+                targetPrice = +mostOptimisticRating?.priceTarget;
+                method = `from analyst (${mostOptimisticRating?.analyst?.shortName}, ` + DateHelper.convertDateToGerman(mostOptimisticRating?.date) + `)`;
+                methodShort = `from ${mostOptimisticRating?.analyst?.shortName}`;
+            }
+        }
+        let chance = +((100 / actual * target) - 100).toFixed();
+        if (isNaN(chance)) {
+            chance = 0;
+        }
+        const targetSummary = {
+            position: this,
+            actual: actual,
+            target: target,
+            targetPrice: targetPrice,
+            chance: chance,
+            method: method,
+            methodShort: methodShort
+        };
+
+        return targetSummary;
     }
 
 

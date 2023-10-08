@@ -31,9 +31,9 @@ export class PositionCreator {
     }
 
 
-    public static oneFromApiArray(apiArray?: Position): Position|undefined
+    public static oneFromApiArray(apiArray?: Position|undefined): Position|undefined
     {
-        if (apiArray !== undefined) {
+        if (apiArray !== undefined && apiArray !== null) {
             return new Position(
                 apiArray.id,
                 ShareCreator.oneFromApiArray(apiArray.share),

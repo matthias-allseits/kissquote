@@ -87,42 +87,10 @@ export class TargetValueComponent {
         this.targetTotal = 0;
         this.chance = 0;
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
-            let method = 'none';
-            let methodShort = 'none';
-            let actual = +position.actualValue();
-            let target = +position.actualValue();
-            let targetPrice = 0;
-            const targetFromMostOptimistic = position.valueFromMostOptimisticAnalyst();
-            if (position.manualTargetPrice && position.balance) {
-                target = position.balance?.amount * position.manualTargetPrice;
-                targetPrice = position.manualTargetPrice;
-                method = `from manual entry`;
-                methodShort = `from manual entry`;
-            } else if (targetFromMostOptimistic && position.shareheadShare) {
-                const mostOptimisticRating = position.shareheadShare.mostOptimisticRating();
-                target = targetFromMostOptimistic;
-                if (mostOptimisticRating?.date && mostOptimisticRating?.priceTarget) {
-                    targetPrice = +mostOptimisticRating?.priceTarget;
-                    method = `from analyst (${mostOptimisticRating?.analyst?.shortName}, ` + DateHelper.convertDateToGerman(mostOptimisticRating?.date) + `)`;
-                    methodShort = `from ${mostOptimisticRating?.analyst?.shortName}`;
-                }
-            }
-            let chance = +((100 / actual * target) - 100).toFixed();
-            if (isNaN(chance)) {
-                chance = 0;
-            }
-            const entry = {
-                position: position,
-                actual: actual,
-                target: target,
-                targetPrice: targetPrice,
-                chance: chance,
-                method: method,
-                methodShort: methodShort
-            };
-            this.actualTotal += actual;
-            this.targetTotal += target;
-            this.targetList.push(entry);
+            const targetSummary = position.getTargetSummary();
+            this.actualTotal += targetSummary.actual;
+            this.targetTotal += targetSummary.target;
+            this.targetList.push(targetSummary);
         });
         this.chance = +((100 / this.actualTotal * this.targetTotal) - 100).toFixed();
         this.targetList.sort((a, b) => (+a.chance < +b.chance) ? 1 : ((+b.chance < +a.chance) ? -1 : 0));

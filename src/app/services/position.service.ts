@@ -10,6 +10,7 @@ import {StockRate} from "../models/stock-rate";
 import {SwissquoteHelper} from "../core/swissquote-helper";
 import {Share} from "../models/share";
 import {Currency} from "../models/currency";
+import {PositionLogCreator} from "../creators/position-log-creator";
 
 
 const httpOptions = {
@@ -171,22 +172,29 @@ export class PositionService extends ApiService {
     }
 
 
-    update(position: Position): Observable<Position|null> {
-        position.activeFrom = DateHelper.convertDateToMysql(position.activeFrom);
-        if (position.activeUntil) {
-            position.activeUntil = DateHelper.convertDateToMysql(position.activeUntil);
+    update(position: Position): Observable<Position|undefined> {
+        const shareheadShare = position.shareheadShare;
+        const deepCopy = structuredClone(position);
+        deepCopy.activeFrom = DateHelper.convertDateToMysql(deepCopy.activeFrom);
+        if (deepCopy.activeUntil) {
+            deepCopy.activeUntil = DateHelper.convertDateToMysql(deepCopy.activeUntil);
         } else {
-            position.activeUntil = null;
+            deepCopy.activeUntil = null;
         }
-        if (position.removeUnderlying && position.underlying) {
-            position.underlying = undefined;
+        if (deepCopy.removeUnderlying && deepCopy.underlying) {
+            deepCopy.underlying = undefined;
         }
         const url = `${this.apiUrl}/${position.id}`;
-        // todo: cast this as we do in position-log-service
         return this.http
-            .put(url, JSON.stringify(position), httpOptions)
+            .put<Position>(url, JSON.stringify(deepCopy), httpOptions)
             .pipe(
-                map(() => position),
+                map(res => {
+                    const castedPosi = PositionCreator.oneFromApiArray(res);
+                    if (castedPosi) {
+                        castedPosi.shareheadShare = shareheadShare;
+                    }
+                    return castedPosi;
+                }),
                 // catchError(this.handleError)
             );
     }
