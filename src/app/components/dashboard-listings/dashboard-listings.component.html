@@ -206,9 +206,9 @@
                     <td>{{ rating.date|date:'dd.MM.' }}</td>
                     <td *ngIf="rating.positionId"><a [routerLink]="['/position-detail/' + rating.positionId]" ngbTooltip="Details" tooltipClass="custom-tooltip">{{ rating.share.name }}</a></td>
                     <td *ngIf="!rating.positionId"><a [routerLink]="['/sharehead-share-detail/' + rating.share.id]" ngbTooltip="Details">{{ rating.share.name }}</a></td>
-                    <td>{{ rating.analyst }}</td>
+                    <td>{{ rating.analyst?.shortName }}</td>
                     <td>{{ rating.rating }}</td>
-                    <td><span class="float-end">{{ rating.priceTarget }} {{ rating.currency }}</span></td>
+                    <td><span class="float-end">{{ rating.priceTarget }} {{ rating.currency?.name }}</span></td>
                 </ng-container>
             </tr>
             </tbody>
