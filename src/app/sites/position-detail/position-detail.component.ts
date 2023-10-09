@@ -1,6 +1,6 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DividendDropSummary, MaxDrawdownSummary, Position} from '../../models/position';
+import {DividendDropSummary, MaxDrawdownSummary, NextPayment, Position} from '../../models/position';
 import {PositionService} from '../../services/position.service';
 import {
     faChevronLeft, faChevronRight,
@@ -76,10 +76,7 @@ export class PositionDetailComponent implements OnInit {
     public daysTillNextEx?: number;
     public daysTillNextPayment?: number;
     public daysTillNextReport?: number;
-    public nextPayment?: number;
-    public nextPaymentDate?: Date;
-    public nextPaymentCurrency?: string;
-    public nextPaymentCorrected?: number;
+    public nextPayment?: NextPayment;
     public stopLossBroken = false;
     public hasReachedTargetPrice = false;
     public filteredPositions?: Position[];
@@ -632,8 +629,6 @@ export class PositionDetailComponent implements OnInit {
         this.daysTillNextPayment = undefined;
         this.daysTillNextReport = undefined;
         this.nextPayment = undefined;
-        this.nextPaymentDate = undefined;
-        this.nextPaymentCurrency = undefined;
         this.stopLossBroken = false;
         this.hasReachedTargetPrice = false;
         this.rosaBrille = undefined;
@@ -689,20 +684,8 @@ export class PositionDetailComponent implements OnInit {
                         const nextReportDate = share.nextReportDate;
                         this.daysTillNextReport = Math.floor((Date.UTC(nextReportDate.getFullYear(), nextReportDate.getMonth(), nextReportDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
                     }
-                    if (this.position.balance) {
-                        this.nextPaymentDate = nextPayDate;
-                        this.nextPayment = share.plannedDividends[0].amount * this.position.balance?.amount;
-                        if (share.plannedDividends[0].currency) {
-                            this.nextPaymentCurrency = share.plannedDividends[0].currency.name;
-                            if (this.position.currency?.name !== this.nextPaymentCurrency) {
-                                this.nextPaymentCorrected = this.nextPayment * share.plannedDividends[0].currency.rate;
-                                if (this.position.currency && this.position.currency?.name !== 'CHF') {
-                                    this.nextPaymentCorrected = this.nextPaymentCorrected / this.position.currency.rate;
-                                }
-                            }
-                        }
-                    }
                 }
+                this.nextPayment = this.position.nextPayment();
             }
             if (this.position.stopLossBroken()) {
                 this.stopLossBroken = true;

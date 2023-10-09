@@ -249,12 +249,12 @@
                     <ng-container *ngIf="nextPayment">
                         <h6>Next payment</h6>
                         <div class="row">
-                            <div class="col-8">{{ nextPaymentDate|date: 'dd.MM.YYYY' }}</div>
-                            <div class="col-4"><span class="float-end">{{ nextPayment|number: '1.0' }} {{ nextPaymentCurrency }}</span></div>
+                            <div class="col-8">{{ nextPayment.date|date: 'dd.MM.YYYY' }}</div>
+                            <div class="col-4"><span class="float-end">{{ nextPayment.payment|number: '1.0' }} {{ nextPayment.currency }}</span></div>
                         </div>
-                        <div *ngIf="position.currency?.name !== nextPaymentCurrency" class="row">
+                        <div *ngIf="position.currency?.name !== nextPayment.currency" class="row">
                             <div class="col-8">Currency-corrected:</div>
-                            <div class="col-4"><span class="float-end bold">{{ nextPaymentCorrected|number: '1.0-2' }} {{ position.currency?.name }}</span></div>
+                            <div class="col-4"><span class="float-end bold">{{ nextPayment.paymentCorrected|number: '1.0-2' }} {{ position.currency?.name }}</span></div>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="position.manualDividend && position.currency">

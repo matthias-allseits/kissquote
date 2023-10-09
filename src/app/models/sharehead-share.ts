@@ -9,7 +9,6 @@ import {ShareheadPlannedDividend} from "./sharehead-planned-dividend";
 import {AnalystRating} from "./analyst-rating";
 import {ShareheadTurningPoint} from "./sharehead-turning-point";
 import {StockRate} from "./stock-rate";
-import {Dividend} from "./dividend";
 import {ShareheadHistoricDividend} from "./sharehead-historic-dividend";
 import {Observable} from "rxjs";
 import {SwissquoteHelper} from "../core/swissquote-helper";

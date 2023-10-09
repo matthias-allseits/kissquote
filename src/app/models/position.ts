@@ -52,6 +52,15 @@ export interface DividendDropSummary {
     dividendAfterDrop: number;
 }
 
+export interface NextPayment {
+    position: Position;
+    positionId: number;
+    payment: number;
+    date: Date;
+    currency: string;
+    paymentCorrected?: number;
+}
+
 export class Position {
 
     constructor(
@@ -241,6 +250,42 @@ export class Position {
             transactionCount: transactionCount,
             manualDividend: manualDividend,
         };
+
+        return result;
+    }
+
+
+    nextPayment(): NextPayment|undefined {
+        let result;
+        const shareheadShare = this.shareheadShare;
+        if (this.share && shareheadShare && shareheadShare.plannedDividends && shareheadShare.plannedDividends.length > 0) {
+            if (shareheadShare.plannedDividends[0].amount > 0) {
+                const nextPayDate = shareheadShare.plannedDividends[0].payDate;
+                let nextPaymentCorrected;
+                let nextPaymentCurrency = '';
+                let nextPayment = 0;
+                if (this.balance) {
+                    nextPayment = shareheadShare.plannedDividends[0].amount * this.balance?.amount;
+                    if (shareheadShare.plannedDividends[0].currency) {
+                        nextPaymentCurrency = shareheadShare.plannedDividends[0].currency.name;
+                        if (this.currency?.name !== nextPaymentCurrency) {
+                            nextPaymentCorrected = nextPayment * shareheadShare.plannedDividends[0].currency.rate;
+                            if (this.currency && this.currency?.name !== 'CHF') {
+                                nextPaymentCorrected = nextPaymentCorrected / this.currency.rate;
+                            }
+                        }
+                    }
+                }
+                result = {
+                    position: this,
+                    positionId: this.id,
+                    payment: nextPayment,
+                    date: nextPayDate,
+                    currency: nextPaymentCurrency,
+                    paymentCorrected: nextPaymentCorrected
+                };
+            }
+        }
 
         return result;
     }
