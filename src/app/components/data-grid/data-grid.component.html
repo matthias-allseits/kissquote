@@ -1,0 +1,39 @@
+<table class="table table-striped table-sm">
+    <thead>
+        <tr>
+            <th *ngFor="let column of gridColumns"
+                [class.d-none]="column.responsive === 'md-up'"
+                [class.d-md-table-cell]="column.responsive === 'md-up'"
+                [class.text-center]="column.alignment === 'center'"
+                scope="col">
+                <span
+                    [class.float-end]="column.alignment === 'right'"
+                >{{ column.title }}</span>
+            </th>
+            <th *ngFor="let entry of contextMenu" scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>
+            <th scope="col" class="d-sm-table-cell d-md-none mobile-navi-cell"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let entry of gridData">
+            <td *ngFor="let column of gridColumns"
+                [class.d-none]="column.responsive === 'md-up'"
+                [class.d-md-table-cell]="column.responsive === 'md-up'"
+                [class.text-center]="column.alignment === 'center'"
+                >
+                <span
+                    [class.float-end]="column.alignment === 'right'"
+                >{{ renderCell(entry, column) }}</span>
+            </td>
+            <td *ngFor="let entry of contextMenu" class="d-none d-md-table-cell" style="width: 35px;">
+                <button type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="deleteIcon"></fa-icon></button>
+            </td>
+            <td class="d-sm-table-cell d-md-none mobile-navi-cell" ngbDropdown>
+                <fa-icon class="float-end" (click)="toggleMenu(entry)" id="entryMenu" [icon]="naviIcon" ngbDropdownToggle></fa-icon>
+                <div ngbDropdownMenu aria-labelledby="entryMenu">
+                    <button *ngFor="let entry of contextMenu" ngbDropdownItem>{{ entry.label }}</button>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

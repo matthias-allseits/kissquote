@@ -51,6 +51,12 @@
                 </div>
             </div>
             <ng-container *ngIf="bankAccount.getCashPositions().length > 0">
+                <app-data-grid
+                    [gridData]="bankAccount.getCashPositions()"
+                    [gridColumns]="cashColumns"
+                    [contextMenu]="cashContextMenu"
+                    (baseFunctionCall)="positionEventHandler($event)"
+                ></app-data-grid>
                 <table class="table table-striped table-sm">
                     <thead>
                         <tr>
@@ -59,9 +65,10 @@
                             <th scope="col" class="d-none d-md-table-cell" style="width: 125px;">Active From</th>
                             <th scope="col" class="d-none d-md-table-cell" style="width: 125px;">Active Until</th>
                             <th scope="col" class="text-center d-none d-md-table-cell" style="width: 105px;"><span ngbTooltip="{{ tranService.trans('GLOB_TRANSACTIONS') }}" tooltipClass="custom-tooltip">Ta</span></th>
-                            <th scope="col" style="width: 35px;"></th>
-                            <th scope="col" style="width: 35px;"></th>
-                            <th scope="col" style="width: 35px;"></th>
+                            <th scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>
+                            <th scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>
+                            <th scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>
+                            <th scope="col" class="d-sm-table-cell d-md-none mobile-navi-cell"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,9 +78,17 @@
                             <td class="d-none d-md-table-cell"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
                             <td class="d-none d-md-table-cell"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
                             <td class="text-center d-none d-md-table-cell">{{ position.transactions.length }}</td>
-                            <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details" tooltipClass="custom-tooltip"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                            <td><button [routerLink]="'/position/' + position.id + '/cash-transaction-form'" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Add Transaction" tooltipClass="custom-tooltip"><fa-icon [icon]="addIcon"></fa-icon></button></td>
-                            <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                            <td class="d-none d-md-table-cell"><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details" tooltipClass="custom-tooltip"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                            <td class="d-none d-md-table-cell"><button [routerLink]="'/position/' + position.id + '/cash-transaction-form'" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Add Transaction" tooltipClass="custom-tooltip"><fa-icon [icon]="addIcon"></fa-icon></button></td>
+                            <td class="d-none d-md-table-cell"><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                            <td class="d-sm-table-cell d-md-none mobile-navi-cell" ngbDropdown>
+                                <fa-icon class="float-end" (click)="togglePositionsMenu(position)" id="positionsMenu" [icon]="naviIcon" ngbDropdownToggle></fa-icon>
+                                <div ngbDropdownMenu aria-labelledby="positionsMenu">
+                                    <button [routerLink]="['/position-detail/' + position.id]" ngbDropdownItem>Details</button>
+                                    <button [routerLink]="'/position/' + position.id + '/cash-transaction-form'" ngbDropdownItem>Add Transaction</button>
+                                    <button (click)="openPositionConfirmModal(removePositionModal, position)" ngbDropdownItem>Löschen</button>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
