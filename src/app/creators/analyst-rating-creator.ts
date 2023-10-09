@@ -1,5 +1,7 @@
 import {AnalystRating} from "../models/analyst-rating";
 import {ShareheadShareCreator} from "./sharehead-share-creator";
+import {CurrencyCreator} from "./currency-creator";
+import {AnalystCreator} from "./analyst-creator";
 
 
 export class AnalystRatingCreator {
@@ -26,10 +28,10 @@ export class AnalystRatingCreator {
         if (apiArray !== undefined && apiArray !== null) {
             return new AnalystRating(
                 +apiArray.id,
-                apiArray.analyst.shortName,
-                apiArray.currency?.name,
                 new Date(apiArray.date),
                 apiArray.priceTarget,
+                AnalystCreator.oneFromApiArray(apiArray.analyst),
+                CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.rating,
                 apiArray.source,
                 apiArray.share ? ShareheadShareCreator.oneFromApiArray(apiArray.share) : undefined,

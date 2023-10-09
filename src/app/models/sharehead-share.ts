@@ -233,16 +233,31 @@ export class ShareheadShare {
 
     public filteredRatings(): AnalystRating[] {
         let filtered: AnalystRating[] = [];
-        const checkArray: string[] = [];
+        const checkArray: number[] = [];
         this.analystRatings?.forEach(rating => {
-            if (checkArray.indexOf(rating.analyst) < 0) {
-                filtered.push(rating);
-                checkArray.push(rating.analyst);
+            if (rating.analyst) {
+                if (checkArray.indexOf(rating.analyst.id) < 0) {
+                    filtered.push(rating);
+                    checkArray.push(rating.analyst.id);
+                }
             }
         });
         filtered = filtered.slice(0, 10);
 
         return filtered;
+    }
+
+
+    public mostOptimisticRating(): AnalystRating|undefined {
+        let result: AnalystRating|undefined;
+        const filteredRatings = this.filteredRatings();
+        for (const rating of filteredRatings) {
+            if (result === undefined || (rating.priceTarget !== null && result.priceTarget !== null && rating.priceTarget > result.priceTarget)) {
+                result = rating;
+            }
+        }
+
+        return result;
     }
 
 

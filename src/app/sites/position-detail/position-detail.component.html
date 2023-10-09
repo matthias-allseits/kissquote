@@ -180,6 +180,14 @@
                 <div *ngIf="position.balance" class="info-box">
                     <h5>Performance</h5>
                     <div class="row">
+                        <div class="col-9">Days since start:</div>
+                        <div class="col-3"><span class="float-end">{{ position.daysSinceStart()|number: '1.0' }}</span></div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-9">Total return per day:</div>
+                        <div class="col-3"><span class="float-end" [class.red-text]="+position.totalReturnPerDay() < 0" [class.green-text]="+position.totalReturnPerDay() > 0">{{ position.totalReturnPerDay() }}</span></div>
+                    </div>
+                    <div class="row">
                         <div class="col-9">1 day:</div>
                         <div class="col-3"><span class="float-end" [class.red-text]="position.balance.performance[0] < 0" [class.green-text]="position.balance.performance[0] > 0">{{ position.balance.performance[0] }}%</span></div>
                     </div>
@@ -255,7 +263,7 @@
                             <div class="col-8">Next payment:</div>
                             <div class="col-4"><span class="float-end">{{ position.manualDividendPayment() }} {{ position.currency.name }}</span></div>
                         </div>
-                        <div class="row">
+                        <div class="row" *ngIf="position.balance.investment > 0">
                             <div class="col-6">Yield on investment:</div>
                             <div class="col-6"><span class="float-end">{{ position.manualYieldOnInvestent() }}%</span></div>
                         </div>
@@ -265,7 +273,7 @@
                         <div class="col-8">Next payment:</div>
                         <div class="col-4"><span class="float-end">{{ position.balance.projectedNextDividendPayment|number: '1.0' }} {{ position.balance.projectedNextDividendCurrency }}</span></div>
                     </div>
-                    <div class="row">
+                    <div class="row" *ngIf="position.balance.investment > 0">
                         <div class="col-6">Yield on investment:</div>
                         <div class="col-6"><span class="float-end"><span *ngIf="position.dividendPeriodicity === 'quaterly'">(annualized) </span>{{ position.yieldOnInvestent() }}%</span></div>
                     </div>
@@ -276,7 +284,7 @@
                             <div class="col-4"><span class="float-end">{{ shareheadDividendPayment|number: '1.0' }} {{ position.shareheadShare.currency?.name }}</span></div>
                         </div>
                         <ng-container *ngIf="position.currency?.name === position.shareheadShare.currency?.name">
-                            <div class="row">
+                            <div class="row" *ngIf="position.balance.investment > 0">
                                 <div class="col-8">Yield on investment:</div>
                                 <div class="col-4"><span class="float-end">{{ (100 / position.balance.investment * +shareheadDividendPayment).toFixed(1) }}%</span></div>
                             </div>
@@ -286,21 +294,12 @@
                                 <div class="col-8">Currency-corrected:</div>
                                 <div class="col-4"><span class="float-end bold">{{ shareheadCurrencyCorrectedDividendPayment|number: '1.0' }} {{ position.currency?.name }}</span></div>
                             </div>
-                            <div class="row">
+                            <div class="row" *ngIf="position.balance.investment > 0">
                                 <div class="col-8">Yield on investment:</div>
                                 <div class="col-4"><span class="float-end">{{ (100 / position.balance.investment * +shareheadCurrencyCorrectedDividendPayment).toFixed(1) }}%</span></div>
                             </div>
                         </ng-container>
                     </ng-container>
-                    <h5 style="margin-top: 15px;">Performance</h5>
-                    <div class="row">
-                        <div class="col-9">Days since start:</div>
-                        <div class="col-3"><span class="float-end">{{ position.daysSinceStart()|number: '1.0' }}</span></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-9">Total return per day:</div>
-                        <div class="col-3"><span class="float-end" [class.red-text]="+position.totalReturnPerDay() < 0" [class.green-text]="+position.totalReturnPerDay() > 0">{{ position.totalReturnPerDay() }}</span></div>
-                    </div>
                     <h5 style="margin-top: 15px;">Dividend projections</h5>
                     <ng-container *ngFor="let projection of diviProjectionYears">
                         <div class="row">
@@ -314,6 +313,29 @@
                             <div class="col-4"></div>
                             <div class="col-6">Yield on investment: </div>
                             <div class="col-2"><span class="float-end">{{ projection.yieldFloat }}</span></div>
+                        </div>
+                    </ng-container>
+                    <h5 style="margin-top: 15px;">Rosa Brille</h5>
+                    <ng-container *ngIf="rosaBrille && rosaBrille.targetPrice > 0">
+                        <div class="row">
+                            <div class="col-6">Kursziel:</div>
+                            <div class="col-6"><span class="float-end">{{ rosaBrille.targetPrice|number: '1.0-2' }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">{{ rosaBrille.method }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">Target:</div>
+                            <div class="col-9"><span class="float-end">{{ rosaBrille.target|number: '1.0-0' }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">Chance:</div>
+                            <div class="col-9"><span class="float-end">{{ rosaBrille.chance|number: '1.0-0' }}%</span></div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!rosaBrille || rosaBrille.targetPrice === 0">
+                        <div class="row">
+                            <div class="col-12">n.v.</div>
                         </div>
                     </ng-container>
                 </div>
@@ -389,7 +411,7 @@
                         <div class="col-7">Dividend after drop:</div>
                         <div class="col-5"><span class="float-end">{{ dividendDropSummary.dividendAfterDrop }} {{ position.currency?.name }}</span></div>
                     </div>
-                    <div class="row mb-2" *ngIf="position.balance">
+                    <div class="row mb-2" *ngIf="position.balance && position.balance.investment > 0">
                         <div class="col-4"></div>
                         <div class="col-6">Yield on investment: </div>
                         <div class="col-2"><span class="float-end">{{ (100 / position.balance.investment * dividendDropSummary.dividendAfterDrop).toFixed(1) }}%</span></div>

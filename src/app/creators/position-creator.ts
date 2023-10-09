@@ -31,9 +31,9 @@ export class PositionCreator {
     }
 
 
-    public static oneFromApiArray(apiArray?: Position): Position|undefined
+    public static oneFromApiArray(apiArray?: Position|undefined): Position|undefined
     {
-        if (apiArray !== undefined) {
+        if (apiArray !== undefined && apiArray !== null) {
             return new Position(
                 apiArray.id,
                 ShareCreator.oneFromApiArray(apiArray.share),
@@ -58,6 +58,7 @@ export class PositionCreator {
                 apiArray.targetPrice ? apiArray.targetPrice : undefined,
                 apiArray.targetType ? apiArray.targetType : undefined,
                 apiArray.manualDividend ? apiArray.manualDividend : undefined,
+                apiArray.manualTargetPrice ? apiArray.manualTargetPrice : undefined,
                 apiArray.manualDrawdown ? apiArray.manualDrawdown : undefined,
                 apiArray.manualDividendDrop !== undefined && !isNaN(apiArray.manualDividendDrop) ? apiArray.manualDividendDrop : undefined,
                 apiArray.labels ? LabelCreator.fromApiArray(apiArray.labels) : undefined
