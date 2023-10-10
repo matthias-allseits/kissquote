@@ -56,6 +56,7 @@
                     [gridColumns]="cashColumns"
                     [contextMenu]="cashContextMenu"
                     (baseFunctionCall)="positionEventHandler($event)"
+                    (selectedItem)="selectPosition($event)"
                 ></app-data-grid>
                 <table class="table table-striped table-sm">
                     <thead>

@@ -31,7 +31,7 @@
             <td class="d-sm-table-cell d-md-none mobile-navi-cell" ngbDropdown>
                 <fa-icon class="float-end" (click)="toggleMenu(entry)" id="entryMenu" [icon]="naviIcon" ngbDropdownToggle></fa-icon>
                 <div ngbDropdownMenu aria-labelledby="entryMenu">
-                    <button *ngFor="let entry of contextMenu" ngbDropdownItem>{{ entry.label }}</button>
+                    <button *ngFor="let entry of contextMenu" (click)="callFunction(entry)" ngbDropdownItem>{{ entry.label }}</button>
                 </div>
             </td>
         </tr>

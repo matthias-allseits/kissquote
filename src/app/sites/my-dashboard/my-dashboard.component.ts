@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {DividendTotals, Portfolio} from '../../models/portfolio';
 import {faEdit, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
@@ -18,7 +18,7 @@ import {DividendCreator} from "../../creators/dividend-creator";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {Label} from "../../models/label";
 import {LabelService} from "../../services/label.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons/faEllipsisVertical";
 import {GridColumn, GridContextMenuItem} from "../../components/data-grid/data-grid.component";
 
@@ -29,6 +29,8 @@ import {GridColumn, GridContextMenuItem} from "../../components/data-grid/data-g
     styleUrls: ['./my-dashboard.component.scss']
 })
 export class MyDashboardComponent implements OnInit {
+
+    @ViewChild('removePositionModal') removeModal?: TemplateRef<any>;
 
     protected readonly eyeIcon = faEye;
     protected readonly deleteIcon = faTrashAlt;
@@ -66,6 +68,7 @@ export class MyDashboardComponent implements OnInit {
     constructor(
         public tranService: TranslationService,
         private route: ActivatedRoute,
+        private router: Router,
         private positionService: PositionService,
         private labelService: LabelService,
         private bankAccountService: BankAccountService,
@@ -78,7 +81,6 @@ export class MyDashboardComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.data.subscribe(data => {
-            console.log(data);
             if (data['portfolio'] instanceof Portfolio) {
                 this.portfolio = data['portfolio'];
                 this.shareheadSharesLoaded = true;
@@ -146,45 +148,18 @@ export class MyDashboardComponent implements OnInit {
                 this.cashContextMenu = [];
                 this.cashContextMenu.push(
                     {
+                        key: 'details',
                         label: 'Details',
                     },
                     {
+                        key: 'addTransaction',
                         label: 'Add Transaction',
                     },
                     {
+                        key: 'delete',
                         label: 'Löschen',
                     },
                 );
-
-                // <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>
-                // <th scope="col" style="width: 105px;"><span class="float-end">{{ tranService.trans('GLOB_VALUE') }}</span></th>
-                // <th scope="col" class="d-none d-md-table-cell" style="width: 125px;">Active From</th>
-                // <th scope="col" class="d-none d-md-table-cell" style="width: 125px;">Active Until</th>
-                // <th scope="col" class="text-center d-none d-md-table-cell" style="width: 105px;"><span ngbTooltip="{{ tranService.trans('GLOB_TRANSACTIONS') }}" tooltipClass="custom-tooltip">Ta</span></th>
-                // <th scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>
-                //     <th scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>
-                //     <th scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>
-                //     <th scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>
-                //     <th class="d-sm-none d-md-table-cell mobile-navi-cell"></th>
-
-                // <tr *ngFor="let position of bankAccount.getCashPositions()">
-                // <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
-                // <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>
-                // <td class="d-none d-md-table-cell"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
-                // <td class="d-none d-md-table-cell"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
-                // <td class="text-center d-none d-md-table-cell">{{ position.transactions.length }}</td>
-                // <td class="d-none d-md-table-cell"><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details" tooltipClass="custom-tooltip"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                // <td class="d-none d-md-table-cell"><button [routerLink]="'/position/' + position.id + '/cash-transaction-form'" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Add Transaction" tooltipClass="custom-tooltip"><fa-icon [icon]="addIcon"></fa-icon></button></td>
-                // <td class="d-none d-md-table-cell"><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
-                // <td class="d-sm-table-cell d-md-none mobile-navi-cell" ngbDropdown>
-                // <fa-icon class="float-end" (click)="togglePositionsMenu(position)" id="positionsMenu" [icon]="naviIcon" ngbDropdownToggle></fa-icon>
-                // <div ngbDropdownMenu aria-labelledby="positionsMenu">
-                // <button [routerLink]="['/position-detail/' + position.id]" ngbDropdownItem>Details</button>
-                // <button [routerLink]="'/position/' + position.id + '/cash-transaction-form'" ngbDropdownItem>Add Transaction</button>
-                // <button (click)="openPositionConfirmModal(removePositionModal, position)" ngbDropdownItem>Löschen</button>
-                // </div>
-                // </td>
-                // </tr>
             }
         });
     }
@@ -192,6 +167,10 @@ export class MyDashboardComponent implements OnInit {
     changeTab(selectedTab: string): void {
         this.dashboardTab = selectedTab;
         localStorage.setItem('dashboardTab', selectedTab);
+    }
+
+    selectPosition(position: Position) {
+        this.selectedPosition = position;
     }
 
     changeDividenListTab(selectedTab: number): void {
@@ -268,7 +247,6 @@ export class MyDashboardComponent implements OnInit {
     }
 
     deleteBankAccount(account: BankAccount): void {
-        console.log(account);
         this.bankAccountService.delete(account.id).subscribe(() => {
             document.location.reload();
         });
@@ -362,11 +340,26 @@ export class MyDashboardComponent implements OnInit {
 
     togglePositionsMenu(position: Position): void {
         this.selectedPosition = position;
-        console.log(this.selectedPosition);
     }
 
     positionEventHandler(event: any) {
-        console.log(event);
+        switch(event.key) {
+            case 'details':
+                if (this.selectedPosition) {
+                    this.router.navigate(['/position-detail/' + this.selectedPosition.id]);
+                }
+                break;
+            case 'addTransaction':
+                if (this.selectedPosition) {
+                    this.router.navigate(['/position/' + this.selectedPosition.id + '/cash-transaction-form']);
+                }
+                break;
+            case 'delete':
+                if (this.selectedPosition && this.removeModal) {
+                    this.openPositionConfirmModal(this.removeModal, this.selectedPosition);
+                }
+                break;
+        }
     }
 
     private loadWatchlist(): void

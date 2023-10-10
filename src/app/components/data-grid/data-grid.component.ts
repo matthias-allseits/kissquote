@@ -17,6 +17,7 @@ export interface GridColumn {
 }
 
 export interface GridContextMenuItem {
+    key: string,
     label: string,
 }
 
@@ -67,7 +68,6 @@ export class DataGridComponent implements OnInit {
             if (column.type === 'date' && result instanceof Date) {
                 result = DateHelper.convertDateToGerman(result); // todo: develop a elaborated date-formatter
             } else if (column.type === 'number') {
-                console.log('type is number');
                 result = +result;
                 if (column.format) {
                     result = this._decimalPipe.transform(result, column.format);
@@ -75,9 +75,6 @@ export class DataGridComponent implements OnInit {
             }
         }
         if (typeof entry[fieldName] === 'function' && column.type === 'function') {
-            console.log('type is function');
-            console.log(entry);
-            console.log(fieldName);
             result = entry[fieldName]();
             if (column.format) {
                 result = this._decimalPipe.transform(result, column.format);
@@ -88,7 +85,11 @@ export class DataGridComponent implements OnInit {
     }
 
     toggleMenu(entry: any): void {
-        console.log(entry);
+        this.selectedItem.next(entry);
+    }
+
+    callFunction(entry: any): void {
+        this.baseFunctionCall.next(entry);
     }
 
 }
