@@ -16,6 +16,9 @@
             <a class="nav-link" [class.active]="listingTab === 'lastMinute'" (click)="changeListingTab('lastMinute')" aria-current="page">Last Minute</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" [class.active]="listingTab === 'payDays'" (click)="changeListingTab('payDays')" aria-current="page">Pay Days</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" [class.active]="listingTab === 'newestRatings'" (click)="changeListingTab('newestRatings')" aria-current="page">New Ratings</a>
         </li>
         <li class="nav-item">
@@ -182,6 +185,29 @@
                     <td>{{ entry.plannedDividends[0].exDate|date:'dd.MM.YY' }}</td>
                     <td>{{ entry.plannedDividends[0].payDate|date:'dd.MM.YY' }}</td>
                 </ng-container>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'payDays'">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
+            <h4>Pay Days</h4>
+        </div>
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
+                <th scope="col">Pay-Date</th>
+                <th scope="col" style="width: 100px;"><span class="float-end">Payment</span></th>
+<!--                <th scope="col"><span class="float-end">Yield</span></th>-->
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let entry of payDays">
+                <td><a [routerLink]="['/position-detail/' + entry.positionId]" ngbTooltip="Zur Position" tooltipClass="custom-tooltip">{{ entry.position.getName() }}</a></td>
+                <td>{{ entry.date|date:'dd.MM.YY' }}</td>
+                <td><span class="float-end">{{ entry.payment|number: '1.0-2' }} {{ entry.currency }}</span></td>
+<!--                <td><span *ngIf="entry.position.balance && entry.position.balance.lastRate" class="float-end">{{ (100 / entry.position.balance.lastRate.rate * entry.payment).toFixed(2) }}%</span></td>-->
             </tr>
             </tbody>
         </table>
