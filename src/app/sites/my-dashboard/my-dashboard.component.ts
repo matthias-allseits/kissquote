@@ -59,6 +59,8 @@ export class MyDashboardComponent implements OnInit {
 
     public cashColumns?: GridColumn[];
     public cashContextMenu?: GridContextMenuItem[];
+    public nonCashColumns?: GridColumn[];
+    public nonCashContextMenu?: GridContextMenuItem[];
 
     manualDividendForm = new FormGroup({
         year: new UntypedFormControl(new Date().getFullYear(), Validators.required),
@@ -106,6 +108,9 @@ export class MyDashboardComponent implements OnInit {
                 });
                 this.loadWatchlist();
 
+                // todo: develop a elaborated date-formatter
+                // todo: cellrenderer for labels
+                // todo: cellrenderer for stop-loss and target-price
                 this.cashColumns = [];
                 this.cashColumns.push(
                     {
@@ -123,9 +128,10 @@ export class MyDashboardComponent implements OnInit {
                     {
                         title: 'Active From',
                         type: 'date',
-                        format: 'dd.MM.y', // todo: develop a elaborated date-formatter
+                        format: 'dd.MM.y',
                         field: 'activeFrom',
                         responsive: 'md-up',
+                        width: '125px',
                     },
                     {
                         title: 'Active Until',
@@ -133,6 +139,7 @@ export class MyDashboardComponent implements OnInit {
                         format: 'dd.MM.y',
                         field: 'activeUntil',
                         responsive: 'md-up',
+                        width: '125px',
                     },
                     {
                         title: 'Ta',
@@ -142,6 +149,7 @@ export class MyDashboardComponent implements OnInit {
                         alignment: 'center',
                         toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
                         responsive: 'md-up',
+                        width: '105px',
                     }
                 );
 
@@ -160,6 +168,132 @@ export class MyDashboardComponent implements OnInit {
                         label: 'Löschen',
                     },
                 );
+
+                this.nonCashColumns = [];
+                this.nonCashColumns.push(
+                    {
+                        title: this.tranService.trans('GLOB_SHARE'),
+                        type: 'string',
+                        field: 'share.name',
+                    },
+                    {
+                        title: this.tranService.trans('GLOB_VALUE'),
+                        type: 'function',
+                        format: '1.0',
+                        field: 'actualValue',
+                        alignment: 'right'
+                    },
+                    {
+                        title: this.tranService.trans('GLOB_CURRENCY'),
+                        type: 'string',
+                        field: 'currency.name',
+                    },
+                    {
+                        title: 'Sector',
+                        type: 'string',
+                        field: 'sector.name',
+                    },
+                    {
+                        title: 'Labels',
+                        type: 'string',
+                        field: 'currency.name',
+                    },
+                    {
+                        title: 'Anteil',
+                        type: 'percent',
+                        format: '1.0-1',
+                        field: 'shareFromTotal',
+                        alignment: 'center',
+                        responsive: 'md-up',
+                    },
+                    {
+                        title: 'Active From',
+                        type: 'date',
+                        format: 'dd.MM.y',
+                        field: 'activeFrom',
+                        responsive: 'md-up',
+                        width: '125px',
+                    },
+                    {
+                        title: 'Active Until',
+                        type: 'date',
+                        format: 'dd.MM.y',
+                        field: 'activeUntil',
+                        responsive: 'md-up',
+                        width: '125px',
+                    },
+                    {
+                        title: '',
+                        type: 'string',
+                        field: 'currency.name',
+                    },
+                    {
+                        title: 'Le',
+                        type: 'number',
+                        format: '1.0',
+                        field: 'logEntries.length',
+                        alignment: 'center',
+                        toolTip: 'Log entries',
+                        responsive: 'md-up',
+                        width: '105px',
+                    },
+                    {
+                        title: 'Ta',
+                        type: 'number',
+                        format: '1.0',
+                        field: 'realTransactions.length', // todo: fix this
+                        alignment: 'center',
+                        toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
+                        responsive: 'md-up',
+                        width: '105px',
+                    }
+                );
+
+                this.nonCashContextMenu = [];
+                this.nonCashContextMenu.push(
+                    {
+                        key: 'details',
+                        label: 'Details',
+                    },
+                    {
+                        key: 'editPosition',
+                        label: 'Edit Position',
+                    },
+                    {
+                        key: 'delete',
+                        label: 'Löschen',
+                    },
+                );
+
+
+
+                // <tr *ngFor="let position of bankAccount.getActiveNonCashPositions()" [class.red20]="position.stopLossBroken()" [class.green20]="position.hasReachedTargetPrice()">
+                // <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
+                // <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>
+                // <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
+                // <td class="d-none d-md-table-cell"><span *ngIf="position.sector">{{ position.sector.name }}</span></td>
+                // <td class="d-none d-sm-table-cell">
+                // <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
+                // </td>
+                // <td class="text-center d-none d-md-table-cell">{{ position.shareFromTotal|number: '1.0-1' }}%</td>
+                // <td class="d-none d-md-table-cell"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
+                // <td class="d-none d-md-table-cell"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
+                // <td class="d-none d-md-table-cell">
+                // <button *ngIf="position.stopLoss && position.stopLoss > 0" type="button" class="btn btn-tiny btn-outline-red" ngbTooltip="Has stop-loss" tooltipClass="custom-tooltip" style="margin-right: 2px;">SL</button>
+                // <button *ngIf="position.targetPrice && position.targetPrice > 0" type="button" class="btn btn-tiny btn-outline-green" ngbTooltip="Has target-price" tooltipClass="custom-tooltip">TP</button>
+                //     </td>
+                //     <td class="text-center d-none d-md-table-cell">{{ position.logEntries.length }}</td>
+                // <td class="text-center d-none d-md-table-cell">{{ position.realTransactions().length }}</td>
+                // <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details" tooltipClass="custom-tooltip"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
+                // <td><button [routerLink]="['/bank-account/' + accountIndex + '/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Edit Position" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button></td>
+                // <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                // </tr>
+
+
+
+
+
+
             }
         });
     }
@@ -352,6 +486,19 @@ export class MyDashboardComponent implements OnInit {
             case 'addTransaction':
                 if (this.selectedPosition) {
                     this.router.navigate(['/position/' + this.selectedPosition.id + '/cash-transaction-form']);
+                }
+                break;
+            case 'editPosition':
+                if (this.selectedPosition) {
+                    let accountIndex = 0;
+                    this.portfolio?.bankAccounts.forEach((account, index) => {
+                        account.positions.forEach(position => {
+                            if (this.selectedPosition && position.id === this.selectedPosition.id) {
+                                accountIndex = index;
+                            }
+                        });
+                    });
+                    this.router.navigate(['/bank-account/' + accountIndex + '/position-form/' + this.selectedPosition.id]);
                 }
                 break;
             case 'delete':

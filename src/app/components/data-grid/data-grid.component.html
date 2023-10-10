@@ -5,6 +5,7 @@
                 [class.d-none]="column.responsive === 'md-up'"
                 [class.d-md-table-cell]="column.responsive === 'md-up'"
                 [class.text-center]="column.alignment === 'center'"
+                [style.width]="column.width"
                 scope="col">
                 <span
                     [class.float-end]="column.alignment === 'right'"
@@ -26,7 +27,15 @@
                 >{{ renderCell(entry, column) }}</span>
             </td>
             <td *ngFor="let entry of contextMenu" class="d-none d-md-table-cell" style="width: 35px;">
-                <button type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="deleteIcon"></fa-icon></button>
+                <button type="button" class="btn btn-sm btn-outline-primary"
+                        ngbTooltip="{{ entry.label }}"
+                        tooltipClass="custom-tooltip"
+                >
+                    <fa-icon *ngIf="entry.key === 'details'" [icon]="eyeIcon"></fa-icon>
+                    <fa-icon *ngIf="entry.key.indexOf('add') > -1" [icon]="addIcon"></fa-icon>
+                    <fa-icon *ngIf="entry.key.indexOf('edit') > -1" [icon]="editIcon"></fa-icon>
+                    <fa-icon *ngIf="entry.key === 'delete'" [icon]="deleteIcon"></fa-icon>
+                </button>
             </td>
             <td class="d-sm-table-cell d-md-none mobile-navi-cell" ngbDropdown>
                 <fa-icon class="float-end" (click)="toggleMenu(entry)" id="entryMenu" [icon]="naviIcon" ngbDropdownToggle></fa-icon>

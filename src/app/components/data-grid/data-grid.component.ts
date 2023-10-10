@@ -14,11 +14,13 @@ export interface GridColumn {
     alignment?: string,
     toolTip?: string,
     responsive?: string,
+    width?: string,
 }
 
 export interface GridContextMenuItem {
     key: string,
     label: string,
+    toolTip?: string,
 }
 
 @Component({
@@ -67,10 +69,13 @@ export class DataGridComponent implements OnInit {
             result = entry[fieldName];
             if (column.type === 'date' && result instanceof Date) {
                 result = DateHelper.convertDateToGerman(result); // todo: develop a elaborated date-formatter
-            } else if (column.type === 'number') {
+            } else if (column.type === 'number' || column.type === 'percent') {
                 result = +result;
                 if (column.format) {
                     result = this._decimalPipe.transform(result, column.format);
+                }
+                if (column.type === 'percent') {
+                    result += '%';
                 }
             }
         }
