@@ -69,6 +69,7 @@ export class PositionDetailComponent implements OnInit {
     public allSectors?: Sector[];
     public allStrategies?: Strategy[];
     public logBook?: any[];
+    public commentsFilter = false;
 
     public selectedLogEntry?: PositionLog;
     public chartData?: ChartData;
@@ -573,10 +574,19 @@ export class PositionDetailComponent implements OnInit {
         this.showLabelsDropdown = !this.showLabelsDropdown;
     }
 
+    toggleFilter(): void {
+        this.commentsFilter = !this.commentsFilter;
+        this.refreshLog();
+    }
+
     private refreshLog(): void
     {
         if (this.position) {
-            this.logBook = this.position.logEntries;
+            if (!this.commentsFilter) {
+                this.logBook = this.position.logEntries;
+            } else {
+                this.logBook = [];
+            }
             this.logBook = this.logBook.concat(this.position.transactions);
             this.logBook.sort((a, b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0));
         }
