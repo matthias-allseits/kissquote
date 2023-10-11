@@ -6,6 +6,7 @@ import {DateHelper} from "../../core/datehelper";
 import { DecimalPipe } from '@angular/common';
 import {CellRendererInterface} from "../cell-renderer/cell-renderer.interface";
 import {LabelsCellRendererComponent} from "../cell-renderer/labels-cell-renderer/labels-cell-renderer.component";
+import {Position} from "../../models/position";
 
 
 export interface GridColumn {
@@ -60,6 +61,14 @@ export class DataGridComponent implements OnInit {
         // }, 1000);
     }
 
+
+    checkForRedColoring(entry: any): boolean {
+        return entry instanceof Position && entry.stopLossBroken()
+    }
+
+    checkForGreenColoring(entry: any): boolean {
+        return entry instanceof Position && entry.hasReachedTargetPrice()
+    }
 
     renderContent(entry: any, column: GridColumn): string {
         let result: any;

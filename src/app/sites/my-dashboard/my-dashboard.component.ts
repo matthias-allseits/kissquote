@@ -112,8 +112,6 @@ export class MyDashboardComponent implements OnInit {
                 this.loadWatchlist();
 
                 // todo: develop a elaborated date-formatter
-                // todo: cellrenderer for labels
-                // todo: cellrenderer for stop-loss and target-price
                 this.cashColumns = [];
                 this.cashColumns.push(
                     {
@@ -151,8 +149,7 @@ export class MyDashboardComponent implements OnInit {
                         field: 'transactions.length',
                         alignment: 'center',
                         toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
-                        responsive: 'md-up',
-                        width: '105px',
+                        width: '65px',
                     }
                 );
 
@@ -232,8 +229,8 @@ export class MyDashboardComponent implements OnInit {
                         title: '',
                         type: 'renderer',
                         field: '',
-                        responsive: 'md-up',
-                        renderer: 'PricealertsCellRendererComponent'
+                        renderer: 'PricealertsCellRendererComponent',
+                        width: '55px',
                     },
                     {
                         title: 'Le',
@@ -249,7 +246,7 @@ export class MyDashboardComponent implements OnInit {
                         title: 'Ta',
                         type: 'number',
                         format: '1.0',
-                        field: 'realTransactions.length', // todo: fix this
+                        field: 'realTransactions.length',
                         alignment: 'center',
                         toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
                         responsive: 'md-up',
@@ -272,36 +269,6 @@ export class MyDashboardComponent implements OnInit {
                         label: 'Löschen',
                     },
                 );
-
-
-
-                // <tr *ngFor="let position of bankAccount.getActiveNonCashPositions()" [class.red20]="position.stopLossBroken()" [class.green20]="position.hasReachedTargetPrice()">
-                // <td><span *ngIf="position.share">{{ position.share.name }}</span></td>
-                // <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>
-                // <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>
-                // <td class="d-none d-md-table-cell"><span *ngIf="position.sector">{{ position.sector.name }}</span></td>
-                // <td class="d-none d-sm-table-cell">
-                // <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
-                // </td>
-                // <td class="text-center d-none d-md-table-cell">{{ position.shareFromTotal|number: '1.0-1' }}%</td>
-                // <td class="d-none d-md-table-cell"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>
-                // <td class="d-none d-md-table-cell"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>
-                // <td class="d-none d-md-table-cell">
-                // <button *ngIf="position.stopLoss && position.stopLoss > 0" type="button" class="btn btn-tiny btn-outline-red" ngbTooltip="Has stop-loss" tooltipClass="custom-tooltip" style="margin-right: 2px;">SL</button>
-                // <button *ngIf="position.targetPrice && position.targetPrice > 0" type="button" class="btn btn-tiny btn-outline-green" ngbTooltip="Has target-price" tooltipClass="custom-tooltip">TP</button>
-                //     </td>
-                //     <td class="text-center d-none d-md-table-cell">{{ position.logEntries.length }}</td>
-                // <td class="text-center d-none d-md-table-cell">{{ position.realTransactions().length }}</td>
-                // <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details" tooltipClass="custom-tooltip"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>
-                // <td><button [routerLink]="['/bank-account/' + accountIndex + '/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Edit Position" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button></td>
-                // <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
-                // </tr>
-
-
-
-
-
-
             }
         });
     }
