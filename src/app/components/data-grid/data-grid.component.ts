@@ -5,7 +5,6 @@ import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {DateHelper} from "../../core/datehelper";
 import { DecimalPipe } from '@angular/common';
 import {CellRendererInterface} from "../cell-renderer/cell-renderer.interface";
-import {LabelsCellRendererComponent} from "../cell-renderer/labels-cell-renderer/labels-cell-renderer.component";
 import {Position} from "../../models/position";
 
 
@@ -144,9 +143,11 @@ export class DataGridComponent implements OnInit {
         this.selectedItem.next(entry);
     }
 
-    callFunction(entry: any): void {
-        this.baseFunctionCall.next(entry);
+    callFunction(contextEntry: GridContextMenuItem, entry?: any): void {
+        if (entry) {
+            this.selectedItem.next(entry);
+        }
+        this.baseFunctionCall.next(contextEntry);
     }
 
-    protected readonly LabelsCellRendererComponent = LabelsCellRendererComponent;
 }

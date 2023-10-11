@@ -33,21 +33,22 @@
                     <app-pricealerts-cell-renderer *ngIf="column.renderer === 'PricealertsCellRendererComponent'" [data]="entry"></app-pricealerts-cell-renderer>
                 </ng-container>
             </td>
-            <td *ngFor="let entry of contextMenu" class="d-none d-md-table-cell" style="width: 35px;">
+            <td *ngFor="let contextEntry of contextMenu" class="d-none d-md-table-cell" style="width: 35px;">
                 <button type="button" class="btn btn-sm btn-outline-primary"
-                        ngbTooltip="{{ entry.label }}"
+                        ngbTooltip="{{ contextEntry.label }}"
                         tooltipClass="custom-tooltip"
+                        (click)="callFunction(contextEntry, entry)"
                 >
-                    <fa-icon *ngIf="entry.key === 'details'" [icon]="eyeIcon"></fa-icon>
-                    <fa-icon *ngIf="entry.key.indexOf('add') > -1" [icon]="addIcon"></fa-icon>
-                    <fa-icon *ngIf="entry.key.indexOf('edit') > -1" [icon]="editIcon"></fa-icon>
-                    <fa-icon *ngIf="entry.key === 'delete'" [icon]="deleteIcon"></fa-icon>
+                    <fa-icon *ngIf="contextEntry.key === 'details'" [icon]="eyeIcon"></fa-icon>
+                    <fa-icon *ngIf="contextEntry.key.indexOf('add') > -1" [icon]="addIcon"></fa-icon>
+                    <fa-icon *ngIf="contextEntry.key.indexOf('edit') > -1" [icon]="editIcon"></fa-icon>
+                    <fa-icon *ngIf="contextEntry.key === 'delete'" [icon]="deleteIcon"></fa-icon>
                 </button>
             </td>
             <td class="d-sm-table-cell d-md-none mobile-navi-cell" ngbDropdown>
                 <fa-icon class="float-end" (click)="toggleMenu(entry)" id="entryMenu" [icon]="naviIcon" ngbDropdownToggle></fa-icon>
                 <div ngbDropdownMenu aria-labelledby="entryMenu">
-                    <button *ngFor="let entry of contextMenu" (click)="callFunction(entry)" ngbDropdownItem>{{ entry.label }}</button>
+                    <button *ngFor="let contextEntry of contextMenu" (click)="callFunction(contextEntry)" ngbDropdownItem>{{ contextEntry.label }}</button>
                 </div>
             </td>
         </tr>
