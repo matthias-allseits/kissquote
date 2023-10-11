@@ -22,9 +22,13 @@
                 [class.d-md-table-cell]="column.responsive === 'md-up'"
                 [class.text-center]="column.alignment === 'center'"
                 >
-                <span
+                <span *ngIf="column.type !== 'renderer'"
                     [class.float-end]="column.alignment === 'right'"
-                >{{ renderCell(entry, column) }}</span>
+                >{{ renderContent(entry, column) }}</span>
+                <ng-container *ngIf="column.type === 'renderer'">
+                    <app-labels-cell-renderer *ngIf="column.renderer === 'LabelsCellRendererComponent'" [data]="entry[column.field]"></app-labels-cell-renderer>
+                    <app-pricealerts-cell-renderer *ngIf="column.renderer === 'PricealertsCellRendererComponent'" [data]="entry"></app-pricealerts-cell-renderer>
+                </ng-container>
             </td>
             <td *ngFor="let entry of contextMenu" class="d-none d-md-table-cell" style="width: 35px;">
                 <button type="button" class="btn btn-sm btn-outline-primary"

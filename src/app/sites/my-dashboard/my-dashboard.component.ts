@@ -21,6 +21,9 @@ import {LabelService} from "../../services/label.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons/faEllipsisVertical";
 import {GridColumn, GridContextMenuItem} from "../../components/data-grid/data-grid.component";
+import {
+    LabelsCellRendererComponent
+} from "../../components/cell-renderer/labels-cell-renderer/labels-cell-renderer.component";
 
 
 @Component({
@@ -192,11 +195,14 @@ export class MyDashboardComponent implements OnInit {
                         title: 'Sector',
                         type: 'string',
                         field: 'sector.name',
+                        responsive: 'md-up',
                     },
                     {
                         title: 'Labels',
-                        type: 'string',
-                        field: 'currency.name',
+                        type: 'renderer',
+                        field: 'labels',
+                        responsive: 'md-up',
+                        renderer: 'LabelsCellRendererComponent'
                     },
                     {
                         title: 'Anteil',
@@ -224,8 +230,10 @@ export class MyDashboardComponent implements OnInit {
                     },
                     {
                         title: '',
-                        type: 'string',
-                        field: 'currency.name',
+                        type: 'renderer',
+                        field: '',
+                        responsive: 'md-up',
+                        renderer: 'PricealertsCellRendererComponent'
                     },
                     {
                         title: 'Le',

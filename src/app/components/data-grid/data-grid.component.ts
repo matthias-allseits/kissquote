@@ -1,9 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, Type, ViewChild, ViewEncapsulation} from '@angular/core';
 import {faEdit, faPlus, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons/faEllipsisVertical";
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {DateHelper} from "../../core/datehelper";
 import { DecimalPipe } from '@angular/common';
+import {CellRendererInterface} from "../cell-renderer/cell-renderer.interface";
+import {LabelsCellRendererComponent} from "../cell-renderer/labels-cell-renderer/labels-cell-renderer.component";
 
 
 export interface GridColumn {
@@ -15,6 +17,8 @@ export interface GridColumn {
     toolTip?: string,
     responsive?: string,
     width?: string,
+    renderer?: string,
+    // renderer?: Type<CellRendererInterface>,
 }
 
 export interface GridContextMenuItem {
@@ -24,9 +28,10 @@ export interface GridContextMenuItem {
 }
 
 @Component({
-  selector: 'app-data-grid',
-  templateUrl: './data-grid.component.html',
-  styleUrls: ['./data-grid.component.scss']
+    selector: 'app-data-grid',
+    templateUrl: './data-grid.component.html',
+    styleUrls: ['./data-grid.component.scss'],
+    encapsulation: ViewEncapsulation.None,
 })
 export class DataGridComponent implements OnInit {
 
@@ -35,6 +40,8 @@ export class DataGridComponent implements OnInit {
     @Input() contextMenu?: GridContextMenuItem[];
     @Output() baseFunctionCall: EventEmitter<any> = new EventEmitter();
     @Output() selectedItem: EventEmitter<any> = new EventEmitter();
+
+    // @ViewChild(CellRendererDirective, {static: true}) cell2Render!: CellRendererDirective;
 
     protected readonly eyeIcon = faEye;
     protected readonly deleteIcon = faTrashAlt;
@@ -48,46 +55,81 @@ export class DataGridComponent implements OnInit {
     }
 
     ngOnInit() {
+        // setTimeout(() => {
+        //     this.renderCells();
+        // }, 1000);
     }
 
 
-    renderCell(entry: any, column: GridColumn): string {
+    renderContent(entry: any, column: GridColumn): string {
         let result: any;
 
         let fieldName = column.field;
         if (column.field.indexOf('.') > -1) {
             const fieldSplit = column.field.split('.');
-            const subFields = fieldSplit.slice(1);
+            const firstField = fieldSplit[0];
+            const secondField = fieldSplit[1];
+            const followingFields = fieldSplit.slice(1);
 
-            const subColumn = structuredClone(column);
-            subColumn.field = subFields.join('.');
-
-            return this.renderCell(entry[fieldSplit[0]], subColumn);
-        }
-
-        if (entry.hasOwnProperty(fieldName)) {
-            result = entry[fieldName];
-            if (column.type === 'date' && result instanceof Date) {
-                result = DateHelper.convertDateToGerman(result); // todo: develop a elaborated date-formatter
-            } else if (column.type === 'number' || column.type === 'percent') {
-                result = +result;
+            if (typeof entry[firstField] === 'function') {
+                const firstResult = entry[firstField]();
+                result = firstResult[secondField];
                 if (column.format) {
                     result = this._decimalPipe.transform(result, column.format);
                 }
-                if (column.type === 'percent') {
-                    result += '%';
+
+                return result;
+            }
+
+            const subColumn = structuredClone(column);
+            subColumn.field = followingFields.join('.');
+
+            return this.renderContent(entry[fieldSplit[0]], subColumn);
+        }
+
+        if (entry) {
+            if (entry.hasOwnProperty(fieldName)) {
+                result = entry[fieldName];
+                if (column.type === 'date' && result instanceof Date) {
+                    result = DateHelper.convertDateToGerman(result); // todo: develop a elaborated date-formatter
+                } else if (column.type === 'number' || column.type === 'percent') {
+                    result = +result;
+                    if (column.format) {
+                        result = this._decimalPipe.transform(result, column.format);
+                    }
+                    if (column.type === 'percent') {
+                        result += '%';
+                    }
                 }
             }
-        }
-        if (typeof entry[fieldName] === 'function' && column.type === 'function') {
-            result = entry[fieldName]();
-            if (column.format) {
-                result = this._decimalPipe.transform(result, column.format);
+            if (typeof entry[fieldName] === 'function' && column.type === 'function') {
+                result = entry[fieldName]();
+                if (column.format) {
+                    result = this._decimalPipe.transform(result, column.format);
+                }
             }
         }
 
         return result;
     }
+
+
+    // renderCells(): void {
+    //     if (this.gridData && this.gridColumns) {
+    //         for (const entry of this.gridData) {
+    //             for (const column of this.gridColumns) {
+    //                 let fieldName = column.field;
+    //                 if (column.type === 'renderer' && column.renderer) {
+    //                     console.log('type is renderer');
+    //                     const viewContainerRef = this.cell2Render.viewContainerRef;
+    //                     // viewContainerRef.clear();
+    //                     const componentRef = viewContainerRef.createComponent<LabelsCellRendererComponent>(column.renderer);
+    //                     componentRef.instance.data = entry[fieldName];
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     toggleMenu(entry: any): void {
         this.selectedItem.next(entry);
@@ -97,4 +139,5 @@ export class DataGridComponent implements OnInit {
         this.baseFunctionCall.next(entry);
     }
 
+    protected readonly LabelsCellRendererComponent = LabelsCellRendererComponent;
 }

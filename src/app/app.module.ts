@@ -52,6 +52,8 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { DashboardLogbookComponent } from './components/dashboard-logbook/dashboard-logbook.component';
 import { TargetValueComponent } from './components/target-value/target-value.component';
 import { DataGridComponent } from './components/data-grid/data-grid.component';
+import { LabelsCellRendererComponent } from "./components/cell-renderer/labels-cell-renderer/labels-cell-renderer.component";
+import { PricealertsCellRendererComponent } from './components/cell-renderer/pricealerts-cell-renderer/pricealerts-cell-renderer.component';
 registerLocaleData(localeCH);
 
 
@@ -96,6 +98,8 @@ registerLocaleData(localeCH);
         DashboardLogbookComponent,
         TargetValueComponent,
         DataGridComponent,
+        LabelsCellRendererComponent,
+        PricealertsCellRendererComponent,
     ],
     imports: [
         BrowserModule,
