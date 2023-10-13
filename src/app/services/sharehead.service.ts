@@ -16,6 +16,7 @@ import {Portfolio} from "../models/portfolio";
 import {DateHelper} from "../core/datehelper";
 import {CacheHelper} from "../helper/cache.helper";
 import {SwissquoteHelper} from "../core/swissquote-helper";
+import {Md5} from "ts-md5";
 
 
 @Injectable({
@@ -72,8 +73,8 @@ export class ShareheadService {
                 map(res => {
                     const collection = ShareheadShareCreator.fromApiArray(res);
                     console.log('deliver collection from server');
-                    const name = JSON.stringify(shareheadIds);
-                    CacheHelper.cache(name, collection, 60 * 60 * 1000);
+                    const name = Md5.hashStr(JSON.stringify(shareheadIds));
+                    CacheHelper.cache(name, collection); // one hour
 
                     return collection;
                 }),
@@ -82,7 +83,7 @@ export class ShareheadService {
 
     public getCachedSharesCollection(shareheadIds: number[]): ShareheadShare[]|null
     {
-        const name = JSON.stringify(shareheadIds);
+        const name = Md5.hashStr(JSON.stringify(shareheadIds));
         console.log(name);
         const cachedData = CacheHelper.get(name);
         if (cachedData) {
