@@ -1,0 +1,4 @@
+<div>
+    <button *ngIf="data.stopLoss && data.stopLoss > 0" type="button" class="btn btn-tiny btn-outline-red" ngbTooltip="Has stop-loss" tooltipClass="custom-tooltip" style="margin-right: 2px;">SL</button>
+    <button *ngIf="data.targetPrice && data.targetPrice > 0" type="button" class="btn btn-tiny btn-outline-green" ngbTooltip="Has target-price" tooltipClass="custom-tooltip">TP</button>
+</div>

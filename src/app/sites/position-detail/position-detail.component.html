@@ -249,12 +249,12 @@
                     <ng-container *ngIf="nextPayment">
                         <h6>Next payment</h6>
                         <div class="row">
-                            <div class="col-8">{{ nextPaymentDate|date: 'dd.MM.YYYY' }}</div>
-                            <div class="col-4"><span class="float-end">{{ nextPayment|number: '1.0' }} {{ nextPaymentCurrency }}</span></div>
+                            <div class="col-8">{{ nextPayment.date|date: 'dd.MM.YYYY' }}</div>
+                            <div class="col-4"><span class="float-end">{{ nextPayment.payment|number: '1.0' }} {{ nextPayment.currency }}</span></div>
                         </div>
-                        <div *ngIf="position.currency?.name !== nextPaymentCurrency" class="row">
+                        <div *ngIf="position.currency?.name !== nextPayment.currency" class="row">
                             <div class="col-8">Currency-corrected:</div>
-                            <div class="col-4"><span class="float-end bold">{{ nextPaymentCorrected|number: '1.0-2' }} {{ position.currency?.name }}</span></div>
+                            <div class="col-4"><span class="float-end bold">{{ nextPayment.paymentCorrected|number: '1.0-2' }} {{ position.currency?.name }}</span></div>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="position.manualDividend && position.currency">
@@ -440,6 +440,14 @@
                     <button *ngIf="!position.isCash" [routerLink]="'/position/' + position.id + '/transaction-form'" type="button" class="btn btn-sm btn-outline-primary">Add Transaction</button>
                     <button *ngIf="position.isCash" [routerLink]="'/position/' + position.id + '/cash-transaction-form'" type="button" class="btn btn-sm btn-outline-primary">Add Transaction</button>
                     <button (click)="openLogEntryModal(logEntryModal, undefined)" type="button" class="btn btn-sm btn-outline-primary">Add Log entry</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input (change)="toggleFilter()" class="form-check-input" type="checkbox" id="darkmode-switch" [checked]="commentsFilter">
+                    <label for="darkmode-switch" class="form-label">Kommentarfilter</label>
                 </div>
             </div>
         </div>

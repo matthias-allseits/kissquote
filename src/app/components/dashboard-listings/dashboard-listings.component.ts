@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {TranslationService} from "../../services/translation.service";
 import {Label} from "../../models/label";
-import {Position} from "../../models/position";
+import {NextPayment, Position} from "../../models/position";
 import {CrisisDividendSummary, LombardValuesSummary, Portfolio} from "../../models/portfolio";
 import {ShareheadService} from "../../services/sharehead.service";
 import {ShareheadShare} from "../../models/sharehead-share";
@@ -24,11 +24,12 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
 
     eyeIcon = faEye;
 
-    private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'newestRatings', 'nextReports', 'diversification', 'performance', 'risks', 'strategies', 'targetValue'];
+    private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'payDays', 'newestRatings', 'nextReports', 'diversification', 'performance', 'risks', 'strategies', 'targetValue'];
     public listingTab = 'ultimate';
     private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year', '3years', '5years', '10years'];
     public performanceListTab = '1day';
     public performanceList?: Position[];
+    public payDays?: NextPayment[];
     public nextReportsList?: ShareheadShare[];
     public diversityByInvestmentChartData?: ChartData;
     public diversityByValueChartData?: ChartData;
@@ -94,6 +95,15 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
             });
             this.risksList = structuredClone(this.lombardValueList);
             this.risksList.sort((a,b) => (a.maxDrawdownSummary.risk < b.maxDrawdownSummary.risk) ? 1 : (b.maxDrawdownSummary.risk < a.maxDrawdownSummary.risk) ? -1 : 0);
+
+            this.payDays = [];
+            for (const position of this.portfolio.getAllPositions()) {
+                const nextPayment = position.nextPayment();
+                if (nextPayment) {
+                    this.payDays.push(nextPayment);
+                }
+            }
+            this.payDays.sort((a,b) => (a.date > b.date) ? 1 : (b.date > a.date) ? -1 : 0);
         }
     }
 

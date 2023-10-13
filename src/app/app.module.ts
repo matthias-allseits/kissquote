@@ -21,7 +21,7 @@ import {BankAccountFormComponent} from "./sites/bank-account-form/bank-account-f
 import {FaqComponent} from "./sites/faq/faq.component";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
-import { registerLocaleData } from '@angular/common';
+import {DecimalPipe, registerLocaleData} from '@angular/common';
 import localeCH from '@angular/common/locales/de-CH';
 import { PositionListComponent } from './components/position-list/position-list.component';
 import { TransactionFormComponent } from './sites/transaction-form/transaction-form.component';
@@ -51,6 +51,9 @@ import { ShareBarChartContainerComponent } from './components/share-bar-chart-co
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { DashboardLogbookComponent } from './components/dashboard-logbook/dashboard-logbook.component';
 import { TargetValueComponent } from './components/target-value/target-value.component';
+import { DataGridComponent } from './components/data-grid/data-grid.component';
+import { LabelsCellRendererComponent } from "./components/cell-renderer/labels-cell-renderer/labels-cell-renderer.component";
+import { PricealertsCellRendererComponent } from './components/cell-renderer/pricealerts-cell-renderer/pricealerts-cell-renderer.component';
 registerLocaleData(localeCH);
 
 
@@ -94,6 +97,9 @@ registerLocaleData(localeCH);
         SpinnerComponent,
         DashboardLogbookComponent,
         TargetValueComponent,
+        DataGridComponent,
+        LabelsCellRendererComponent,
+        PricealertsCellRendererComponent,
     ],
     imports: [
         BrowserModule,
@@ -112,6 +118,7 @@ registerLocaleData(localeCH);
         // TabsModule.forRoot(),
     ],
     providers: [
+        DecimalPipe,
         {
             provide: LOCALE_ID, useValue: "de-CH"
         },

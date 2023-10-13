@@ -1,7 +1,9 @@
 <div class="row">
     <div class="col-12">
-        <button *ngIf="!transactionsOnly" (click)="toggleFilter()" type="button" class="btn btn-sm btn-outline-primary">All Entries</button>
-        <button *ngIf="transactionsOnly" (click)="toggleFilter()" type="button" class="btn btn-sm btn-outline-primary">Transactions only</button>
+        <div class="form-check form-switch">
+            <input (change)="toggleFilter()" class="form-check-input" type="checkbox" id="darkmode-switch" [checked]="commentsFilter">
+            <label for="darkmode-switch" class="form-label">Kommentarfilter</label>
+        </div>
     </div>
 </div>
 <div class="table-responsive">

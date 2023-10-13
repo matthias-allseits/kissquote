@@ -1,0 +1,56 @@
+<table class="table table-striped table-sm">
+    <thead>
+        <tr>
+            <th *ngFor="let column of gridColumns"
+                [class.d-none]="column.responsive === 'md-up'"
+                [class.d-md-table-cell]="column.responsive === 'md-up'"
+                [class.text-center]="column.alignment === 'center'"
+                [style.width]="column.width"
+                scope="col">
+                <span
+                    [class.float-end]="column.alignment === 'right'"
+                >{{ column.title }}</span>
+            </th>
+            <th *ngFor="let entry of contextMenu" scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>
+            <th scope="col" class="d-sm-table-cell d-md-none mobile-navi-cell"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let entry of gridData"
+            [class.red20]="checkForRedColoring(entry)"
+            [class.green20]="checkForGreenColoring(entry)"
+        >
+            <td *ngFor="let column of gridColumns"
+                [class.d-none]="column.responsive === 'md-up'"
+                [class.d-md-table-cell]="column.responsive === 'md-up'"
+                [class.text-center]="column.alignment === 'center'"
+                >
+                <span *ngIf="column.type !== 'renderer'"
+                    [class.float-end]="column.alignment === 'right'"
+                >{{ renderContent(entry, column) }}</span>
+                <ng-container *ngIf="column.type === 'renderer'">
+                    <app-labels-cell-renderer *ngIf="column.renderer === 'LabelsCellRendererComponent'" [data]="entry[column.field]"></app-labels-cell-renderer>
+                    <app-pricealerts-cell-renderer *ngIf="column.renderer === 'PricealertsCellRendererComponent'" [data]="entry"></app-pricealerts-cell-renderer>
+                </ng-container>
+            </td>
+            <td *ngFor="let contextEntry of contextMenu" class="d-none d-md-table-cell" style="width: 35px;">
+                <button type="button" class="btn btn-sm btn-outline-primary"
+                        ngbTooltip="{{ contextEntry.label }}"
+                        tooltipClass="custom-tooltip"
+                        (click)="callFunction(contextEntry, entry)"
+                >
+                    <fa-icon *ngIf="contextEntry.key === 'details'" [icon]="eyeIcon"></fa-icon>
+                    <fa-icon *ngIf="contextEntry.key.indexOf('add') > -1" [icon]="addIcon"></fa-icon>
+                    <fa-icon *ngIf="contextEntry.key.indexOf('edit') > -1" [icon]="editIcon"></fa-icon>
+                    <fa-icon *ngIf="contextEntry.key === 'delete'" [icon]="deleteIcon"></fa-icon>
+                </button>
+            </td>
+            <td class="d-sm-table-cell d-md-none mobile-navi-cell" ngbDropdown>
+                <fa-icon class="float-end" (click)="toggleMenu(entry)" id="entryMenu" [icon]="naviIcon" ngbDropdownToggle></fa-icon>
+                <div ngbDropdownMenu aria-labelledby="entryMenu">
+                    <button *ngFor="let contextEntry of contextMenu" (click)="callFunction(contextEntry)" ngbDropdownItem>{{ contextEntry.label }}</button>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

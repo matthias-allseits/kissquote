@@ -13,7 +13,7 @@ export class DashboardLogbookComponent implements OnInit {
     @Input() portfolio?: Portfolio;
 
     public logBook: any[] = [];
-    public transactionsOnly = false;
+    public commentsFilter = false;
 
     constructor(
         public tranService: TranslationService
@@ -33,7 +33,7 @@ export class DashboardLogbookComponent implements OnInit {
     }
 
     toggleFilter(): void {
-        this.transactionsOnly = !this.transactionsOnly;
+        this.commentsFilter = !this.commentsFilter;
         this.refreshLogbook();
     }
 
@@ -43,7 +43,7 @@ export class DashboardLogbookComponent implements OnInit {
             let relevantPositions = this.portfolio.getActiveNonCashPositions();
             relevantPositions = relevantPositions.concat(this.portfolio?.getClosedNonCashPositions());
             relevantPositions?.forEach(position => {
-                if (!this.transactionsOnly) {
+                if (!this.commentsFilter) {
                     position.logEntries.forEach(entry => {
                         entry.positionId = position.id;
                         if (position.share && position.share.shortname && position.share.name) {
@@ -69,7 +69,7 @@ export class DashboardLogbookComponent implements OnInit {
                 this.logBook = this.logBook.concat(position.transactions);
             });
             this.logBook.sort((a, b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0));
-            if (!this.transactionsOnly) {
+            if (!this.commentsFilter) {
                 this.logBook = this.logBook.slice(0, 100);
             } else {
                 this.logBook = this.logBook.slice(0, 50);

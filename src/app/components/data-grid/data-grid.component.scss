@@ -1,0 +1,11 @@
+
+.dropdown-toggle::after {
+    display:none;
+}
+
+.mobile-navi-cell {
+    width: 35px;
+    fa-icon {
+        padding-right: 10px;
+    }
+}
