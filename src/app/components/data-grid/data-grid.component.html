@@ -2,8 +2,9 @@
     <thead>
         <tr>
             <th *ngFor="let column of gridColumns"
-                [class.d-none]="column.responsive === 'md-up'"
+                [class.d-none]="column.responsive && ['md-up', 'sm-up'].indexOf(column.responsive) > -1"
                 [class.d-md-table-cell]="column.responsive === 'md-up'"
+                [class.d-sm-table-cell]="column.responsive === 'sm-up'"
                 [class.text-center]="column.alignment === 'center'"
                 [style.width]="column.width"
                 scope="col">
@@ -25,7 +26,7 @@
                 [class.d-md-table-cell]="column.responsive === 'md-up'"
                 [class.d-sm-table-cell]="column.responsive === 'sm-up'"
                 [class.text-center]="column.alignment === 'center'"
-                >
+            >
                 <ng-container *ngIf="setPositionAchor(entry, column)">
                     <a [routerLink]="['/position-detail/' + entry.id]">{{ entry.share.name }}</a>
                 </ng-container>
