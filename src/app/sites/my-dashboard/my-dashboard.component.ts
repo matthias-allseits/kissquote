@@ -61,6 +61,8 @@ export class MyDashboardComponent implements OnInit {
     public cashContextMenu?: GridContextMenuItem[];
     public nonCashColumns?: GridColumn[];
     public nonCashContextMenu?: GridContextMenuItem[];
+    public closedColumns?: GridColumn[];
+    public closedContextMenu?: GridContextMenuItem[];
 
     manualDividendForm = new FormGroup({
         year: new UntypedFormControl(new Date().getFullYear(), Validators.required),
@@ -109,6 +111,7 @@ export class MyDashboardComponent implements OnInit {
                 this.loadWatchlist();
                 this.setCashGridOptions();
                 this.setNonCashGridOptions();
+                this.setClosedGridOptions();
             }
         });
     }
@@ -379,7 +382,7 @@ export class MyDashboardComponent implements OnInit {
                 type: 'date',
                 format: 'dd.MM.y',
                 field: 'activeUntil',
-                responsive: 'md-up',
+                responsive: 'xl-up',
                 width: '125px',
             },
             {
@@ -389,7 +392,7 @@ export class MyDashboardComponent implements OnInit {
                 field: 'transactions.length',
                 alignment: 'center',
                 toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
-                width: '65px',
+                width: '40px',
             }
         );
 
@@ -465,7 +468,7 @@ export class MyDashboardComponent implements OnInit {
                 type: 'date',
                 format: 'dd.MM.y',
                 field: 'activeUntil',
-                responsive: 'md-up',
+                responsive: 'xl-up',
                 width: '125px',
             },
             {
@@ -483,7 +486,7 @@ export class MyDashboardComponent implements OnInit {
                 alignment: 'center',
                 toolTip: 'Log entries',
                 responsive: 'md-up',
-                width: '105px',
+                width: '40px',
             },
             {
                 title: 'Ta',
@@ -493,7 +496,7 @@ export class MyDashboardComponent implements OnInit {
                 alignment: 'center',
                 toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
                 responsive: 'sm-up',
-                width: '65px',
+                width: '40px',
             }
         );
 
@@ -514,5 +517,91 @@ export class MyDashboardComponent implements OnInit {
         );
     }
 
+
+    private setClosedGridOptions() {
+        this.closedColumns = [];
+        this.closedColumns.push(
+            {
+                title: this.tranService.trans('GLOB_SHARE'),
+                type: 'string',
+                field: 'share.name',
+            },
+            {
+                title: 'Account',
+                type: 'string',
+                field: 'bankAccount.name',
+                responsive: 'md-up',
+            },
+            {
+                title: 'Result',
+                type: 'number',
+                field: 'balance.closedResult',
+                format: '1.0',
+                alignment: 'right',
+                responsive: 'md-up',
+            },
+            {
+                title: this.tranService.trans('GLOB_CURRENCY'),
+                type: 'string',
+                field: 'currency.name',
+            },
+            {
+                title: 'Result CHF',
+                type: 'function',
+                field: 'closedResultCorrected',
+                resultColoring: true,
+                alignment: 'right',
+                width: '95px',
+            },
+            {
+                title: 'Active From',
+                type: 'date',
+                format: 'dd.MM.y',
+                field: 'activeFrom',
+                responsive: 'md-up',
+                width: '125px',
+            },
+            {
+                title: 'Active Until',
+                type: 'date',
+                format: 'dd.MM.y',
+                field: 'activeUntil',
+                responsive: 'sm-up',
+                width: '125px',
+            },
+            {
+                title: 'Le',
+                type: 'number',
+                format: '1.0',
+                field: 'logEntries.length',
+                alignment: 'center',
+                toolTip: 'Log entries',
+                responsive: 'md-up',
+                width: '40px',
+            },
+            {
+                title: 'Ta',
+                type: 'number',
+                format: '1.0',
+                field: 'realTransactions.length',
+                alignment: 'center',
+                toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
+                responsive: 'sm-up',
+                width: '40px',
+            }
+        );
+
+        this.closedContextMenu = [];
+        this.closedContextMenu.push(
+            {
+                key: 'details',
+                label: 'Details',
+            },
+            {
+                key: 'delete',
+                label: 'Löschen',
+            },
+        );
+    }
 
 }

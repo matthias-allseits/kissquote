@@ -8,6 +8,7 @@ import {ShareheadShare} from "../../models/sharehead-share";
 import {ChartData} from "chart.js";
 import {AnalystRating} from "../../models/analyst-rating";
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
+import {GridColumn, GridContextMenuItem} from "../data-grid/data-grid.component";
 
 
 @Component({
@@ -49,6 +50,11 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public diversityList: Position[] = [];
     public ultimateBalance?: number;
     public ultimateValue?: number;
+
+    public lombardColumns?: GridColumn[];
+    public lombardContextMenu?: GridContextMenuItem[];
+    public crisisDivisColumns?: GridColumn[];
+    public crisisDivisContextMenu?: GridContextMenuItem[];
 
     constructor(
         public tranService: TranslationService,
@@ -105,6 +111,9 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
             }
             this.payDays.sort((a,b) => (a.date > b.date) ? 1 : (b.date > a.date) ? -1 : 0);
         }
+
+        this.setLombardGridOptions();
+        this.setCrisisDivisGridOptions();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -211,5 +220,108 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
             });
         }
     }
+
+
+    selectPosition(position: Position) {
+    }
+
+    positionEventHandler(event: any) {
+        switch(event.key) {
+        }
+    }
+
+    private setLombardGridOptions() {
+        this.lombardColumns = [];
+        this.lombardColumns.push(
+            {
+                title: this.tranService.trans('GLOB_SHARE'),
+                type: 'string',
+                field: 'position.share.name',
+            },
+            {
+                title: 'Sector',
+                type: 'string',
+                field: 'position.sector.name',
+                responsive: 'md-up',
+            },
+            {
+                title: 'Method',
+                type: 'string',
+                field: 'maxDrawdownSummary.method',
+            },
+            {
+                title: this.tranService.trans('GLOB_VALUE'),
+                type: 'number',
+                format: '1.0',
+                field: 'maxDrawdownSummary.lombardValue',
+                alignment: 'right',
+            },
+            {
+                title: 'FrmInv',
+                type: 'percent',
+                format: '1.0',
+                field: 'maxDrawdownSummary.lombardValueFromInvestment',
+                alignment: 'right',
+                toolTip: this.tranService.trans('LISTNGS_FROM_INVESTMENT'),
+            }
+        );
+
+        this.lombardContextMenu = [];
+    }
+
+    private setCrisisDivisGridOptions() {
+        this.crisisDivisColumns = [];
+        this.crisisDivisColumns.push(
+            {
+                title: this.tranService.trans('GLOB_SHARE'),
+                type: 'string',
+                field: 'position.share.name',
+            },
+            {
+                title: 'Sector',
+                type: 'string',
+                field: 'position.sector.name',
+                responsive: 'md-up',
+            },
+            {
+                title: 'Data',
+                type: 'number',
+                format: '1.0',
+                field: 'position.shareheadShare.historicDividends.length',
+                alignment: 'right',
+                responsive: 'md-up',
+            },
+            {
+                title: 'Method',
+                type: 'string',
+                field: 'crisisDropSummary.method',
+            },
+            {
+                title: 'Drop',
+                type: 'percent',
+                format: '1.0',
+                field: 'crisisDropSummary.maxDrop',
+                alignment: 'right',
+            },
+            {
+                title: 'Actual',
+                type: 'number',
+                format: '1.0-0',
+                field: 'crisisDropSummary.actualDividend',
+                alignment: 'right',
+                responsive: 'md-up',
+            },
+            {
+                title: 'After',
+                type: 'number',
+                format: '1.0',
+                field: 'crisisDropSummary.dividendAfterDrop',
+                alignment: 'right',
+            }
+        );
+
+        this.crisisDivisContextMenu = [];
+    }
+
 
 }

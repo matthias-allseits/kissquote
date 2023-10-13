@@ -6,6 +6,7 @@ import {DateHelper} from "../../core/datehelper";
 import { DecimalPipe } from '@angular/common';
 import {CellRendererInterface} from "../cell-renderer/cell-renderer.interface";
 import {Position} from "../../models/position";
+import {PositionCreator} from "../../creators/position-creator";
 
 
 export interface GridColumn {
@@ -14,6 +15,7 @@ export interface GridColumn {
     field: string,
     format?: string,
     alignment?: string,
+    resultColoring?: boolean,
     toolTip?: string,
     responsive?: string,
     width?: string,
@@ -63,15 +65,32 @@ export class DataGridComponent implements OnInit {
 
 
     setPositionAchor(entry: any, column: GridColumn): boolean {
-        return entry instanceof Position && column.field === 'share.name'
+        if (entry instanceof Position && column.field === 'share.name') {
+            return true;
+        }
+        if (entry.hasOwnProperty('position') && entry.position instanceof Position && column.field === 'position.share.name') {
+            return true;
+        }
+
+        return false;
+    }
+
+    getPosition(entry: any, column: GridColumn): Position {
+        if (entry instanceof Position && column.field === 'share.name') {
+            return entry
+        } else if (entry.hasOwnProperty('position') && entry.position instanceof Position && column.field === 'position.share.name') {
+            return entry.position;
+        }
+
+        return PositionCreator.createNewPosition();
     }
 
     checkForRedColoring(entry: any): boolean {
-        return entry instanceof Position && entry.stopLossBroken()
+        return entry instanceof Position && entry.active && entry.stopLossBroken()
     }
 
     checkForGreenColoring(entry: any): boolean {
-        return entry instanceof Position && entry.hasReachedTargetPrice()
+        return entry instanceof Position && entry.active && entry.hasReachedTargetPrice()
     }
 
     renderContent(entry: any, column: GridColumn): string {
@@ -107,6 +126,9 @@ export class DataGridComponent implements OnInit {
                     result = DateHelper.convertDateToGerman(result); // todo: develop a elaborated date-formatter
                 } else if (column.type === 'number' || column.type === 'percent') {
                     result = +result;
+                    if (isNaN(result)) {
+                        return '';
+                    }
                     if (column.format) {
                         result = this._decimalPipe.transform(result, column.format);
                     }
