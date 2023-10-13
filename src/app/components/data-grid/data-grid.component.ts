@@ -54,12 +54,17 @@ export class DataGridComponent implements OnInit {
     ) {
     }
 
+    // todo: develop a elaborated date-formatter
     ngOnInit() {
         // setTimeout(() => {
         //     this.renderCells();
         // }, 1000);
     }
 
+
+    setPositionAchor(entry: any, column: GridColumn): boolean {
+        return entry instanceof Position && column.field === 'share.name'
+    }
 
     checkForRedColoring(entry: any): boolean {
         return entry instanceof Position && entry.stopLossBroken()
