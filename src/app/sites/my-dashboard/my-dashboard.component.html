@@ -58,41 +58,6 @@
                     (baseFunctionCall)="positionEventHandler($event)"
                     (selectedItem)="selectPosition($event)"
                 ></app-data-grid>
-                <table class="table table-striped table-sm">
-<!--                    <thead>-->
-<!--                        <tr>-->
-<!--                            <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>-->
-<!--                            <th scope="col" style="width: 105px;"><span class="float-end">{{ tranService.trans('GLOB_VALUE') }}</span></th>-->
-<!--                            <th scope="col" class="d-none d-md-table-cell" style="width: 125px;">Active From</th>-->
-<!--                            <th scope="col" class="d-none d-md-table-cell" style="width: 125px;">Active Until</th>-->
-<!--                            <th scope="col" class="text-center d-none d-md-table-cell" style="width: 105px;"><span ngbTooltip="{{ tranService.trans('GLOB_TRANSACTIONS') }}" tooltipClass="custom-tooltip">Ta</span></th>-->
-<!--                            <th scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>-->
-<!--                            <th scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>-->
-<!--                            <th scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>-->
-<!--                            <th scope="col" class="d-sm-table-cell d-md-none mobile-navi-cell"></th>-->
-<!--                        </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody>-->
-<!--                        <tr *ngFor="let position of bankAccount.getCashPositions()">-->
-<!--                            <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>-->
-<!--                            <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>-->
-<!--                            <td class="d-none d-md-table-cell"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>-->
-<!--                            <td class="d-none d-md-table-cell"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>-->
-<!--                            <td class="text-center d-none d-md-table-cell">{{ position.transactions.length }}</td>-->
-<!--                            <td class="d-none d-md-table-cell"><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details" tooltipClass="custom-tooltip"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>-->
-<!--                            <td class="d-none d-md-table-cell"><button [routerLink]="'/position/' + position.id + '/cash-transaction-form'" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Add Transaction" tooltipClass="custom-tooltip"><fa-icon [icon]="addIcon"></fa-icon></button></td>-->
-<!--                            <td class="d-none d-md-table-cell"><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>-->
-<!--                            <td class="d-sm-table-cell d-md-none mobile-navi-cell" ngbDropdown>-->
-<!--                                <fa-icon class="float-end" (click)="togglePositionsMenu(position)" id="positionsMenu" [icon]="naviIcon" ngbDropdownToggle></fa-icon>-->
-<!--                                <div ngbDropdownMenu aria-labelledby="positionsMenu">-->
-<!--                                    <button [routerLink]="['/position-detail/' + position.id]" ngbDropdownItem>Details</button>-->
-<!--                                    <button [routerLink]="'/position/' + position.id + '/cash-transaction-form'" ngbDropdownItem>Add Transaction</button>-->
-<!--                                    <button (click)="openPositionConfirmModal(removePositionModal, position)" ngbDropdownItem>Löschen</button>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                    </tbody>-->
-                </table>
             </ng-container>
             <ng-container *ngIf="bankAccount.getActiveNonCashPositions().length > 0">
                 <app-data-grid
@@ -102,55 +67,12 @@
                     (baseFunctionCall)="positionEventHandler($event)"
                     (selectedItem)="selectPosition($event)"
                 ></app-data-grid>
-                <table class="table table-striped table-sm">
-<!--                    <thead>-->
-<!--                        <tr>-->
-<!--                            <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>-->
-<!--                            <th scope="col"><span class="float-end">{{ tranService.trans('GLOB_VALUE') }}</span></th>-->
-<!--                            <th scope="col">{{ tranService.trans('GLOB_CURRENCY') }}</th>-->
-<!--                            <th scope="col" class="d-none d-md-table-cell">Sector</th>-->
-<!--                            <th scope="col" class="d-none d-sm-table-cell">Labels</th>-->
-<!--                            <th scope="col" class="text-center d-none d-md-table-cell">Anteil</th>-->
-<!--                            <th scope="col" class="d-none d-md-table-cell" style="width: 125px;">Active From</th>-->
-<!--                            <th scope="col" class="d-none d-md-table-cell" style="width: 125px;">Active Until</th>-->
-<!--                            <th scope="col" class="d-none d-md-table-cell" style="width: 55px;"></th>-->
-<!--                            <th scope="col" class="text-center d-none d-md-table-cell" style="width: 105px;"><span ngbTooltip="Log entries" tooltipClass="custom-tooltip">Le</span></th>-->
-<!--                            <th scope="col" class="text-center d-none d-md-table-cell" style="width: 105px;"><span ngbTooltip="{{ tranService.trans('GLOB_TRANSACTIONS') }}" tooltipClass="custom-tooltip">Ta</span></th>-->
-<!--                            <th scope="col" style="width: 35px;"></th>-->
-<!--                            <th scope="col" style="width: 35px;"></th>-->
-<!--                            <th scope="col" style="width: 35px;"></th>-->
-<!--                        </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody>-->
-<!--                        <tr *ngFor="let position of bankAccount.getActiveNonCashPositions()" [class.red20]="position.stopLossBroken()" [class.green20]="position.hasReachedTargetPrice()">-->
-<!--                            <td><span *ngIf="position.share">{{ position.share.name }}</span></td>-->
-<!--                            <td><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></td>-->
-<!--                            <td><span *ngIf="position.currency">{{ position.currency.name }}</span></td>-->
-<!--                            <td class="d-none d-md-table-cell"><span *ngIf="position.sector">{{ position.sector.name }}</span></td>-->
-<!--                            <td class="d-none d-sm-table-cell">-->
-<!--                                <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>-->
-<!--                            </td>-->
-<!--                            <td class="text-center d-none d-md-table-cell">{{ position.shareFromTotal|number: '1.0-1' }}%</td>-->
-<!--                            <td class="d-none d-md-table-cell"><span *ngIf="position.activeFrom">{{ position.activeFrom|date:'dd.MM.y' }}</span></td>-->
-<!--                            <td class="d-none d-md-table-cell"><span *ngIf="position.activeUntil">{{ position.activeUntil|date:'dd.MM.y' }}</span></td>-->
-<!--                            <td class="d-none d-md-table-cell">-->
-<!--                                <button *ngIf="position.stopLoss && position.stopLoss > 0" type="button" class="btn btn-tiny btn-outline-red" ngbTooltip="Has stop-loss" tooltipClass="custom-tooltip" style="margin-right: 2px;">SL</button>-->
-<!--                                <button *ngIf="position.targetPrice && position.targetPrice > 0" type="button" class="btn btn-tiny btn-outline-green" ngbTooltip="Has target-price" tooltipClass="custom-tooltip">TP</button>-->
-<!--                            </td>-->
-<!--                            <td class="text-center d-none d-md-table-cell">{{ position.logEntries.length }}</td>-->
-<!--                            <td class="text-center d-none d-md-table-cell">{{ position.realTransactions().length }}</td>-->
-<!--                            <td><button [routerLink]="['/position-detail/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Details" tooltipClass="custom-tooltip"><fa-icon [icon]="eyeIcon"></fa-icon></button></td>-->
-<!--                            <td><button [routerLink]="['/bank-account/' + accountIndex + '/position-form/' + position.id]" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Edit Position" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button></td>-->
-<!--                            <td><button (click)="openPositionConfirmModal(removePositionModal, position)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>-->
-<!--                        </tr>-->
-<!--                    </tbody>-->
-                </table>
             </ng-container>
             <p *ngIf="bankAccount.positions.length === 0">
                 Ohne Positionen wird es hier sehr schnell sehr langweilig...
             </p>
         </div>
-        <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'balance'">
+        <div class="shadow-sm p-1 pt-3 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'balance'">
             <app-dashboard-balance [portfolio]="portfolio" [dividendLists]="dividendLists"></app-dashboard-balance>
         </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'logbook'">

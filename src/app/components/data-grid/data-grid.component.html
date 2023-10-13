@@ -2,9 +2,10 @@
     <thead>
         <tr>
             <th *ngFor="let column of gridColumns"
-                [class.d-none]="column.responsive && ['md-up', 'sm-up'].indexOf(column.responsive) > -1"
+                [class.d-none]="column.responsive && ['md-up', 'sm-up', 'xl-up'].indexOf(column.responsive) > -1"
                 [class.d-md-table-cell]="column.responsive === 'md-up'"
                 [class.d-sm-table-cell]="column.responsive === 'sm-up'"
+                [class.d-xl-table-cell]="column.responsive === 'xl-up'"
                 [class.text-center]="column.alignment === 'center'"
                 [style.width]="column.width"
                 scope="col">
@@ -13,7 +14,7 @@
                 >{{ column.title }}</span>
             </th>
             <th *ngFor="let entry of contextMenu" scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>
-            <th scope="col" class="d-sm-table-cell d-md-none mobile-navi-cell"></th>
+            <th *ngIf="contextMenu && contextMenu.length > 0" scope="col" class="d-sm-table-cell d-md-none mobile-navi-cell"></th>
         </tr>
     </thead>
     <tbody>
@@ -22,13 +23,14 @@
             [class.green20]="checkForGreenColoring(entry)"
         >
             <td *ngFor="let column of gridColumns"
-                [class.d-none]="column.responsive && ['md-up', 'sm-up'].indexOf(column.responsive) > -1"
+                [class.d-none]="column.responsive && ['md-up', 'sm-up', 'xl-up'].indexOf(column.responsive) > -1"
                 [class.d-md-table-cell]="column.responsive === 'md-up'"
                 [class.d-sm-table-cell]="column.responsive === 'sm-up'"
+                [class.d-xl-table-cell]="column.responsive === 'xl-up'"
                 [class.text-center]="column.alignment === 'center'"
             >
                 <ng-container *ngIf="setPositionAchor(entry, column)">
-                    <a [routerLink]="['/position-detail/' + entry.id]">{{ entry.share.name }}</a>
+                    <a [routerLink]="['/position-detail/' + getPosition(entry, column).id]">{{ getPosition(entry, column).share?.name }}</a>
                 </ng-container>
                 <ng-container *ngIf="!setPositionAchor(entry, column)">
                     <span *ngIf="column.type !== 'renderer'"
@@ -52,7 +54,7 @@
                     <fa-icon *ngIf="contextEntry.key === 'delete'" [icon]="deleteIcon"></fa-icon>
                 </button>
             </td>
-            <td class="d-sm-table-cell d-md-none mobile-navi-cell" ngbDropdown>
+            <td *ngIf="contextMenu && contextMenu.length > 0" class="d-sm-table-cell d-md-none mobile-navi-cell" ngbDropdown>
                 <fa-icon class="float-end" (click)="toggleMenu(entry)" id="entryMenu" [icon]="naviIcon" ngbDropdownToggle></fa-icon>
                 <div ngbDropdownMenu aria-labelledby="entryMenu">
                     <button *ngFor="let contextEntry of contextMenu" (click)="callFunction(contextEntry)" ngbDropdownItem>{{ contextEntry.label }}</button>

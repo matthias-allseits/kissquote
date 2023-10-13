@@ -379,7 +379,7 @@ export class MyDashboardComponent implements OnInit {
                 type: 'date',
                 format: 'dd.MM.y',
                 field: 'activeUntil',
-                responsive: 'md-up',
+                responsive: 'xl-up',
                 width: '125px',
             },
             {
@@ -389,7 +389,7 @@ export class MyDashboardComponent implements OnInit {
                 field: 'transactions.length',
                 alignment: 'center',
                 toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
-                width: '65px',
+                width: '50px',
             }
         );
 
@@ -465,7 +465,7 @@ export class MyDashboardComponent implements OnInit {
                 type: 'date',
                 format: 'dd.MM.y',
                 field: 'activeUntil',
-                responsive: 'md-up',
+                responsive: 'xl-up',
                 width: '125px',
             },
             {
@@ -483,7 +483,7 @@ export class MyDashboardComponent implements OnInit {
                 alignment: 'center',
                 toolTip: 'Log entries',
                 responsive: 'md-up',
-                width: '105px',
+                width: '50px',
             },
             {
                 title: 'Ta',
@@ -493,7 +493,7 @@ export class MyDashboardComponent implements OnInit {
                 alignment: 'center',
                 toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
                 responsive: 'sm-up',
-                width: '65px',
+                width: '50px',
             }
         );
 
