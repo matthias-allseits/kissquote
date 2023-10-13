@@ -21,9 +21,6 @@ import {LabelService} from "../../services/label.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons/faEllipsisVertical";
 import {GridColumn, GridContextMenuItem} from "../../components/data-grid/data-grid.component";
-import {
-    LabelsCellRendererComponent
-} from "../../components/cell-renderer/labels-cell-renderer/labels-cell-renderer.component";
 
 
 @Component({
@@ -110,165 +107,8 @@ export class MyDashboardComponent implements OnInit {
                     }
                 });
                 this.loadWatchlist();
-
-                // todo: develop a elaborated date-formatter
-                this.cashColumns = [];
-                this.cashColumns.push(
-                    {
-                        title: this.tranService.trans('GLOB_CURRENCY'),
-                        type: 'string',
-                        field: 'currency.name',
-                    },
-                    {
-                        title: this.tranService.trans('GLOB_VALUE'),
-                        type: 'function',
-                        format: '1.0',
-                        field: 'actualValue',
-                        alignment: 'right'
-                    },
-                    {
-                        title: 'Active From',
-                        type: 'date',
-                        format: 'dd.MM.y',
-                        field: 'activeFrom',
-                        responsive: 'md-up',
-                        width: '125px',
-                    },
-                    {
-                        title: 'Active Until',
-                        type: 'date',
-                        format: 'dd.MM.y',
-                        field: 'activeUntil',
-                        responsive: 'md-up',
-                        width: '125px',
-                    },
-                    {
-                        title: 'Ta',
-                        type: 'number',
-                        format: '1.0',
-                        field: 'transactions.length',
-                        alignment: 'center',
-                        toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
-                        width: '65px',
-                    }
-                );
-
-                this.cashContextMenu = [];
-                this.cashContextMenu.push(
-                    {
-                        key: 'details',
-                        label: 'Details',
-                    },
-                    {
-                        key: 'addTransaction',
-                        label: 'Add Transaction',
-                    },
-                    {
-                        key: 'delete',
-                        label: 'Löschen',
-                    },
-                );
-
-                this.nonCashColumns = [];
-                this.nonCashColumns.push(
-                    {
-                        title: this.tranService.trans('GLOB_SHARE'),
-                        type: 'string',
-                        field: 'share.name',
-                    },
-                    {
-                        title: this.tranService.trans('GLOB_VALUE'),
-                        type: 'function',
-                        format: '1.0',
-                        field: 'actualValue',
-                        alignment: 'right'
-                    },
-                    {
-                        title: this.tranService.trans('GLOB_CURRENCY'),
-                        type: 'string',
-                        field: 'currency.name',
-                    },
-                    {
-                        title: 'Sector',
-                        type: 'string',
-                        field: 'sector.name',
-                        responsive: 'md-up',
-                    },
-                    {
-                        title: 'Labels',
-                        type: 'renderer',
-                        field: 'labels',
-                        responsive: 'md-up',
-                        renderer: 'LabelsCellRendererComponent'
-                    },
-                    {
-                        title: 'Anteil',
-                        type: 'percent',
-                        format: '1.0-1',
-                        field: 'shareFromTotal',
-                        alignment: 'center',
-                        responsive: 'md-up',
-                    },
-                    {
-                        title: 'Active From',
-                        type: 'date',
-                        format: 'dd.MM.y',
-                        field: 'activeFrom',
-                        responsive: 'md-up',
-                        width: '125px',
-                    },
-                    {
-                        title: 'Active Until',
-                        type: 'date',
-                        format: 'dd.MM.y',
-                        field: 'activeUntil',
-                        responsive: 'md-up',
-                        width: '125px',
-                    },
-                    {
-                        title: '',
-                        type: 'renderer',
-                        field: '',
-                        renderer: 'PricealertsCellRendererComponent',
-                        width: '55px',
-                    },
-                    {
-                        title: 'Le',
-                        type: 'number',
-                        format: '1.0',
-                        field: 'logEntries.length',
-                        alignment: 'center',
-                        toolTip: 'Log entries',
-                        responsive: 'md-up',
-                        width: '105px',
-                    },
-                    {
-                        title: 'Ta',
-                        type: 'number',
-                        format: '1.0',
-                        field: 'realTransactions.length',
-                        alignment: 'center',
-                        toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
-                        responsive: 'md-up',
-                        width: '105px',
-                    }
-                );
-
-                this.nonCashContextMenu = [];
-                this.nonCashContextMenu.push(
-                    {
-                        key: 'details',
-                        label: 'Details',
-                    },
-                    {
-                        key: 'editPosition',
-                        label: 'Edit Position',
-                    },
-                    {
-                        key: 'delete',
-                        label: 'Löschen',
-                    },
-                );
+                this.setCashGridOptions();
+                this.setNonCashGridOptions();
             }
         });
     }
@@ -500,5 +340,169 @@ export class MyDashboardComponent implements OnInit {
             });
         });
     }
+
+    private setCashGridOptions() {
+        this.cashColumns = [];
+        this.cashColumns.push(
+            {
+                title: this.tranService.trans('GLOB_CURRENCY'),
+                type: 'string',
+                field: 'currency.name',
+            },
+            {
+                title: this.tranService.trans('GLOB_VALUE'),
+                type: 'function',
+                format: '1.0',
+                field: 'actualValue',
+                alignment: 'right'
+            },
+            {
+                title: 'Active From',
+                type: 'date',
+                format: 'dd.MM.y',
+                field: 'activeFrom',
+                responsive: 'md-up',
+                width: '125px',
+            },
+            {
+                title: 'Active Until',
+                type: 'date',
+                format: 'dd.MM.y',
+                field: 'activeUntil',
+                responsive: 'md-up',
+                width: '125px',
+            },
+            {
+                title: 'Ta',
+                type: 'number',
+                format: '1.0',
+                field: 'transactions.length',
+                alignment: 'center',
+                toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
+                width: '65px',
+            }
+        );
+
+        this.cashContextMenu = [];
+        this.cashContextMenu.push(
+            {
+                key: 'details',
+                label: 'Details',
+            },
+            {
+                key: 'addTransaction',
+                label: 'Add Transaction',
+            },
+            {
+                key: 'delete',
+                label: 'Löschen',
+            },
+        );
+    }
+
+
+    private setNonCashGridOptions() {
+        this.nonCashColumns = [];
+        this.nonCashColumns.push(
+            {
+                title: this.tranService.trans('GLOB_SHARE'),
+                type: 'string',
+                field: 'share.name',
+            },
+            {
+                title: this.tranService.trans('GLOB_VALUE'),
+                type: 'function',
+                format: '1.0',
+                field: 'actualValue',
+                alignment: 'right'
+            },
+            {
+                title: this.tranService.trans('GLOB_CURRENCY'),
+                type: 'string',
+                field: 'currency.name',
+            },
+            {
+                title: 'Sector',
+                type: 'string',
+                field: 'sector.name',
+                responsive: 'sm-up',
+            },
+            {
+                title: 'Labels',
+                type: 'renderer',
+                field: 'labels',
+                responsive: 'md-up',
+                renderer: 'LabelsCellRendererComponent'
+            },
+            {
+                title: 'Anteil',
+                type: 'percent',
+                format: '1.0-1',
+                field: 'shareFromTotal',
+                alignment: 'center',
+                responsive: 'sm-up',
+            },
+            {
+                title: 'Active From',
+                type: 'date',
+                format: 'dd.MM.y',
+                field: 'activeFrom',
+                responsive: 'md-up',
+                width: '125px',
+            },
+            {
+                title: 'Active Until',
+                type: 'date',
+                format: 'dd.MM.y',
+                field: 'activeUntil',
+                responsive: 'md-up',
+                width: '125px',
+            },
+            {
+                title: '',
+                type: 'renderer',
+                field: '',
+                renderer: 'PricealertsCellRendererComponent',
+                width: '55px',
+            },
+            {
+                title: 'Le',
+                type: 'number',
+                format: '1.0',
+                field: 'logEntries.length',
+                alignment: 'center',
+                toolTip: 'Log entries',
+                responsive: 'md-up',
+                width: '105px',
+            },
+            {
+                title: 'Ta',
+                type: 'number',
+                format: '1.0',
+                field: 'realTransactions.length',
+                alignment: 'center',
+                toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
+                responsive: 'sm-up',
+                width: '65px',
+            }
+        );
+
+        this.nonCashContextMenu = [];
+        this.nonCashContextMenu.push(
+            {
+                key: 'details',
+                label: 'Details',
+            },
+            {
+                key: 'editPosition',
+                label: 'Edit Position',
+            },
+            {
+                key: 'delete',
+                label: 'Löschen',
+            },
+        );
+    }
+
 
 }

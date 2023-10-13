@@ -21,16 +21,22 @@
             [class.green20]="checkForGreenColoring(entry)"
         >
             <td *ngFor="let column of gridColumns"
-                [class.d-none]="column.responsive === 'md-up'"
+                [class.d-none]="column.responsive && ['md-up', 'sm-up'].indexOf(column.responsive) > -1"
                 [class.d-md-table-cell]="column.responsive === 'md-up'"
+                [class.d-sm-table-cell]="column.responsive === 'sm-up'"
                 [class.text-center]="column.alignment === 'center'"
                 >
-                <span *ngIf="column.type !== 'renderer'"
-                    [class.float-end]="column.alignment === 'right'"
-                >{{ renderContent(entry, column) }}</span>
-                <ng-container *ngIf="column.type === 'renderer'">
-                    <app-labels-cell-renderer *ngIf="column.renderer === 'LabelsCellRendererComponent'" [data]="entry[column.field]"></app-labels-cell-renderer>
-                    <app-pricealerts-cell-renderer *ngIf="column.renderer === 'PricealertsCellRendererComponent'" [data]="entry"></app-pricealerts-cell-renderer>
+                <ng-container *ngIf="setPositionAchor(entry, column)">
+                    <a [routerLink]="['/position-detail/' + entry.id]">{{ entry.share.name }}</a>
+                </ng-container>
+                <ng-container *ngIf="!setPositionAchor(entry, column)">
+                    <span *ngIf="column.type !== 'renderer'"
+                          [class.float-end]="column.alignment === 'right'"
+                    >{{ renderContent(entry, column) }}</span>
+                    <ng-container *ngIf="column.type === 'renderer'">
+                        <app-labels-cell-renderer *ngIf="column.renderer === 'LabelsCellRendererComponent'" [data]="entry[column.field]"></app-labels-cell-renderer>
+                        <app-pricealerts-cell-renderer *ngIf="column.renderer === 'PricealertsCellRendererComponent'" [data]="entry"></app-pricealerts-cell-renderer>
+                    </ng-container>
                 </ng-container>
             </td>
             <td *ngFor="let contextEntry of contextMenu" class="d-none d-md-table-cell" style="width: 35px;">
