@@ -51,6 +51,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public ultimateBalance?: number;
     public ultimateValue?: number;
 
+    public ultimateColumns?: GridColumn[];
+    public ultimateContextMenu?: GridContextMenuItem[];
     public lombardColumns?: GridColumn[];
     public lombardContextMenu?: GridContextMenuItem[];
     public crisisDivisColumns?: GridColumn[];
@@ -112,6 +114,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
             this.payDays.sort((a,b) => (a.date > b.date) ? 1 : (b.date > a.date) ? -1 : 0);
         }
 
+        this.setUltimateGridOptions();
         this.setLombardGridOptions();
         this.setCrisisDivisGridOptions();
     }
@@ -229,6 +232,61 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         switch(event.key) {
         }
     }
+
+    private setUltimateGridOptions() {
+        this.ultimateColumns = [];
+        this.ultimateColumns.push(
+            {
+                title: this.tranService.trans('GLOB_SHARE'),
+                type: 'string',
+                field: 'share.name',
+            },
+            {
+                title: 'Sector',
+                type: 'string',
+                field: 'sector.name',
+                responsive: 'md-up',
+            },
+            {
+                title: this.tranService.trans('GLOB_VALUE'),
+                type: 'function',
+                format: '1.0',
+                field: 'actualValue',
+                alignment: 'right'
+            },
+            {
+                title: 'Labels',
+                type: 'renderer',
+                field: 'labels',
+                responsive: 'sm-up',
+                renderer: 'LabelsCellRendererComponent'
+            },
+            {
+                title: '',
+                type: 'renderer',
+                field: '',
+                renderer: 'PricealertsCellRendererComponent',
+                width: '55px',
+            },
+            {
+                title: this.tranService.trans('LISTNGS_DAYS'),
+                type: 'function',
+                format: '1.0',
+                field: 'daysSinceStart',
+                alignment: 'right',
+            },
+            {
+                title: 'Trpd',
+                type: 'function',
+                field: 'totalReturnPerDay',
+                alignment: 'right',
+                toolTip: 'Total return per day',
+            }
+        );
+
+        this.ultimateContextMenu = [];
+    }
+
 
     private setLombardGridOptions() {
         this.lombardColumns = [];
