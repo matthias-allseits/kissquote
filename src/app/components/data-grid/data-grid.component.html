@@ -6,6 +6,8 @@
                 [class.d-md-table-cell]="column.responsive === 'md-up'"
                 [class.d-sm-table-cell]="column.responsive === 'sm-up'"
                 [class.d-xl-table-cell]="column.responsive === 'xl-up'"
+                [class.d-table-cell]="column.responsive === 'sm-only'"
+                [class.d-md-none]="column.responsive === 'sm-only'"
                 [class.text-center]="column.alignment === 'center'"
                 [style.width]="column.width"
                 scope="col">
@@ -27,6 +29,8 @@
                 [class.d-md-table-cell]="column.responsive === 'md-up'"
                 [class.d-sm-table-cell]="column.responsive === 'sm-up'"
                 [class.d-xl-table-cell]="column.responsive === 'xl-up'"
+                [class.d-table-cell]="column.responsive === 'sm-only'"
+                [class.d-md-none]="column.responsive === 'sm-only'"
                 [class.text-center]="column.alignment === 'center'"
             >
                 <ng-container *ngIf="setPositionAchor(entry, column)">

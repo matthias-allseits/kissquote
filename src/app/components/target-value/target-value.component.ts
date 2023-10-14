@@ -1,12 +1,11 @@
-import {Component, Input, TemplateRef} from '@angular/core';
-import {faEdit, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
+import {Component, Input, TemplateRef, ViewChild} from '@angular/core';
 import {Portfolio} from "../../models/portfolio";
 import {TranslationService} from "../../services/translation.service";
 import {Position} from "../../models/position";
-import {DateHelper} from "../../core/datehelper";
 import {FormGroup, UntypedFormControl, Validators} from "@angular/forms";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {PositionService} from "../../services/position.service";
+import {GridColumn, GridContextMenuItem} from "../data-grid/data-grid.component";
 
 
 export interface TargetSummary {
@@ -26,6 +25,8 @@ export interface TargetSummary {
 })
 export class TargetValueComponent {
 
+    @ViewChild('manualTargetPriceFormModal') targetModal?: TemplateRef<any>;
+
     @Input() portfolio?: Portfolio;
 
     public targetList: TargetSummary[] = [];
@@ -35,8 +36,8 @@ export class TargetValueComponent {
     modalRef?: NgbModalRef;
     public selectedTargetSummary?: TargetSummary;
 
-    deleteIcon = faTrashAlt;
-    editIcon = faEdit;
+    public tableColumns?: GridColumn[];
+    public tableContextMenu?: GridContextMenuItem[];
 
     manualTargetPriceForm = new FormGroup({
         targetPrice: new UntypedFormControl('', Validators.required),
@@ -50,11 +51,11 @@ export class TargetValueComponent {
 
     ngOnInit() {
         this.prepareData();
+        this.setTableGridOptions();
     }
 
 
-    openManualModal(template: TemplateRef<any>, entry: TargetSummary|undefined) {
-        this.selectedTargetSummary = entry;
+    openManualModal(template: TemplateRef<any>) {
         this.manualTargetPriceForm.get('targetPrice')?.setValue(this.selectedTargetSummary?.position?.manualTargetPrice);
         this.modalRef = this.modalService.open(template);
     }
@@ -94,6 +95,89 @@ export class TargetValueComponent {
         });
         this.chance = +((100 / this.actualTotal * this.targetTotal) - 100).toFixed();
         this.targetList.sort((a, b) => (+a.chance < +b.chance) ? 1 : ((+b.chance < +a.chance) ? -1 : 0));
+    }
+
+
+    selectEntry(entry: TargetSummary) {
+        this.selectedTargetSummary = entry;
+    }
+
+    gridEventHandler(event: any) {
+        switch(event.key) {
+            case 'editTarget':
+                if (this.targetModal) {
+                    this.openManualModal(this.targetModal);
+                }
+                break;
+        }
+    }
+
+    private setTableGridOptions() {
+        this.tableColumns = [];
+        this.tableColumns.push(
+            {
+                title: this.tranService.trans('GLOB_SHARE'),
+                type: 'string',
+                field: 'position.share.name',
+            },
+            {
+                title: 'Sector',
+                type: 'string',
+                field: 'position.sector.name',
+                responsive: 'md-up',
+            },
+            {
+                title: 'Actual',
+                type: 'number',
+                field: 'actual',
+                format: '1.0',
+                alignment: 'right',
+                responsive: 'md-up',
+            },
+            {
+                title: 'Target',
+                type: 'number',
+                field: 'target',
+                format: '1.0',
+                alignment: 'right',
+            },
+            {
+                title: 'Method',
+                type: 'string',
+                field: 'method',
+                responsive: 'md-up',
+            },
+            {
+                title: 'Method',
+                type: 'string',
+                field: 'methodShort',
+                responsive: 'sm-only',
+            },
+            {
+                title: 'TP',
+                type: 'number',
+                format: '1.0-2',
+                field: 'targetPrice',
+                alignment: 'right',
+                toolTip: 'Target price',
+                responsive: 'sm-up',
+            },
+            {
+                title: 'Chance',
+                type: 'percent',
+                format: '1.0',
+                field: 'chance',
+                alignment: 'right',
+            }
+        );
+
+        this.tableContextMenu = [];
+        this.tableContextMenu.push(
+            {
+                key: 'editTarget',
+                label: 'Edit target-price',
+            },
+        );
     }
 
 }
