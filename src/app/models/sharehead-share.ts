@@ -233,6 +233,9 @@ export class ShareheadShare {
     public filteredRatings(): AnalystRating[] {
         let filtered: AnalystRating[] = [];
         const checkArray: number[] = [];
+        if (this.analystRatings) {
+            this.analystRatings.sort((a,b) => (a.date < b.date) ? 1 : (b.date < a.date) ? -1 : 0);
+        }
         this.analystRatings?.forEach(rating => {
             if (rating.analyst) {
                 if (checkArray.indexOf(rating.analyst.id) < 0) {

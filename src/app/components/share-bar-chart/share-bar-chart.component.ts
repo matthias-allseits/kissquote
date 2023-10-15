@@ -180,6 +180,13 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                 });
                 transactionsBuy.forEach(transaction => {
                     if (transaction.date instanceof Date && transaction.rate) {
+                        let transactionsRate = transaction.rate;
+                        // todo: this is a hack for the position BCV. implement a serious solution for the split-problematic
+                        if (this.position && this.position.shareheadId === 1238 && transaction.date.getFullYear() === 2019) {
+                            console.log('rate before: ', transactionsRate);
+                            transactionsRate = transactionsRate / 10;
+                            console.log('rate after: ', transactionsRate);
+                        }
                         let hit = false;
                         entryDates.forEach(date => {
                             if (transaction.date instanceof Date && DateHelper.datesAreEqual(transaction.date, date)) {
@@ -190,7 +197,6 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                             this.context.beginPath();
                             this.context.strokeStyle = this.greenColor;
                             const xValue = CanvasHelper.optimizeCoordinate(this.offsetLeft + ((i * this.stepWidth) + 3));
-                            let transactionsRate = transaction.rate;
                             if (this.position?.currency?.name === 'GBP') {
                                 transactionsRate *= 100;
                             }
