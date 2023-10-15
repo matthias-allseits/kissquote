@@ -23,6 +23,7 @@
         <tr *ngFor="let entry of gridData"
             [class.red20]="checkForRedColoring(entry)"
             [class.green20]="checkForGreenColoring(entry)"
+            [style.display]="checkForVisibility(entry)"
         >
             <td *ngFor="let column of gridColumns"
                 [class.d-none]="column.responsive && ['md-up', 'sm-up', 'xl-up'].indexOf(column.responsive) > -1"

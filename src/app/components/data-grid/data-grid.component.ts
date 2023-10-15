@@ -86,11 +86,20 @@ export class DataGridComponent implements OnInit {
     }
 
     checkForRedColoring(entry: any): boolean {
-        return entry instanceof Position && entry.active && entry.stopLossBroken()
+        return entry instanceof Position && entry.active && entry.stopLossBroken();
     }
 
     checkForGreenColoring(entry: any): boolean {
-        return entry instanceof Position && entry.active && entry.hasReachedTargetPrice()
+        return entry instanceof Position && entry.active && entry.hasReachedTargetPrice();
+    }
+
+    checkForVisibility(entry: any): string {
+        let visibility = 'table-row';
+        if (entry instanceof Position && entry.visible === false) {
+            visibility = 'none';
+        }
+
+        return visibility;
     }
 
     renderContent(entry: any, column: GridColumn): string {
