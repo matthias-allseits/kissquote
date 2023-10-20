@@ -44,6 +44,8 @@ export class ShareheadShare {
         public turningPoints?: ShareheadTurningPoint[],
         public historicDividends?: ShareheadHistoricDividend[],
         public lastRate?: StockRate,
+        public boeNewsId?: number,
+        public boeNewsSummary?: string,
         public positionId?: number,
         public isOnWatchlist?: boolean,
     ) { }
@@ -57,6 +59,15 @@ export class ShareheadShare {
             }
 
             return `https://www.swissquote.ch/sq_mi/public/market/Detail.action?s=${this.isin}_${this.marketplace.urlKey}_${currency}`;
+        }
+
+        return null;
+    }
+
+
+    boeNewsUrl(): string|null {
+        if (this.boeNewsId) {
+            return `https://www.boersennews.de/community/diskussion/holcim/${this.boeNewsId}/`;
         }
 
         return null;

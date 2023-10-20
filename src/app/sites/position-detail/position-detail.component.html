@@ -1,6 +1,20 @@
 <main *ngIf="position" class="col-md-12 col-lg-12 px-md-4">
-    <div *ngIf="filteredPositions" class="text-center">
+    <div *ngIf="filteredPositions" class="text-center d-none d-md-block">
         <a [routerLink]="['/position-detail/' + posi.id]" *ngFor="let posi of filteredPositions" ngbTooltip="{{ posi.share?.name }}" tooltipClass="custom-tooltip" class="direct-navi-a">
+            <div class="direct-navi-frame">
+                <div class="direct-navi-icon" [class.direct-navi-active]="posi.id === position.id"></div>
+            </div>
+        </a>
+    </div>
+    <div *ngIf="filteredPositions" class="text-center d-block d-md-none">
+        <a *ngFor="let posi of filteredPositions"
+           ngbTooltip="{{ posi.share?.name }}"
+           tooltipClass="custom-tooltip"
+           triggers="click"
+           class="direct-navi-a"
+           (click)="selectDirectNaviPosition(posi)"
+           [class.direct-navi-selected]="selectedDirectNaviPosition === posi"
+        >
             <div class="direct-navi-frame">
                 <div class="direct-navi-icon" [class.direct-navi-active]="posi.id === position.id"></div>
             </div>
@@ -10,10 +24,14 @@
         <h1 class="h2">
             <span *ngIf="!position.motherId">Position</span>
             <span *ngIf="position.motherId">Underlying</span>
-            &laquo;{{ position.getName() }}&raquo;</h1>
+            &laquo;{{ position.getName() }}&raquo;
+        </h1>
         <div class="mb-2 mb-md-0">
             <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
             <button (click)="openLabelModal(labelModal)" type="button" class="btn btn-tiny btn-outline-primary" ngbTooltip="Labels bearbeiten" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button>
+        </div>
+        <div class="mb-2 mb-md-0">
+            <button (click)="refreshPositionStatic()" type="button" class="btn btn-tiny btn-outline-primary" ngbTooltip="Refresh" tooltipClass="custom-tooltip"><fa-icon [icon]="refreshIcon"></fa-icon></button>
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
             <ng-container *ngIf="!position.motherId">

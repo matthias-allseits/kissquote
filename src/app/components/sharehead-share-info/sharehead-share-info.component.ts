@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShareheadShare} from "../../models/sharehead-share";
 import {ShareheadService} from "../../services/sharehead.service";
 import {StockRate} from "../../models/stock-rate";
+import {faExternalLinkAlt} from "@fortawesome/free-solid-svg-icons";
 
 
 @Component({
@@ -20,6 +21,8 @@ export class ShareheadShareInfoComponent implements OnInit {
 
     public nextEstimationYear = new Date().getFullYear() + 1;
     public overNextEstimationYear = new Date().getFullYear() + 3;
+
+    externalLinkIcon = faExternalLinkAlt;
 
     constructor(
         private shareheadService: ShareheadService,

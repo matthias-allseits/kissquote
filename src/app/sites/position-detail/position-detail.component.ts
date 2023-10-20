@@ -5,7 +5,7 @@ import {PositionService} from '../../services/position.service';
 import {
     faChevronLeft, faChevronRight,
     faEdit,
-    faExternalLinkAlt, faPlus,
+    faExternalLinkAlt, faPlus, faRefresh,
     faTrashAlt
 } from "@fortawesome/free-solid-svg-icons";
 import {Transaction} from "../../models/transaction";
@@ -50,6 +50,7 @@ export class PositionDetailComponent implements OnInit {
     naviForwardIcon = faChevronRight;
     naviBackIcon = faChevronLeft;
     addIcon = faPlus;
+    refreshIcon = faRefresh;
 
     public position?: Position;
     public selectedTransaction?: Transaction;
@@ -81,6 +82,7 @@ export class PositionDetailComponent implements OnInit {
     public stopLossBroken = false;
     public hasReachedTargetPrice = false;
     public filteredPositions?: Position[];
+    public selectedDirectNaviPosition?: Position;
     public rosaBrille?: TargetSummary;
 
     manualDrawdownForm = new FormGroup({
@@ -536,6 +538,13 @@ export class PositionDetailComponent implements OnInit {
         }
     }
 
+    selectDirectNaviPosition(position: Position): void {
+        if (this.selectedDirectNaviPosition === position) {
+            this.router.navigate(['/position-detail/' + this.selectedDirectNaviPosition.id]);
+        }
+        this.selectedDirectNaviPosition = position;
+    }
+
     navigateCross(direction: string): void {
         let positionIndex: number = -1;
         this.getFilteredPositions()
@@ -599,6 +608,16 @@ export class PositionDetailComponent implements OnInit {
         }
         // todo: find a solution to really reload the whole page
         // todo: get logentries and transactions from backend
+    }
+
+
+    public refreshPositionStatic(): void {
+        if (this.position) {
+            this.refreshPosition(this.position.id)
+                .subscribe(posi => {
+
+                });
+        }
     }
 
 
@@ -736,7 +755,7 @@ export class PositionDetailComponent implements OnInit {
                     } else {
                         positionsFilter = JSON.parse(positionsFilter);
                         const positions = this.filterPositions(posis, positionsFilter);
-                        if (screen.width > 400) {
+                        if (screen.width > 400 || positions.length < 15) {
                             this.filteredPositions = positions;
                         }
                         psitons.next(positions);

@@ -61,6 +61,8 @@ export class ShareheadShareCreator {
                 apiArray.turningPoints ? ShareheadTurningPointCreator.fromApiArray(apiArray.turningPoints) : undefined,
                 apiArray.historicDividends ? ShareheadHistoricDividendCreator.fromApiArray(apiArray.historicDividends) : undefined,
                 apiArray.lastRate ? StockRateCreator.oneFromApiArray(apiArray.lastRate) : undefined,
+                apiArray.boeNewsId,
+                apiArray.boeNewsSummary,
             );
         } else {
             return undefined;

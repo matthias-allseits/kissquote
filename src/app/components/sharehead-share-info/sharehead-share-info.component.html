@@ -149,6 +149,11 @@
                     </div>
                 </ng-container>
             </div>
+            <div *ngIf="!timeWarpMode && shareheadShare.boeNewsId" class="info-box">
+                <h5>boersennews.de</h5>
+                {{ shareheadShare.boeNewsSummary }}
+                <a href="{{ shareheadShare.boeNewsUrl() }}" target="_blank" type="button" class="btn btn-tiny btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon></a>
+            </div>
         </div>
         <div>
             <div class="info-box chart-box info-box-lg">

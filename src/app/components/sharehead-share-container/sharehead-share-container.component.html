@@ -3,13 +3,13 @@
         <h4 class="col-12 col-md-2">Sharehead Infos</h4>
         <div class="col-12 col-md-7 btn-toolbar">
             <div class="btn-toolbar mb-2 mb-md-0">
-                <div class="btn-group me-2 source-btn">
+                <div *ngIf="shareheadShare.urlWikipedia" class="btn-group me-2 source-btn">
                     <a href="{{ shareheadShare.urlWikipedia }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> Wikipedia</a>
                 </div>
                 <div *ngIf="shareheadShare.swissquoteUrl()" class="btn-group me-2 source-btn">
                     <a href="{{ shareheadShare.swissquoteUrl() }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> swissquote.ch</a>
                 </div>
-                <div class="btn-group me-2 source-btn">
+                <div *ngIf="shareheadShare.urlDiviMax" class="btn-group me-2 source-btn">
                     <a href="{{ shareheadShare.urlDiviMax }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> dividendmax.com</a>
                 </div>
                 <div class="btn-group me-2 source-btn">
@@ -18,7 +18,7 @@
                 <div class="btn-group me-2 source-btn">
                     <a href="{{ shareheadShare.urlInvesting }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> investing.com</a>
                 </div>
-                <div class="btn-group me-2 source-btn">
+                <div *ngIf="shareheadShare.urlYahoo" class="btn-group me-2 source-btn">
                     <a href="{{ shareheadShare.urlYahoo }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> yahoo.com</a>
                 </div>
             </div>

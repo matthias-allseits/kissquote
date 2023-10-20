@@ -183,9 +183,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                         let transactionsRate = transaction.rate;
                         // todo: this is a hack for the position BCV. implement a serious solution for the split-problematic
                         if (this.position && this.position.shareheadId === 1238 && transaction.date.getFullYear() === 2019) {
-                            console.log('rate before: ', transactionsRate);
                             transactionsRate = transactionsRate / 10;
-                            console.log('rate after: ', transactionsRate);
                         }
                         let hit = false;
                         entryDates.forEach(date => {
