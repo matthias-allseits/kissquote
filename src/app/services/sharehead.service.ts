@@ -19,6 +19,10 @@ import {SwissquoteHelper} from "../core/swissquote-helper";
 import {Md5} from "ts-md5";
 
 
+interface CollectionsCache {
+    [key: string]: ShareheadShare[];
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -26,10 +30,12 @@ import {Md5} from "ts-md5";
 export class ShareheadService {
 
     private baseUrl = 'http://sharehead.dyn-o-saur.com/api';
+    private cachedCollections: CollectionsCache;
 
     constructor(
         private http: HttpClient,
     ) {
+        this.cachedCollections = {};
         if (+window.location.port === 4300) {
             this.baseUrl = 'http://sharehead.local/api';
         } else if (+window.location.port === 4500) {
@@ -68,17 +74,24 @@ export class ShareheadService {
 
     public getSharesCollection(shareheadIds: number[]): Observable<ShareheadShare[]>
     {
-        return this.http.post(this.baseUrl + '/share/collection', JSON.stringify(shareheadIds))
-            .pipe(
-                map(res => {
-                    const collection = ShareheadShareCreator.fromApiArray(res);
-                    console.log('deliver collection from server');
-                    const name = Md5.hashStr(JSON.stringify(shareheadIds));
-                    CacheHelper.cache(name, collection); // one hour
+        const idsHash = Md5.hashStr(JSON.stringify(shareheadIds));
+        if (this.cachedCollections[idsHash]) {
+            console.log('deliver collection from cache');
+            return new Observable(cache => {
+                cache.next(this.cachedCollections[idsHash]);
+            });
+        } else {
+            console.log('deliver collection from server');
+            return this.http.post(this.baseUrl + '/share/collection', JSON.stringify(shareheadIds))
+                .pipe(
+                    map(res => {
+                        const collection = ShareheadShareCreator.fromApiArray(res);
+                        this.cachedCollections[idsHash] = collection;
 
-                    return collection;
-                }),
-            );
+                        return collection;
+                    }),
+                );
+        }
     }
 
     public getCachedSharesCollection(shareheadIds: number[]): ShareheadShare[]|null

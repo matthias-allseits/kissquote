@@ -22,6 +22,8 @@ const httpOptions = {
 
 export class PortfolioService extends ApiService {
 
+    public portfolio?: Portfolio;
+
     constructor(
         public override http: HttpClient,
     ) {
@@ -43,14 +45,23 @@ export class PortfolioService extends ApiService {
 
     public portfolioByKey(key: string|null): Observable<Portfolio|undefined>
     {
-        const body = {
-            hashKey: key
-        };
-        return this.http.post<Portfolio>(this.apiUrl + '/restore', JSON.stringify(body), httpOptions )
-            .pipe(
-                map(res => PortfolioCreator.oneFromApiArray(res)),
-                catchError(this.handleError)
-            );
+        if (this.portfolio) {
+            return new Observable(portflio => {
+                portflio.next(this.portfolio);
+            });
+        } else {
+            const body = {
+                hashKey: key
+            };
+            return this.http.post<Portfolio>(this.apiUrl + '/restore', JSON.stringify(body), httpOptions)
+                .pipe(
+                    map(res => {
+                        const portfolio = PortfolioCreator.oneFromApiArray(res);
+                        this.portfolio = portfolio;
+                        return portfolio;
+                    }),
+                );
+        }
     }
 
 

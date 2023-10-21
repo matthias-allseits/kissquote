@@ -1,4 +1,6 @@
 
+
+// obsolete
 export class CacheHelper {
 
     private static ttl: number = 60 * 60 * 1000;

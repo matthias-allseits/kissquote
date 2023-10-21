@@ -32,6 +32,7 @@ import {formatDate} from "@angular/common";
 import {Strategy} from "../../models/strategy";
 import {StrategyService} from "../../services/strategy.service";
 import {TargetSummary} from "../../components/target-value/target-value.component";
+import {PortfolioService} from "../../services/portfolio.service";
 
 
 @Component({
@@ -122,6 +123,7 @@ export class PositionDetailComponent implements OnInit {
         private strategyService: StrategyService,
         private positionLogService: PositionLogService,
         private transactionService: TransactionService,
+        private portfolioService: PortfolioService,
         private shareService: ShareService,
         private shareheadService: ShareheadService,
         private modalService: NgbModal,
@@ -663,6 +665,9 @@ export class PositionDetailComponent implements OnInit {
         this.rosaBrille = undefined;
 
         if (this.position) {
+            if (this.portfolioService.portfolio) {
+                this.portfolioService.portfolio.replacePosition(this.position);
+            }
             this.checkAndResetPositionFilter(this.position);
 
             this.refreshLog();

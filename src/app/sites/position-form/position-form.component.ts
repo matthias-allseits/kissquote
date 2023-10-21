@@ -159,11 +159,15 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         if (this.position.id > 0) {
             this.positionService.update(this.position)
                 .subscribe(position => {
+                    if (position) {
+                        this.portfolioService.portfolio?.replacePosition(position);
+                    }
                     this.location.back();
                 });
         } else {
             this.positionService.create(this.position)
                 .subscribe(position => {
+                    this.portfolioService.portfolio = undefined;
                     this.location.back();
                 });
         }

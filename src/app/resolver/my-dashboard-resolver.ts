@@ -61,17 +61,10 @@ export class MyDashboardResolver implements Resolve<Portfolio>{
                         shareheadIds.push(position.shareheadId);
                     }
                 });
-                const shareheadSharesFromCache = this.shareheadService.getCachedSharesCollection(shareheadIds);
-                if (shareheadSharesFromCache) {
-                    this.assignShareheadShares(allPositions, shareheadSharesFromCache, result, psitons);
-                } else {
-                    this.shareheadService.getSharesCollection(shareheadIds).subscribe(shares => {
-                        this.shareheadService.getSharesCollection(shareheadIds)
-                            .subscribe(shares => {
-                                this.assignShareheadShares(allPositions, shares, result, psitons);
-                            });
+                this.shareheadService.getSharesCollection(shareheadIds)
+                    .subscribe(shares => {
+                        this.assignShareheadShares(allPositions, shares, result, psitons);
                     });
-                }
             }
         });
     }

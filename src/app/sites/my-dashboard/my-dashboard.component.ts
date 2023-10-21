@@ -258,6 +258,9 @@ export class MyDashboardComponent implements OnInit {
 
     checkFilterVisibility(posiLabels: Label[], filterLabels: Label[]): boolean {
         let result = false;
+        if (posiLabels.length === 0) {
+            result = true;
+        }
         posiLabels.forEach(label => {
             filterLabels.forEach(filter => {
                 if (label.id === filter.id && filter.checked) {
@@ -333,21 +336,16 @@ export class MyDashboardComponent implements OnInit {
         this.portfolio?.watchlistEntries.forEach(entry => {
             shareheadIds.push(entry.shareheadId);
         });
-        const shareheadSharesFromCache = this.shareheadService.getCachedSharesCollection(shareheadIds);
-        if (shareheadSharesFromCache) {
-            this.assignShareheadShares(shareheadSharesFromCache);
-        } else {
-            this.shareheadService.getSharesCollection(shareheadIds).subscribe(shares => {
-                this.assignShareheadShares(shares);
-            });
-        }
+        this.shareheadService.getSharesCollection(shareheadIds).subscribe(shares => {
+            this.assignShareheadShares(shares);
+        });
     }
 
 
     private assignShareheadShares(shares: ShareheadShare[]) {
         shares.forEach(share => {
             this.portfolio?.watchlistEntries.forEach(entry => {
-                if (share.id === entry.shareheadId) {
+                if (+share.id === +entry.shareheadId) {
                     entry.shareheadShare = share;
                 }
             });
