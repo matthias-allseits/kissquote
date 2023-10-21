@@ -10,7 +10,6 @@ import {StockRate} from "../models/stock-rate";
 import {SwissquoteHelper} from "../core/swissquote-helper";
 import {Share} from "../models/share";
 import {Currency} from "../models/currency";
-import {PositionLogCreator} from "../creators/position-log-creator";
 
 
 const httpOptions = {
@@ -24,6 +23,8 @@ const httpOptions = {
 })
 
 export class PositionService extends ApiService {
+
+    private activePositions?: Position[];
 
     constructor(
         public override http: HttpClient,
@@ -68,9 +69,6 @@ export class PositionService extends ApiService {
         return this.http.get<Position>(this.apiUrl + '/' + id)
             .pipe(
                 map(res => PositionCreator.oneFromApiArray(res))
-                // map(this.extractData),
-                // catchError(this.handleError('addHero', portfolio))
-                // catchError(this.handleError('addHero', portfolio))
             );
     }
 
@@ -80,22 +78,26 @@ export class PositionService extends ApiService {
         return this.http.get<Position[]>(this.apiUrl)
             .pipe(
                 map(res => PositionCreator.fromApiArray(res))
-                // map(this.extractData),
-                // catchError(this.handleError('addHero', portfolio))
-                // catchError(this.handleError('addHero', portfolio))
             );
     }
 
 
     public getActivePositions(): Observable<Position[]>
     {
-        return this.http.get<Position[]>(this.apiUrl + '/active')
-            .pipe(
-                map(res => PositionCreator.fromApiArray(res))
-                // map(this.extractData),
-                // catchError(this.handleError('addHero', portfolio))
-                // catchError(this.handleError('addHero', portfolio))
-            );
+        if (this.activePositions) {
+            return new Observable(psitons => {
+                psitons.next(this.activePositions);
+            });
+        } else {
+            return this.http.get<Position[]>(this.apiUrl + '/active')
+                .pipe(
+                    map(res => {
+                        const castedPosis = PositionCreator.fromApiArray(res);
+                        this.activePositions = castedPosis;
+                        return castedPosis;
+                    })
+                );
+        }
     }
 
 
@@ -131,7 +133,6 @@ export class PositionService extends ApiService {
             .post(url, JSON.stringify(position), httpOptions)
             .pipe(
                 map(() => position),
-                // catchError(this.handleError)
             );
     }
 
@@ -148,7 +149,6 @@ export class PositionService extends ApiService {
             .post(url, JSON.stringify(position), httpOptions)
             .pipe(
                 map(() => position),
-                // catchError(this.handleError)
             );
     }
 
@@ -167,7 +167,6 @@ export class PositionService extends ApiService {
             .post(url, JSON.stringify(positions), httpOptions)
             .pipe(
                 map(() => positions),
-                // catchError(this.handleError)
             );
     }
 
@@ -195,7 +194,6 @@ export class PositionService extends ApiService {
                     }
                     return castedPosi;
                 }),
-                // catchError(this.handleError)
             );
     }
 
@@ -204,7 +202,6 @@ export class PositionService extends ApiService {
         const url = `${this.apiUrl}/${id}`;
         return this.http.delete(url, httpOptions)
             .pipe(
-                // catchError(this.handleError)
             );
     }
 
@@ -213,7 +210,6 @@ export class PositionService extends ApiService {
         const url = `${this.apiUrl}/${positionId}/label/${labelId}`;
         return this.http.get(url, httpOptions)
             .pipe(
-                // catchError(this.handleError)
             );
     }
 
@@ -222,7 +218,6 @@ export class PositionService extends ApiService {
         const url = `${this.apiUrl}/${positionId}/label/${labelId}`;
         return this.http.delete(url, httpOptions)
             .pipe(
-                // catchError(this.handleError)
             );
     }
 
