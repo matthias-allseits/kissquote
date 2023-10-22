@@ -1,4 +1,14 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef} from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    SimpleChanges,
+    TemplateRef,
+    ViewChild
+} from '@angular/core';
 import {faEdit, faPlus, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 import {TranslationService} from "../../services/translation.service";
 import {CurrencyService} from "../../services/currency.service";
@@ -14,6 +24,7 @@ import {SectorService} from "../../services/sector.service";
 import {Strategy} from "../../models/strategy";
 import {StrategyService} from "../../services/strategy.service";
 import {StrategyCreator} from "../../creators/strategy-creator";
+import {GridColumn, GridContextMenuItem} from "../data-grid/data-grid.component";
 
 
 @Component({
@@ -22,6 +33,8 @@ import {StrategyCreator} from "../../creators/strategy-creator";
   styleUrls: ['./dashboard-settings.component.scss']
 })
 export class DashboardSettingsComponent implements OnInit {
+
+    @ViewChild('exchangeRateFormModal') currencyModal?: TemplateRef<any>;
 
     @Input() labels?: Label[];
     @Output() refreshLabels: EventEmitter<any> = new EventEmitter();
@@ -39,6 +52,9 @@ export class DashboardSettingsComponent implements OnInit {
     public selectedStrategy?: Strategy;
     public color = 'ffffff';
     public darkMode = false;
+
+    public currenciesColumns?: GridColumn[];
+    public currenciesContextMenu?: GridContextMenuItem[];
 
     modalRef?: NgbModalRef;
 
@@ -84,6 +100,7 @@ export class DashboardSettingsComponent implements OnInit {
             .subscribe(strategies => {
                 this.strategies = strategies;
             });
+        this.setCurrenciesGridOptions();
     }
 
     toggleDarkmode(): void {
@@ -92,10 +109,11 @@ export class DashboardSettingsComponent implements OnInit {
         document.location.reload();
     }
 
-    openExchangeRateModal(template: TemplateRef<any>, currency: Currency) {
-        this.selectedCurrency = currency;
-        this.exchangeRateForm.get('rate')?.setValue(currency.rate);
-        this.modalRef = this.modalService.open(template);
+    openExchangeRateModal(template: TemplateRef<any>) {
+        if (this.selectedCurrency) {
+            this.exchangeRateForm.get('rate')?.setValue(this.selectedCurrency.rate);
+            this.modalRef = this.modalService.open(template);
+        }
     }
 
     persistExchangeRate(): void {
@@ -286,6 +304,47 @@ export class DashboardSettingsComponent implements OnInit {
 
     cancelModal(): void {
         this.modalRef?.close();
+    }
+
+    gridEventHandler(event: any) {
+        switch(event.key) {
+            case 'editCurrency':
+                if (this.currencyModal) {
+                    this.openExchangeRateModal(this.currencyModal);
+                }
+                break;
+        }
+    }
+
+    selectCurrency(currency: Currency) {
+        this.selectedCurrency = currency;
+    }
+
+
+    private setCurrenciesGridOptions() {
+        this.currenciesColumns = [];
+        this.currenciesColumns.push(
+            {
+                title: 'Name',
+                type: 'string',
+                field: 'name',
+            },
+            {
+                title: 'Exchange rate',
+                type: 'number',
+                format: '1.0-2',
+                field: 'rate',
+                alignment: 'right',
+            },
+        );
+
+        this.currenciesContextMenu = [];
+        this.currenciesContextMenu.push(
+            {
+                key: 'editCurrency',
+                label: 'Editieren',
+            },
+        );
     }
 
 }
