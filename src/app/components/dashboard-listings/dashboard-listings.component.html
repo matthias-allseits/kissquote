@@ -132,24 +132,13 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
             <h4>Pay Days</h4>
         </div>
-        <table class="table table-sm">
-            <thead>
-            <tr>
-                <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
-                <th scope="col">Date</th>
-                <th scope="col" style="width: 100px;"><span class="float-end">Payment</span></th>
-<!--                <th scope="col"><span class="float-end">Yield</span></th>-->
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let entry of payDays">
-                <td><a [routerLink]="['/position-detail/' + entry.positionId]" ngbTooltip="Zur Position" tooltipClass="custom-tooltip">{{ entry.position.getName() }}</a></td>
-                <td>{{ entry.date|date:'dd.MM.YY' }}</td>
-                <td><span class="float-end">{{ entry.payment|number: '1.0-2' }} {{ entry.currency }}</span></td>
-<!--                <td><span *ngIf="entry.position.balance && entry.position.balance.lastRate" class="float-end">{{ (100 / entry.position.balance.lastRate.rate * entry.payment).toFixed(2) }}%</span></td>-->
-            </tr>
-            </tbody>
-        </table>
+        <app-data-grid
+            [gridData]="payDays"
+            [gridColumns]="payDaysColumns"
+            [contextMenu]="payDaysContextMenu"
+            (baseFunctionCall)="positionEventHandler($event)"
+            (selectedItem)="selectPosition($event)"
+        ></app-data-grid>
     </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'newestRatings'">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">

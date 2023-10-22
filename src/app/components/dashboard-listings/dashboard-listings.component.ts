@@ -57,6 +57,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public lombardContextMenu?: GridContextMenuItem[];
     public crisisDivisColumns?: GridColumn[];
     public crisisDivisContextMenu?: GridContextMenuItem[];
+    public payDaysColumns?: GridColumn[];
+    public payDaysContextMenu?: GridContextMenuItem[];
 
     constructor(
         public tranService: TranslationService,
@@ -117,6 +119,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         this.setUltimateGridOptions();
         this.setLombardGridOptions();
         this.setCrisisDivisGridOptions();
+        this.setPayDaysGridOptions();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -381,5 +384,39 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         this.crisisDivisContextMenu = [];
     }
 
+
+    private setPayDaysGridOptions() {
+        this.payDaysColumns = [];
+        this.payDaysColumns.push(
+            {
+                title: this.tranService.trans('GLOB_SHARE'),
+                type: 'string',
+                field: 'position.share.name',
+            },
+            {
+                title: 'Date',
+                type: 'date',
+                format: 'dd.MM.YY',
+                field: 'date',
+            },
+            {
+                title: '',
+                type: 'number',
+                format: '1.0-0',
+                field: 'payment',
+                alignment: 'right',
+                width: '50px'
+            },
+            {
+                title: '',
+                type: 'string',
+                field: 'currency',
+                alignment: 'right',
+                width: '35px'
+            },
+        );
+
+        this.payDaysContextMenu = [];
+    }
 
 }

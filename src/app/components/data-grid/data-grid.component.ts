@@ -133,6 +133,10 @@ export class DataGridComponent implements OnInit {
                 result = entry[fieldName];
                 if (column.type === 'date' && result instanceof Date) {
                     result = DateHelper.convertDateToGerman(result); // todo: develop a elaborated date-formatter
+                    if (screen.width < 400) {
+                        const tempResult = result;
+                        result = tempResult.substring(0, 6) + tempResult.substring(8, 10);
+                    }
                 } else if (column.type === 'number' || column.type === 'percent') {
                     result = +result;
                     if (isNaN(result)) {
