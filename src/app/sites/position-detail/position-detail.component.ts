@@ -447,14 +447,14 @@ export class PositionDetailComponent implements OnInit {
                 this.positionLogService.update(this.selectedLogEntry)
                     .subscribe(entry => {
                         this.positionLogService.replaceEntry(this.position?.logEntries, entry);
-                        this.refreshLog();
+                        this.setLogBook();
                     });
             } else {
                 this.positionLogService.create(this.selectedLogEntry)
                     .subscribe(entry => {
                         if (entry) {
                             this.position?.logEntries.push(entry);
-                            this.refreshLog();
+                            this.setLogBook();
                         }
                     });
             }
@@ -467,7 +467,7 @@ export class PositionDetailComponent implements OnInit {
     deleteTransaction(transaction: Transaction): void {
         this.transactionService.delete(transaction.id).subscribe(() => {
             this.transactionService.removeEntry(this.position?.transactions, transaction);
-            this.refreshLog();
+            this.setLogBook();
         });
     }
 
@@ -485,7 +485,7 @@ export class PositionDetailComponent implements OnInit {
     deleteLogEntry(logEntry: PositionLog): void {
         this.positionLogService.delete(logEntry.id).subscribe(() => {
             this.positionLogService.removeEntry(this.position?.logEntries, logEntry);
-            this.refreshLog();
+            this.setLogBook();
         });
     }
 
@@ -584,13 +584,13 @@ export class PositionDetailComponent implements OnInit {
 
     toggleFilter(): void {
         this.commentsFilter = !this.commentsFilter;
-        this.refreshLog();
+        this.setLogBook();
     }
 
-    private refreshLog(): void
+    private setLogBook(keepCache = false): void
     {
         if (this.position) {
-            if (this.portfolioService.portfolio) {
+            if (!keepCache && this.portfolioService.portfolio) {
                 this.portfolioService.portfolio = undefined;
             }
             if (!this.commentsFilter) {
@@ -608,7 +608,7 @@ export class PositionDetailComponent implements OnInit {
         if (this.position) {
             this.refreshPosition(this.position.id)
                 .subscribe(result => {
-                    this.refreshLog();
+                    this.setLogBook();
                 });
         }
         // todo: find a solution to really reload the whole page
@@ -673,9 +673,7 @@ export class PositionDetailComponent implements OnInit {
             }
             this.checkAndResetPositionFilter(this.position);
 
-            if (referer !== 'ngOnInit') {
-                this.refreshLog();
-            }
+            this.setLogBook(true);
             if (this.position.isCash) {
                 this.positionTab = 'logbook';
             }
