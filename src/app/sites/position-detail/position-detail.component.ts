@@ -673,7 +673,9 @@ export class PositionDetailComponent implements OnInit {
             }
             this.checkAndResetPositionFilter(this.position);
 
-            this.refreshLog();
+            if (referer !== 'ngOnInit') {
+                this.refreshLog();
+            }
             if (this.position.isCash) {
                 this.positionTab = 'logbook';
             }
