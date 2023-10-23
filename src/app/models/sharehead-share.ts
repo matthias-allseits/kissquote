@@ -216,6 +216,24 @@ export class ShareheadShare {
     }
 
 
+    getAvgPerformance()
+    {
+        const balances = this.workingBalancesByDate();
+        if (balances.length > 0) {
+            let raisesCount = balances.length - 1;
+            let raiseStart = balances[0].avgRate;
+            const raiseEnd = balances[raisesCount].avgRate;
+            if (raiseStart > 0 && raiseEnd > 0 && raisesCount > 0) {
+                const result = ((Math.pow(raiseEnd / raiseStart, (1 / raisesCount)) - 1) * 100).toFixed(1);
+
+                return result;
+            }
+        }
+
+        return 0;
+    }
+
+
     private workingBalancesByDate(): ShareheadBalance[]
     {
         const balances = this.balances ?? [];
