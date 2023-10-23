@@ -14,7 +14,7 @@ export class TransactionCreator {
 
         for (const transactionList of apiArray) {
             const transaction = this.oneFromApiArray(transactionList);
-            if (null !== transaction) {
+            if (transaction) {
                 array.push(transaction);
             }
         }
@@ -24,7 +24,7 @@ export class TransactionCreator {
     }
 
 
-    public static oneFromApiArray(apiArray: Transaction): Transaction|null
+    public static oneFromApiArray(apiArray: Transaction): Transaction|undefined
     {
         let position = PositionCreator.oneFromApiArray(apiArray.position);
         if (apiArray !== undefined) {
@@ -41,7 +41,7 @@ export class TransactionCreator {
                 apiArray.currency ? CurrencyCreator.oneFromApiArray(apiArray.currency) : undefined,
             );
         } else {
-            return null;
+            return undefined;
         }
     }
 

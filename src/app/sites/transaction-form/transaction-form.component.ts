@@ -13,6 +13,7 @@ import { formatDate } from '@angular/common';
 import {TranslationService} from "../../services/translation.service";
 import {Currency} from "../../models/currency";
 import {CurrencyService} from "../../services/currency.service";
+import {PortfolioService} from "../../services/portfolio.service";
 
 
 @Component({
@@ -43,6 +44,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
         private positionService: PositionService,
         private currencyService: CurrencyService,
         private transactionService: TransactionService,
+        private portfolioService: PortfolioService,
         public tranService: TranslationService,
     ) {
         super();
@@ -59,7 +61,6 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
             if (positionId > 0) {
                 this.positionService.getPosition(positionId)
                     .subscribe(position => {
-                        console.log(position);
                         if (position instanceof Position) {
                             this.position = position;
                             this.transaction.currency = this.position.currency;
@@ -69,7 +70,6 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
                 if (transactionId > 0) {
                     this.transactionService.getTransaction(transactionId)
                         .subscribe(transaction => {
-                            console.log(transaction);
                             if (transaction instanceof Transaction) {
                                 this.transaction = transaction;
                                 this.transactionForm.patchValue(transaction, { onlySelf: true });
@@ -103,11 +103,13 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
         if (this.transaction.id > 0) {
             this.transactionService.update(this.transaction)
                 .subscribe(transaction => {
+                    this.portfolioService.portfolio = undefined;
                     this.location.back();
                 });
         } else {
             this.transactionService.create(this.transaction)
                 .subscribe(transaction => {
+                    this.portfolioService.portfolio = undefined;
                     this.location.back();
                 });
         }

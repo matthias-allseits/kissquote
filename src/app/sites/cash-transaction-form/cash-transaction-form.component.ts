@@ -12,6 +12,7 @@ import {ShareCreator} from "../../creators/share-creator";
 import {TranslationService} from "../../services/translation.service";
 import {CurrencyService} from "../../services/currency.service";
 import {Currency} from "../../models/currency";
+import {PortfolioService} from "../../services/portfolio.service";
 
 
 @Component({
@@ -42,6 +43,7 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
         private positionService: PositionService,
         private currencyService: CurrencyService,
         private transactionService: TransactionService,
+        private portfolioService: PortfolioService,
         public tranService: TranslationService,
     ) {
         super();
@@ -104,11 +106,13 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
         if (this.transaction.id > 0) {
             this.transactionService.update(this.transaction)
                 .subscribe(transaction => {
+                    this.portfolioService.portfolio = undefined;
                     this.location.back();
                 });
         } else {
             this.transactionService.create(this.transaction)
                 .subscribe(transaction => {
+                    this.portfolioService.portfolio = undefined;
                     this.location.back();
                 });
         }

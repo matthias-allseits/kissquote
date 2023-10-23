@@ -46,10 +46,12 @@ export class PortfolioService extends ApiService {
     public portfolioByKey(key: string|null): Observable<Portfolio|undefined>
     {
         if (this.portfolio) {
+            console.log('deliver portfolio from cache');
             return new Observable(portflio => {
                 portflio.next(this.portfolio);
             });
         } else {
+            console.log('deliver portfolio from server');
             const body = {
                 hashKey: key
             };
@@ -85,9 +87,6 @@ export class PortfolioService extends ApiService {
             .pipe(
                 map(res => PortfolioCreator.oneFromApiArray(res)),
                 catchError(this.handleError)
-                // map(this.extractData),
-                // catchError(this.handleError('addHero', portfolio))
-                // catchError(this.handleError('addHero', portfolio))
             );
     }
 
@@ -109,10 +108,6 @@ export class PortfolioService extends ApiService {
         });
     }
 
-
-    // protected extractData(res: Response) {
-    //     return res['data'] || {};
-    // }
 
     private handleError(error: HttpErrorResponse) {
         console.log(error);

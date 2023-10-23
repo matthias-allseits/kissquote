@@ -192,6 +192,17 @@ export class Position {
     }
 
 
+    replaceTransaction(transaction: Transaction) {
+        let index = 0;
+        for (const transi of this.transactions) {
+            if (transi.id === transaction.id) {
+                this.transactions[index] = transaction;
+            }
+            index++;
+        }
+    }
+
+
     investmentAtDate(date: Date): number
     {
         let value = 0;

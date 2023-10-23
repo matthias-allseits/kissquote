@@ -6,6 +6,8 @@ import {Transaction} from "../models/transaction";
 import {TransactionCreator} from "../creators/transaction-creator";
 import {ApiService} from "./api-service";
 import {DateHelper} from "../core/datehelper";
+import {PositionCreator} from "../creators/position-creator";
+import {Position} from "../models/position";
 
 
 const httpOptions = {
@@ -27,65 +29,66 @@ export class TransactionService extends ApiService {
     }
 
 
-    public getTransaction(id: number): Observable<Transaction|null>
+    public getTransaction(id: number): Observable<Transaction|undefined>
     {
         return this.http.get<Transaction>(this.apiUrl + '/' + id)
             .pipe(
                 map(res => TransactionCreator.oneFromApiArray(res))
-                // map(this.extractData),
-                // catchError(this.handleError('addHero', portfolio))
-                // catchError(this.handleError('addHero', portfolio))
             );
     }
 
 
-    create(transaction: Transaction): Observable<Transaction> {
+    create(transaction: Transaction): Observable<Transaction|undefined> {
         transaction.date = DateHelper.convertDateToMysql(transaction.date);
-        if (transaction.position) {
-            transaction.position.activeFrom = DateHelper.convertDateToMysql(transaction.position.activeFrom);
-            if (transaction.position.activeUntil) {
-                transaction.position.activeUntil = DateHelper.convertDateToMysql(transaction.position.activeUntil);
+        const deepCopy = structuredClone(transaction);
+        if (deepCopy.position) {
+            deepCopy.position.activeFrom = DateHelper.convertDateToMysql(deepCopy.position.activeFrom);
+            if (deepCopy.position.activeUntil) {
+                deepCopy.position.activeUntil = DateHelper.convertDateToMysql(deepCopy.position.activeUntil);
             } else {
-                transaction.position.activeUntil = null;
+                deepCopy.position.activeUntil = null;
             }
-            transaction.position.transactions.forEach(trans => {
+            deepCopy.position.transactions.forEach(trans => {
                 trans.date = DateHelper.convertDateToMysql(trans.date);
             });
-            if (transaction.position.underlying) {
-                transaction.position.underlying = undefined;
+            if (deepCopy.position.underlying) {
+                deepCopy.position.underlying = undefined;
             }
         }
         const url = `${this.apiUrl}`;
-        // todo: cast this as we do in position-log-service
         return this.http
-            .post(url, JSON.stringify(transaction), httpOptions)
+            .post<Transaction>(url, JSON.stringify(deepCopy), httpOptions)
             .pipe(
-                map(() => transaction),
-                // catchError(this.handleError)
+                map(res => {
+                    const castedTransi = TransactionCreator.oneFromApiArray(res);
+                    return castedTransi;
+                }),
             );
     }
 
 
-    update(transaction: Transaction): Observable<Transaction> {
+    update(transaction: Transaction): Observable<Transaction|undefined> {
         transaction.date = DateHelper.convertDateToMysql(transaction.date);
-        if (transaction.position) {
-            transaction.position.activeFrom = DateHelper.convertDateToMysql(transaction.position.activeFrom);
-            if (transaction.position.activeUntil) {
-                transaction.position.activeUntil = DateHelper.convertDateToMysql(transaction.position.activeUntil);
+        const deepCopy = structuredClone(transaction);
+        if (deepCopy.position) {
+            deepCopy.position.activeFrom = DateHelper.convertDateToMysql(deepCopy.position.activeFrom);
+            if (deepCopy.position.activeUntil) {
+                deepCopy.position.activeUntil = DateHelper.convertDateToMysql(deepCopy.position.activeUntil);
             } else {
-                transaction.position.activeUntil = null;
+                deepCopy.position.activeUntil = null;
             }
-            transaction.position.transactions.forEach(trans => {
+            deepCopy.position.transactions.forEach(trans => {
                 trans.date = DateHelper.convertDateToMysql(trans.date);
             });
         }
         const url = `${this.apiUrl}/${transaction.id}`;
-        // todo: cast this as we do in position-log-service
         return this.http
-            .put(url, JSON.stringify(transaction), httpOptions)
+            .put<Transaction>(url, JSON.stringify(deepCopy), httpOptions)
             .pipe(
-                map(() => transaction),
-                // catchError(this.handleError)
+                map(res => {
+                    const castedTransi = TransactionCreator.oneFromApiArray(res);
+                    return castedTransi;
+                }),
             );
     }
 
@@ -121,7 +124,6 @@ export class TransactionService extends ApiService {
         const url = `${this.apiUrl}/${id}`;
         return this.http.delete(url, httpOptions)
             .pipe(
-                // catchError(this.handleError)
             );
     }
 

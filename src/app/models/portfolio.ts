@@ -207,13 +207,15 @@ export class Portfolio {
 
 
     replacePosition(position: Position) {
-        this.bankAccounts.forEach(account => {
-            account.positions.forEach((posi, index) => {
+        for (const account of this.bankAccounts) {
+            let index = 0;
+            for (const posi of account.positions) {
                 if (posi.id === position.id) {
                     account.positions[index] = position;
                 }
-            });
-        });
+                index++;
+            }
+        }
     }
 
 

@@ -590,6 +590,9 @@ export class PositionDetailComponent implements OnInit {
     private refreshLog(): void
     {
         if (this.position) {
+            if (this.portfolioService.portfolio) {
+                this.portfolioService.portfolio = undefined;
+            }
             if (!this.commentsFilter) {
                 this.logBook = this.position.logEntries;
             } else {
