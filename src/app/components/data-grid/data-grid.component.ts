@@ -97,6 +97,8 @@ export class DataGridComponent implements OnInit {
         let visibility = 'table-row';
         if (entry instanceof Position && entry.visible === false) {
             visibility = 'none';
+        } else if (entry.hasOwnProperty('position') && entry.position instanceof Position && entry.position.visible === false) {
+            visibility = 'none';
         }
 
         return visibility;

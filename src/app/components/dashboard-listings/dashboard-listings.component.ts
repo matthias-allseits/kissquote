@@ -9,6 +9,7 @@ import {ChartData} from "chart.js";
 import {AnalystRating} from "../../models/analyst-rating";
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {GridColumn, GridContextMenuItem} from "../data-grid/data-grid.component";
+import {PositionCreator} from "../../creators/position-creator";
 
 
 @Component({
@@ -59,6 +60,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public crisisDivisContextMenu?: GridContextMenuItem[];
     public payDaysColumns?: GridColumn[];
     public payDaysContextMenu?: GridContextMenuItem[];
+    public riskColumns?: GridColumn[];
+    public riskContextMenu?: GridContextMenuItem[];
 
     constructor(
         public tranService: TranslationService,
@@ -104,6 +107,12 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 this.riskTotal += +entry.maxDrawdownSummary.risk;
             });
             this.risksList = structuredClone(this.lombardValueList);
+            for (const entry of this.risksList) {
+                const posiObject = PositionCreator.oneFromApiArray(entry.position);
+                if (posiObject) {
+                    entry.position = posiObject;
+                }
+            }
             this.risksList.sort((a,b) => (a.maxDrawdownSummary.risk < b.maxDrawdownSummary.risk) ? 1 : (b.maxDrawdownSummary.risk < a.maxDrawdownSummary.risk) ? -1 : 0);
 
             this.payDays = [];
@@ -120,6 +129,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         this.setLombardGridOptions();
         this.setCrisisDivisGridOptions();
         this.setPayDaysGridOptions();
+        this.setRiskGridOptions();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -180,7 +190,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     }
 
     listDiversityPositions(event: any): void {
-        console.log(event);
         this.diversityList = [];
         this.diversityListTitle = event;
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
@@ -417,6 +426,31 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         );
 
         this.payDaysContextMenu = [];
+    }
+
+    private setRiskGridOptions() {
+        this.riskColumns = [];
+        this.riskColumns.push(
+            {
+                title: this.tranService.trans('GLOB_SHARE'),
+                type: 'string',
+                field: 'position.share.name',
+            },
+            {
+                title: 'Sector',
+                type: 'string',
+                field: 'position.sector.name',
+            },
+            {
+                title: 'Risk',
+                type: 'number',
+                field: 'maxDrawdownSummary.risk',
+                format: '1.0',
+                alignment: 'right',
+            },
+        );
+
+        this.riskContextMenu = [];
     }
 
 }

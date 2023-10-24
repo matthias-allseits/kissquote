@@ -36,7 +36,7 @@ export class ShareheadShareContainerComponent implements OnInit {
     }
 
     setComparedShare(shareheadShare: ShareheadShare): void {
-        this.shareheadService.getShare(shareheadShare.shareheadId)
+        this.shareheadService.getShare(shareheadShare.id)
             .subscribe(share => {
                 if (share) {
                     this.compareShare = share;
