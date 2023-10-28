@@ -751,7 +751,7 @@ export class PositionDetailComponent implements OnInit {
                     localStorage.removeItem('ultimateFilterLabel');
                     this.getFilteredPositions()
                         .subscribe(posis => {
-                            this.filteredPositions = posis;
+                            this.setFilteredPositions(posis);
                         });
                 }
             });
@@ -771,9 +771,7 @@ export class PositionDetailComponent implements OnInit {
                         } else {
                             ultimateFilter = JSON.parse(ultimateFilter);
                             const positions = this.filterPositions(posis, ultimateFilter);
-                            if (screen.width > 400 || positions.length < 15) {
-                                this.filteredPositions = positions;
-                            }
+                            this.setFilteredPositions(positions);
                             psitons.next(positions);
                         }
                     } else if (filterType === 'sector' || filterType === 'strategy') {
@@ -795,13 +793,11 @@ export class PositionDetailComponent implements OnInit {
                                     }
                                 }
                             }
-                            if (screen.width > 400 || positions.length < 15) {
-                                this.filteredPositions = positions;
-                            }
+                            this.setFilteredPositions(positions);
                             psitons.next(positions);
                         }
                     } else {
-                        this.filteredPositions = posis;
+                        this.setFilteredPositions(posis);
                         psitons.next(posis);
                     }
             });
@@ -820,6 +816,15 @@ export class PositionDetailComponent implements OnInit {
         });
 
         return filteredPosis;
+    }
+
+
+    private setFilteredPositions(posis: Position[]): void {
+        if (screen.width > 400 || posis.length < 15) {
+            this.filteredPositions = posis;
+        } else {
+            this.filteredPositions = [];
+        }
     }
 
 
