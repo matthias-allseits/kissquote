@@ -1,12 +1,12 @@
 <main *ngIf="position" class="col-md-12 col-lg-12 px-md-4">
-    <div *ngIf="filteredPositions" class="text-center d-none d-md-block">
+    <div *ngIf="filteredPositions" class="text-center d-none d-xl-block">
         <a [routerLink]="['/position-detail/' + posi.id]" *ngFor="let posi of filteredPositions" ngbTooltip="{{ posi.share?.name }}" tooltipClass="custom-tooltip" class="direct-navi-a">
             <div class="direct-navi-frame">
                 <div class="direct-navi-icon" [class.direct-navi-active]="posi.id === position.id"></div>
             </div>
         </a>
     </div>
-    <div *ngIf="filteredPositions" class="text-center d-block d-md-none">
+    <div *ngIf="filteredPositions" class="text-center d-block d-xl-none">
         <a *ngFor="let posi of filteredPositions"
            ngbTooltip="{{ posi.share?.name }}"
            tooltipClass="custom-tooltip"

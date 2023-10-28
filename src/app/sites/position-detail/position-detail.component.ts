@@ -548,6 +548,7 @@ export class PositionDetailComponent implements OnInit {
     }
 
     navigateCross(direction: string): void {
+        this.selectedDirectNaviPosition = undefined;
         let positionIndex: number = -1;
         this.getFilteredPositions()
             .subscribe(positions => {
