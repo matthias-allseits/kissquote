@@ -740,13 +740,18 @@ export class PositionDetailComponent implements OnInit {
         this.getFilteredPositions()
             .subscribe(posis => {
                 posis.forEach(posi => {
-                    if (posi.id === position.id) {
+                    if (+posi.id === +position.id) {
                         hit = true;
                     }
                 });
                 if (!hit && this.position?.motherId === undefined) {
                     // console.log('rasiere ultimate-filter');
-                    localStorage.removeItem('ultimateFilter');
+                    localStorage.removeItem('ultimateFilterType');
+                    localStorage.removeItem('ultimateFilterLabel');
+                    this.getFilteredPositions()
+                        .subscribe(posis => {
+                            this.filteredPositions = posis;
+                        });
                 }
             });
     }
@@ -757,16 +762,46 @@ export class PositionDetailComponent implements OnInit {
         return new Observable(psitons => {
             this.positionService.getNonCashAndActivePositions()
                 .subscribe(posis => {
-                    let positionsFilter = localStorage.getItem('ultimateFilter');
-                    if (positionsFilter === null) {
-                        psitons.next(posis);
-                    } else {
-                        positionsFilter = JSON.parse(positionsFilter);
-                        const positions = this.filterPositions(posis, positionsFilter);
-                        if (screen.width > 400 || positions.length < 15) {
-                            this.filteredPositions = positions;
+                    const filterType = localStorage.getItem('ultimateFilterType');
+                    if (filterType === 'label') {
+                        let ultimateFilter = localStorage.getItem('ultimateFilterLabel');
+                        if (ultimateFilter === null) {
+                            psitons.next(posis);
+                        } else {
+                            ultimateFilter = JSON.parse(ultimateFilter);
+                            const positions = this.filterPositions(posis, ultimateFilter);
+                            if (screen.width > 400 || positions.length < 15) {
+                                this.filteredPositions = positions;
+                            }
+                            psitons.next(positions);
                         }
-                        psitons.next(positions);
+                    } else if (filterType === 'sector' || filterType === 'strategy') {
+                        let ultimateFilter;
+                        if (filterType === 'sector') {
+                            ultimateFilter = localStorage.getItem('ultimateFilterSector');
+                        } else {
+                            ultimateFilter = localStorage.getItem('ultimateFilterStrategy');
+                        }
+                        if (ultimateFilter === null) {
+                            psitons.next(posis);
+                        } else {
+                            const ultimateFilterArray: number[] = JSON.parse(ultimateFilter);
+                            const positions: Position[] = [];
+                            if (ultimateFilter) {
+                                for (const posi of posis) {
+                                    if (ultimateFilterArray.indexOf(posi.id) > -1) {
+                                        positions.push(posi);
+                                    }
+                                }
+                            }
+                            if (screen.width > 400 || positions.length < 15) {
+                                this.filteredPositions = positions;
+                            }
+                            psitons.next(positions);
+                        }
+                    } else {
+                        this.filteredPositions = posis;
+                        psitons.next(posis);
                     }
             });
         });

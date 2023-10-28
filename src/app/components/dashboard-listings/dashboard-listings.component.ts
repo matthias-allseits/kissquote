@@ -49,6 +49,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public riskTotal = 0;
     public diversityListTitle = '';
     public diversityList: Position[] = [];
+    public strategyListTitle = '';
+    public strategyList: Position[] = [];
     public ultimateBalance?: number;
     public ultimateValue?: number;
 
@@ -62,6 +64,10 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public payDaysContextMenu?: GridContextMenuItem[];
     public riskColumns?: GridColumn[];
     public riskContextMenu?: GridContextMenuItem[];
+    public diversificationColumns?: GridColumn[];
+    public diversificationContextMenu?: GridContextMenuItem[];
+    public strategyColumns?: GridColumn[];
+    public strategyContextMenu?: GridContextMenuItem[];
 
     constructor(
         public tranService: TranslationService,
@@ -130,6 +136,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         this.setCrisisDivisGridOptions();
         this.setPayDaysGridOptions();
         this.setRiskGridOptions();
+        this.setDiversificationGridOptions();
+        this.setStrategyGridOptions();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -149,7 +157,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 filter.checked = !filter.checked;
             }
         });
-        localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
+        localStorage.setItem('ultimateFilterLabel', JSON.stringify(this.ultimateBalanceFilter));
+        localStorage.setItem('ultimateFilterType', 'label');
         this.filterUltmateList.emit();
     }
 
@@ -161,7 +170,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 filter.checked = false;
             }
         });
-        localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
+        localStorage.setItem('ultimateFilterLabel', JSON.stringify(this.ultimateBalanceFilter));
+        localStorage.setItem('ultimateFilterType', 'label');
         this.filterUltmateList.emit();
         this.calculateUltimateBalance();
     }
@@ -172,7 +182,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         this.ultimateBalanceFilter?.forEach(filter => {
             filter.checked = true;
         });
-        localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
+        localStorage.setItem('ultimateFilterLabel', JSON.stringify(this.ultimateBalanceFilter));
+        localStorage.setItem('ultimateFilterType', 'label');
         this.filterUltmateList.emit();
     }
 
@@ -192,11 +203,29 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     listDiversityPositions(event: any): void {
         this.diversityList = [];
         this.diversityListTitle = event;
+        const filteredIds: number[] = [];
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
                 if (position.sector?.name === event) {
                     this.diversityList.push(position);
+                    filteredIds.push(position.id);
                 }
             });
+        localStorage.setItem('ultimateFilterSector', JSON.stringify(filteredIds));
+        localStorage.setItem('ultimateFilterType', 'sector');
+    }
+
+    listStrategyPositions(event: any): void {
+        this.strategyList = [];
+        this.strategyListTitle = event;
+        const filteredIds: number[] = [];
+        this.portfolio?.getActiveNonCashPositions().forEach(position => {
+                if (position.strategy?.name === event) {
+                    this.strategyList.push(position);
+                    filteredIds.push(position.id);
+                }
+            });
+        localStorage.setItem('ultimateFilterStrategy', JSON.stringify(filteredIds));
+        localStorage.setItem('ultimateFilterType', 'strategy');
     }
 
     private calculateUltimateBalance(): void
@@ -451,6 +480,102 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         );
 
         this.riskContextMenu = [];
+    }
+
+    private setDiversificationGridOptions() {
+        this.diversificationColumns = [];
+        this.diversificationColumns.push(
+            {
+                title: this.tranService.trans('GLOB_SHARE'),
+                type: 'string',
+                field: 'share.name',
+            },
+            {
+                title: 'Labels',
+                type: 'renderer',
+                field: 'labels',
+                responsive: 'md-up',
+                renderer: 'LabelsCellRendererComponent'
+            },
+            {
+                title: 'Investment',
+                type: 'number',
+                format: '1.0',
+                field: 'balance.investment',
+                alignment: 'right',
+                responsive: 'sm-up',
+            },
+            {
+                title: this.tranService.trans('GLOB_VALUE'),
+                type: 'function',
+                format: '1.0',
+                field: 'actualValue',
+                alignment: 'right',
+                responsive: 'sm-up',
+            },
+            {
+                title: 'Dividend',
+                type: 'function',
+                format: '1.0',
+                field: 'bestSelectedDividendPayment',
+                alignment: 'right',
+            },
+            {
+                title: this.tranService.trans('GLOB_CURRENCY'),
+                type: 'string',
+                field: 'currency.name',
+            },
+        );
+
+        this.diversificationContextMenu = [];
+    }
+
+    private setStrategyGridOptions() {
+        this.strategyColumns = [];
+        this.strategyColumns.push(
+            {
+                title: this.tranService.trans('GLOB_SHARE'),
+                type: 'string',
+                field: 'share.name',
+            },
+            {
+                title: 'Labels',
+                type: 'renderer',
+                field: 'labels',
+                responsive: 'md-up',
+                renderer: 'LabelsCellRendererComponent'
+            },
+            {
+                title: 'Investment',
+                type: 'number',
+                format: '1.0',
+                field: 'balance.investment',
+                alignment: 'right',
+                responsive: 'sm-up',
+            },
+            {
+                title: this.tranService.trans('GLOB_VALUE'),
+                type: 'function',
+                format: '1.0',
+                field: 'actualValue',
+                alignment: 'right',
+                responsive: 'sm-up',
+            },
+            {
+                title: 'Dividend',
+                type: 'function',
+                format: '1.0',
+                field: 'bestSelectedDividendPayment',
+                alignment: 'right',
+            },
+            {
+                title: this.tranService.trans('GLOB_CURRENCY'),
+                type: 'string',
+                field: 'currency.name',
+            },
+        );
+
+        this.strategyContextMenu = [];
     }
 
 }
