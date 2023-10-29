@@ -210,6 +210,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                     filteredIds.push(position.id);
                 }
             });
+        this.diversityList.sort((a, b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
         localStorage.setItem('ultimateFilterSector', JSON.stringify(filteredIds));
         localStorage.setItem('ultimateFilterType', 'sector');
     }
@@ -224,6 +225,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                     filteredIds.push(position.id);
                 }
             });
+        this.strategyList.sort((a, b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
         localStorage.setItem('ultimateFilterStrategy', JSON.stringify(filteredIds));
         localStorage.setItem('ultimateFilterType', 'strategy');
     }
@@ -503,7 +505,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 format: '1.0',
                 field: 'balance.investment',
                 alignment: 'right',
-                responsive: 'sm-up',
+                responsive: 'md-up',
             },
             {
                 title: this.tranService.trans('GLOB_VALUE'),
@@ -525,6 +527,22 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 type: 'string',
                 field: 'currency.name',
             },
+            {
+                title: this.tranService.trans('LISTNGS_DAYS'),
+                type: 'function',
+                format: '1.0',
+                field: 'daysSinceStart',
+                alignment: 'right',
+                responsive: 'sm-up',
+            },
+            {
+                title: 'Trpd',
+                type: 'function',
+                field: 'totalReturnPerDay',
+                alignment: 'right',
+                toolTip: 'Total return per day',
+                responsive: 'sm-up',
+            }
         );
 
         this.diversificationContextMenu = [];
@@ -551,7 +569,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 format: '1.0',
                 field: 'balance.investment',
                 alignment: 'right',
-                responsive: 'sm-up',
+                responsive: 'md-up',
             },
             {
                 title: this.tranService.trans('GLOB_VALUE'),
@@ -573,6 +591,22 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 type: 'string',
                 field: 'currency.name',
             },
+            {
+                title: this.tranService.trans('LISTNGS_DAYS'),
+                type: 'function',
+                format: '1.0',
+                field: 'daysSinceStart',
+                alignment: 'right',
+                responsive: 'sm-up',
+            },
+            {
+                title: 'Trpd',
+                type: 'function',
+                field: 'totalReturnPerDay',
+                alignment: 'right',
+                toolTip: 'Total return per day',
+                responsive: 'sm-up',
+            }
         );
 
         this.strategyContextMenu = [];

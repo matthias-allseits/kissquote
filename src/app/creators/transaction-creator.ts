@@ -31,7 +31,7 @@ export class TransactionCreator {
             return new Transaction(
                 apiArray.id,
                 apiArray.title,
-                new Date(apiArray.date),
+                apiArray.date instanceof Date ? apiArray.date : new Date(apiArray.date),
                 apiArray.quantity,
                 apiArray.rate,
                 apiArray.fee,
