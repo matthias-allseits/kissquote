@@ -102,8 +102,12 @@
                                 <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.name }}</a></td>
                                 <td>From Transactions</td>
                                 <td><span class="float-end">{{ entry.total }} {{ entry.currency?.name }}</span></td>
-                                <td *ngIf="entry.manualDividend === undefined"><button (click)="openManualDividendModal(manualDividendFormModal, entry.positionId)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Set manual entry" tooltipClass="custom-tooltip"><fa-icon [icon]="addIcon"></fa-icon></button></td>
-                                <td *ngIf="entry.manualDividend"><button (click)="openManualDividendConfirmModal(removeManualDividendModal, entry.manualDividend)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Remove manual entry" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                                <td>
+                                    <button (click)="openManualDividendModal(manualDividendFormModal, entry, dividendList.year)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Set manual entry" tooltipClass="custom-tooltip">
+                                        <fa-icon *ngIf="entry.manualDividend === undefined" [icon]="addIcon"></fa-icon>
+                                        <fa-icon *ngIf="entry.manualDividend" [icon]="editIcon"></fa-icon>
+                                    </button>
+                                </td>
                             </tr>
                         </ng-container>
                     </tbody>
@@ -125,8 +129,12 @@
                                     <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.name }}</a></td>
                                     <td>{{ entry.source }}</td>
                                     <td><span class="float-end">{{ entry.total|number: '1.0-0' }} {{ entry.currency?.name }}</span></td>
-                                    <td *ngIf="entry.manualDividend === undefined"><button (click)="openManualDividendModal(manualDividendFormModal, entry.positionId)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Set manual entry" tooltipClass="custom-tooltip"><fa-icon [icon]="addIcon"></fa-icon></button></td>
-                                    <td *ngIf="entry.manualDividend"><button (click)="openManualDividendConfirmModal(removeManualDividendModal, entry.manualDividend)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Remove manual entry" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></td>
+                                    <td>
+                                        <button (click)="openManualDividendModal(manualDividendFormModal, entry, dividendList.year)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Set manual entry" tooltipClass="custom-tooltip">
+                                            <fa-icon *ngIf="entry.manualDividend === undefined" [icon]="addIcon"></fa-icon>
+                                            <fa-icon *ngIf="entry.manualDividend" [icon]="editIcon"></fa-icon>
+                                        </button>
+                                    </td>
                                 </tr>
                             </ng-container>
                         </tbody>
@@ -205,14 +213,6 @@
     <div class="modal-body text-center">
         <p>{{ tranService.trans('MYDA_ENTRY_REALLY_REMOVE') }}</p>
         <button type="button" class="btn btn-default" (click)="confirmDeleteWatchlistEntry()">{{ tranService.trans('GLOB_YES') }}</button>
-        <button type="button" class="btn btn-primary" (click)="cancelModal()">{{ tranService.trans('GLOB_NO') }}</button>
-    </div>
-</ng-template>
-
-<ng-template #removeManualDividendModal>
-    <div class="modal-body text-center">
-        <p>{{ tranService.trans('MYDA_ENTRY_REALLY_REMOVE') }}</p>
-        <button type="button" class="btn btn-default" (click)="confirmDeleteManualDividend()">{{ tranService.trans('GLOB_YES') }}</button>
         <button type="button" class="btn btn-primary" (click)="cancelModal()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>

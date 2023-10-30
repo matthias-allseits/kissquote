@@ -38,6 +38,18 @@ export class ManualDividendService extends ApiService {
     }
 
 
+    update(dividend: ManualDividend): Observable<ManualDividend|null> {
+        const url = `${this.apiUrl}/${dividend.id}`;
+        // todo: cast this as we do in position-log-service
+        return this.http
+            .put(url, JSON.stringify(dividend), httpOptions)
+            .pipe(
+                map(() => dividend),
+                // catchError(this.handleError)
+            );
+    }
+
+
     public delete(id: number): Observable<ManualDividend[]> {
         const url = `${this.apiUrl}/${id}`;
         return this.http.delete(url, httpOptions)

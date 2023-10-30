@@ -3,7 +3,7 @@ import {DividendTotals, Portfolio} from '../../models/portfolio';
 import {faEdit, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {TranslationService} from "../../services/translation.service";
-import {Position} from "../../models/position";
+import {DividendTotal, Position} from "../../models/position";
 import {PositionService} from "../../services/position.service";
 import {BankAccount} from "../../models/bank-account";
 import {BankAccountService} from "../../services/bank-account.service";
@@ -21,6 +21,7 @@ import {LabelService} from "../../services/label.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons/faEllipsisVertical";
 import {GridColumn, GridContextMenuItem} from "../../components/data-grid/data-grid.component";
+import {ShareCreator} from "../../creators/share-creator";
 
 
 @Component({
@@ -139,11 +140,6 @@ export class MyDashboardComponent implements OnInit {
         this.modalRef = this.modalService.open(template);
     }
 
-    openManualDividendConfirmModal(template: TemplateRef<any>, entry: ManualDividend|undefined) {
-        this.selectedManualDividend = entry;
-        this.modalRef = this.modalService.open(template);
-    }
-
 
     confirmDeletePosition(): void {
         if (this.selectedPosition) {
@@ -168,25 +164,51 @@ export class MyDashboardComponent implements OnInit {
         this.modalRef = this.modalService.open(template);
     }
 
-    openManualDividendModal(template: TemplateRef<any>, positionId: number) {
-        const position = this.portfolio?.positionById(positionId);
+    openManualDividendModal(template: TemplateRef<any>, entry: DividendTotal, year: number) {
+        console.log(entry);
+        const position = this.portfolio?.positionById(entry.positionId);
+        console.log(position);
         if (position) {
-            this.selectedManualDividend = DividendCreator.createNewDividend();
-            this.selectedManualDividend.share = position.share;
-            this.selectedManualDividend.year = new Date().getFullYear();
+            if (entry.manualDividend === undefined) {
+                this.selectedManualDividend = DividendCreator.createNewDividend();
+                this.selectedManualDividend.share = position.share;
+                this.selectedManualDividend.year = year;
+                this.manualDividendForm.get('amount')?.setValue(null);
+            } else {
+                this.selectedManualDividend = entry.manualDividend;
+                const tempShare = ShareCreator.createNewShare();
+                tempShare.name = position?.share?.name ? position.share.name : '';
+                this.selectedManualDividend.share = tempShare;
+                this.manualDividendForm.get('amount')?.setValue(entry.manualDividend.amount);
+            }
+            this.manualDividendForm.get('year')?.setValue(this.selectedManualDividend.year);
             this.modalRef = this.modalService.open(template);
         }
     }
 
     persistManualDividend(): void {
         if (this.selectedManualDividend) {
-            this.selectedManualDividend.amount = this.manualDividendForm.get('amount')?.value;
-            this.selectedManualDividend.year = this.manualDividendForm.get('year')?.value;
-            this.manualDividendService.create(this.selectedManualDividend)
-                .subscribe(dividend => {
-                    // todo: implement a data updater
-                    document.location.reload();
-                });
+            const amount = this.manualDividendForm.get('amount')?.value;
+            console.log(amount);
+            if (amount === '') {
+                this.deleteManualDividend(this.selectedManualDividend);
+            } else {
+                this.selectedManualDividend.amount = amount;
+                this.selectedManualDividend.year = this.manualDividendForm.get('year')?.value;
+                if (this.selectedManualDividend.id > 0) {
+                    this.manualDividendService.update(this.selectedManualDividend)
+                        .subscribe(dividend => {
+                            // todo: implement a data updater
+                            document.location.reload();
+                        });
+                } else {
+                    this.manualDividendService.create(this.selectedManualDividend)
+                        .subscribe(dividend => {
+                            // todo: implement a data updater
+                            document.location.reload();
+                        });
+                }
+            }
         }
         this.modalRef?.close();
     }
@@ -202,13 +224,6 @@ export class MyDashboardComponent implements OnInit {
         this.bankAccountService.delete(account.id).subscribe(() => {
             document.location.reload();
         });
-    }
-
-    confirmDeleteManualDividend(): void {
-        if (this.selectedManualDividend) {
-            this.deleteManualDividend(this.selectedManualDividend);
-        }
-        this.modalRef?.close();
     }
 
     deleteManualDividend(dividend: ManualDividend): void {
