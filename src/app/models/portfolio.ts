@@ -677,7 +677,7 @@ export class Portfolio {
             this.getAllPositions().forEach(position => {
                 position.transactions.forEach(transaction => {
                     if (transaction.isDividend() && transaction.date instanceof Date && transaction.rate) {
-                        const workDate = transaction.date;
+                        const workDate = structuredClone(transaction.date);
                         workDate.setDate(1);
                         if (DateHelper.datesAreEqual(monthThisYear, workDate)) {
                             if (netOrGross === 'gross') {

@@ -151,7 +151,7 @@ export class DashboardSettingsComponent implements OnInit {
     persistLabel(): void {
         if (this.selectedLabel) {
             this.selectedLabel.name = this.labelForm.get('name')?.value;
-            localStorage.removeItem('ultimateFilter');
+            localStorage.removeItem('ultimateFilterLabel');
             if (this.selectedLabel.id > 0) {
                 this.labelService.update(this.selectedLabel)
                     .subscribe(label => {
@@ -176,7 +176,7 @@ export class DashboardSettingsComponent implements OnInit {
     }
 
     deleteLabel(label: Label): void {
-        localStorage.removeItem('ultimateFilter');
+        localStorage.removeItem('ultimateFilterLabel');
         this.labelService.delete(label.id).subscribe(() => {
             this.refreshLabels.emit();
         });

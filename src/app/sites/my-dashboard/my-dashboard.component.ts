@@ -294,13 +294,13 @@ export class MyDashboardComponent implements OnInit {
                 this.labels = labels;
                 localStorage.setItem('labels', JSON.stringify(this.labels));
 
-                const ultimateFilter = localStorage.getItem('ultimateFilter');
+                const ultimateFilter = localStorage.getItem('ultimateFilterLabel');
                 if (ultimateFilter === null) {
                     this.ultimateBalanceFilter = this.labels;
                     this.ultimateBalanceFilter?.forEach((label) => {
                         label.checked = true;
                     });
-                    localStorage.setItem('ultimateFilter', JSON.stringify(this.ultimateBalanceFilter));
+                    localStorage.setItem('ultimateFilterLabel', JSON.stringify(this.ultimateBalanceFilter));
                 } else {
                     this.ultimateBalanceFilter = JSON.parse(ultimateFilter);
                 }

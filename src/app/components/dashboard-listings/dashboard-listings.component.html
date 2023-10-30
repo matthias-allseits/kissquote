@@ -259,49 +259,44 @@
         </div>
         <ng-container *ngIf="diversityList && diversityList.length > 0">
             <h5>{{ diversityListTitle }}</h5>
-            <table class="table table-striped table-sm">
-                <thead>
-                <tr>
-                    <th scope="col">{{ tranService.trans('GLOB_SHARE') }}</th>
-                    <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Investment</span></th>
-                    <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Value</span></th>
-                    <th scope="col"><span class="float-end">Dividend</span></th>
-                    <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Currency</span></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let position of diversityList">
-                    <ng-container>
-                        <td><a [routerLink]="['/position-detail/' + position.id]">{{ position.getName() }}</a></td>
-                        <td class="d-none d-md-table-cell"><span class="float-end">{{ position.balance?.investment }}</span></td>
-                        <td class="d-none d-md-table-cell"><span class="float-end">{{ position.actualValue() }}</span></td>
-                        <td><span class="float-end">{{ position.bestSelectedDividendPayment() }}</span></td>
-                        <td class="d-none d-md-table-cell"><span class="float-end">{{ position.currency?.name }}</span></td>
-                    </ng-container>
-                </tr>
-                </tbody>
-            </table>
+            <app-data-grid
+                [gridData]="diversityList"
+                [gridColumns]="diversificationColumns"
+                [contextMenu]="diversificationContextMenu"
+                (baseFunctionCall)="positionEventHandler($event)"
+                (selectedItem)="selectPosition($event)"
+            ></app-data-grid>
         </ng-container>
     </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'strategies'">
         <div class="info-box chart-box">
             <h5>by investment</h5>
             <ng-container *ngIf="strategiesByInvestmentChartData">
-                <app-pie-chart [data]="strategiesByInvestmentChartData" [height]="400"></app-pie-chart>
+                <app-pie-chart [data]="strategiesByInvestmentChartData" [height]="400" (triggerClick)="listStrategyPositions($event)"></app-pie-chart>
             </ng-container>
         </div>
         <div class="info-box chart-box">
             <h5>by value</h5>
             <ng-container *ngIf="strategiesByValueChartData">
-                <app-pie-chart [data]="strategiesByValueChartData" [height]="400"></app-pie-chart>
+                <app-pie-chart [data]="strategiesByValueChartData" [height]="400" (triggerClick)="listStrategyPositions($event)"></app-pie-chart>
             </ng-container>
         </div>
         <div class="info-box chart-box">
             <h5>by dividend</h5>
             <ng-container *ngIf="strategiesByDividendChartData">
-                <app-pie-chart [data]="strategiesByDividendChartData" [height]="400"></app-pie-chart>
+                <app-pie-chart [data]="strategiesByDividendChartData" [height]="400" (triggerClick)="listStrategyPositions($event)"></app-pie-chart>
             </ng-container>
         </div>
+        <ng-container *ngIf="strategyList && strategyList.length > 0">
+            <h5>{{ strategyListTitle }}</h5>
+            <app-data-grid
+                [gridData]="strategyList"
+                [gridColumns]="diversificationColumns"
+                [contextMenu]="diversificationContextMenu"
+                (baseFunctionCall)="positionEventHandler($event)"
+                (selectedItem)="selectPosition($event)"
+            ></app-data-grid>
+        </ng-container>
     </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'risks'">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">

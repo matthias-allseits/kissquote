@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
                 // console.log('spinning: ', result);
             });
 
-        localStorage.removeItem('ultimateFilter');
+        localStorage.removeItem('ultimateFilterLabel');
         if (null !== localStorage.getItem('lang')) {
             this.language = localStorage.getItem('lang');
         }
