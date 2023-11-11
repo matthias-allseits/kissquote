@@ -33,6 +33,14 @@ export class ShareheadShareCreator {
     {
         if (apiArray !== undefined) {
             const marketplace = MarketplaceCreator.oneFromApiArray(apiArray.marketplace);
+            if (apiArray.balances?.length) {
+                apiArray.balances.forEach((balance, index) => {
+                    console.log(index);
+                    if (apiArray.balances && apiArray.balances[index-1]) {
+                        balance.lastYearEquity = apiArray.balances[index-1].equity;
+                    }
+                });
+            }
             return new ShareheadShare(
                 apiArray.id,
                 apiArray.shareheadId,
@@ -64,6 +72,7 @@ export class ShareheadShareCreator {
                 apiArray.boeNewsId,
                 apiArray.boeNewsSummary,
             );
+
         } else {
             return undefined;
         }

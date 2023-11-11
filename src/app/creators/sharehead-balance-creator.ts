@@ -31,10 +31,12 @@ export class ShareheadBalanceCreator {
                 apiArray.equityRatio,
                 apiArray.dividend,
                 apiArray.avgRate,
+                apiArray.equity,
                 CurrencyCreator.oneFromApiArray(apiArray.currency),
                 apiArray.debtNet,
                 apiArray.ordinarySharesNumber,
                 apiArray.treasurySharesNumber,
+                apiArray.lastYearEquity,
             );
         } else {
             return null;

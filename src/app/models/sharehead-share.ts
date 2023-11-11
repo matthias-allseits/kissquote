@@ -503,6 +503,45 @@ export class ShareheadShare {
     }
 
 
+    equityChartData(): ChartData {
+        const chartData: ChartData = {
+            labels: [],
+            datasets: [
+                {
+                    data: [],
+                    label: 'Return on equity',
+                    borderColor: 'rgb(220, 57, 18, 1)',
+                    backgroundColor: 'rgb(220, 57, 18, 1)',
+                    hoverBackgroundColor: 'rgb(220, 57, 18, 0.5)',
+                    pointBackgroundColor: 'rgb(220, 57, 18, 1)',
+                    // pointBorderColor: 'rgb(220, 57, 18, 0)',
+                    pointHoverBackgroundColor: 'rgba(220, 57, 18, 1)',
+                    pointHoverBorderColor: 'rgba(220, 57, 18, 1)',
+                },
+                {
+                    data: [],
+                    label: 'Equity (Mrd.)',
+                    borderColor: 'rgb(51, 102, 204, 1)',
+                    backgroundColor: 'rgb(51, 102, 204, 1)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)',
+                    type: 'bar',
+                }
+            ]
+        };
+
+        this.balances?.forEach(balance => {
+            const returnOnEquity = balance.returnOnEquity();
+            if (returnOnEquity) {
+                chartData.labels?.push(balance.year);
+                chartData.datasets[0].data.push(returnOnEquity);
+                chartData.datasets[1].data.push(balance.equity / 1000);
+            }
+        });
+
+        return chartData;
+    }
+
+
     equityRatesChartData(): ChartData {
         const chartData: ChartData = {
             labels: [],
@@ -593,7 +632,7 @@ export class ShareheadShare {
                 },
                 {
                     data: [],
-                    label: 'Net debt (Mia.)',
+                    label: 'Net debt (Mrd.)',
                     borderColor: 'rgb(51, 102, 204, 1)',
                     backgroundColor: 'rgb(51, 102, 204, 1)',
                     hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)',

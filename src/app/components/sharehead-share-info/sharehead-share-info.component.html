@@ -177,6 +177,10 @@
                 <app-line-chart [data]="shareheadShare.returnOnSalesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
             <div class="info-box chart-box info-box-lg">
+                <h5>Equity and Return on equity</h5>
+                <app-line-chart [data]="shareheadShare.equityChartData()" [height]="150" [pointRadius]="3.5"></app-line-chart>
+            </div>
+            <div class="info-box chart-box info-box-lg">
                 <h5>Equity Ratio</h5>
                 <app-line-chart [data]="shareheadShare.equityRatesChartData()" [height]="150" [forceBeginAtZero]="true" [percentageChart]="true" [pointRadius]="3.5"></app-line-chart>
             </div>

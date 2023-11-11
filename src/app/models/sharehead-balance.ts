@@ -12,16 +12,37 @@ export class ShareheadBalance {
         public equityRatio: number,
         public dividend: number,
         public avgRate: number,
+        public equity: number,
         public currency?: Currency,
         public debtNet?: number,
         public ordinarySharesNumber?: number,
         public treasurySharesNumber?: number,
+        public lastYearEquity?: number,
     ) {}
 
 
     returnOnSales(): number
     {
         return +(100 / this.sales * this.profit).toFixed(1);
+    }
+
+    averageEquity(): number|null
+    {
+        if (this.lastYearEquity && this.equity > 0) {
+            return +((this.lastYearEquity + this.equity) / 2).toFixed(0);
+        }
+
+        return null;
+    }
+
+    returnOnEquity(): number|null
+    {
+        const averageEquity = this.averageEquity();
+        if (averageEquity) {
+            return +(100 / averageEquity * this.profit).toFixed(1);
+        }
+
+        return null;
     }
 
     netDebtRatio(): number|null
