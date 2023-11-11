@@ -19,6 +19,11 @@ export class ShareheadBalance {
     ) {}
 
 
+    returnOnSales(): number
+    {
+        return +(100 / this.sales * this.profit).toFixed(1);
+    }
+
     netDebtRatio(): number|null
     {
         if (this.profit > 0 && this.debtNet && this.debtNet > 0) {

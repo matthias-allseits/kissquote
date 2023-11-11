@@ -42,10 +42,10 @@
                     <div class="col-9">Avg yearly performance:</div>
                     <div class="col-3"><span class="float-end">{{ shareheadShare.getAvgPerformance() }}%</span></div>
                 </div>
-    <!--            <div class="row">-->
-    <!--                <div class="col-9">Return on sales:</div>-->
-    <!--                <div class="col-3"><span class="float-end"></span></div>-->
-    <!--            </div>-->
+                <div class="row">
+                    <div class="col-9">Return on sales:</div>
+                    <div class="col-3"><span class="float-end"></span></div>
+                </div>
                 <div class="row">
                     <div class="col-6">Country:</div>
                     <div class="col-6"><span class="float-end">{{ shareheadShare.country }}</span></div>
@@ -171,6 +171,10 @@
             <div class="info-box chart-box info-box-lg">
                 <h5>Avg Rates</h5>
                 <app-line-chart [data]="shareheadShare.yearlyAverageRatesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
+            </div>
+            <div class="info-box chart-box info-box-lg">
+                <h5>Return on sales</h5>
+                <app-line-chart [data]="shareheadShare.returnOnSalesChartData()" [height]="150" [forceBeginAtZero]="true" [pointRadius]="3.5"></app-line-chart>
             </div>
             <div class="info-box chart-box info-box-lg">
                 <h5>Equity Ratio</h5>

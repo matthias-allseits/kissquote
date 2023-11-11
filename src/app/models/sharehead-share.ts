@@ -449,6 +449,60 @@ export class ShareheadShare {
     }
 
 
+    returnOnSalesChartData(date?: Date): ChartData {
+        const chartData: ChartData = {
+            labels: [],
+            datasets: [
+                {
+                    data: [],
+                    label: 'Return on sales',
+                    borderColor: 'rgb(51, 102, 204, 1)',
+                    backgroundColor: 'rgb(51, 102, 204, 1)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.5)',
+                    pointBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBackgroundColor: 'rgba(51, 102, 204, 1)',
+                    pointHoverBorderColor: 'rgba(51, 102, 204, 1)',
+                },
+                {
+                    data: [],
+                    label: 'Estimated Return on sales',
+                    borderColor: 'rgb(51, 102, 204, 0.4)',
+                    backgroundColor: 'rgb(51, 102, 204, 0.4)',
+                    hoverBackgroundColor: 'rgb(51, 102, 204, 0.2)',
+                    pointBackgroundColor: 'rgba(51, 102, 204, 0.4)',
+                    pointHoverBackgroundColor: 'rgba(51, 102, 204, 0.4)',
+                    pointHoverBorderColor: 'rgba(51, 102, 204, 0.4)',
+                },
+            ]
+        };
+
+        this.balances?.forEach(balance => {
+            const returnOnSales = balance.returnOnSales();
+            chartData.labels?.push(balance.year);
+            chartData.datasets[0].data.push(returnOnSales);
+            chartData.datasets[1].data.push(NaN);
+        });
+        chartData.datasets[1].data[chartData.datasets[1].data.length - 1] = chartData.datasets[0].data[chartData.datasets[0].data.length - 1];
+
+        let year = new Date().getFullYear();
+        if (date) {
+            year = date.getFullYear() - 1;
+        }
+        for (let x = 1; x <= 3; x++) {
+            const estimationYear = year + x;
+            const estimationDate = new Date(estimationYear, 1, 1);
+            const lastEstimation = this.lastEstimationForYear(estimationDate);
+            if (lastEstimation) {
+                chartData.labels?.push(lastEstimation.year);
+                chartData.datasets[0].data.push(NaN);
+                chartData.datasets[1].data.push(lastEstimation.returnOnSales());
+            }
+        }
+
+        return chartData;
+    }
+
+
     equityRatesChartData(): ChartData {
         const chartData: ChartData = {
             labels: [],

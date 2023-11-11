@@ -16,4 +16,10 @@ export class ShareheadEstimation {
         public analysts?: number,
     ) {}
 
+
+    returnOnSales(): number
+    {
+        return +(100 / this.sales * this.profit).toFixed(1);
+    }
+
 }
