@@ -17,9 +17,49 @@ export class ShareheadEstimation {
     ) {}
 
 
-    returnOnSales(): number
+    returnOnSales(currency?: Currency): number
     {
-        return +(100 / this.sales * this.profit).toFixed(1);
+        return +(100 / this.currencyCorrectedSales(currency) * this.currencyCorrectedProfit(currency)).toFixed(1);
+    }
+
+    currencyCorrectedSales(currency?: Currency): number
+    {
+        let result = this.sales;
+        if (this.currency && currency && +currency.id !== +this.currency.id) {
+            result = this.sales * currency.rate / this.currency.rate;
+        }
+
+        return +result.toFixed(0);
+    }
+
+    currencyCorrectedProfitPerShare(currency?: Currency): number
+    {
+        let result = this.profitPerShare;
+        if (this.currency && currency && +currency.id !== +this.currency.id) {
+            result = this.profitPerShare * currency.rate / this.currency.rate;
+        }
+
+        return +result.toFixed(1);
+    }
+
+    currencyCorrectedDividend(currency?: Currency): number
+    {
+        let result = this.dividend;
+        if (this.currency && currency && +currency.id !== +this.currency.id) {
+            result = this.dividend * currency.rate / this.currency.rate;
+        }
+
+        return +result.toFixed(1);
+    }
+
+    currencyCorrectedProfit(currency?: Currency): number
+    {
+        let result = this.profit;
+        if (this.currency && currency && +currency.id !== +this.currency.id) {
+            result = this.profit * currency.rate / this.currency.rate;
+        }
+
+        return +result.toFixed(1);
     }
 
 }

@@ -135,6 +135,21 @@ export class ShareheadShare {
     }
 
 
+    hasYearsWithNegativeEquity(): boolean
+    {
+        let result = false;
+        if (this.balances) {
+            for (const balance of this.balances) {
+                if (balance.equity <= 0) {
+                    result = true;
+                }
+            }
+        }
+
+        return result;
+    }
+
+
     shareNumbersChanges(): number|null
     {
         let result = 0;
@@ -328,7 +343,7 @@ export class ShareheadShare {
             const lastEstimation = this.lastEstimationForYear(estimationDate);
             if (lastEstimation) {
                 chartData.labels?.push(lastEstimation.year);
-                chartData.datasets[0].data.push(lastEstimation.sales);
+                chartData.datasets[0].data.push(lastEstimation.currencyCorrectedSales(this.currency));
                 if (Array.isArray(chartData.datasets[0].borderColor)) {
                     chartData.datasets[0].borderColor.push('rgb(51, 102, 204, 0.4)');
                 }
@@ -413,9 +428,9 @@ export class ShareheadShare {
             if (lastEstimation) {
                 chartData.labels?.push(lastEstimation.year);
                 chartData.datasets[0].data.push(NaN);
-                chartData.datasets[1].data.push(lastEstimation.profitPerShare);
+                chartData.datasets[1].data.push(lastEstimation.currencyCorrectedProfitPerShare(this.currency));
                 chartData.datasets[2].data.push(NaN);
-                chartData.datasets[3].data.push(lastEstimation.dividend);
+                chartData.datasets[3].data.push(lastEstimation.currencyCorrectedDividend(this.currency));
             }
         }
 
@@ -600,14 +615,14 @@ export class ShareheadShare {
         if (last) {
             this.analysisResults?.estimationChangesOverNext?.forEach(estimation => {
                 chartData.labels?.push(DateHelper.convertDateToGerman(estimation.date));
-                chartData.datasets[0].data.push(estimation.profitPerShare);
-                chartData.datasets[1].data.push(estimation.dividend);
+                chartData.datasets[0].data.push(estimation.currencyCorrectedProfitPerShare(this.currency));
+                chartData.datasets[1].data.push(estimation.currencyCorrectedDividend(this.currency));
             });
         } else {
             this.analysisResults?.estimationChanges?.forEach(estimation => {
                 chartData.labels?.push(DateHelper.convertDateToGerman(estimation.date));
-                chartData.datasets[0].data.push(estimation.profitPerShare);
-                chartData.datasets[1].data.push(estimation.dividend);
+                chartData.datasets[0].data.push(estimation.currencyCorrectedProfitPerShare(this.currency));
+                chartData.datasets[1].data.push(estimation.currencyCorrectedDividend(this.currency));
             });
         }
 

@@ -47,6 +47,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public lombardTotal = 0;
     public risksList?: LombardValuesSummary[];
     public riskTotal = 0;
+    public missingPositionsInRisklist = 0;
     public diversityListTitle = '';
     public diversityList: Position[] = [];
     public strategyListTitle = '';
@@ -108,6 +109,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 this.crisisDividendTotal += +entry.crisisDropSummary.dividendAfterDrop;
             });
             this.lombardValueList = this.portfolio.lombardValuePositions();
+            this.missingPositionsInRisklist = this.portfolio.getActiveNonCashPositions().length - this.lombardValueList.length;
             this.lombardValueList.forEach(entry => {
                 this.lombardTotal += +entry.maxDrawdownSummary.lombardValue;
                 this.riskTotal += +entry.maxDrawdownSummary.risk;

@@ -71,6 +71,11 @@
                         <div class="yellow">The estimations have another currency ({{ shareheadShare.estimationsCurrency() }}) than the balances ({{ shareheadShare.balancesCurrency() }})</div>
                     </div>
                 </div>
+                <div *ngIf="shareheadShare.hasYearsWithNegativeEquity()" class="row">
+                    <div class="col-12">
+                        <div class="yellow">This share had years with negative equity</div>
+                    </div>
+                </div>
             </div>
             <div *ngIf="!timeWarpMode" class="info-box">
                 <h5>Financial crisis</h5>

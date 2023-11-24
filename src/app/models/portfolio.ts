@@ -229,6 +229,8 @@ export class Portfolio {
                     position: position,
                     maxDrawdownSummary: summary,
                 });
+            } else {
+                // console.log(position.getName());
             }
         });
         positions.sort((a,b) => (a.maxDrawdownSummary.lombardValue < b.maxDrawdownSummary.lombardValue) ? 1 : ((b.maxDrawdownSummary.lombardValue < a.maxDrawdownSummary.lombardValue) ? -1 : 0));
