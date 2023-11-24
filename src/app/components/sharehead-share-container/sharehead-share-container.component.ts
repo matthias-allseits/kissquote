@@ -12,6 +12,7 @@ import {ShareheadService} from "../../services/sharehead.service";
 export class ShareheadShareContainerComponent implements OnInit {
 
     @Input() shareheadShare?: ShareheadShare;
+    @Input() positionContext = true;
     @Output() removeInquiry: EventEmitter<any> = new EventEmitter();
     public timeWarpMode = false;
     public compareMode = false;

@@ -204,9 +204,12 @@
                 <h5>Historic dividends</h5>
                 <app-bar-chart [data]="shareheadShare.historicDividendsChartData()" [height]="150"></app-bar-chart>
             </div>
-            <div *ngIf="!timeWarpMode" class="info-box info-box-lg">
+            <div *ngIf="!timeWarpMode && positionContext" class="info-box info-box-lg">
                 <button (click)="sendRemoveInquiry()" class="btn btn-sm btn-outline-primary">Remove this Sharehead Share</button>
             </div>
         </div>
+    </div>
+    <div *ngIf="!positionContext || timeWarpMode" class="info-container">
+        <app-share-bar-chart-container [historicRates]="historicStockRates"></app-share-bar-chart-container>
     </div>
 </ng-container>

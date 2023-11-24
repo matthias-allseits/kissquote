@@ -14,10 +14,12 @@ export class ShareheadShareInfoComponent implements OnInit {
 
     @Input() shareheadShare?: ShareheadShare;
     @Input() componentTitle?: string;
-    @Input() timeWarpMode?: boolean;
+    @Input() positionContext = true;
+    @Input() timeWarpMode?: boolean; // todo: this is also used for compareMode. this is crap
     @Input() timeWarpDate?: Date|undefined;
     @Output() removeInquiry: EventEmitter<any> = new EventEmitter();
     public stockRate?: StockRate;
+    public historicStockRates: StockRate[] = [];
 
     public nextEstimationYear = new Date().getFullYear() + 1;
     public overNextEstimationYear = new Date().getFullYear() + 3;
@@ -37,6 +39,12 @@ export class ShareheadShareInfoComponent implements OnInit {
                         this.stockRate = rate;
                     }
                 });
+            if (!this.positionContext || this.timeWarpMode) {
+                this.shareheadShare.getStockRates()
+                    .subscribe((rates => {
+                        this.historicStockRates = rates;
+                    }));
+            }
         }
     }
 

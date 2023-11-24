@@ -51,22 +51,22 @@
     </div>
 
     <div *ngIf="!timeWarpMode && !compareMode" class="col-12">
-        <app-sharehead-share-info [shareheadShare]="shareheadShare" (removeInquiry)="sendRemoveInquiry()" [timeWarpMode]="false"></app-sharehead-share-info>
+        <app-sharehead-share-info [shareheadShare]="shareheadShare" (removeInquiry)="sendRemoveInquiry()" [timeWarpMode]="false" [positionContext]="positionContext"></app-sharehead-share-info>
     </div>
     <div class="row" *ngIf="timeWarpMode">
         <div class="col-6">
-            <app-sharehead-share-info [shareheadShare]="shareheadShare" (removeInquiry)="sendRemoveInquiry()" componentTitle="Today" [timeWarpMode]="true"></app-sharehead-share-info>
+            <app-sharehead-share-info [shareheadShare]="shareheadShare" (removeInquiry)="sendRemoveInquiry()" componentTitle="Today" [timeWarpMode]="true" [positionContext]="positionContext"></app-sharehead-share-info>
         </div>
         <div class="col-6">
-            <app-sharehead-share-info *ngIf="timeWarpedShare" [shareheadShare]="timeWarpedShare" (removeInquiry)="sendRemoveInquiry()" [componentTitle]="timeWarpTitle" [timeWarpMode]="true" [timeWarpDate]="this.timeWarpDate"></app-sharehead-share-info>
+            <app-sharehead-share-info *ngIf="timeWarpedShare" [shareheadShare]="timeWarpedShare" (removeInquiry)="sendRemoveInquiry()" [componentTitle]="timeWarpTitle" [timeWarpMode]="true" [timeWarpDate]="this.timeWarpDate" [positionContext]="positionContext"></app-sharehead-share-info>
         </div>
     </div>
     <div class="row" *ngIf="compareMode">
         <div class="col-6" *ngIf="shareheadShare.name">
-            <app-sharehead-share-info [shareheadShare]="shareheadShare" (removeInquiry)="sendRemoveInquiry()" [componentTitle]="shareheadShare.name" [timeWarpMode]="true"></app-sharehead-share-info>
+            <app-sharehead-share-info [shareheadShare]="shareheadShare" (removeInquiry)="sendRemoveInquiry()" [componentTitle]="shareheadShare.name" [timeWarpMode]="true" [positionContext]="positionContext"></app-sharehead-share-info>
         </div>
         <div class="col-6">
-            <app-sharehead-share-info *ngIf="compareShare && compareShare.name" [shareheadShare]="compareShare" (removeInquiry)="sendRemoveInquiry()" [componentTitle]="compareShare.name" [timeWarpMode]="true"></app-sharehead-share-info>
+            <app-sharehead-share-info *ngIf="compareShare && compareShare.name" [shareheadShare]="compareShare" (removeInquiry)="sendRemoveInquiry()" [componentTitle]="compareShare.name" [timeWarpMode]="true" [positionContext]="positionContext"></app-sharehead-share-info>
             <app-sharehead-share-search *ngIf="!compareShare" (selectedShare)="setComparedShare($event)"></app-sharehead-share-search>
         </div>
     </div>

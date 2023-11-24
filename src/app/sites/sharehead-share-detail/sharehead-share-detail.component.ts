@@ -16,7 +16,6 @@ export class ShareheadShareDetailComponent implements OnInit {
 
     public shareheadShare?: ShareheadShare;
     public positionTab = 'sharehead';
-    public historicStockRates: StockRate[] = [];
 
     naviForwardIcon = faChevronRight;
     naviBackIcon = faChevronLeft;
@@ -80,10 +79,6 @@ export class ShareheadShareDetailComponent implements OnInit {
             .subscribe(share => {
                 if (share) {
                     this.shareheadShare = share;
-                    this.shareheadShare.getStockRates()
-                        .subscribe((rates => {
-                            this.historicStockRates = rates;
-                        }));
                 }
             });
     }
