@@ -35,7 +35,6 @@ export class ShareheadShareCreator {
             const marketplace = MarketplaceCreator.oneFromApiArray(apiArray.marketplace);
             if (apiArray.balances?.length) {
                 apiArray.balances.forEach((balance, index) => {
-                    console.log(index);
                     if (apiArray.balances && apiArray.balances[index-1]) {
                         balance.lastYearEquity = apiArray.balances[index-1].equity;
                     }

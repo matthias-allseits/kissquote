@@ -626,7 +626,7 @@ export class ShareheadShare {
                     backgroundColor: 'rgb(220, 57, 18, 1)',
                     hoverBackgroundColor: 'rgb(220, 57, 18, 0.5)',
                     pointBackgroundColor: 'rgb(220, 57, 18, 1)',
-                    pointBorderColor: 'rgb(220, 57, 18, 0)',
+                    // pointBorderColor: 'rgb(220, 57, 18, 0)',
                     pointHoverBackgroundColor: 'rgba(220, 57, 18, 1)',
                     pointHoverBorderColor: 'rgba(220, 57, 18, 1)',
                 },
