@@ -54,6 +54,7 @@ import { TargetValueComponent } from './components/target-value/target-value.com
 import { DataGridComponent } from './components/data-grid/data-grid.component';
 import { LabelsCellRendererComponent } from "./components/cell-renderer/labels-cell-renderer/labels-cell-renderer.component";
 import { PricealertsCellRendererComponent } from './components/cell-renderer/pricealerts-cell-renderer/pricealerts-cell-renderer.component';
+import { LandingpageOpensourceComponent } from './sites/landingpage-opensource/landingpage-opensource.component';
 registerLocaleData(localeCH);
 
 
@@ -100,6 +101,7 @@ registerLocaleData(localeCH);
         DataGridComponent,
         LabelsCellRendererComponent,
         PricealertsCellRendererComponent,
+        LandingpageOpensourceComponent,
     ],
     imports: [
         BrowserModule,

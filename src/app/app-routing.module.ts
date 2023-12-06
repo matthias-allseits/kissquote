@@ -19,11 +19,12 @@ import {CashTransactionFormComponent} from "./sites/cash-transaction-form/cash-t
 import {ShareheadShareDetailComponent} from "./sites/sharehead-share-detail/sharehead-share-detail.component";
 import {PositionDetailResolver} from "./resolver/position-detail-resolver";
 import {MyDashboardResolver} from "./resolver/my-dashboard-resolver";
+import {LandingpageOpensourceComponent} from "./sites/landingpage-opensource/landingpage-opensource.component";
 
 
 const routes: Routes = [
     { path: '', redirectTo: '/landingpage', pathMatch: 'full' },
-    { path: 'landingpage', component: LandingpageComponent },
+    { path: 'landingpage', component: LandingpageOpensourceComponent },
     {
         path: 'my-dashboard',
         component: MyDashboardComponent,

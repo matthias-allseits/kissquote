@@ -56,7 +56,8 @@ export class MyDashboardResolver implements Resolve<Portfolio>{
                 const allPositions = this.portfolio.getAllPositions();
                 // console.log('all posis length: ' + allPositions.length);
                 const shareheadIds: number[] = [];
-                this.portfolio.getActiveNonCashPositions().forEach(position => {
+                const allActiveNonCash = this.portfolio.getActiveNonCashPositions();
+                allActiveNonCash.forEach(position => {
                     if (position.shareheadId) {
                         shareheadIds.push(position.shareheadId);
                     }
@@ -65,6 +66,9 @@ export class MyDashboardResolver implements Resolve<Portfolio>{
                     .subscribe(shares => {
                         this.assignShareheadShares(allPositions, shares, result, psitons);
                     });
+                if (allActiveNonCash.length === 0) {
+                    psitons.next(result);
+                }
             }
         });
     }

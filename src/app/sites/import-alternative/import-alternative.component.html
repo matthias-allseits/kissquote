@@ -1,12 +1,10 @@
 <div class="px-4 py-5 my-5 text-center">
     <img src="assets/kissquote.svg" width="65" ngbTooltip="{{ tranService.trans('GLOB_TITLE') }}" tooltipClass="custom-tooltip">
-    <h1 class="display-5 fw-bold centered-header">{{ tranService.trans('UPAL_TITLE') }}</h1>
+    <h1 class="display-4 fw-normal centered-header">{{ tranService.trans('UPAL_TITLE') }}</h1>
     <div class="col-lg-6 mx-auto">
-        <p class="lead mb-4">
-            Sie sind nicht Swissquote-Kunde, unser Import hat kläglich versagt oder Sie misstrauen dem Import oder was auch immer der Grund ist, weshalb Sie hier gelandet sind?
-        </p>
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <button (click)="createPortfolio()" type="button" class="btn btn-primary btn-lg px-4 gap-3">{{ tranService.trans('UPAL_TRIGGER') }}</button>
-        </div>
+<!--        <p class="lead mb-4">-->
+<!--            Sie sind nicht Swissquote-Kunde, unser Import hat kläglich versagt oder Sie misstrauen dem Import oder was auch immer der Grund ist, weshalb Sie hier gelandet sind?-->
+<!--        </p>-->
+        <button (click)="createPortfolio()" type="button" class="btn btn-outline-primary btn-lg px-4 gap-3">Start from scratch</button>
     </div>
 </div>

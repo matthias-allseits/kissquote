@@ -1,0 +1,25 @@
+<div class="container py-3">
+    <header>
+        <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+            <h1 class="display-4 fw-normal">
+                <img src="assets/kissquote.svg" width="55" ngbTooltip="{{ tranService.trans('GLOB_TITLE') }}" tooltipClass="custom-tooltip">
+                {{ tranService.trans('GLOB_TITLE') }}
+            </h1>
+            <p>Ein Programmator hat mehrere bunte Webseiten erstellt, die Interessierte nutzen können, um ihre Wertpapier-Portfolios zu verwalten</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="row row-cols-1 row-cols-md-3 mb-4 text-center">
+            <div class="col">
+                <button routerLink="/demo" type="button" class="w-100 btn btn-lg btn-outline-primary">Demo</button>
+            </div>
+            <div class="col">
+                <button routerLink="/import-alternative" type="button" class="w-100 btn btn-lg btn-outline-primary">From scratch</button>
+            </div>
+            <div class="col">
+                <button routerLink="/restore" type="button" class="w-100 btn btn-lg btn-outline-primary">Restore</button>
+            </div>
+        </div>
+    </main>
+</div>
