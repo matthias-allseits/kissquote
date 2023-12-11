@@ -483,7 +483,6 @@
                     <th scope="col" class="d-none d-md-table-cell"><span class="float-end">Total</span></th>
                     <th scope="col" class="d-none d-md-table-cell">Currency</th>
                     <th scope="col" style="width: 35px;"></th>
-                    <th scope="col" style="width: 35px;"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -493,11 +492,19 @@
                             <span class="d-none d-md-table-cell">{{ entry.date|date:'dd.MM.y' }}</span>
                             <span class="d-table-cell d-md-none">{{ entry.date|date:'dd.MM.YY' }}</span>
                         </td>
-                        <td [colSpan]="getColspan()">{{ entry.emoticon }} {{ entry.log }}</td>
+                        <td [colSpan]="getColspan()">{{ entry.emoticon }} <span *ngIf="entry.pinned">📌</span> {{ entry.log }}</td>
                         <td class="d-none d-md-table-cell"></td>
                         <td class="d-none d-md-table-cell"></td>
-                        <td><span class="float-end"><button (click)="openLogEntryModal(logEntryModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
-                        <td><span class="float-end"><button (click)="openLogEntryConfirmModal(removeLogEntryConfirmModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></span></td>
+<!--                        <td><span class="float-end"><button (click)="openLogEntryModal(logEntryModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>-->
+<!--                        <td><span class="float-end"><button (click)="openLogEntryConfirmModal(removeLogEntryConfirmModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></span></td>-->
+
+                        <td *ngIf="logContextMenu && logContextMenu.length > 0" class="mobile-navi-cell" ngbDropdown>
+                            <fa-icon class="float-end" (click)="toggleMenu(entry)" id="logEntryMenu" [icon]="naviIcon" ngbDropdownToggle></fa-icon>
+                            <div ngbDropdownMenu aria-labelledby="logEntryMenu">
+                                <button *ngFor="let contextEntry of logContextMenu" (click)="callFunction(contextEntry)" ngbDropdownItem>{{ contextEntry.label }}</button>
+                            </div>
+                        </td>
+
                     </ng-container>
                     <ng-container *ngIf="entry.hasOwnProperty('quantity')">
                         <td>
@@ -510,9 +517,17 @@
                         <td class="d-none d-md-table-cell"><span class="float-end">{{ entry.fee }}</span></td>
                         <td class="d-none d-md-table-cell"><span *ngIf="entry.isRealTransaction()" class="float-end">{{ entry.total()|number: '1.0' }}</span></td>
                         <td class="d-none d-md-table-cell">{{ entry.currency?.name }}</td>
-                        <td *ngIf="!position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/transaction-form/' + entry.id" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
-                        <td *ngIf="position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/cash-transaction-form/' + entry.id" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>
-                        <td><span class="float-end"><button (click)="openModal(removeTransactionConfirmModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></span></td>
+<!--                        <td *ngIf="!position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/transaction-form/' + entry.id" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>-->
+<!--                        <td *ngIf="position.isCash"><span class="float-end"><button [routerLink]="'/position/' + position.id + '/cash-transaction-form/' + entry.id" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Bearbeiten" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button></span></td>-->
+<!--                        <td><span class="float-end"><button (click)="openModal(removeTransactionConfirmModal, entry)" type="button" class="btn btn-sm btn-outline-primary" ngbTooltip="Löschen" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button></span></td>-->
+
+                        <td *ngIf="transactionContextMenu && transactionContextMenu.length > 0" class="mobile-navi-cell" ngbDropdown>
+                            <fa-icon class="float-end" (click)="toggleMenu(entry)" id="transEntryMenu" [icon]="naviIcon" ngbDropdownToggle></fa-icon>
+                            <div ngbDropdownMenu aria-labelledby="transEntryMenu">
+                                <button *ngFor="let contextEntry of transactionContextMenu" (click)="callFunction(contextEntry)" ngbDropdownItem>{{ contextEntry.label }}</button>
+                            </div>
+                        </td>
+
                     </ng-container>
                 </tr>
                 </tbody>
@@ -525,7 +540,7 @@
     <div class="modal-body text-center">
         <p>Wollen Sie diese Transaktion wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirm()">{{ tranService.trans('GLOB_YES') }}</button>
-        <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
+        <button type="button" class="btn btn-outline-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>
 
@@ -533,7 +548,7 @@
     <div class="modal-body text-center">
         <p>Wollen Sie dieses Underlying wirklich entfernen?</p>
         <button type="button" class="btn btn-default" (click)="confirmUnderlyingRemoving()">{{ tranService.trans('GLOB_YES') }}</button>
-        <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
+        <button type="button" class="btn btn-outline-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>
 
@@ -541,7 +556,7 @@
     <div class="modal-body text-center">
         <p>Wollen Sie diese Verknüpfung wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirmShareheadRemoving()">{{ tranService.trans('GLOB_YES') }}</button>
-        <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
+        <button type="button" class="btn btn-outline-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>
 
@@ -549,7 +564,7 @@
     <div class="modal-body text-center">
         <p>Wollen Sie diesen Log-Eintrag wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirmLogEntryRemoving()">{{ tranService.trans('GLOB_YES') }}</button>
-        <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
+        <button type="button" class="btn btn-outline-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>
 
@@ -566,7 +581,7 @@
                     <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
                 </div>
                 <div class="col-6">
-                    <button type="button" class="btn btn-primary float-end" (click)="persistManualDrawdown()">{{ tranService.trans('GLOB_SAVE') }}</button>
+                    <button type="button" class="btn btn-outline-primary float-end" (click)="persistManualDrawdown()">{{ tranService.trans('GLOB_SAVE') }}</button>
                 </div>
             </div>
         </form>
@@ -586,7 +601,7 @@
                     <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
                 </div>
                 <div class="col-6">
-                    <button type="button" class="btn btn-primary float-end" (click)="persistStopLoss()">{{ tranService.trans('GLOB_SAVE') }}</button>
+                    <button type="button" class="btn btn-outline-primary float-end" (click)="persistStopLoss()">{{ tranService.trans('GLOB_SAVE') }}</button>
                 </div>
             </div>
         </form>
@@ -614,7 +629,7 @@
                     <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
                 </div>
                 <div class="col-6">
-                    <button type="button" class="btn btn-primary float-end" (click)="persistTargetPrice()">{{ tranService.trans('GLOB_SAVE') }}</button>
+                    <button type="button" class="btn btn-outline-primary float-end" (click)="persistTargetPrice()">{{ tranService.trans('GLOB_SAVE') }}</button>
                 </div>
             </div>
         </form>
@@ -625,7 +640,7 @@
     <div class="modal-body text-center">
         <p>Wollen Sie diesen manuellen Drawdown wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirmManualDrawdownRemoving()">{{ tranService.trans('GLOB_YES') }}</button>
-        <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
+        <button type="button" class="btn btn-outline-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>
 
@@ -642,7 +657,7 @@
                     <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
                 </div>
                 <div class="col-6">
-                    <button type="button" class="btn btn-primary float-end" (click)="persistManualDividendDrop()">{{ tranService.trans('GLOB_SAVE') }}</button>
+                    <button type="button" class="btn btn-outline-primary float-end" (click)="persistManualDividendDrop()">{{ tranService.trans('GLOB_SAVE') }}</button>
                 </div>
             </div>
         </form>
@@ -662,7 +677,7 @@
                     <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
                 </div>
                 <div class="col-6">
-                    <button type="button" class="btn btn-primary float-end" (click)="persistManualDividend()">{{ tranService.trans('GLOB_SAVE') }}</button>
+                    <button type="button" class="btn btn-outline-primary float-end" (click)="persistManualDividend()">{{ tranService.trans('GLOB_SAVE') }}</button>
                 </div>
             </div>
         </form>
@@ -673,7 +688,7 @@
     <div class="modal-body text-center">
         <p>Wollen Sie diesen manuellen Dividend Drop wirklich löschen?</p>
         <button type="button" class="btn btn-default" (click)="confirmManualDividendDropRemoving()">{{ tranService.trans('GLOB_YES') }}</button>
-        <button type="button" class="btn btn-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
+        <button type="button" class="btn btn-outline-primary" (click)="decline()">{{ tranService.trans('GLOB_NO') }}</button>
     </div>
 </ng-template>
 
@@ -747,7 +762,7 @@
                     <button type="button" class="btn btn-default" (click)="cancelModal()">{{ tranService.trans('GLOB_CANCEL') }}</button>
                 </div>
                 <div class="col-6">
-                    <button type="button" class="btn btn-primary float-end" (click)="persistLogEntry()">{{ tranService.trans('GLOB_SAVE') }}</button>
+                    <button type="button" class="btn btn-outline-primary float-end" (click)="persistLogEntry()">{{ tranService.trans('GLOB_SAVE') }}</button>
                 </div>
             </div>
         </form>

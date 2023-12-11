@@ -75,3 +75,16 @@ input {
         width: 365px;
     }
 }
+
+
+.dropdown-toggle::after {
+    display:none;
+}
+
+.mobile-navi-cell {
+    width: 35px;
+    cursor: pointer;
+    fa-icon {
+        padding-right: 10px;
+    }
+}

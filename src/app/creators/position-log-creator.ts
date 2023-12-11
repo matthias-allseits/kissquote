@@ -4,7 +4,7 @@ import {PositionLog} from "../models/position-log";
 export class PositionLogCreator {
 
     public static createNewPositionLog(): PositionLog {
-        return new PositionLog(0, new Date(), '', '');
+        return new PositionLog(0, new Date(), '', '', false);
     }
 
 
@@ -30,6 +30,7 @@ export class PositionLogCreator {
                 new Date(apiArray.date),
                 apiArray.log,
                 apiArray.emoticon,
+                apiArray.pinned,
                 apiArray.positionId
             );
         } else {

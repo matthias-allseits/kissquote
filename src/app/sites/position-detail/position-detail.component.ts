@@ -5,7 +5,7 @@ import {PositionService} from '../../services/position.service';
 import {
     faChevronLeft, faChevronRight,
     faEdit,
-    faExternalLinkAlt, faPlus, faRefresh,
+    faExternalLinkAlt, faPlus, faRefresh, faThumbTack,
     faTrashAlt
 } from "@fortawesome/free-solid-svg-icons";
 import {Transaction} from "../../models/transaction";
@@ -33,6 +33,9 @@ import {Strategy} from "../../models/strategy";
 import {StrategyService} from "../../services/strategy.service";
 import {TargetSummary} from "../../components/target-value/target-value.component";
 import {PortfolioService} from "../../services/portfolio.service";
+import {GridContextMenuItem} from "../../components/data-grid/data-grid.component";
+import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons/faEllipsisVertical";
+import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 
 
 @Component({
@@ -42,6 +45,9 @@ import {PortfolioService} from "../../services/portfolio.service";
 })
 export class PositionDetailComponent implements OnInit {
 
+    @ViewChild('removeTransactionConfirmModal') removeTransactionConfirmModal?: TemplateRef<any>;
+    @ViewChild('removeLogEntryConfirmModal') removeLogEntryConfirmModal?: TemplateRef<any>;
+    @ViewChild('logEntryModal') logEntryModal?: TemplateRef<any>;
     @ViewChild(LineChartComponent)
     private lineChartComponent!: LineChartComponent;
 
@@ -52,6 +58,9 @@ export class PositionDetailComponent implements OnInit {
     naviBackIcon = faChevronLeft;
     addIcon = faPlus;
     refreshIcon = faRefresh;
+    eyeIcon = faEye;
+    naviIcon = faEllipsisVertical;
+    pinIcon = faThumbTack;
 
     public position?: Position;
     public selectedTransaction?: Transaction;
@@ -85,6 +94,10 @@ export class PositionDetailComponent implements OnInit {
     public filteredPositions?: Position[];
     public selectedDirectNaviPosition?: Position;
     public rosaBrille?: TargetSummary;
+    selectedItem?: PositionLog|Transaction;
+
+    transactionContextMenu?: GridContextMenuItem[];
+    logContextMenu?: GridContextMenuItem[];
 
     manualDrawdownForm = new FormGroup({
         amount: new UntypedFormControl('', Validators.required),
@@ -142,6 +155,7 @@ export class PositionDetailComponent implements OnInit {
                 this.historicRates = data['positionData']['historicRates'];
                 this.chartData = data['positionData']['costIncomeChartData'];
                 this.loadData('ngOnInit');
+                this.setContextMenus();
             }, 100);
         });
 
@@ -533,7 +547,7 @@ export class PositionDetailComponent implements OnInit {
     }
 
     getColspan(): number {
-        if (screen.width < 400) {
+        if (screen.width < 700) {
             return 3;
         } else {
             return 4;
@@ -600,7 +614,9 @@ export class PositionDetailComponent implements OnInit {
                 this.logBook = [];
             }
             this.logBook = this.logBook.concat(this.position.transactions);
+            // this.logBook.sort((a, b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0)); todo: do not forget this
             this.logBook.sort((a, b) => (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0));
+            this.logBook.sort((a, b) => (b.pinned) ? 1 : (a.pinned) ? -1 : 0);
         }
     }
 
@@ -626,6 +642,55 @@ export class PositionDetailComponent implements OnInit {
         }
     }
 
+    toggleMenu(entry: any): void {
+        this.selectedItem = entry;
+    }
+
+    callFunction(contextEntry: GridContextMenuItem, entry?: any): void {
+        // console.log(contextEntry);
+        if (entry) {
+            this.selectedItem = entry;
+            // console.log(this.selectedItem);
+        }
+        this.contextEventHandler(contextEntry);
+    }
+
+    contextEventHandler(event: any) {
+        // console.log(event);
+        // console.log(this.selectedItem);
+        switch(event.key) {
+            case 'pin':
+                if (this.position && this.selectedItem && this.selectedItem instanceof PositionLog) {
+                    this.selectedLogEntry = this.selectedItem;
+                    this.selectedLogEntry.positionId = this.position.id;
+                    this.selectedLogEntry.pinned = true;
+                    this.positionLogService.update(this.selectedLogEntry)
+                        .subscribe(entry => {
+                            this.positionLogService.replaceEntry(this.position?.logEntries, entry);
+                            this.refreshLogHard();
+                        });
+                }
+                break;
+            case 'edit':
+                if (this.selectedItem instanceof Transaction && this.position) {
+                    if (!this.selectedItem.position?.isCash) {
+                        this.router.navigate(['/position/' + this.position.id + '/transaction-form/' + this.selectedItem.id]);
+                    } else if (this.selectedItem.position?.isCash) {
+                        this.router.navigate(['/position/' + this.position.id + '/cash-transaction-form/' + this.selectedItem.id]);
+                    }
+                } else if (this.selectedItem instanceof PositionLog && this.logEntryModal) {
+                    this.openLogEntryModal(this.logEntryModal, this.selectedItem);
+                }
+                break;
+            case 'delete':
+                if (this.selectedItem instanceof Transaction && this.removeTransactionConfirmModal) {
+                    this.openModal(this.removeTransactionConfirmModal, this.selectedItem);
+                } else if (this.selectedItem instanceof PositionLog && this.removeLogEntryConfirmModal) {
+                    this.openLogEntryConfirmModal(this.removeLogEntryConfirmModal, this.selectedItem);
+                }
+                break;
+        }
+    }
 
     private refreshPosition(positionId: number): Observable<boolean> {
         return new Observable(obs => {
@@ -840,4 +905,35 @@ export class PositionDetailComponent implements OnInit {
 
         return result;
     }
+
+    private setContextMenus() {
+        this.transactionContextMenu = [];
+        this.transactionContextMenu.push(
+            {
+                key: 'edit',
+                label: this.tranService.trans('GLOB_EDIT'),
+            },
+            {
+                key: 'delete',
+                label: this.tranService.trans('GLOB_DELETE'),
+            },
+        );
+
+        this.logContextMenu = [];
+        this.logContextMenu.push(
+            {
+                key: 'pin',
+                label: 'Pin this entry',
+            },
+            {
+                key: 'edit',
+                label: this.tranService.trans('GLOB_EDIT'),
+            },
+            {
+                key: 'delete',
+                label: this.tranService.trans('GLOB_DELETE'),
+            },
+        );
+    }
+
 }

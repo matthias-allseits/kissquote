@@ -12,7 +12,7 @@
             <input type="file" (change)="fileChanged($event)" class="form-control" id="inputGroupFile02">
         </div>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
-            <button (click)="onSubmit()" type="button" class="btn btn-primary btn-lg px-4 gap-3">{{ tranService.trans('GLOB_SUBMIT') }}</button>
+            <button (click)="onSubmit()" type="button" class="btn btn-outline-primary btn-lg px-4 gap-3">{{ tranService.trans('GLOB_SUBMIT') }}</button>
         </div>
     </div>
 </div>
@@ -23,7 +23,7 @@
         Wenn Sie der Meinung sind, das Resultat sei gut genug für den Start Ihres Portfolios, können Sie dies bestätigen und wir erstellen damit ein Portfolio für Sie.<br>
         Sie werden immer die Möglichkeit haben, ihr Portfolio zu ändern, zu korrigieren oder zu erweitern.
     </p>
-    <button (click)="submitResult()" class="btn btn-lg btn-primary" type="submit">Portfolio erstellen</button>
+    <button (click)="submitResult()" class="btn btn-lg btn-outline-primary" type="submit">Portfolio erstellen</button>
     <div class="text-start">
         <h6>Transactions found: {{ parsedTransactions.length }}</h6>
         <h6>Resolved transactions: {{ resolvedActions }}</h6>
