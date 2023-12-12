@@ -663,7 +663,7 @@ export class PositionDetailComponent implements OnInit {
                 if (this.position && this.selectedItem && this.selectedItem instanceof PositionLog) {
                     this.selectedLogEntry = this.selectedItem;
                     this.selectedLogEntry.positionId = this.position.id;
-                    this.selectedLogEntry.pinned = true;
+                    this.selectedLogEntry.pinned = !this.selectedLogEntry.pinned;
                     this.positionLogService.update(this.selectedLogEntry)
                         .subscribe(entry => {
                             this.positionLogService.replaceEntry(this.position?.logEntries, entry);

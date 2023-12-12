@@ -15,9 +15,8 @@
                 Mein Menu
             </button>
             <ul [class.show]="showUsersMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li><a (click)="logout()" class="dropdown-item" href="#">Logout</a></li>
+                <li><a (click)="logout()" class="dropdown-item" href="#">Log out</a></li>
                 <li><a (click)="gotoFeedback()" routerLink="feedback" class="dropdown-item" href="#">Feedback</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
         </div>
         <a (click)="changeLanguage('de')" class="me-3 py-2 text-decoration-none head-anchor"
