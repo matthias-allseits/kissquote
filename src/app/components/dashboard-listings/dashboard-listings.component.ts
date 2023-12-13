@@ -5,9 +5,7 @@ import {NextPayment, Position} from "../../models/position";
 import {CrisisDividendSummary, LombardValuesSummary, Portfolio} from "../../models/portfolio";
 import {ShareheadService} from "../../services/sharehead.service";
 import {ShareheadShare} from "../../models/sharehead-share";
-import {ChartData} from "chart.js";
 import {AnalystRating} from "../../models/analyst-rating";
-import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {GridColumn, GridContextMenuItem} from "../data-grid/data-grid.component";
 import {PositionCreator} from "../../creators/position-creator";
 
@@ -24,8 +22,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     @Input() ultimateBalanceFilter?: Label[];
     @Output() filterUltmateList: EventEmitter<any> = new EventEmitter();
 
-    eyeIcon = faEye;
-
     private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'payDays', 'newestRatings', 'nextReports', 'diversification', 'performance', 'risks', 'strategies', 'targetValue'];
     public listingTab = 'ultimate';
     private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year', '3years', '5years', '10years'];
@@ -33,12 +29,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public performanceList?: Position[];
     public payDays?: NextPayment[];
     public nextReportsList?: ShareheadShare[];
-    public diversityByInvestmentChartData?: ChartData;
-    public diversityByValueChartData?: ChartData;
-    public diversityByDividendChartData?: ChartData;
-    public strategiesByInvestmentChartData?: ChartData;
-    public strategiesByValueChartData?: ChartData;
-    public strategiesByDividendChartData?: ChartData;
     public lastMinuteList?: ShareheadShare[];
     public newestRatingsList?: AnalystRating[];
     public crisisDividendList?: CrisisDividendSummary[];
@@ -48,10 +38,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public risksList?: LombardValuesSummary[];
     public riskTotal = 0;
     public missingPositionsInRisklist = 0;
-    public diversityListTitle = '';
-    public diversityList: Position[] = [];
-    public strategyListTitle = '';
-    public strategyList: Position[] = [];
     public ultimateBalance?: number;
     public ultimateValue?: number;
 
@@ -65,10 +51,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public payDaysContextMenu?: GridContextMenuItem[];
     public riskColumns?: GridColumn[];
     public riskContextMenu?: GridContextMenuItem[];
-    public diversificationColumns?: GridColumn[];
-    public diversificationContextMenu?: GridContextMenuItem[];
-    public strategyColumns?: GridColumn[];
-    public strategyContextMenu?: GridContextMenuItem[];
 
     constructor(
         public tranService: TranslationService,
@@ -94,12 +76,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 .subscribe(shares => {
                     this.nextReportsList = shares;
                 });
-            this.diversityByInvestmentChartData = this.portfolio.diversityByInvestmentChartData();
-            this.diversityByValueChartData = this.portfolio.diversityByValueChartData();
-            this.diversityByDividendChartData = this.portfolio.diversityByDividendChartData();
-            this.strategiesByInvestmentChartData = this.portfolio.strategiesByInvestmentChartData();
-            this.strategiesByValueChartData = this.portfolio.strategiesByValueChartData();
-            this.strategiesByDividendChartData = this.portfolio.strategiesByDividendChartData();
             this.shareheadService.getNewestRatingsList(this.portfolio)
                 .subscribe(shares => {
                     this.newestRatingsList = shares;
@@ -138,8 +114,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         this.setCrisisDivisGridOptions();
         this.setPayDaysGridOptions();
         this.setRiskGridOptions();
-        this.setDiversificationGridOptions();
-        this.setStrategyGridOptions();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -200,36 +174,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
             }
         });
         this.performanceList.sort((a, b) => (a.tempPerformanceValue !== undefined && b.tempPerformanceValue !== undefined && a.tempPerformanceValue < b.tempPerformanceValue) ? 1 : ((a.tempPerformanceValue !== undefined && b.tempPerformanceValue !== undefined && b.tempPerformanceValue < a.tempPerformanceValue) ? -1 : 0));
-    }
-
-    listDiversityPositions(event: any): void {
-        this.diversityList = [];
-        this.diversityListTitle = event;
-        const filteredIds: number[] = [];
-        this.portfolio?.getActiveNonCashPositions().forEach(position => {
-                if (position.sector?.name === event) {
-                    this.diversityList.push(position);
-                    filteredIds.push(position.id);
-                }
-            });
-        this.diversityList.sort((a, b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
-        localStorage.setItem('ultimateFilterSector', JSON.stringify(filteredIds));
-        localStorage.setItem('ultimateFilterType', 'sector');
-    }
-
-    listStrategyPositions(event: any): void {
-        this.strategyList = [];
-        this.strategyListTitle = event;
-        const filteredIds: number[] = [];
-        this.portfolio?.getActiveNonCashPositions().forEach(position => {
-                if (position.strategy?.name === event) {
-                    this.strategyList.push(position);
-                    filteredIds.push(position.id);
-                }
-            });
-        this.strategyList.sort((a, b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
-        localStorage.setItem('ultimateFilterStrategy', JSON.stringify(filteredIds));
-        localStorage.setItem('ultimateFilterType', 'strategy');
     }
 
     private calculateUltimateBalance(): void
@@ -484,134 +428,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         );
 
         this.riskContextMenu = [];
-    }
-
-    private setDiversificationGridOptions() {
-        this.diversificationColumns = [];
-        this.diversificationColumns.push(
-            {
-                title: this.tranService.trans('GLOB_SHARE'),
-                type: 'string',
-                field: 'share.name',
-            },
-            {
-                title: 'Labels',
-                type: 'renderer',
-                field: 'labels',
-                responsive: 'md-up',
-                renderer: 'LabelsCellRendererComponent'
-            },
-            {
-                title: 'Investment',
-                type: 'number',
-                format: '1.0',
-                field: 'balance.investment',
-                alignment: 'right',
-                responsive: 'md-up',
-            },
-            {
-                title: this.tranService.trans('GLOB_VALUE'),
-                type: 'function',
-                format: '1.0',
-                field: 'actualValue',
-                alignment: 'right',
-                responsive: 'sm-up',
-            },
-            {
-                title: 'Dividend',
-                type: 'function',
-                format: '1.0',
-                field: 'bestSelectedDividendPayment',
-                alignment: 'right',
-            },
-            {
-                title: this.tranService.trans('GLOB_CURRENCY'),
-                type: 'string',
-                field: 'currency.name',
-            },
-            {
-                title: this.tranService.trans('LISTNGS_DAYS'),
-                type: 'function',
-                format: '1.0',
-                field: 'daysSinceStart',
-                alignment: 'right',
-                responsive: 'sm-up',
-            },
-            {
-                title: 'Trpd',
-                type: 'function',
-                field: 'totalReturnPerDay',
-                alignment: 'right',
-                toolTip: 'Total return per day',
-                responsive: 'sm-up',
-            }
-        );
-
-        this.diversificationContextMenu = [];
-    }
-
-    private setStrategyGridOptions() {
-        this.strategyColumns = [];
-        this.strategyColumns.push(
-            {
-                title: this.tranService.trans('GLOB_SHARE'),
-                type: 'string',
-                field: 'share.name',
-            },
-            {
-                title: 'Labels',
-                type: 'renderer',
-                field: 'labels',
-                responsive: 'md-up',
-                renderer: 'LabelsCellRendererComponent'
-            },
-            {
-                title: 'Investment',
-                type: 'number',
-                format: '1.0',
-                field: 'balance.investment',
-                alignment: 'right',
-                responsive: 'md-up',
-            },
-            {
-                title: this.tranService.trans('GLOB_VALUE'),
-                type: 'function',
-                format: '1.0',
-                field: 'actualValue',
-                alignment: 'right',
-                responsive: 'sm-up',
-            },
-            {
-                title: 'Dividend',
-                type: 'function',
-                format: '1.0',
-                field: 'bestSelectedDividendPayment',
-                alignment: 'right',
-            },
-            {
-                title: this.tranService.trans('GLOB_CURRENCY'),
-                type: 'string',
-                field: 'currency.name',
-            },
-            {
-                title: this.tranService.trans('LISTNGS_DAYS'),
-                type: 'function',
-                format: '1.0',
-                field: 'daysSinceStart',
-                alignment: 'right',
-                responsive: 'sm-up',
-            },
-            {
-                title: 'Trpd',
-                type: 'function',
-                field: 'totalReturnPerDay',
-                alignment: 'right',
-                toolTip: 'Total return per day',
-                responsive: 'sm-up',
-            }
-        );
-
-        this.strategyContextMenu = [];
     }
 
 }

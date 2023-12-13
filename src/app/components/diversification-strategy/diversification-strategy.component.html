@@ -1,0 +1,28 @@
+<div class="info-box chart-box">
+    <h5>by investment</h5>
+    <ng-container *ngIf="strategiesByInvestmentChartData">
+        <app-pie-chart [data]="strategiesByInvestmentChartData" [height]="400" (triggerClick)="listStrategyPositions($event)"></app-pie-chart>
+    </ng-container>
+</div>
+<div class="info-box chart-box">
+    <h5>by value</h5>
+    <ng-container *ngIf="strategiesByValueChartData">
+        <app-pie-chart [data]="strategiesByValueChartData" [height]="400" (triggerClick)="listStrategyPositions($event)"></app-pie-chart>
+    </ng-container>
+</div>
+<div class="info-box chart-box">
+    <h5>by dividend</h5>
+    <ng-container *ngIf="strategiesByDividendChartData">
+        <app-pie-chart [data]="strategiesByDividendChartData" [height]="400" (triggerClick)="listStrategyPositions($event)"></app-pie-chart>
+    </ng-container>
+</div>
+<ng-container *ngIf="strategyList && strategyList.length > 0">
+    <h5>{{ strategyListTitle }}</h5>
+    <app-data-grid
+        [gridData]="strategyList"
+        [gridColumns]="strategyColumns"
+        [contextMenu]="strategyContextMenu"
+        (baseFunctionCall)="positionEventHandler($event)"
+        (selectedItem)="selectPosition($event)"
+    ></app-data-grid>
+</ng-container>

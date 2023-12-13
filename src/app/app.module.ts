@@ -55,6 +55,8 @@ import { DataGridComponent } from './components/data-grid/data-grid.component';
 import { LabelsCellRendererComponent } from "./components/cell-renderer/labels-cell-renderer/labels-cell-renderer.component";
 import { PricealertsCellRendererComponent } from './components/cell-renderer/pricealerts-cell-renderer/pricealerts-cell-renderer.component';
 import { LandingpageOpensourceComponent } from './sites/landingpage-opensource/landingpage-opensource.component';
+import { DiversificationStrategyComponent } from './components/diversification-strategy/diversification-strategy.component';
+import { DiversificationSectorComponent } from './components/diversification-sector/diversification-sector.component';
 registerLocaleData(localeCH);
 
 
@@ -102,6 +104,8 @@ registerLocaleData(localeCH);
         LabelsCellRendererComponent,
         PricealertsCellRendererComponent,
         LandingpageOpensourceComponent,
+        DiversificationStrategyComponent,
+        DiversificationSectorComponent,
     ],
     imports: [
         BrowserModule,
