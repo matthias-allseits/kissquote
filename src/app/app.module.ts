@@ -57,6 +57,7 @@ import { PricealertsCellRendererComponent } from './components/cell-renderer/pri
 import { LandingpageOpensourceComponent } from './sites/landingpage-opensource/landingpage-opensource.component';
 import { DiversificationStrategyComponent } from './components/diversification-strategy/diversification-strategy.component';
 import { DiversificationSectorComponent } from './components/diversification-sector/diversification-sector.component';
+import { DiversificationSectorContainerComponent } from './components/diversification-sector-container/diversification-sector-container.component';
 registerLocaleData(localeCH);
 
 
@@ -106,6 +107,7 @@ registerLocaleData(localeCH);
         LandingpageOpensourceComponent,
         DiversificationStrategyComponent,
         DiversificationSectorComponent,
+        DiversificationSectorContainerComponent,
     ],
     imports: [
         BrowserModule,

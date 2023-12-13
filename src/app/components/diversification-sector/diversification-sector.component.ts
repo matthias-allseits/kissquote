@@ -14,6 +14,7 @@ import {GridColumn, GridContextMenuItem} from "../data-grid/data-grid.component"
 export class DiversificationSectorComponent implements OnInit {
 
     @Input() portfolio?: Portfolio;
+    @Input() timeWarpMode?: boolean;
 
     public diversityByInvestmentChartData?: ChartData;
     public diversityByValueChartData?: ChartData;
