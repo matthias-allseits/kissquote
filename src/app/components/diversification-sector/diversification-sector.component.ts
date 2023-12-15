@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {TranslationService} from "../../services/translation.service";
 import {Portfolio} from "../../models/portfolio";
 import {ChartData} from "chart.js";
@@ -11,10 +11,11 @@ import {GridColumn, GridContextMenuItem} from "../data-grid/data-grid.component"
   templateUrl: './diversification-sector.component.html',
   styleUrls: ['./diversification-sector.component.scss']
 })
-export class DiversificationSectorComponent implements OnInit {
+export class DiversificationSectorComponent implements OnInit, OnChanges {
 
     @Input() portfolio?: Portfolio;
     @Input() timeWarpMode?: boolean;
+    @Input() componentTitle?: string;
 
     public diversityByInvestmentChartData?: ChartData;
     public diversityByValueChartData?: ChartData;
@@ -30,13 +31,20 @@ export class DiversificationSectorComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.setDiversificationGridOptions();
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        console.log(this.portfolio);
+        this.loadData();
+    }
+
+    loadData() {
         if (this.portfolio) {
             this.diversityByInvestmentChartData = this.portfolio.diversityByInvestmentChartData();
             this.diversityByValueChartData = this.portfolio.diversityByValueChartData();
             this.diversityByDividendChartData = this.portfolio.diversityByDividendChartData();
         }
-
-        this.setDiversificationGridOptions();
     }
 
     listDiversityPositions(event: any): void {
@@ -44,6 +52,7 @@ export class DiversificationSectorComponent implements OnInit {
         this.diversityListTitle = event;
         const filteredIds: number[] = [];
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
+            console.log(position);
             if (position.sector?.name === event) {
                 this.diversityList.push(position);
                 filteredIds.push(position.id);

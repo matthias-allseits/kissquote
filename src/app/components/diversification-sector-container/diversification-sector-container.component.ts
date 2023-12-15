@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {Portfolio} from "../../models/portfolio";
 import {TranslationService} from "../../services/translation.service";
 import {PortfolioService} from "../../services/portfolio.service";
@@ -24,7 +24,6 @@ export class DiversificationSectorContainerComponent {
     ) {
     }
 
-
     startTimeWarp(months: number): void {
         this.timeWarpTitle = `${months} months ago`;
         this.timeWarpDate = new Date();
@@ -32,7 +31,7 @@ export class DiversificationSectorContainerComponent {
         this.timeWarpMode = true;
         if (this.portfolio) {
             const myKey = localStorage.getItem('my-key');
-            this.portfolioService.portfolioByKey(myKey)
+            this.portfolioService.portfolioByKeyAndDate(myKey, this.timeWarpDate)
                 .subscribe(portfolio => {
                     this.timeWarpedPortfolio = portfolio;
                 });

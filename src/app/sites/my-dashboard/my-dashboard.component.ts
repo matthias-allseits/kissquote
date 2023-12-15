@@ -540,6 +540,18 @@ export class MyDashboardComponent implements OnInit {
                 field: 'share.name',
             },
             {
+                title: 'Strategy',
+                type: 'string',
+                field: 'strategy.name',
+                responsive: 'md-up',
+            },
+            {
+                title: 'Sector',
+                type: 'string',
+                field: 'sector.name',
+                responsive: 'md-up',
+            },
+            {
                 title: 'Account',
                 type: 'string',
                 field: 'bankAccount.name',

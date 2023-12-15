@@ -33,12 +33,14 @@
         <app-diversification-sector
             [portfolio]="portfolio"
             [timeWarpMode]="true"
+            [componentTitle]="'Aktuell'"
         ></app-diversification-sector>
     </div>
     <div class="col-6">
         <app-diversification-sector
             [portfolio]="timeWarpedPortfolio"
             [timeWarpMode]="true"
+            [componentTitle]="timeWarpTitle"
         ></app-diversification-sector>
     </div>
 </div>
