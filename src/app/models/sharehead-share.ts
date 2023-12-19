@@ -187,6 +187,34 @@ export class ShareheadShare {
     }
 
 
+    lastCashInBalance(): number
+    {
+        let hit = 0;
+        if (this.balances && this.balances[this.balances.length - 1]) {
+            const lastBalance = this.balances[this.balances.length - 1];
+            if (lastBalance.cash) {
+                hit = +(lastBalance.cash / 1000 / 1000).toFixed(1);
+            }
+        }
+
+        return hit;
+    }
+
+
+    lastGoodwillAndCrapInBalance(): number
+    {
+        let hit = 0;
+        if (this.balances && this.balances[this.balances.length - 1]) {
+            const lastBalance = this.balances[this.balances.length - 1];
+            if (lastBalance.goodwillAndCrap) {
+                hit = +(lastBalance.goodwillAndCrap / 1000 / 1000).toFixed(1);
+            }
+        }
+
+        return hit;
+    }
+
+
     yield(lastRate: number)
     {
         let yieldnumber = 0;

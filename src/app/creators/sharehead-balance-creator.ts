@@ -36,6 +36,8 @@ export class ShareheadBalanceCreator {
                 apiArray.debtNet,
                 apiArray.ordinarySharesNumber,
                 apiArray.treasurySharesNumber,
+                apiArray.goodwillAndCrap,
+                apiArray.cash,
                 apiArray.lastYearEquity,
             );
         } else {

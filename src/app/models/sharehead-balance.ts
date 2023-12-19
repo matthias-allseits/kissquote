@@ -17,6 +17,8 @@ export class ShareheadBalance {
         public debtNet?: number,
         public ordinarySharesNumber?: number,
         public treasurySharesNumber?: number,
+        public goodwillAndCrap?: number,
+        public cash?: number,
         public lastYearEquity?: number,
     ) {}
 

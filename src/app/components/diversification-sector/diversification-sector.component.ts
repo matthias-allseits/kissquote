@@ -35,7 +35,6 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log(this.portfolio);
         this.loadData();
     }
 
