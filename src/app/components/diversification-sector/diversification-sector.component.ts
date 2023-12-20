@@ -15,6 +15,7 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
 
     @Input() portfolio?: Portfolio;
     @Input() timeWarpMode?: boolean;
+    @Input() timeWarpDate?: Date|undefined;
     @Input() componentTitle?: string;
 
     public diversityByInvestmentChartData?: ChartData;
@@ -39,6 +40,7 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
     }
 
     loadData() {
+        console.log(this.timeWarpDate);
         if (this.portfolio) {
             this.diversityByInvestmentChartData = this.portfolio.diversityByInvestmentChartData();
             this.diversityByValueChartData = this.portfolio.diversityByValueChartData();
@@ -51,13 +53,16 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
         this.diversityListTitle = event;
         const filteredIds: number[] = [];
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
-            console.log(position);
             if (position.sector?.name === event) {
                 this.diversityList.push(position);
                 filteredIds.push(position.id);
             }
         });
-        this.diversityList.sort((a, b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
+        if (!this.timeWarpMode) {
+            this.diversityList.sort((a, b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
+        } else {
+            // this.diversityList.sort((a, b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
+        }
         localStorage.setItem('ultimateFilterSector', JSON.stringify(filteredIds));
         localStorage.setItem('ultimateFilterType', 'sector');
     }
@@ -131,6 +136,11 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
                 responsive: 'sm-up',
             }
         );
+
+        if (this.timeWarpMode) {
+            console.log('let us splice');
+            this.diversificationColumns.splice(1, 1);
+        }
 
         this.diversificationContextMenu = [];
     }

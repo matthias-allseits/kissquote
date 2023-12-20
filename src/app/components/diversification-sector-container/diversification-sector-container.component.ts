@@ -25,7 +25,11 @@ export class DiversificationSectorContainerComponent {
     }
 
     startTimeWarp(months: number): void {
-        this.timeWarpTitle = `${months} months ago`;
+        if (months < 13) {
+            this.timeWarpTitle = `${months} months ago`;
+        } else {
+            this.timeWarpTitle = `${months / 12} years ago`;
+        }
         this.timeWarpDate = new Date();
         this.timeWarpDate.setMonth(this.timeWarpDate.getMonth() - months);
         this.timeWarpMode = true;
