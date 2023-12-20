@@ -54,6 +54,9 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
         const filteredIds: number[] = [];
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
             if (position.sector?.name === event) {
+                if (this.timeWarpMode) {
+                    position.timeWarpDate = this.timeWarpDate;
+                }
                 this.diversityList.push(position);
                 filteredIds.push(position.id);
             }
@@ -61,7 +64,7 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
         if (!this.timeWarpMode) {
             this.diversityList.sort((a, b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
         } else {
-            // this.diversityList.sort((a, b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
+            this.diversityList.sort((a, b) => (+a.activeFrom > +b.activeFrom) ? 1 : ((+b.activeFrom > +a.activeFrom) ? -1 : 0));
         }
         localStorage.setItem('ultimateFilterSector', JSON.stringify(filteredIds));
         localStorage.setItem('ultimateFilterType', 'sector');

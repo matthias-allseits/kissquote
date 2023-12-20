@@ -94,6 +94,7 @@ export class Position {
         public shareheadShare?: ShareheadShare,
         public visible?: boolean, // for filtering purposes
         public tempPerformanceValue?: number, // for filtering purposes
+        public timeWarpDate?: Date, // for time-warp purposes
     ) {}
 
 
@@ -395,6 +396,9 @@ export class Position {
     daysSinceStart(): number
     {
         let currentDate = new Date();
+        if (this.timeWarpDate) {
+            currentDate = this.timeWarpDate
+        }
 
         if (this.activeFrom instanceof Date) {
             // yes i know, not every day has 24 hours. i do not care...
