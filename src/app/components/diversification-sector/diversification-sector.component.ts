@@ -51,7 +51,6 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
         this.diversityListTitle = event;
         const filteredIds: number[] = [];
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
-            console.log(position);
             if (position.sector?.name === event) {
                 this.diversityList.push(position);
                 filteredIds.push(position.id);
