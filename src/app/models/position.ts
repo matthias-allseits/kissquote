@@ -592,19 +592,9 @@ export class Position {
     public bestSelectedDividendPayment(): string {
         let result = '';
         if (this.shareheadShare && this.balance) {
-            if (this.timeWarpDate) {
-                console.log('bestSelectedDividendPayment: option 1');
-            }
             result = this.shareheadDividendPaymentCorrected();
         } else if (this.manualDividend) {
             result = this.manualDividendPayment();
-            if (this.timeWarpDate) {
-                console.log('bestSelectedDividendPayment: option 2');
-            }
-        } else {
-            if (this.timeWarpDate) {
-                console.log('bestSelectedDividendPayment: option 3: ' + this.getName());
-            }
         }
 
         return result;
