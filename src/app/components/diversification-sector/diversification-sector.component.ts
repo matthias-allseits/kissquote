@@ -40,7 +40,6 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
     }
 
     loadData() {
-        console.log(this.timeWarpDate);
         if (this.portfolio) {
             this.diversityByInvestmentChartData = this.portfolio.diversityByInvestmentChartData();
             this.diversityByValueChartData = this.portfolio.diversityByValueChartData();
