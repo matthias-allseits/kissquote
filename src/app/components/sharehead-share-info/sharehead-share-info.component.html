@@ -43,16 +43,16 @@
                     <div class="col-3"><span class="float-end">{{ shareheadShare.getAvgPerformance() }}%</span></div>
                 </div>
                 <div class="row">
-                    <div class="col-9">Return on sales:</div>
-                    <div class="col-3"><span class="float-end"></span></div>
+                    <div class="col-6">Market cap:</div>
+                    <div class="col-6"><span *ngIf="stockRate" class="float-end">{{ shareheadShare.marketCap(stockRate.rate) }} Mrd. {{ shareheadShare.currency?.name }}</span></div>
                 </div>
                 <div class="row">
-                    <div class="col-6">Cash in balance</div>
-                    <div class="col-6"><span class="float-end">{{ shareheadShare.lastCashInBalance() }} Mrd.</span></div>
+                    <div class="col-6">Cash in balance:</div>
+                    <div class="col-6"><span class="float-end">{{ shareheadShare.lastCashInBalance() }} Mrd. {{ shareheadShare.currency?.name }}</span></div>
                 </div>
                 <div class="row">
-                    <div class="col-6">Goodwill</div>
-                    <div class="col-6"><span class="float-end">{{ shareheadShare.lastGoodwillAndCrapInBalance() }} Mrd.</span></div>
+                    <div class="col-6">Goodwill:</div>
+                    <div class="col-6"><span class="float-end">{{ shareheadShare.lastGoodwillAndCrapInBalance() }} Mrd. {{ shareheadShare.currency?.name }}</span></div>
                 </div>
                 <div class="row">
                     <div class="col-6">Country:</div>

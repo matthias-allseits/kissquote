@@ -176,6 +176,24 @@ export class ShareheadShare {
     }
 
 
+    marketCap(lastRate: number): number|null
+    {
+        let result = 0;
+        const yahooBalances = this.yahooBalances();
+        const last = yahooBalances[yahooBalances.length - 1];
+        if (yahooBalances.length > 0 && last.ordinarySharesNumber) {
+            const rawResult = +(lastRate * last.ordinarySharesNumber / 1000 / 1000);
+            if (rawResult > 20) {
+                result = +rawResult.toFixed(0);
+            } else {
+                result = +rawResult.toFixed(1);
+            }
+        }
+
+        return result;
+    }
+
+
     lastDividend(): number|null
     {
         let hit = null;
