@@ -57,6 +57,7 @@ export class Portfolio {
         public bankAccounts: BankAccount[],
         public currencies: Currency[],
         public watchlistEntries: WatchlistEntry[],
+        public shareheadSharesLoaded?: boolean,
     ) {}
 
 

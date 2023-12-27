@@ -58,6 +58,7 @@ import { LandingpageOpensourceComponent } from './sites/landingpage-opensource/l
 import { DiversificationStrategyComponent } from './components/diversification-strategy/diversification-strategy.component';
 import { DiversificationSectorComponent } from './components/diversification-sector/diversification-sector.component';
 import { DiversificationSectorContainerComponent } from './components/diversification-sector-container/diversification-sector-container.component';
+import { SpinnerRelativeComponent } from './components/spinner-relative/spinner-relative.component';
 registerLocaleData(localeCH);
 
 
@@ -99,6 +100,7 @@ registerLocaleData(localeCH);
         DashboardBalanceChartsComponent,
         ShareBarChartContainerComponent,
         SpinnerComponent,
+        SpinnerRelativeComponent,
         DashboardLogbookComponent,
         TargetValueComponent,
         DataGridComponent,

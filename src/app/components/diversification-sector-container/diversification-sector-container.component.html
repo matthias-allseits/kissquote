@@ -37,7 +37,8 @@
         ></app-diversification-sector>
     </div>
     <div class="col-6">
-        <app-diversification-sector
+        <app-spinner-relative *ngIf="!timeWarpedPortfolio?.shareheadSharesLoaded"></app-spinner-relative>
+        <app-diversification-sector *ngIf="timeWarpedPortfolio?.shareheadSharesLoaded"
             [portfolio]="timeWarpedPortfolio"
             [timeWarpMode]="true"
             [timeWarpDate]="timeWarpDate"

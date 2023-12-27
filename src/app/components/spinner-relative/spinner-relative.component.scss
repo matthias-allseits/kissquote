@@ -1,0 +1,45 @@
+@import "../../../../node_modules/bootstrap/scss/bootstrap";
+
+#spnner-overlay {
+    background: #ffffff;
+    color: #666666;
+    //position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 5000;
+    top: 0;
+    left: 0;
+    float: left;
+    text-align: center;
+    padding-top: 80%;
+    opacity: .80;
+}
+.spinner-loader {
+    font-size: 32px;
+    margin: 0 auto;
+    height: 48px;
+    width: 48px;
+    animation: rotate 1.6s infinite linear;
+    border: 5px solid var(--main-color);
+    border-right-color: transparent;
+    border-radius: 50%;
+}
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@include media-breakpoint-up(md) {
+    #spnner-overlay {
+        padding-top: 25%;
+    }
+    .spinner-loader {
+        font-size: 96px;
+        height: 144px;
+        width: 144px;
+    }
+}

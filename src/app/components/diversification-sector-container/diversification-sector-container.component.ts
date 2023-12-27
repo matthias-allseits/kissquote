@@ -45,8 +45,11 @@ export class DiversificationSectorContainerComponent {
                     this.timeWarpedPortfolio = portfolio;
                     this.loadShareheadShares()
                         .subscribe(result => {
+                            if (this.timeWarpedPortfolio) {
+                                this.timeWarpedPortfolio.shareheadSharesLoaded = true;
                                 // console.log(this.timeWarpedPortfolio);
-                            });
+                            }
+                        });
                 });
         }
     }
