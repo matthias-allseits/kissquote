@@ -424,7 +424,7 @@ export class Portfolio {
             labels: labels,
             datasets: [
                 {
-                    label: 'Sector',
+                    label: 'Value',
                     data: data,
                     backgroundColor: colors,
                 }
@@ -459,7 +459,7 @@ export class Portfolio {
             labels: labels,
             datasets: [
                 {
-                    label: 'Sector',
+                    label: 'Value',
                     data: data,
                     backgroundColor: colors,
                 }
@@ -494,7 +494,7 @@ export class Portfolio {
             labels: labels,
             datasets: [
                 {
-                    label: 'Sector',
+                    label: 'Value',
                     data: data,
                     backgroundColor: colors,
                 }
@@ -529,7 +529,7 @@ export class Portfolio {
             labels: labels,
             datasets: [
                 {
-                    label: 'Sector',
+                    label: 'Value',
                     data: data,
                     backgroundColor: colors,
                 }
@@ -564,7 +564,7 @@ export class Portfolio {
             labels: labels,
             datasets: [
                 {
-                    label: 'Sector',
+                    label: 'Value',
                     data: data,
                     backgroundColor: colors,
                 }
@@ -599,7 +599,7 @@ export class Portfolio {
             labels: labels,
             datasets: [
                 {
-                    label: 'Sector',
+                    label: 'Value',
                     data: data,
                     backgroundColor: colors,
                 }
