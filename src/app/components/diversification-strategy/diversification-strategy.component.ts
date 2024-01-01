@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
 import {ChartData} from "chart.js";
 import {Portfolio} from "../../models/portfolio";
 import {Position} from "../../models/position";
@@ -14,6 +14,9 @@ import {TranslationService} from "../../services/translation.service";
 export class DiversificationStrategyComponent implements OnInit {
 
     @Input() portfolio?: Portfolio;
+    @Input() timeWarpMode?: boolean;
+    @Input() timeWarpDate?: Date|undefined;
+    @Input() componentTitle?: string;
 
     public strategiesByInvestmentChartData?: ChartData;
     public strategiesByValueChartData?: ChartData;
@@ -29,15 +32,20 @@ export class DiversificationStrategyComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.setStrategyGridOptions();
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        this.loadData();
+    }
+
+    loadData() {
         if (this.portfolio) {
             this.strategiesByInvestmentChartData = this.portfolio.strategiesByInvestmentChartData();
             this.strategiesByValueChartData = this.portfolio.strategiesByValueChartData();
             this.strategiesByDividendChartData = this.portfolio.strategiesByDividendChartData();
         }
-
-        this.setStrategyGridOptions();
     }
-
 
     listStrategyPositions(event: any): void {
         this.strategyList = [];
@@ -45,11 +53,18 @@ export class DiversificationStrategyComponent implements OnInit {
         const filteredIds: number[] = [];
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
             if (position.strategy?.name === event) {
+                if (this.timeWarpMode) {
+                    position.timeWarpDate = this.timeWarpDate;
+                }
                 this.strategyList.push(position);
                 filteredIds.push(position.id);
             }
         });
-        this.strategyList.sort((a, b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
+        if (!this.timeWarpMode) {
+            this.strategyList.sort((a, b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
+        } else {
+            this.strategyList.sort((a, b) => (+a.activeFrom > +b.activeFrom) ? 1 : ((+b.activeFrom > +a.activeFrom) ? -1 : 0));
+        }
         localStorage.setItem('ultimateFilterStrategy', JSON.stringify(filteredIds));
         localStorage.setItem('ultimateFilterType', 'strategy');
     }
@@ -123,6 +138,11 @@ export class DiversificationStrategyComponent implements OnInit {
                 responsive: 'sm-up',
             }
         );
+
+        if (this.timeWarpMode) {
+            console.log('let us splice');
+            this.strategyColumns.splice(1, 1);
+        }
 
         this.strategyContextMenu = [];
     }

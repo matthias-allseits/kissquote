@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
+    <h4 class="col-6">Diversification by strategies</h4>
+    <div class="col-md-6 d-none d-md-block text-end">
+        <div *ngIf="!timeWarpMode" ngbDropdown class="d-inline-block">
+            <button type="button" class="btn btn-sm btn-outline-primary source-btn" id="dropdownTimeWarp" ngbDropdownToggle>
+                Time warp
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownTimeWarp">
+                <button (click)="startTimeWarp(3)" ngbDropdownItem>3 months</button>
+                <button (click)="startTimeWarp(6)" ngbDropdownItem>6 months</button>
+                <button (click)="startTimeWarp(12)" ngbDropdownItem>1 year</button>
+                <button (click)="startTimeWarp(36)" ngbDropdownItem>3 years</button>
+                <button (click)="startTimeWarp(60)" ngbDropdownItem>5 years</button>
+                <button (click)="startTimeWarp(120)" ngbDropdownItem>10 years</button>
+            </div>
+        </div>
+        <div *ngIf="timeWarpMode" ngbDropdown class="d-inline-block">
+            <button (click)="stopTimeWarp()" type="button" class="btn btn-sm btn-outline-primary active source-btn" id="stopTimeWarp">
+                Stop Time warp mode
+            </button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!timeWarpMode" class="col-12">
+    <app-diversification-strategy
+        [portfolio]="portfolio"
+        [timeWarpMode]="false"
+    ></app-diversification-strategy>
+</div>
+<div *ngIf="timeWarpMode" class="row">
+    <div class="col-6">
+        <app-diversification-strategy
+            [portfolio]="portfolio"
+            [timeWarpMode]="true"
+            [componentTitle]="'Aktuell'"
+        ></app-diversification-strategy>
+    </div>
+    <div class="col-6">
+        <app-spinner-relative *ngIf="!timeWarpedPortfolio?.shareheadSharesLoaded"></app-spinner-relative>
+        <app-diversification-strategy *ngIf="timeWarpedPortfolio?.shareheadSharesLoaded"
+                                    [portfolio]="timeWarpedPortfolio"
+                                    [timeWarpMode]="true"
+                                    [timeWarpDate]="timeWarpDate"
+                                    [componentTitle]="timeWarpTitle"
+        ></app-diversification-strategy>
+    </div>
+</div>
