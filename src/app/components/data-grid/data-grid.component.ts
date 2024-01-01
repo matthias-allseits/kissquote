@@ -40,6 +40,7 @@ export class DataGridComponent implements OnInit {
     @Input() gridData?: any[];
     @Input() gridColumns?: GridColumn[];
     @Input() contextMenu?: GridContextMenuItem[];
+    @Input() suppressColoring = false;
     @Output() baseFunctionCall: EventEmitter<any> = new EventEmitter();
     @Output() selectedItem: EventEmitter<any> = new EventEmitter();
 
@@ -86,11 +87,11 @@ export class DataGridComponent implements OnInit {
     }
 
     checkForRedColoring(entry: any): boolean {
-        return entry instanceof Position && entry.active && entry.stopLossBroken();
+        return !this.suppressColoring && entry instanceof Position && entry.active && entry.stopLossBroken();
     }
 
     checkForGreenColoring(entry: any): boolean {
-        return entry instanceof Position && entry.active && entry.hasReachedTargetPrice();
+        return !this.suppressColoring && entry instanceof Position && entry.active && entry.hasReachedTargetPrice();
     }
 
     checkForVisibility(entry: any): string {

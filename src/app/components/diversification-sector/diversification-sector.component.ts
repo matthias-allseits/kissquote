@@ -140,7 +140,6 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
         );
 
         if (this.timeWarpMode) {
-            console.log('let us splice');
             this.diversificationColumns.splice(1, 1);
         }
 

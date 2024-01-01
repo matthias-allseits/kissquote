@@ -23,6 +23,7 @@
         [gridData]="strategyList"
         [gridColumns]="strategyColumns"
         [contextMenu]="strategyContextMenu"
+        [suppressColoring]="true"
         (baseFunctionCall)="positionEventHandler($event)"
         (selectedItem)="selectPosition($event)"
     ></app-data-grid>

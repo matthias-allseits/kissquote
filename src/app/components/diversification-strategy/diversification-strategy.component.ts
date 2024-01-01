@@ -140,7 +140,6 @@ export class DiversificationStrategyComponent implements OnInit {
         );
 
         if (this.timeWarpMode) {
-            console.log('let us splice');
             this.strategyColumns.splice(1, 1);
         }
 
