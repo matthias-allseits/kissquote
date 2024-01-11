@@ -591,10 +591,10 @@ export class Position {
 
     public bestSelectedDividendPayment(): string {
         let result = '';
-        if (this.shareheadShare && this.balance) {
-            result = this.shareheadDividendPaymentCorrected();
-        } else if (this.manualDividend) {
+        if (this.manualDividend) {
             result = this.manualDividendPayment();
+        } else if (this.shareheadShare && this.balance) {
+            result = this.shareheadDividendPaymentCorrected();
         }
 
         return result;
