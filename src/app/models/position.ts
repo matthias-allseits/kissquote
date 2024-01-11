@@ -829,7 +829,7 @@ export class Position {
 
         const extraYear = new Date(new Date().setFullYear(new Date().getFullYear() + extrapolationDelta));
 
-        if (this.balance && this.shareheadShare && this.balance?.lastRate && lastYield > 0) {
+        if (this.balance && this.shareheadShare && this.balance?.lastRate) {
             projection = DividendProjectionCreator.createNewDividendProjection();
             projection.year = extraYear;
             let projectedValue = (lastYield * this.balance.averagePayedPriceGross * this.balance?.amount) / 100;
