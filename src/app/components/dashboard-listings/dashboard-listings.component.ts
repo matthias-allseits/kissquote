@@ -389,14 +389,14 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 title: '',
                 type: 'number',
                 format: '1.0-0',
-                field: 'payment',
+                field: 'paymentCorrected',
                 alignment: 'right',
                 width: '50px'
             },
             {
                 title: '',
                 type: 'string',
-                field: 'currency',
+                field: 'currencyCorrected',
                 alignment: 'right',
                 width: '35px'
             },

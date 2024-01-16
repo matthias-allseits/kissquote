@@ -59,6 +59,7 @@ export interface NextPayment {
     date: Date;
     currency: string;
     paymentCorrected?: number;
+    currencyCorrected?: string;
 }
 
 export class Position {
@@ -277,7 +278,7 @@ export class Position {
                 let nextPaymentCurrency = '';
                 let nextPayment = 0;
                 if (this.balance) {
-                    nextPayment = shareheadShare.plannedDividends[0].amount * this.balance?.amount;
+                    nextPayment = nextPaymentCorrected = shareheadShare.plannedDividends[0].amount * this.balance?.amount;
                     if (shareheadShare.plannedDividends[0].currency) {
                         nextPaymentCurrency = shareheadShare.plannedDividends[0].currency.name;
                         if (this.currency?.name !== nextPaymentCurrency) {
@@ -294,7 +295,8 @@ export class Position {
                     payment: nextPayment,
                     date: nextPayDate,
                     currency: nextPaymentCurrency,
-                    paymentCorrected: nextPaymentCorrected
+                    paymentCorrected: nextPaymentCorrected,
+                    currencyCorrected: this.currency?.name,
                 };
             }
         }

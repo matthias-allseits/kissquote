@@ -76,7 +76,11 @@ export class PositionDetailResolver implements Resolve<PositionData>{
     {
         if (position?.balance) {
             if (position.balance.lastRate?.date instanceof Date) {
-                if (position.balance.lastRate.date > rates[rates.length - 1].date) {
+                if (
+                    position.balance.lastRate.date > rates[rates.length - 1].date &&
+                    position.balance.lastRate.high !== rates[rates.length - 1].high &&
+                    position.balance.lastRate.rate !== rates[rates.length - 1].rate
+                ) {
                     if (position.share?.marketplace?.currency === 'GBX') {
                         // island apes shit!
                         const ratesCopy = StockRateCreator.createNewStockRate();
