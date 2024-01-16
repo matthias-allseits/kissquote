@@ -593,10 +593,10 @@ export class Position {
 
     public bestSelectedDividendPayment(): string {
         let result = '';
-        if (this.shareheadShare && this.balance) {
-            result = this.shareheadDividendPaymentCorrected();
-        } else if (this.manualDividend) {
+        if (this.manualDividend) {
             result = this.manualDividendPayment();
+        } else if (this.shareheadShare && this.balance) {
+            result = this.shareheadDividendPaymentCorrected();
         }
 
         return result;
@@ -831,7 +831,7 @@ export class Position {
 
         const extraYear = new Date(new Date().setFullYear(new Date().getFullYear() + extrapolationDelta));
 
-        if (this.balance && this.shareheadShare && this.balance?.lastRate && lastYield > 0) {
+        if (this.balance && this.shareheadShare && this.balance?.lastRate) {
             projection = DividendProjectionCreator.createNewDividendProjection();
             projection.year = extraYear;
             let projectedValue = (lastYield * this.balance.averagePayedPriceGross * this.balance?.amount) / 100;
