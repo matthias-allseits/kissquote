@@ -253,5 +253,9 @@
 </ng-template>
 
 <div *ngIf="selectionBalance" id="position-balance-result">
-    Total CHF: {{ balanceResult }}
+    Total CHF:
+    <span [class.red-text]="balanceResult < 0" [class.green-text]="balanceResult > 0">
+        <span *ngIf="balanceResult <= 0">{{ balanceResult }}</span>
+        <span *ngIf="balanceResult > 0">+{{ balanceResult }}</span>
+    </span>
 </div>
