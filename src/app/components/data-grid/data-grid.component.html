@@ -17,6 +17,7 @@
             </th>
             <th *ngFor="let entry of contextMenu" scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>
             <th *ngIf="contextMenu && contextMenu.length > 0" scope="col" class="d-sm-table-cell d-md-none mobile-navi-cell"></th>
+            <th *ngIf="selectionMode" class="d-none d-md-table-cell"></th>
         </tr>
     </thead>
     <tbody>
@@ -61,7 +62,8 @@
                     <fa-icon *ngIf="contextEntry.key === 'delete'" [icon]="deleteIcon"></fa-icon>
                 </button>
             </td>
-            <td *ngIf="contextMenu && contextMenu.length > 0" class="d-sm-table-cell d-md-none mobile-navi-cell" ngbDropdown>
+            <td *ngIf="selectionMode" class="text-center"><input (change)="toggleSelection(entry)" class="form-check-input" type="checkbox"></td>
+            <td *ngIf="!selectionMode && contextMenu && contextMenu.length > 0" class="d-sm-table-cell d-md-none mobile-navi-cell" ngbDropdown>
                 <fa-icon class="float-end" (click)="toggleMenu(entry)" id="entryMenu" [icon]="naviIcon" ngbDropdownToggle></fa-icon>
                 <div ngbDropdownMenu aria-labelledby="entryMenu">
                     <button *ngFor="let contextEntry of contextMenu" (click)="callFunction(contextEntry)" ngbDropdownItem>{{ contextEntry.label }}</button>

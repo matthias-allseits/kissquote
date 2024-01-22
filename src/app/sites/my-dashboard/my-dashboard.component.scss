@@ -1,3 +1,15 @@
 :host ::ng-deep a {
   text-decoration: none;
 }
+
+#position-balance-result {
+    background-color: rgb(167, 252, 252);
+    padding: 0.2rem 0.5rem;
+    position: fixed;
+    bottom: 0.5rem;
+    right: 2.0rem;
+    margin: 0;
+    border: 1px solid rgba(0, 0, 0, 0.175);
+    border-radius: 0.5rem;
+    outline: 0;
+}

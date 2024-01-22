@@ -175,6 +175,11 @@
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'closedPositions'">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
                 <h4 class="pt-2">{{ tranService.trans('GLOB_CLOSED') }} {{ tranService.trans('GLOB_POSITIONS') }}</h4>
+                <div class="mb-2 mb-md-0">
+                    <button (click)="toggleSelectionBalance()" type="button" [class.active]="selectionBalance" class="btn btn-sm btn-outline-primary" ngbTooltip="Selection" tooltipClass="custom-tooltip">
+                        <fa-icon [icon]="listIcon"></fa-icon>
+                    </button>
+                </div>
             </div>
             <h5 [class.red-text]="closedPositionsBalance < 0" [class.green-text]="closedPositionsBalance > 0">{{ tranService.trans('GLOB_BALANCE') }}:
                 <span *ngIf="closedPositionsBalance < 0">{{ closedPositionsBalance }}</span>
@@ -187,6 +192,8 @@
                     [contextMenu]="closedContextMenu"
                     (baseFunctionCall)="positionEventHandler($event)"
                     (selectedItem)="selectPosition($event)"
+                    [selectionMode]="selectionBalance"
+                    (toggleItemForBalance)="togglePositionForBalance($event)"
                 ></app-data-grid>
             </ng-container>
         </div>
@@ -244,3 +251,7 @@
         </form>
     </div>
 </ng-template>
+
+<div *ngIf="selectionBalance" id="position-balance-result">
+    Total CHF: {{ balanceResult }}
+</div>

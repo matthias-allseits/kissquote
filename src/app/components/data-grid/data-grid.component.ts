@@ -41,8 +41,10 @@ export class DataGridComponent implements OnInit {
     @Input() gridColumns?: GridColumn[];
     @Input() contextMenu?: GridContextMenuItem[];
     @Input() suppressColoring = false;
+    @Input() selectionMode = false;
     @Output() baseFunctionCall: EventEmitter<any> = new EventEmitter();
     @Output() selectedItem: EventEmitter<any> = new EventEmitter();
+    @Output() toggleItemForBalance: EventEmitter<any> = new EventEmitter();
 
     // @ViewChild(CellRendererDirective, {static: true}) cell2Render!: CellRendererDirective;
 
@@ -184,6 +186,10 @@ export class DataGridComponent implements OnInit {
 
     toggleMenu(entry: any): void {
         this.selectedItem.next(entry);
+    }
+
+    toggleSelection(entry: any): void {
+        this.toggleItemForBalance.next(entry);
     }
 
     callFunction(contextEntry: GridContextMenuItem, entry?: any): void {

@@ -1,6 +1,6 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {DividendTotals, Portfolio} from '../../models/portfolio';
-import {faEdit, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
+import {faEdit, faListCheck, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {TranslationService} from "../../services/translation.service";
 import {DividendTotal, Position} from "../../models/position";
@@ -38,6 +38,7 @@ export class MyDashboardComponent implements OnInit {
     protected readonly addIcon = faPlus;
     protected readonly editIcon = faEdit;
     protected readonly naviIcon = faEllipsisVertical;
+    protected readonly listIcon = faListCheck;
 
     public myKey: string|null = null;
     // todo: the portfolio has to be ready at this time. probably the solution: resolvers!
@@ -56,6 +57,9 @@ export class MyDashboardComponent implements OnInit {
     public ultimateBalanceList?: Position[];
     public ultimateBalanceFilter?: Label[];
     public shareheadSharesLoaded = false;
+    private positionListForBalance: Position[] = [];
+    public balanceResult = 0;
+    public selectionBalance = false;
     modalRef?: NgbModalRef;
 
     public cashColumns?: GridColumn[];
@@ -120,10 +124,27 @@ export class MyDashboardComponent implements OnInit {
     changeTab(selectedTab: string): void {
         this.dashboardTab = selectedTab;
         localStorage.setItem('dashboardTab', selectedTab);
+        this.selectionBalance = false;
+        this.positionListForBalance = [];
     }
 
     selectPosition(position: Position) {
         this.selectedPosition = position;
+    }
+
+    togglePositionForBalance(position: Position) {
+        const check = this.positionListForBalance.indexOf(position);
+        if (check > -1) {
+            this.positionListForBalance.splice(check, 1);
+        } else {
+            this.positionListForBalance.push(position);
+        }
+        this.balanceResult = 0;
+        for (const posi of this.positionListForBalance) {
+            if (posi.balance?.closedResult) {
+                this.balanceResult += +posi.closedResultCorrected();
+            }
+        }
     }
 
     changeDividenListTab(selectedTab: number): void {
@@ -308,8 +329,8 @@ export class MyDashboardComponent implements OnInit {
             });
     }
 
-    togglePositionsMenu(position: Position): void {
-        this.selectedPosition = position;
+    toggleSelectionBalance(): void {
+        this.selectionBalance = !this.selectionBalance;
     }
 
     positionEventHandler(event: any) {
