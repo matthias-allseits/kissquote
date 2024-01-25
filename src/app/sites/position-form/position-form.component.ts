@@ -44,6 +44,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
 
     positionForm = new UntypedFormGroup({
         shareName: new FormControl('', Validators.required),
+        shortName: new FormControl('', Validators.required),
         isin: new FormControl('', Validators.required),
         marketplace: new FormControl('', Validators.required),
         currency: new FormControl('', Validators.required),
@@ -85,6 +86,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
                         if (position instanceof Position) {
                             this.position = position;
                             this.positionForm.get('shareName')?.setValue(position.share?.name);
+                            this.positionForm.get('shortName')?.setValue(position.share?.shortname);
                             this.positionForm.get('isin')?.setValue(position.share?.isin);
                             this.positionForm.get('dividendPeriodicity')?.setValue(position.dividendPeriodicity);
                             this.positionForm.get('activeFrom')?.setValue(formatDate(position.activeFrom, 'yyyy-MM-dd', 'en'));
@@ -128,6 +130,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         share.marketplace = shareheadShare.marketplace;
         this.selectableShares = [];
         this.positionForm.get('shareName')?.setValue(share.name);
+        this.positionForm.get('shortName')?.setValue(share.name?.substring(0, 15));
         this.positionForm.get('isin')?.setValue(share.isin);
         this.position.share = share;
         this.position.shareheadId = share.id;
@@ -149,6 +152,7 @@ export class PositionFormComponent extends MotherFormComponent implements OnInit
         }
         const newShare = ShareCreator.createNewShare();
         newShare.name = this.positionForm.get('shareName')?.value;
+        newShare.shortname = this.positionForm.get('shortName')?.value;
         newShare.marketplace = this.positionForm.get('marketplace')?.value;
         newShare.isin = this.positionForm.get('isin')?.value;
         if (this.selectedShare) {
