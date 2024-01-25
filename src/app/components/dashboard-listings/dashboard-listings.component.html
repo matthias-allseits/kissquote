@@ -249,7 +249,7 @@
             <h4>Risks</h4>
         </div>
         <h6>Total: {{ riskTotal|number: '1.0' }}</h6>
-        <h6>{{ (100 / portfolio.valueTotal() * riskTotal).toFixed() }}%</h6>
+        <h6>{{ (100 / portfolio.valueTotal() * riskTotal).toFixed() }}% von aktueller Bewertung</h6>
         <span>! {{ missingPositionsInRisklist }} positions are missing in this list !</span>
         <app-data-grid
             [gridData]="risksList"

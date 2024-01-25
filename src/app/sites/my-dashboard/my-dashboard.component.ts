@@ -53,7 +53,7 @@ export class MyDashboardComponent implements OnInit {
     public dividendListTab = new Date().getFullYear();
     public dividendLists?: DividendTotals[];
     public closedPositionsBalance = 0;
-    public years = [2023, 2024, 2025, 2026];
+    public years = [2023, 2024, 2025, 2026, 2027, 2028, 2029];
     public ultimateBalanceList?: Position[];
     public ultimateBalanceFilter?: Label[];
     public shareheadSharesLoaded = false;

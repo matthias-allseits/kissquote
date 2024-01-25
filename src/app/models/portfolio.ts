@@ -615,7 +615,7 @@ export class Portfolio {
             labels: [],
             datasets: [
                 {
-                    label: (new Date().getFullYear() - 2).toString(),
+                    label: (new Date().getFullYear() - 3).toString(),
                     data: [],
                     borderColor: 'rgb(220, 193, 18, 1)',
                     backgroundColor: 'rgb(220, 193, 18, 1)',
@@ -626,7 +626,7 @@ export class Portfolio {
                     yAxisID: 'y',
                 },
                 {
-                    label: (new Date().getFullYear() - 1).toString(),
+                    label: (new Date().getFullYear() - 2).toString(),
                     data: [],
                     borderColor: 'rgb(51, 102, 204, 1)',
                     backgroundColor: 'rgb(51, 102, 204, 1)',
@@ -637,7 +637,7 @@ export class Portfolio {
                     yAxisID: 'y',
                 },
                 {
-                    label: (new Date().getFullYear()).toString(),
+                    label: (new Date().getFullYear() - 1).toString(),
                     data: [],
                     borderColor: 'rgb(112, 204, 51)',
                     backgroundColor: 'rgb(112, 204, 51, 1)',
@@ -648,7 +648,7 @@ export class Portfolio {
                     yAxisID: 'y',
                 },
                 {
-                    label: (new Date().getFullYear() + 1).toString(),
+                    label: (new Date().getFullYear()).toString(),
                     data: [],
                     borderColor: 'rgb(255, 102, 51, 1)',
                     backgroundColor: 'rgb(255, 102, 51, 1)',
