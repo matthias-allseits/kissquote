@@ -42,6 +42,8 @@ export class ShareheadService {
             // this.baseUrl = 'http://localhost:8009/api';
             this.baseUrl = 'http://head.local/api';
             // this.baseUrl = 'http://head.om/api';
+        } else if (window.location.href.indexOf('allseits.ch') > -1) {
+            this.baseUrl = 'https://api.sharehead.allseits.ch/api';
         }
     }
 

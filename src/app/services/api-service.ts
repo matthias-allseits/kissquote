@@ -16,6 +16,8 @@ export abstract class ApiService {
             this.apiUrl = 'http://api.kissquote.local/api';
         } else if (+window.location.port === 4500) {
             this.apiUrl = 'http://localhost:8008/api';
+        } else if (window.location.href.indexOf('allseits.ch') > -1) {
+            this.apiUrl = 'https://api.kissquote.allseits.ch/api';
         } else {
             this.apiUrl = 'http://api-kissquote.dyn-o-saur.com/api';
         }
