@@ -42,6 +42,7 @@ export class DataGridComponent implements OnInit {
     @Input() contextMenu?: GridContextMenuItem[];
     @Input() suppressColoring = false;
     @Input() selectionMode = false;
+    @Input() filterActive = false;
     @Output() baseFunctionCall: EventEmitter<any> = new EventEmitter();
     @Output() selectedItem: EventEmitter<any> = new EventEmitter();
     @Output() toggleItemForBalance: EventEmitter<any> = new EventEmitter();
@@ -98,10 +99,12 @@ export class DataGridComponent implements OnInit {
 
     checkForVisibility(entry: any): string {
         let visibility = 'table-row';
-        if (entry instanceof Position && entry.visible === false) {
-            visibility = 'none';
-        } else if (entry.hasOwnProperty('position') && entry.position instanceof Position && entry.position.visible === false) {
-            visibility = 'none';
+        if (this.filterActive) {
+            if (entry instanceof Position && entry.visible === false) {
+                visibility = 'none';
+            } else if (entry.hasOwnProperty('position') && entry.position instanceof Position && entry.position.visible === false) {
+                visibility = 'none';
+            }
         }
 
         return visibility;

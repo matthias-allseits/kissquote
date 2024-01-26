@@ -13,6 +13,8 @@
                 scope="col">
                 <span
                     [class.float-end]="column.alignment === 'right'"
+                    ngbTooltip="{{ column.toolTip }}"
+                    tooltipClass="custom-tooltip"
                 >{{ column.title }}</span>
             </th>
             <th *ngFor="let entry of contextMenu" scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>

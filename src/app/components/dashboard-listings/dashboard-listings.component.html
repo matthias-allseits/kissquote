@@ -59,6 +59,7 @@
             [contextMenu]="ultimateContextMenu"
             (baseFunctionCall)="positionEventHandler($event)"
             (selectedItem)="selectPosition($event)"
+            [filterActive]="true"
         ></app-data-grid>
         <div *ngIf="ultimateBalance" class="row">
             <div class="col-12">
