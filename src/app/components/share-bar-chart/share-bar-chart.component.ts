@@ -30,6 +30,7 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
     private redColor = 'red';
     private greenColor = 'green';
     private blackColor = 'black';
+    private yellowColor = '#e0c103';
     private helplineColor = '#dee2e6';
     private monthColor = '#a4a4a4';
     private textColor = '#4e4e4e';
@@ -227,6 +228,24 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                 const buyValue = CanvasHelper.optimizeCoordinate(((topEnd - avgPriceForChart) * verticalFactor) + this.offsetTop);
                 this.context.moveTo(this.offsetLeft, buyValue);
                 this.context.lineTo(this.canvasWidth, buyValue);
+                this.context.stroke();
+            }
+
+            // break-even
+            if (this.position?.balance && +this.position.balance.returnOnInvestentByDividends() > 5) {
+                this.context.beginPath();
+                this.context.strokeStyle = this.yellowColor;
+                this.context.setLineDash([5, 5]);
+                let breakEvenForChart = this.position?.balance?.breakEvenPrice;
+                if (this.position.currency?.name === 'GBP') {
+                    breakEvenForChart *= 100;
+                }
+                if (this.position?.share?.name && this.position?.share?.name.indexOf('BRC') > -1) {
+                    breakEvenForChart /= 10;
+                }
+                const breakEvenValue = CanvasHelper.optimizeCoordinate(((topEnd - breakEvenForChart) * verticalFactor) + this.offsetTop);
+                this.context.moveTo(this.offsetLeft, breakEvenValue);
+                this.context.lineTo(this.canvasWidth, breakEvenValue);
                 this.context.stroke();
             }
 

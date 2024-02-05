@@ -8,6 +8,7 @@ export class Balance {
         public firstRate: number,
         public averagePayedPriceGross: number,
         public averagePayedPriceNet: number,
+        public breakEvenPrice: number,
         public investment: number,
         public transactionFeesTotal: number,
         public collectedDividends: number,

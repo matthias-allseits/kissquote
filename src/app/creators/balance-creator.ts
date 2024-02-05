@@ -12,6 +12,7 @@ export class BalanceCreator {
                 apiArray.firstRate,
                 apiArray.averagePayedPriceGross,
                 apiArray.averagePayedPriceNet,
+                apiArray.breakEvenPrice,
                 apiArray.investment,
                 apiArray.transactionFeesTotal,
                 apiArray.collectedDividends,
