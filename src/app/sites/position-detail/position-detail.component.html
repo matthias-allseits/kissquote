@@ -229,6 +229,10 @@
                         <div class="col-9">1 year:</div>
                         <div class="col-3"><span class="float-end" [class.red-text]="position.balance.performance[5] < 0" [class.green-text]="position.balance.performance[5] > 0">{{ position.balance.performance[5] }}%</span></div>
                     </div>
+                    <div *ngIf="position.balance.performance[6] !== undefined" class="row">
+                        <div class="col-9">3 years:</div>
+                        <div class="col-3"><span class="float-end" [class.red-text]="position.balance.performance[6] < 0" [class.green-text]="position.balance.performance[6] > 0">{{ position.balance.performance[6] }}%</span></div>
+                    </div>
                 </div>
                 <div *ngIf="position.balance" class="info-box">
                     <h5>Events</h5>

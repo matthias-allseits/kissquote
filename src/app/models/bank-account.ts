@@ -78,7 +78,7 @@ export class BankAccount {
     investmentTotal(): number {
         let total = 0;
         this.getActiveNonCashPositions().forEach(position => {
-            if (position.balance) {
+            if (position.balance && position.balance.amount > 0) {
                 total += position.balance?.investment;
             }
         });
