@@ -959,7 +959,11 @@ export class Portfolio {
                 position.activeFrom <= date &&
                 (position.activeUntil === null || position.activeUntil >= date)
             ) {
-                positions.push(position);
+                if (position.activeUntil === null && position.balance !== undefined && position.balance.amount === 0) {
+                    // console.log(position.getName());
+                } else {
+                    positions.push(position);
+                }
             }
         });
 
