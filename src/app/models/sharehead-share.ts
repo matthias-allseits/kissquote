@@ -870,7 +870,7 @@ export class ShareheadShare {
         const allPoints = this.turningPoints;
         allPoints?.forEach(point => {
             const year = point.date.getFullYear();
-            if ([2021, 2022, 2023].indexOf(year) > -1 && point.type === 'top') {
+            if ([2021, 2022, 2023, 2024].indexOf(year) > -1 && point.type === 'top') {
                 result = point;
             }
         });
