@@ -39,7 +39,7 @@ export class ShareheadEstimation {
             result = this.profitPerShare * currency.rate / this.currency.rate;
         }
 
-        return +result.toFixed(1);
+        return +result.toFixed(2);
     }
 
     currencyCorrectedDividend(currency?: Currency): number
@@ -49,7 +49,7 @@ export class ShareheadEstimation {
             result = this.dividend * currency.rate / this.currency.rate;
         }
 
-        return +result.toFixed(1);
+        return +result.toFixed(2);
     }
 
     currencyCorrectedProfit(currency?: Currency): number
