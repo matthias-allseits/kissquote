@@ -12,10 +12,15 @@ a {
 .label-checklist {
     display: inline;
     margin-right: 25px;
+    overflow-wrap: anywhere;
 
     input.form-check-input {
         border-radius: 0.25em;
         float: none;
         margin-right: 10px;
+        white-space: nowrap;
+    }
+    label {
+        white-space: nowrap;
     }
 }

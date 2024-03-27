@@ -91,12 +91,12 @@
                     <div class="row">
                         <div class="col-4">Top</div>
                         <div class="col-4">{{ shareheadShare.financialCrisisTop()?.date|date:'dd.MM.y' }}</div>
-                        <div class="col-4"><span class="float-end">{{ shareheadShare.financialCrisisTop()?.rate }}</span></div>
+                        <div class="col-4"><span class="float-end">{{ shareheadShare.financialCrisisTop()?.rate|number: '1.0-2' }}</span></div>
                     </div>
                     <div class="row">
                         <div class="col-4">Bottom</div>
                         <div class="col-4">{{ shareheadShare.financialCrisisBottom()?.date|date:'dd.MM.y' }}</div>
-                        <div class="col-4"><span class="float-end">{{ shareheadShare.financialCrisisBottom()?.rate }}</span></div>
+                        <div class="col-4"><span class="float-end">{{ shareheadShare.financialCrisisBottom()?.rate|number: '1.0-2' }}</span></div>
                     </div>
                     <div class="row">
                         <div class="col-3">Drawdown</div>
@@ -113,12 +113,12 @@
                     <div class="row">
                         <div class="col-4">Top</div>
                         <div class="col-4">{{ shareheadShare.coronaPandemicTop()?.date|date:'dd.MM.y' }}</div>
-                        <div class="col-4"><span class="float-end">{{ shareheadShare.coronaPandemicTop()?.rate }}</span></div>
+                        <div class="col-4"><span class="float-end">{{ shareheadShare.coronaPandemicTop()?.rate|number: '1.0-2' }}</span></div>
                     </div>
                     <div class="row">
                         <div class="col-4">Bottom</div>
                         <div class="col-4">{{ shareheadShare.coronaPandemicBottom()?.date|date:'dd.MM.y' }}</div>
-                        <div class="col-4"><span class="float-end">{{ shareheadShare.coronaPandemicBottom()?.rate }}</span></div>
+                        <div class="col-4"><span class="float-end">{{ shareheadShare.coronaPandemicBottom()?.rate|number: '1.0-2' }}</span></div>
                     </div>
                     <div class="row">
                         <div class="col-3">Drawdown</div>
