@@ -95,8 +95,30 @@ export class LineChartComponent implements OnInit {
         // console.log(event, active);
     }
 
-    public chartHovered({event, active}: { event?: ChartEvent, active?: {}[] }): void {
-        // console.log(event, active);
+    public chartHovered({event, active}: { event?: any, active?: {}[] }): void {
+        // console.log(event);
+        // console.log(event.chart);
+        // console.log('height: ', event.chart.tooltip.height);
+        const dataPoints = event.chart.tooltip.dataPoints;
+        if (dataPoints) {
+            // console.log('dataPoints: ', dataPoints);
+            const pointValue = event.chart.tooltip.dataPoints[0].raw;
+            // console.log('pointValue: ', pointValue);
+            // console.log(event.chart.tooltip.dataPoints[0].dataset.data);
+            const dataIndex = event.chart.tooltip.dataPoints[0].dataset.data.lastIndexOf(pointValue);
+            // console.log('dataIndex: ', dataIndex);
+            if (dataIndex > 0) {
+                const pointValueBefore = event.chart.tooltip.dataPoints[0].dataset.data[dataIndex - 1];
+                const changeInPercent = +((100 / pointValueBefore * pointValue) - 100).toFixed(1);
+                // console.log('changeInPercent: ', changeInPercent);
+                const existingText = event.chart.tooltip.body[0].lines[0];
+                if (existingText.indexOf('%') === -1) {
+                    event.chart.tooltip.body[0].lines[0] += ' (' + changeInPercent + '%)';
+                }
+                // event.chart.tooltip.body[0].lines[1] = changeInPercent + '%';
+                // event.chart.tooltip.height = 63;
+            }
+        }
     }
 
 }
