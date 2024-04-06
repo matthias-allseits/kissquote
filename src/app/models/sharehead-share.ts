@@ -298,14 +298,14 @@ export class ShareheadShare {
     private workingBalancesByDate(): ShareheadBalance[]
     {
         const balances = this.balances ?? [];
-        const filteredBalances = [];
+        const filteredBalances: ShareheadBalance[] = [];
         balances?.forEach(balance => {
             if (undefined === this.ipoDate || this.ipoDate.getFullYear() <= balance.year) {
                 filteredBalances.push(balance);
             }
         });
 
-        return balances;
+        return filteredBalances;
     }
 
 

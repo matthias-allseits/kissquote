@@ -19,6 +19,7 @@ import {Strategy} from "./strategy";
 import {ChartData} from "chart.js";
 import {DateHelper} from "../core/datehelper";
 import {TargetSummary} from "../components/target-value/target-value.component";
+import {ExtraPolaSummary} from "../components/extrapolation-list/extrapolation-list.component";
 
 
 export interface DividendTotal {
@@ -531,6 +532,58 @@ export class Position {
         };
 
         return targetSummary;
+    }
+
+
+    public getExtraPolaSummary(): ExtraPolaSummary {
+        let method = 'none';
+        let avgPerformance = 0;
+        let actual = +this.actualValue();
+        let extraPolatedValue = +this.actualValue();
+        let extraPolatedPrice = 0;
+
+        const shareheadsAveragePerformance = this.shareheadShare?.getAvgPerformance();
+        if (shareheadsAveragePerformance) {
+            avgPerformance = +shareheadsAveragePerformance;
+        }
+        if (this.balance && avgPerformance > 0) {
+            const lastRate = this.balance.lastRate;
+            const lastAvgRate = this.shareheadShare?.lastBalance()?.avgRate;
+            let baseRate = 0;
+            if (lastRate instanceof StockRate && lastAvgRate !== undefined) {
+                if (lastRate.rate < lastAvgRate) {
+                    baseRate = lastRate.rate;
+                    method = 'from last rate (' + baseRate + ')';
+                } else {
+                    baseRate = lastAvgRate;
+                    method = 'from last average rate (' + baseRate + ')';
+                }
+                extraPolatedPrice = baseRate;
+            }
+            if (baseRate > 0) {
+                extraPolatedPrice = baseRate;
+                for (let x = 0; x < 5; x++) {
+                    extraPolatedPrice *= ( avgPerformance / 100 + 1);
+                }
+                extraPolatedValue = +(this.balance.amount * extraPolatedPrice).toFixed();
+            }
+        }
+
+        let performance = +((100 / actual * extraPolatedValue) - 100).toFixed();
+        if (isNaN(performance)) {
+            performance = 0;
+        }
+        const extraPolaSummary = {
+            position: this,
+            actual: actual,
+            avgPerformance: avgPerformance,
+            extraPolatedValue: extraPolatedValue,
+            extraPolatedPrice: extraPolatedPrice,
+            performance: performance,
+            method: method,
+        };
+
+        return extraPolaSummary;
     }
 
 

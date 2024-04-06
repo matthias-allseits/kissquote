@@ -60,6 +60,7 @@ import { DiversificationSectorComponent } from './components/diversification-sec
 import { DiversificationSectorContainerComponent } from './components/diversification-sector-container/diversification-sector-container.component';
 import { SpinnerRelativeComponent } from './components/spinner-relative/spinner-relative.component';
 import { DiversificationStrategyContainerComponent } from './components/diversification-strategy-container/diversification-strategy-container.component';
+import { ExtrapolationListComponent } from './components/extrapolation-list/extrapolation-list.component';
 registerLocaleData(localeCH);
 
 
@@ -112,6 +113,7 @@ registerLocaleData(localeCH);
         DiversificationSectorComponent,
         DiversificationSectorContainerComponent,
         DiversificationStrategyContainerComponent,
+        ExtrapolationListComponent,
     ],
     imports: [
         BrowserModule,

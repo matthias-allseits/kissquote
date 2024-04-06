@@ -22,7 +22,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     @Input() ultimateBalanceFilter?: Label[];
     @Output() filterUltmateList: EventEmitter<any> = new EventEmitter();
 
-    private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'payDays', 'newestRatings', 'nextReports', 'diversification', 'performance', 'risks', 'strategies', 'targetValue'];
+    private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'payDays', 'newestRatings', 'nextReports', 'diversification', 'performance', 'risks', 'strategies', 'targetValue', 'extraPola'];
     public listingTab = 'ultimate';
     private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year', '3years', '5years', '10years'];
     public performanceListTab = '1day';

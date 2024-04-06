@@ -39,6 +39,9 @@
         <li class="nav-item">
             <a class="nav-link" [class.active]="listingTab === 'targetValue'" (click)="changeListingTab('targetValue')" aria-current="page">Target Value</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="listingTab === 'extraPola'" (click)="changeListingTab('extraPola')" aria-current="page">Extrapolation</a>
+        </li>
     </ul>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'ultimate'">
         <div class="row">
@@ -264,5 +267,8 @@
     </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'targetValue'">
         <app-target-value [portfolio]="portfolio"></app-target-value>
+    </div>
+    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'extraPola'">
+        <app-extrapolation-list [portfolio]="portfolio"></app-extrapolation-list>
     </div>
 </ng-container>
