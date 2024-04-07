@@ -26,7 +26,7 @@ export class ShareheadEstimation {
     {
         let result = this.sales;
         if (this.currency && currency && +currency.id !== +this.currency.id) {
-            result = this.sales * currency.rate / this.currency.rate;
+            result = this.sales * this.currency.rate / currency.rate;
         }
 
         return +result.toFixed(0);
@@ -36,7 +36,7 @@ export class ShareheadEstimation {
     {
         let result = this.profitPerShare;
         if (this.currency && currency && +currency.id !== +this.currency.id) {
-            result = this.profitPerShare * currency.rate / this.currency.rate;
+            result = this.profitPerShare * this.currency.rate / currency.rate;
         }
 
         return +result.toFixed(2);
@@ -46,7 +46,7 @@ export class ShareheadEstimation {
     {
         let result = this.dividend;
         if (this.currency && currency && +currency.id !== +this.currency.id) {
-            result = this.dividend * currency.rate / this.currency.rate;
+            result = this.dividend * this.currency.rate / currency.rate;
         }
 
         return +result.toFixed(2);
@@ -56,7 +56,7 @@ export class ShareheadEstimation {
     {
         let result = this.profit;
         if (this.currency && currency && +currency.id !== +this.currency.id) {
-            result = this.profit * currency.rate / this.currency.rate;
+            result = this.profit * this.currency.rate / currency.rate;
         }
 
         return +result.toFixed(1);
