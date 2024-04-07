@@ -11,6 +11,8 @@ export interface ExtraPolaSummary {
     avgPerformance: number;
     extraPolatedValue: number;
     extraPolatedPrice: number;
+    extraPolatedDividend: number;
+    dividendCurrency: string;
     performance: number;
     method: string;
 }
@@ -120,6 +122,15 @@ export class ExtrapolationListComponent {
                 field: 'performance',
                 toolTip: 'Performance till ' + this.year,
                 alignment: 'right',
+            },
+            {
+                title: 'XPltdDivi',
+                type: 'number',
+                format: '1.0',
+                field: 'extraPolatedDividend',
+                toolTip: 'Extrapolated dividend',
+                alignment: 'right',
+                responsive: 'sm-up',
             }
         );
 

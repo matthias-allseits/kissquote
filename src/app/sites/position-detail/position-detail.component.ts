@@ -36,6 +36,7 @@ import {PortfolioService} from "../../services/portfolio.service";
 import {GridContextMenuItem} from "../../components/data-grid/data-grid.component";
 import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons/faEllipsisVertical";
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
+import {ExtraPolaSummary} from "../../components/extrapolation-list/extrapolation-list.component";
 
 
 @Component({
@@ -94,6 +95,7 @@ export class PositionDetailComponent implements OnInit {
     public filteredPositions?: Position[];
     public selectedDirectNaviPosition?: Position;
     public rosaBrille?: TargetSummary;
+    public extraPola?: ExtraPolaSummary;
     selectedItem?: PositionLog|Transaction;
 
     transactionContextMenu?: GridContextMenuItem[];
@@ -732,6 +734,7 @@ export class PositionDetailComponent implements OnInit {
         this.stopLossBroken = false;
         this.hasReachedTargetPrice = false;
         this.rosaBrille = undefined;
+        this.extraPola = undefined;
 
         if (this.position) {
             if (this.portfolioService.portfolio) {
@@ -749,6 +752,7 @@ export class PositionDetailComponent implements OnInit {
             }
 
             this.rosaBrille = this.position.getTargetSummary();
+            this.extraPola = this.position.getExtraPolaSummary();
 
             if (this.position.shareheadShare) {
                 const share = this.position.shareheadShare;

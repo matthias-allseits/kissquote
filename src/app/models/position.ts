@@ -541,6 +541,8 @@ export class Position {
         let actual = +this.actualValue();
         let extraPolatedValue = +this.actualValue();
         let extraPolatedPrice = 0;
+        let extraPolatedDividend = 0;
+        let dividendCurrency = this.currency ? this.currency.name : '';
 
         const shareheadsAveragePerformance = this.shareheadShare?.getAvgPerformance();
         if (shareheadsAveragePerformance) {
@@ -569,6 +571,15 @@ export class Position {
             }
         }
 
+        const dividendProjection = this.extrapolateProjection(5);
+        if (dividendProjection) {
+            if (dividendProjection.currencyCorrectedProjectionValue) {
+                extraPolatedDividend = +(dividendProjection.currencyCorrectedProjectionValue).toFixed();
+            } else {
+                extraPolatedDividend = +(dividendProjection.projectionValue).toFixed();
+            }
+        }
+
         let performance = +((100 / actual * extraPolatedValue) - 100).toFixed();
         if (isNaN(performance)) {
             performance = 0;
@@ -579,6 +590,8 @@ export class Position {
             avgPerformance: avgPerformance,
             extraPolatedValue: extraPolatedValue,
             extraPolatedPrice: extraPolatedPrice,
+            extraPolatedDividend: extraPolatedDividend,
+            dividendCurrency: dividendCurrency,
             performance: performance,
             method: method,
         };
