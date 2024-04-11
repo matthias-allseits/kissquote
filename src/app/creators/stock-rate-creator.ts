@@ -15,8 +15,8 @@ export class StockRateCreator {
                 new Date(apiArray.date),
                 apiArray.rate,
                 apiArray.open,
-                apiArray.high,
-                apiArray.low,
+                apiArray.high > 0 ? apiArray.high : apiArray.rate,
+                apiArray.low > 0 ? apiArray.low : apiArray.rate,
                 apiArray.currency,
             );
         } else {
