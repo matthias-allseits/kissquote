@@ -796,15 +796,18 @@ export class Portfolio {
             if (position.sector && position.balance && position.balance.lastRate) {
                 const summary = this.getSummaryBySector(summaries, position.sector);
                 let dividend = +position.bestSelectedDividendPayment();
-                if (position.shareheadShare?.currency) {
-                    const usersCurrency = Forexhelper.getUsersCurrencyByName(position.shareheadShare?.currency?.name);
-                    if (usersCurrency) {
-                        dividend = usersCurrency.rate * dividend;
-                        if (position.currency && position.currency?.name !== 'CHF') {
-                            dividend = dividend / position.currency?.rate;
-                        }
-                    }
-                }
+                // if (position.shareheadShare?.currency) {
+                //     const usersCurrency = Forexhelper.getUsersCurrencyByName(position.shareheadShare?.currency?.name);
+                //     if (usersCurrency) {
+                //         if (position.sector.name === 'Telekommunikation') {
+                //             console.log('usersCurrency: ', usersCurrency);
+                //         }
+                //         dividend = usersCurrency.rate * dividend;
+                //         if (position.currency && position.currency?.name !== 'CHF') {
+                //             dividend = dividend / position.currency?.rate;
+                //         }
+                //     }
+                // }
                 if (summary) {
                     summary.investment += position.balance?.investment;
                     summary.value += +position.actualValue();
