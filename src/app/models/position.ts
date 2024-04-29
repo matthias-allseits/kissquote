@@ -515,6 +515,13 @@ export class Position {
                 targetPrice = +mostOptimisticRating?.priceTarget;
                 method = `from analyst (${mostOptimisticRating?.analyst?.shortName}, ` + DateHelper.convertDateToGerman(mostOptimisticRating?.date) + `)`;
                 methodShort = `from ${mostOptimisticRating?.analyst?.shortName}`;
+                if (mostOptimisticRating.currency && this.currency) {
+                    if (mostOptimisticRating.currency.name !== this.currency.name) {
+                        target = +(target * mostOptimisticRating.currency.rate / this.currency.rate).toFixed();
+                        targetPrice = targetPrice * mostOptimisticRating.currency.rate / this.currency.rate;
+                        method += ' (converted)';
+                    }
+                }
             }
         }
         let chance = +((100 / actual * target) - 100).toFixed();
