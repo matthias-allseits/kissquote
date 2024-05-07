@@ -61,7 +61,8 @@ export class PositionCreator {
                 apiArray.manualTargetPrice ? apiArray.manualTargetPrice : undefined,
                 apiArray.manualDrawdown ? apiArray.manualDrawdown : undefined,
                 apiArray.manualDividendDrop !== undefined && !isNaN(apiArray.manualDividendDrop) ? apiArray.manualDividendDrop : undefined,
-                apiArray.labels ? LabelCreator.fromApiArray(apiArray.labels) : undefined
+                apiArray.labels ? LabelCreator.fromApiArray(apiArray.labels) : undefined,
+                apiArray.bankAccountName ? apiArray?.bankAccountName : undefined
             );
         } else {
             return undefined;

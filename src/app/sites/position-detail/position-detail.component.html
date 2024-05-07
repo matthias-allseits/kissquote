@@ -20,12 +20,15 @@
             </div>
         </a>
     </div>
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 p-1 pb-2 mb-3 border-bottom">
-        <h1 class="h2">
-            <span *ngIf="!position.motherId">Position</span>
-            <span *ngIf="position.motherId">Underlying</span>
-            &laquo;{{ position.getName() }}&raquo;
-        </h1>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-0 p-1 pb-1 mb-3 border-bottom">
+        <div class="mb-2 mb-md-0">
+            <h1 class="h2">
+                <span *ngIf="!position.motherId">Position</span>
+                <span *ngIf="position.motherId">Underlying</span>
+                &laquo;{{ position.getName() }}&raquo;
+            </h1>
+            <small>Account: {{ position.bankAccountName }}</small>
+        </div>
         <div class="mb-2 mb-md-0">
             <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
             <button (click)="openLabelModal(labelModal)" type="button" class="btn btn-tiny btn-outline-primary" ngbTooltip="Labels bearbeiten" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button>

@@ -93,6 +93,7 @@ export class Position {
         public manualDrawdown?: number,
         public manualDividendDrop?: number,
         public labels?: Label[],
+        public bankAccountName?: string,
         public shareheadShare?: ShareheadShare,
         public visible?: boolean, // for filtering purposes
         public tempPerformanceValue?: number, // for filtering purposes
