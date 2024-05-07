@@ -39,6 +39,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public riskTotal = 0;
     public missingPositionsInRisklist = 0;
     public ultimateBalance?: number;
+    public ultimateTotalReturn?: number;
     public ultimateValue?: number;
 
     public ultimateColumns?: GridColumn[];
@@ -154,6 +155,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
 
     setAllLabelsActive(): void {
         this.ultimateBalance = undefined;
+        this.ultimateTotalReturn = undefined;
         this.ultimateValue = undefined;
         this.ultimateBalanceFilter?.forEach(filter => {
             filter.checked = true;
@@ -180,15 +182,21 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     {
         if (this.ultimateBalanceList) {
             let balance = 0;
+            let balanceTotalReturn = 0;
             let value = 0;
             for (const position of this.ultimateBalanceList) {
                 if (position.balance && position.visible && position.balance.amount > 0) {
                     const result = +position.actualValue() - position.balance.investment;
+                    const totalReturn = +position.actualValue() + position.balance.collectedDividends - position.balance.investment;
+                    // console.log(position.share?.name);
+                    // console.log(result);
                     balance += result;
+                    balanceTotalReturn += totalReturn;
                     value += +position.actualValue();
                 }
             }
             this.ultimateBalance = balance;
+            this.ultimateTotalReturn = balanceTotalReturn;
             this.ultimateValue = value;
         }
     }
