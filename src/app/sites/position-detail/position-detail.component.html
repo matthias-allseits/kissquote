@@ -23,9 +23,8 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-0 p-1 pb-1 mb-3 border-bottom">
         <div class="mb-2 mb-md-0">
             <h1 class="h2">
-                <span *ngIf="!position.motherId">Position</span>
-                <span *ngIf="position.motherId">Underlying</span>
-                &laquo;{{ position.getName() }}&raquo;
+                <span class="d-none d-md-table-cell">{{ positionType }} &laquo;{{ position.getName() }}&raquo;</span>
+                <span class="d-table-cell d-md-none">{{ positionType }} &laquo;{{ position.getShortName() }}&raquo;</span>
             </h1>
             <small *ngIf="position.bankAccountName">Account: {{ position.bankAccountName }}</small>
         </div>
@@ -33,9 +32,9 @@
             <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color" [class.active-filter]="label.checked">{{ label.name }}</span>
             <button (click)="openLabelModal(labelModal)" type="button" class="btn btn-tiny btn-outline-primary" ngbTooltip="Labels bearbeiten" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button>
         </div>
-        <div class="mb-2 mb-md-0">
-            <button (click)="refreshPositionStatic()" type="button" class="btn btn-tiny btn-outline-primary" ngbTooltip="Refresh" tooltipClass="custom-tooltip"><fa-icon [icon]="refreshIcon"></fa-icon></button>
-        </div>
+<!--        <div class="mb-2 mb-md-0">-->
+<!--            <button (click)="refreshPositionStatic()" type="button" class="btn btn-tiny btn-outline-primary" ngbTooltip="Refresh" tooltipClass="custom-tooltip"><fa-icon [icon]="refreshIcon"></fa-icon></button>-->
+<!--        </div>-->
         <div class="btn-toolbar mb-2 mb-md-0">
             <ng-container *ngIf="!position.motherId">
                 <div class="btn-group me-2">

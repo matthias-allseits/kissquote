@@ -82,6 +82,7 @@ export class PositionDetailComponent implements OnInit {
     public allStrategies?: Strategy[];
     public logBook?: any[];
     public commentsFilter = false;
+    public positionType = 'Position';
 
     public selectedLogEntry?: PositionLog;
     public chartData?: ChartData;
@@ -158,6 +159,9 @@ export class PositionDetailComponent implements OnInit {
                 this.chartData = data['positionData']['costIncomeChartData'];
                 this.loadData('ngOnInit');
                 this.setContextMenus();
+                if (this.position?.motherId) {
+                    this.positionType = 'Underlying';
+                }
             }, 100);
         });
 

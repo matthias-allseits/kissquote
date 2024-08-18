@@ -111,6 +111,16 @@ export class Position {
         }
     }
 
+    public getShortName(): string {
+        if (this.share && this.share.shortname) {
+            return this.share.shortname;
+        } else if (this.currency && this.currency.name) {
+            return this.currency.name;
+        } else {
+            return 'undefined';
+        }
+    }
+
 
     investmentBalance(): string
     {
