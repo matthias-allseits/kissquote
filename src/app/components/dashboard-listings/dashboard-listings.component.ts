@@ -388,6 +388,11 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 field: 'position.share.name',
             },
             {
+                title: 'Account',
+                type: 'string',
+                field: 'position.bankAccountName',
+            },
+            {
                 title: 'Date',
                 type: 'date',
                 format: 'dd.MM.YY',

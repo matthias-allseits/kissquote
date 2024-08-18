@@ -28,7 +28,7 @@ export class BankAccountCreator {
             return new BankAccount(
                 apiArray.id,
                 apiArray.name,
-                apiArray.positions ? PositionCreator.fromApiArray(apiArray.positions) : [],
+                apiArray.positions ? PositionCreator.fromApiArray(apiArray.positions, apiArray.name) : [],
             );
         } else {
             return undefined;

@@ -16,11 +16,11 @@ export class PositionCreator {
         return new Position(0, null, true, new Date(), null, [], [], false, '', 0);
     }
 
-    public static fromApiArray(apiArray: Position[]): Position[] {
+    public static fromApiArray(apiArray: Position[], accountName?: string): Position[] {
         const array: Position[] = [];
 
         for (const PositionList of apiArray) {
-            const position = this.oneFromApiArray(PositionList);
+            const position = this.oneFromApiArray(PositionList, accountName);
             if (undefined !== position) {
                 array.push(position);
             }
@@ -31,7 +31,7 @@ export class PositionCreator {
     }
 
 
-    public static oneFromApiArray(apiArray?: Position|undefined): Position|undefined
+    public static oneFromApiArray(apiArray?: Position|undefined, accountName?: string): Position|undefined
     {
         if (apiArray !== undefined && apiArray !== null) {
             return new Position(
@@ -62,7 +62,7 @@ export class PositionCreator {
                 apiArray.manualDrawdown ? apiArray.manualDrawdown : undefined,
                 apiArray.manualDividendDrop !== undefined && !isNaN(apiArray.manualDividendDrop) ? apiArray.manualDividendDrop : undefined,
                 apiArray.labels ? LabelCreator.fromApiArray(apiArray.labels) : undefined,
-                apiArray.bankAccountName ? apiArray?.bankAccountName : undefined
+                apiArray.bankAccountName ? apiArray?.bankAccountName : accountName? accountName : undefined
             );
         } else {
             return undefined;
