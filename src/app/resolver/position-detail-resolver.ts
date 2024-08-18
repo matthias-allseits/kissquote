@@ -7,6 +7,7 @@ import {StockRate} from "../models/stock-rate";
 import {StockRateCreator} from "../creators/stock-rate-creator";
 import {ChartData} from "chart.js";
 import {ShareheadService} from "../services/sharehead.service";
+import {Label} from "../models/label";
 
 
 export interface PositionData {
@@ -66,7 +67,30 @@ export class PositionDetailResolver implements Resolve<PositionData>{
                                     holder.next(data);
                                 }
                             });
-
+                        let ultimateFilter: Label[];
+                        const filterFromStorage = localStorage.getItem('ultimateFilterLabel');
+                        if (filterFromStorage) {
+                            ultimateFilter = JSON.parse(filterFromStorage);
+                            let checkedCounter = 0;
+                            ultimateFilter?.forEach(lbl => {
+                                if (lbl.checked) {
+                                    checkedCounter++;
+                                }
+                            });
+                            if (checkedCounter < 3) {
+                                ultimateFilter?.forEach(lbl => {
+                                    console.log(lbl);
+                                    if (position.labels && lbl.checked) {
+                                        position.labels.forEach(label => {
+                                            if (lbl.id === label.id && lbl.checked) {
+                                                console.log('set label as checked');
+                                                label.checked = true;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
                     }
                 });
         });

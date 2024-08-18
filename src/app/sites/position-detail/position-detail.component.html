@@ -30,7 +30,7 @@
             <small *ngIf="position.bankAccountName">Account: {{ position.bankAccountName }}</small>
         </div>
         <div class="mb-2 mb-md-0">
-            <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
+            <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color" [class.active-filter]="label.checked">{{ label.name }}</span>
             <button (click)="openLabelModal(labelModal)" type="button" class="btn btn-tiny btn-outline-primary" ngbTooltip="Labels bearbeiten" tooltipClass="custom-tooltip"><fa-icon [icon]="editIcon"></fa-icon></button>
         </div>
         <div class="mb-2 mb-md-0">

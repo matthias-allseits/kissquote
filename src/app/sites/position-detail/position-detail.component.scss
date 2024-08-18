@@ -45,6 +45,10 @@ small, .small {
     background-color: rgba(221, 221, 221, 1);
 }
 
+.active-filter {
+    box-shadow: 2px 3px 10px grey;
+}
+
 .direct-navi-frame {
     display: inline-block;
     width: 20px;
