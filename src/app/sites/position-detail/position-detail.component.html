@@ -27,7 +27,7 @@
                 <span *ngIf="position.motherId">Underlying</span>
                 &laquo;{{ position.getName() }}&raquo;
             </h1>
-            <small>Account: {{ position.bankAccountName }}</small>
+            <small *ngIf="position.bankAccountName">Account: {{ position.bankAccountName }}</small>
         </div>
         <div class="mb-2 mb-md-0">
             <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
