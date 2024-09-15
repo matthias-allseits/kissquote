@@ -37,6 +37,7 @@ import {GridContextMenuItem} from "../../components/data-grid/data-grid.componen
 import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons/faEllipsisVertical";
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {ExtraPolaSummary} from "../../components/extrapolation-list/extrapolation-list.component";
+import {RatesHelper} from "../../helper/rates.helper";
 
 
 @Component({
@@ -97,6 +98,8 @@ export class PositionDetailComponent implements OnInit {
     public selectedDirectNaviPosition?: Position;
     public rosaBrille?: TargetSummary;
     public extraPola?: ExtraPolaSummary;
+    public thisYearsAverageRate?: number;
+    public nextYearsAvgPerformanceProjection?: number;
     selectedItem?: PositionLog|Transaction;
 
     transactionContextMenu?: GridContextMenuItem[];
@@ -156,6 +159,12 @@ export class PositionDetailComponent implements OnInit {
             setTimeout(() => {
                 this.position = data['positionData']['position'];
                 this.historicRates = data['positionData']['historicRates'];
+                if (this.position?.currency) {
+                    this.thisYearsAverageRate = RatesHelper.calculateThisYearsAverageRate(this.historicRates, this.position.currency);
+                    if (this.thisYearsAverageRate) {
+                        this.nextYearsAvgPerformanceProjection = this.position?.shareheadShare?.getAvgPerformanceProjection(this.thisYearsAverageRate);
+                    }
+                }
                 this.chartData = data['positionData']['costIncomeChartData'];
                 this.loadData('ngOnInit');
                 this.setContextMenus();
