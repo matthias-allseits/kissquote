@@ -66,7 +66,12 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         } else {
             this.listingTab = 'ultimate';
         }
-        this.changePerformanceListTab('1day');
+        const storedPerformanceTab = localStorage.getItem('performanceTab');
+        if (storedPerformanceTab && this.availablePerformanceTabs.indexOf(storedPerformanceTab) > -1) {
+            this.changePerformanceListTab(storedPerformanceTab);
+        } else {
+            this.changePerformanceListTab('1day');
+        }
         if (this.portfolio) {
             this.shareheadService.getLastMinuteList()
                 .subscribe(shares => {
@@ -167,6 +172,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
 
     changePerformanceListTab(selectedTab: string): void {
         this.performanceListTab = selectedTab;
+        localStorage.setItem('performanceTab', selectedTab);
         this.performanceList = [];
         const tabIndex = this.availablePerformanceTabs.indexOf(selectedTab);
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
