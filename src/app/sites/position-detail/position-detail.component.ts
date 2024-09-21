@@ -159,7 +159,7 @@ export class PositionDetailComponent implements OnInit {
             setTimeout(() => {
                 this.position = data['positionData']['position'];
                 this.historicRates = data['positionData']['historicRates'];
-                if (this.position?.currency) {
+                if (this.position?.currency && this.historicRates) {
                     this.thisYearsAverageRate = RatesHelper.calculateThisYearsAverageRate(this.historicRates, this.position.currency);
                     if (this.thisYearsAverageRate) {
                         this.nextYearsAvgPerformanceProjection = this.position?.shareheadShare?.getAvgPerformanceProjection(this.thisYearsAverageRate);
