@@ -106,8 +106,8 @@ export class PositionDetailResolver implements Resolve<PositionData>{
                         // island apes shit!
                         const ratesCopy = StockRateCreator.createNewStockRate();
                         ratesCopy.rate = lastRateFromBalance.rate * 100;
-                        ratesCopy.high = lastRateFromBalance.high;
-                        ratesCopy.low = lastRateFromBalance.low;
+                        ratesCopy.high = lastRateFromBalance.high * 100;
+                        ratesCopy.low = lastRateFromBalance.low * 100;
                         rates.push(ratesCopy);
                     } else {
                         if (position.share?.name && position.share?.name?.indexOf('BRC') > -1) {
