@@ -624,7 +624,7 @@ export class Position {
             if (currencyName === 'GBP') {
                 currencyName = 'GBX';
             }
-            return `https://www.swissquote.ch/sq_mi/public/market/Detail.action?s=${this.share.isin}_${this.share.marketplace?.urlKey}_${currencyName}`;
+            return `https://www.swissquote.ch/trading-platform/#fullQuote/${this.share.isin}/${this.share.marketplace?.urlKey}_${currencyName}`;
         }
 
         return null;

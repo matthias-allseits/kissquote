@@ -58,7 +58,7 @@ export class ShareheadShare {
                 currency = 'GBX';
             }
 
-            return `https://www.swissquote.ch/sq_mi/public/market/Detail.action?s=${this.isin}_${this.marketplace.urlKey}_${currency}`;
+            return `https://www.swissquote.ch/trading-platform/#fullQuote/${this.isin}/${this.marketplace.urlKey}_${currency}`;
         }
 
         return null;
