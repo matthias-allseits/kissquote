@@ -399,7 +399,7 @@ export class MyDashboardComponent implements OnInit {
             {
                 title: this.tranService.trans('GLOB_VALUE'),
                 type: 'function',
-                format: '1.0',
+                format: '1.2',
                 field: 'actualValue',
                 alignment: 'right'
             },

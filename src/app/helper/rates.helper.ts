@@ -16,7 +16,6 @@ export class RatesHelper {
         });
         if (thisYearsRates.length > 9) {
             averageRate = ratesTotal / thisYearsRates.length;
-            console.log(thisYearsRates[0].currency);
             if (positionsCurrency.name === 'GBP') {
                 averageRate /= 100;
             }
