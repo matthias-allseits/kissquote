@@ -17,6 +17,7 @@ import {DateHelper} from "../core/datehelper";
 import {CacheHelper} from "../helper/cache.helper";
 import {SwissquoteHelper} from "../core/swissquote-helper";
 import {Md5} from "ts-md5";
+import {Share} from "../models/share";
 
 
 interface CollectionsCache {
@@ -133,6 +134,15 @@ export class ShareheadService {
         return this.http.get<StockRate>(this.baseUrl + '/share/' + id + '/rate')
             .pipe(
                 map(res => StockRateCreator.oneFromApiArray(res))
+            );
+    }
+
+
+    public getQuotesBySwissquote(share: Share, currency: string): Observable<StockRate[]|undefined>
+    {
+        return this.http.get<StockRate[]>(this.baseUrl + '/share/swissquote-rates/' + share.isin + '/' + share.marketplace?.urlKey + '/' + currency)
+            .pipe(
+                map(res => StockRateCreator.fromApiArray(res))
             );
     }
 

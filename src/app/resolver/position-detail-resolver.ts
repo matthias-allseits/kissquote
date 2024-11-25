@@ -45,28 +45,28 @@ export class PositionDetailResolver implements Resolve<PositionData>{
                         }
 
                         // this.positionService.getOfflineStockRates(this.position.share, this.position.currency)
-                        position.getStockRates()
-                            .subscribe(rates => {
-                                if (rates.length > 0) {
-                                    this.addLatestRateToLineChart(position, rates);
-                                    data.historicRates = rates;
-
-                                    if (position.shareheadId && position.shareheadId > 0) {
-                                        this.shareheadService.getShare(position.shareheadId)
-                                            .subscribe(share => {
-                                                if (share) {
-                                                    position.shareheadShare = share;
-                                                    holder.next(data);
-                                                }
-                                            });
+                        if (position.share && position.currency) {
+                            this.shareheadService.getQuotesBySwissquote(position.share, position.currency?.name)
+                                .subscribe(rates => {
+                                    if (rates && rates.length > 0) {
+                                        data.historicRates = rates;
+                                        if (position.shareheadId && position.shareheadId > 0) {
+                                            this.shareheadService.getShare(position.shareheadId)
+                                                .subscribe(share => {
+                                                    if (share) {
+                                                        position.shareheadShare = share;
+                                                        holder.next(data);
+                                                    }
+                                                });
+                                        } else {
+                                            holder.next(data);
+                                        }
                                     } else {
+                                        data.historicRates = [];
                                         holder.next(data);
                                     }
-                                } else {
-                                    data.historicRates = [];
-                                    holder.next(data);
-                                }
-                            });
+                                });
+                        }
                         let ultimateFilter: Label[];
                         const filterFromStorage = localStorage.getItem('ultimateFilterLabel');
                         if (filterFromStorage) {
@@ -94,35 +94,6 @@ export class PositionDetailResolver implements Resolve<PositionData>{
                     }
                 });
         });
-    }
-
-    private addLatestRateToLineChart(position: Position, rates: StockRate[]): void
-    {
-        if (position?.balance && position.balance.lastRate) {
-            const lastRateFromBalance = position.balance.lastRate;
-            if (lastRateFromBalance.date > rates[rates.length - 1].date && !this.areRatesEqual(lastRateFromBalance, rates[rates.length - 1])) {
-                if (position) {
-                    if (position.share?.marketplace?.currency === 'GBX') {
-                        // island apes shit!
-                        const ratesCopy = StockRateCreator.createNewStockRate();
-                        ratesCopy.rate = lastRateFromBalance.rate * 100;
-                        ratesCopy.high = lastRateFromBalance.high * 100;
-                        ratesCopy.low = lastRateFromBalance.low * 100;
-                        rates.push(ratesCopy);
-                    } else {
-                        if (position.share?.name && position.share?.name?.indexOf('BRC') > -1) {
-                            if (lastRateFromBalance.low === 0) {
-                                lastRateFromBalance.low = lastRateFromBalance.rate / 10;
-                            }
-                            if (lastRateFromBalance.high === 0) {
-                                lastRateFromBalance.high = lastRateFromBalance.rate / 10;
-                            }
-                        }
-                        rates.push(lastRateFromBalance);
-                    }
-                }
-            }
-        }
     }
 
     private areRatesEqual(rate1: StockRate, rate2: StockRate): boolean
