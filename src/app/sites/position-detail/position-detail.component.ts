@@ -38,6 +38,9 @@ import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons/faEllipsisVe
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {ExtraPolaSummary} from "../../components/extrapolation-list/extrapolation-list.component";
 import {RatesHelper} from "../../helper/rates.helper";
+import {StockrateService} from "../../services/stockrate.service";
+import {DateHelper} from "../../core/datehelper";
+import {StockRateCreator} from "../../creators/stock-rate-creator";
 
 
 @Component({
@@ -142,6 +145,7 @@ export class PositionDetailComponent implements OnInit {
         private strategyService: StrategyService,
         private positionLogService: PositionLogService,
         private transactionService: TransactionService,
+        private stockrateService: StockrateService,
         private portfolioService: PortfolioService,
         private shareService: ShareService,
         private shareheadService: ShareheadService,
@@ -158,7 +162,32 @@ export class PositionDetailComponent implements OnInit {
             // todo: find a better solution...
             setTimeout(() => {
                 this.position = data['positionData']['position'];
-                this.historicRates = data['positionData']['historicRates'];
+                let tempRates = data['positionData']['historicRates'];
+                const crapRateDates = this.analyzeRates(tempRates.slice(-90));
+                if (crapRateDates.length > 0) {
+                    console.warn('crapRateDates: ', crapRateDates);
+                    let loopCounter = 0;
+                    crapRateDates.forEach(date => {
+                        if (this.position?.share?.isin && this.position.share.marketplace && this.position.share.marketplace.urlKey && this.position.currency) {
+                            this.stockrateService.getStockRate(
+                                this.position?.share?.isin,
+                                this.position?.share?.marketplace?.urlKey,
+                                this.position?.currency?.name,
+                                date
+                            ).subscribe(rate => {
+                                loopCounter++;
+                                if (rate) {
+                                    tempRates = this.replaceRate(rate, tempRates);
+                                    if (loopCounter === crapRateDates.length) {
+                                        this.historicRates = tempRates;
+                                    }
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    this.historicRates = tempRates;
+                }
                 if (this.position?.currency && this.historicRates) {
                     this.thisYearsAverageRate = RatesHelper.calculateThisYearsAverageRate(this.historicRates, this.position.currency);
                     if (this.thisYearsAverageRate) {
@@ -921,6 +950,42 @@ export class PositionDetailComponent implements OnInit {
         });
 
         return result;
+    }
+
+    private analyzeRates(rates: StockRate[]): Date[] {
+        const crapDates: Date[] = [];
+        rates.forEach(rate => {
+            if (
+                (rate.high === rate.rate && rate.low === rate.rate) ||
+                rate.rate < rate.low ||
+                rate.rate > rate.high
+            ) {
+                crapDates.push(rate.date);
+            }
+        });
+
+        return crapDates;
+    }
+
+    private replaceRate(rate: StockRate, tempRates: StockRate[]): StockRate[] {
+        if (this.position?.share?.marketplace?.currency === 'GBX') {
+            // island apes shit!
+            const ratesCopy = StockRateCreator.createNewStockRate();
+            ratesCopy.rate = rate.rate * 100;
+            ratesCopy.high = rate.high * 100;
+            ratesCopy.low = rate.low * 100;
+            ratesCopy.date = rate.date;
+            rate = ratesCopy;
+        }
+        let index = 0;
+        for (let histRate of tempRates) {
+            if (DateHelper.datesAreEqual(histRate.date, rate.date)) {
+                tempRates[index] = rate;
+            }
+            index++;
+        }
+
+        return tempRates;
     }
 
     private setContextMenus() {
