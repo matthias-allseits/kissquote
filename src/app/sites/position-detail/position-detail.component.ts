@@ -163,7 +163,12 @@ export class PositionDetailComponent implements OnInit {
             setTimeout(() => {
                 this.position = data['positionData']['position'];
                 let tempRates = data['positionData']['historicRates'];
-                const crapRateDates = this.analyzeRates(tempRates.slice(-90));
+                let rates2Check = 90;
+                if (this.position?.daysSinceStart() && rates2Check > this.position?.daysSinceStart()) {
+                    rates2Check = this.position?.daysSinceStart();
+                }
+                rates2Check *= -1;
+                const crapRateDates = this.analyzeRates(tempRates.slice(rates2Check));
                 if (crapRateDates.length > 0) {
                     console.warn('crapRateDates: ', crapRateDates);
                     let loopCounter = 0;

@@ -79,11 +79,9 @@ export class PositionDetailResolver implements Resolve<PositionData>{
                             });
                             if (checkedCounter < 3) {
                                 ultimateFilter?.forEach(lbl => {
-                                    console.log(lbl);
                                     if (position.labels && lbl.checked) {
                                         position.labels.forEach(label => {
                                             if (lbl.id === label.id && lbl.checked) {
-                                                console.log('set label as checked');
                                                 label.checked = true;
                                             }
                                         });
