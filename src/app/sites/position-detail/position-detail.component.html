@@ -386,11 +386,11 @@
                             <h6>Projection 2025</h6>
                             <div class="row">
                                 <div class="col-8">This years average rate:</div>
-                                <div class="col-4"><span class="float-end">{{ thisYearsAverageRate|number: '1.0-2' }}</span></div>
+                                <div class="col-4"><span class="float-end" [class.red-text]="nextYearsAvgRateAlert" [class.green-text]="!nextYearsAvgRateAlert">{{ thisYearsAverageRate|number: '1.0-2' }}</span></div>
                             </div>
                             <div class="row">
                                 <div class="col-9">Next years average performance:</div>
-                                <div class="col-3"><span class="float-end">{{ nextYearsAvgPerformanceProjection|number: '1.0-2' }}%</span></div>
+                                <div class="col-3"><span class="float-end" [class.red-text]="nextYearsAvgPerformanceProjectionAlert" [class.green-text]="!nextYearsAvgPerformanceProjectionAlert">{{ nextYearsAvgPerformanceProjection|number: '1.0-2' }}%</span></div>
                             </div>
                         </ng-container>
                         <ng-container *ngIf="!extraPola">

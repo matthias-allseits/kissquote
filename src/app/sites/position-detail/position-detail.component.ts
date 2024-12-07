@@ -103,6 +103,8 @@ export class PositionDetailComponent implements OnInit {
     public extraPola?: ExtraPolaSummary;
     public thisYearsAverageRate?: number;
     public nextYearsAvgPerformanceProjection?: number;
+    public nextYearsAvgRateAlert = false;
+    public nextYearsAvgPerformanceProjectionAlert = false;
     selectedItem?: PositionLog|Transaction;
 
     transactionContextMenu?: GridContextMenuItem[];
@@ -158,53 +160,71 @@ export class PositionDetailComponent implements OnInit {
             this.position = undefined;
             this.historicRates = [];
             this.chartData = undefined;
+            this.nextYearsAvgRateAlert = false;
+            this.nextYearsAvgPerformanceProjectionAlert = false;
             // console.log(data);
             // todo: find a better solution...
             setTimeout(() => {
                 this.position = data['positionData']['position'];
-                let tempRates = data['positionData']['historicRates'];
-                let rates2Check = 90;
-                if (this.position?.daysSinceStart() && rates2Check > this.position?.daysSinceStart()) {
-                    rates2Check = this.position?.daysSinceStart();
-                }
-                rates2Check *= -1;
-                const crapRateDates = this.analyzeRates(tempRates.slice(rates2Check));
-                if (crapRateDates.length > 0) {
-                    console.warn('crapRateDates: ', crapRateDates);
-                    let loopCounter = 0;
-                    crapRateDates.forEach(date => {
-                        if (this.position?.share?.isin && this.position.share.marketplace && this.position.share.marketplace.urlKey && this.position.currency) {
-                            this.stockrateService.getStockRate(
-                                this.position?.share?.isin,
-                                this.position?.share?.marketplace?.urlKey,
-                                this.position?.currency?.name,
-                                date
-                            ).subscribe(rate => {
-                                loopCounter++;
-                                if (rate) {
-                                    tempRates = this.replaceRate(rate, tempRates);
-                                    if (loopCounter === crapRateDates.length) {
-                                        this.historicRates = tempRates;
+                if (!this.position?.isCash) {
+                    let tempRates = data['positionData']['historicRates'];
+                    let rates2Check = 90;
+                    if (this.position?.daysSinceStart() && rates2Check > this.position?.daysSinceStart()) {
+                        rates2Check = this.position?.daysSinceStart();
+                    }
+                    rates2Check *= -1;
+                    const crapRateDates = this.analyzeRates(tempRates.slice(rates2Check));
+                    if (crapRateDates.length > 0) {
+                        console.warn('crapRateDates: ', crapRateDates);
+                        let loopCounter = 0;
+                        crapRateDates.forEach(date => {
+                            if (this.position?.share?.isin && this.position.share.marketplace && this.position.share.marketplace.urlKey && this.position.currency) {
+                                this.stockrateService.getStockRate(
+                                    this.position?.share?.isin,
+                                    this.position?.share?.marketplace?.urlKey,
+                                    this.position?.currency?.name,
+                                    date
+                                ).subscribe(rate => {
+                                    loopCounter++;
+                                    if (rate) {
+                                        tempRates = this.replaceRate(rate, tempRates);
+                                        if (loopCounter === crapRateDates.length) {
+                                            this.historicRates = tempRates;
+                                        }
                                     }
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    this.historicRates = tempRates;
-                }
-                if (this.position?.currency && this.historicRates) {
-                    this.thisYearsAverageRate = RatesHelper.calculateThisYearsAverageRate(this.historicRates, this.position.currency);
-                    if (this.thisYearsAverageRate) {
-                        this.nextYearsAvgPerformanceProjection = this.position?.shareheadShare?.getAvgPerformanceProjection(this.thisYearsAverageRate);
+                                });
+                            }
+                        });
+                    } else {
+                        this.historicRates = tempRates;
                     }
                 }
-                this.chartData = data['positionData']['costIncomeChartData'];
-                this.loadData('ngOnInit');
-                this.setContextMenus();
-                if (this.position?.motherId) {
-                    this.positionType = 'Underlying';
-                }
+                // todo: find a better solution...
+                setTimeout(() => {
+                    console.log(this.position?.currency);
+                    console.log(this.historicRates);
+                    if (this.position?.currency && this.historicRates) {
+                        this.thisYearsAverageRate = RatesHelper.calculateThisYearsAverageRate(this.historicRates, this.position.currency);
+                        if (this.thisYearsAverageRate) {
+                            this.nextYearsAvgPerformanceProjection = this.position?.shareheadShare?.getAvgPerformanceProjection(this.thisYearsAverageRate);
+                            if (this.position.balance?.lastRate && this.position.balance?.lastRate?.rate < this.thisYearsAverageRate) {
+                                this.nextYearsAvgRateAlert = true;
+                            }
+                            console.log(this.extraPola);
+                            if (this.nextYearsAvgPerformanceProjection && this.position.shareheadShare && this.nextYearsAvgPerformanceProjection < this.position.shareheadShare.getAvgPerformance()) {
+                                console.log(this.nextYearsAvgPerformanceProjection);
+                                console.log(this.position.shareheadShare.getAvgPerformance());
+                                this.nextYearsAvgPerformanceProjectionAlert = true;
+                            }
+                        }
+                    }
+                    this.chartData = data['positionData']['costIncomeChartData'];
+                    this.loadData('ngOnInit');
+                    this.setContextMenus();
+                    if (this.position?.motherId) {
+                        this.positionType = 'Underlying';
+                    }
+                }, 100);
             }, 100);
         });
 
