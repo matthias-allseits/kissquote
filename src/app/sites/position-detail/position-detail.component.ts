@@ -201,8 +201,6 @@ export class PositionDetailComponent implements OnInit {
                 }
                 // todo: find a better solution...
                 setTimeout(() => {
-                    console.log(this.position?.currency);
-                    console.log(this.historicRates);
                     if (this.position?.currency && this.historicRates) {
                         this.thisYearsAverageRate = RatesHelper.calculateThisYearsAverageRate(this.historicRates, this.position.currency);
                         if (this.thisYearsAverageRate) {
@@ -210,10 +208,7 @@ export class PositionDetailComponent implements OnInit {
                             if (this.position.balance?.lastRate && this.position.balance?.lastRate?.rate < this.thisYearsAverageRate) {
                                 this.nextYearsAvgRateAlert = true;
                             }
-                            console.log(this.extraPola);
                             if (this.nextYearsAvgPerformanceProjection && this.position.shareheadShare && this.nextYearsAvgPerformanceProjection < this.position.shareheadShare.getAvgPerformance()) {
-                                console.log(this.nextYearsAvgPerformanceProjection);
-                                console.log(this.position.shareheadShare.getAvgPerformance());
                                 this.nextYearsAvgPerformanceProjectionAlert = true;
                             }
                         }
