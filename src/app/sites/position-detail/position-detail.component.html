@@ -273,7 +273,7 @@
                     <ng-container *ngIf="nextPayment">
                         <h6>Next payment</h6>
                         <div class="row">
-                            <div class="col-8">{{ nextPayment.date|date: 'dd.MM.YYYY' }}</div>
+                            <div class="col-8">{{ nextPayment.date|date: 'dd.MM.y' }}</div>
                             <div class="col-4"><span class="float-end">{{ nextPayment.payment|number: '1.0' }} {{ nextPayment.currency }}</span></div>
                         </div>
                         <div *ngIf="position.currency?.name !== nextPayment.currency" class="row">
@@ -418,7 +418,7 @@
                     </h5>
                     <div class="row">
                         <div class="col-6">Post corona top:</div>
-                        <div class="col-3">{{ maxDrawdownSummary.postCoronaTop.date|date: 'dd.MM.YY' }}</div>
+                        <div class="col-3">{{ maxDrawdownSummary.postCoronaTop.date|date: 'dd.MM.yy' }}</div>
                         <div class="col-3"><span class="float-end">{{ maxDrawdownSummary.postCoronaTop.rate }}</span></div>
                     </div>
                     <div class="row">
@@ -531,7 +531,7 @@
                     <ng-container *ngIf="entry.hasOwnProperty('log')">
                         <td>
                             <span class="d-none d-md-table-cell">{{ entry.date|date:'dd.MM.y' }}</span>
-                            <span class="d-table-cell d-md-none">{{ entry.date|date:'dd.MM.YY' }}</span>
+                            <span class="d-table-cell d-md-none">{{ entry.date|date:'dd.MM.yy' }}</span>
                         </td>
                         <td [colSpan]="getColspan()">{{ entry.emoticon }} <span *ngIf="entry.pinned">📌</span> {{ entry.log }}</td>
                         <td class="d-none d-md-table-cell"></td>
@@ -550,7 +550,7 @@
                     <ng-container *ngIf="entry.hasOwnProperty('quantity')">
                         <td>
                             <span class="d-none d-md-table-cell">{{ entry.date|date:'dd.MM.y' }}</span>
-                            <span class="d-table-cell d-md-none">{{ entry.date|date:'dd.MM.YY' }}</span>
+                            <span class="d-table-cell d-md-none">{{ entry.date|date:'dd.MM.yy' }}</span>
                         </td>
                         <td>{{ entry.title }}</td>
                         <td><span class="float-end">{{ entry.quantity }}</span></td>

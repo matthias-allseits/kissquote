@@ -24,7 +24,7 @@
         <tr *ngFor="let entry of logBook">
             <ng-container *ngIf="entry.hasOwnProperty('log')">
                 <td class="d-md-none d-sm-table-cell">{{ entry.date|date:'dd.MM.' }}</td>
-                <td class="d-none d-md-table-cell">{{ entry.date|date:'dd.MM.YY' }}</td>
+                <td class="d-none d-md-table-cell">{{ entry.date|date:'dd.MM.yy' }}</td>
                 <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.assetName }}</a></td>
                 <td [colSpan]="getColspan()">{{ entry.emoticon }} {{ entry.log }}</td>
                 <td class="d-none d-md-table-cell"></td>
@@ -32,7 +32,7 @@
             </ng-container>
             <ng-container *ngIf="entry.hasOwnProperty('quantity')">
                 <td class="d-md-none d-sm-table-cell">{{ entry.date|date:'dd.MM.' }}</td>
-                <td class="d-none d-md-table-cell">{{ entry.date|date:'dd.MM.YY' }}</td>
+                <td class="d-none d-md-table-cell">{{ entry.date|date:'dd.MM.yy' }}</td>
                 <td><a [routerLink]="['/position-detail/' + entry.positionId]">{{ entry.assetName }}</a></td>
                 <td>{{ entry.title }}</td>
                 <td><span class="float-end">{{ entry.quantity }}</span></td>

@@ -132,8 +132,8 @@
                     <td *ngIf="!entry.positionId"><a [routerLink]="['/sharehead-share-detail/' + entry.id]" ngbTooltip="Details" tooltipClass="custom-tooltip">{{ entry.name }}</a></td>
                     <td class="d-none d-md-table-cell"><span *ngIf="entry.plannedDividends[0].amount">{{ entry.plannedDividends[0].amount }}</span></td>
                     <td><span *ngIf="entry.plannedDividends[0].amount && entry.lastRate">{{ (100 / entry.lastRate.rate * entry.plannedDividends[0].amount).toFixed(2) }}%</span></td>
-                    <td>{{ entry.plannedDividends[0].exDate|date:'dd.MM.YY' }}</td>
-                    <td>{{ entry.plannedDividends[0].payDate|date:'dd.MM.YY' }}</td>
+                    <td>{{ entry.plannedDividends[0].exDate|date:'dd.MM.yy' }}</td>
+                    <td>{{ entry.plannedDividends[0].payDate|date:'dd.MM.yy' }}</td>
                 </ng-container>
             </tr>
             </tbody>
@@ -193,7 +193,7 @@
             <tbody>
             <tr *ngFor="let share of nextReportsList">
                 <ng-container>
-                    <td>{{ share.nextReportDate|date:'dd.MM.YY' }}</td>
+                    <td>{{ share.nextReportDate|date:'dd.MM.yy' }}</td>
                     <td *ngIf="share.positionId"><a [routerLink]="['/position-detail/' + share.positionId]" ngbTooltip="Details" tooltipClass="custom-tooltip">{{ share.name }}</a></td>
                     <td *ngIf="!share.positionId"><a [routerLink]="['/sharehead-share-detail/' + share.id]" ngbTooltip="Details" tooltipClass="custom-tooltip">{{ share.name }}</a></td>
                 </ng-container>

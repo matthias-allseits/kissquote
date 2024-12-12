@@ -140,7 +140,7 @@
             <div class="info-box">
                 <h5>Analyst Ratings</h5>
                 <div *ngFor="let rating of shareheadShare.filteredRatings()" class="row" title="{{ rating.source }}">
-                    <div class="col-2">{{ rating.date|date:'dd.MM.YY' }}</div>
+                    <div class="col-2">{{ rating.date|date:'dd.MM.yy' }}</div>
                     <div class="col-5" style="padding-left: 20px;">{{ rating.analyst?.shortName }}</div>
                     <div class="col-1"
                         [class.green-text]="rating.isPositive()"

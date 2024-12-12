@@ -401,7 +401,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
             {
                 title: 'Date',
                 type: 'date',
-                format: 'dd.MM.YY',
+                format: 'dd.MM.yy',
                 field: 'date',
             },
             {
