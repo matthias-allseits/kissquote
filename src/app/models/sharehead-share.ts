@@ -338,7 +338,7 @@ export class ShareheadShare {
     }
 
 
-    public filteredRatings(): AnalystRating[] {
+    public filteredRatings(limit: number = 10): AnalystRating[] {
         let filtered: AnalystRating[] = [];
         const checkArray: number[] = [];
         if (this.analystRatings) {
@@ -352,7 +352,7 @@ export class ShareheadShare {
                 }
             }
         });
-        filtered = filtered.slice(0, 10);
+        filtered = filtered.slice(0, limit);
 
         return filtered;
     }
@@ -360,7 +360,7 @@ export class ShareheadShare {
 
     public mostOptimisticRating(): AnalystRating|undefined {
         let result: AnalystRating|undefined;
-        const filteredRatings = this.filteredRatings();
+        const filteredRatings = this.filteredRatings(20);
         for (const rating of filteredRatings) {
             if (result === undefined || (rating.priceTarget !== null && result.priceTarget !== null && rating.priceTarget > result.priceTarget)) {
                 result = rating;
