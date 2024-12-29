@@ -332,7 +332,7 @@ export class DashboardSettingsComponent implements OnInit {
             {
                 title: 'Exchange rate',
                 type: 'number',
-                format: '1.0-2',
+                format: '1.0-3',
                 field: 'rate',
                 alignment: 'right',
             },
