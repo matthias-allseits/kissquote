@@ -392,6 +392,21 @@
                                 <div class="col-9">Next years average performance:</div>
                                 <div class="col-3"><span class="float-end" [class.red-text]="nextYearsAvgPerformanceProjectionAlert" [class.green-text]="!nextYearsAvgPerformanceProjectionAlert">{{ nextYearsAvgPerformanceProjection|number: '1.0-2' }}%</span></div>
                             </div>
+                            <ng-container *ngIf="kgvSummary && !kgvSummary.isRisky">
+                                <h6>KGV</h6>
+                                <div class="row">
+                                    <div class="col-9">Median KGV:</div>
+                                    <div class="col-3"><span class="float-end">{{ kgvSummary.medianKgv }}</span></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-9">KGV {{ kgvSummary.forwardYear }}:</div>
+                                    <div class="col-3"><span class="float-end">{{ kgvSummary.forwardKgv }}</span></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-7">Regressed value:</div>
+                                    <div class="col-5"><span class="float-end">{{ kgvSummary.regressedValue|number: '1.0' }}</span></div>
+                                </div>
+                            </ng-container>
                         </ng-container>
                         <ng-container *ngIf="!extraPola">
                             <div class="row">
@@ -408,6 +423,19 @@
                     <div class="row">
                         <div class="col-9">Transaction fees total:</div>
                         <div class="col-3"><span class="float-end">{{ position.balance.transactionFeesTotal|number: '1.0' }}</span></div>
+                    </div>
+                </div>
+                <div *ngIf="kgvSummary && kgvSummary.isRisky">
+                    <div class="info-box">
+                        <h5>KGV</h5>
+                        <div class="row">
+                            <div class="col-9">Median KGV:</div>
+                            <div class="col-3"><span class="float-end">{{ kgvSummary.medianKgv }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">KGV {{ kgvSummary.forwardYear }}:</div>
+                            <div class="col-3"><span class="float-end">{{ kgvSummary.forwardKgv }}</span></div>
+                        </div>
                     </div>
                 </div>
                 <div class="info-box" *ngIf="maxDrawdownSummary">

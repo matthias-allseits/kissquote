@@ -56,4 +56,15 @@ export class ShareheadBalance {
         return null;
     }
 
+    kgv(lastRate: number): number
+    {
+        if (this.avgRate > 0 && this.profitPerShare > 0) {
+
+            return +(this.avgRate / this.profitPerShare).toFixed(1);
+        } else {
+
+            return 0;
+        }
+    }
+
 }

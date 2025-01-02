@@ -12,7 +12,16 @@ import {StockRate} from "./stock-rate";
 import {ShareheadHistoricDividend} from "./sharehead-historic-dividend";
 import {Observable} from "rxjs";
 import {SwissquoteHelper} from "../core/swissquote-helper";
+import {MedianHelper} from "../helper/median.helper";
 
+
+export interface KgvSummary {
+    forwardYear: number;
+    medianKgv: number;
+    forwardKgv: number;
+    regressedValue: number;
+    isRisky: boolean;
+}
 
 export class ShareheadShare {
 
@@ -175,6 +184,79 @@ export class ShareheadShare {
         }
     }
 
+    kgvSummary(): KgvSummary|null
+    {
+        const forwardYear = this.forwardYear();
+        const medianKgv = this.medianKgv();
+        const forwardKgv = this.forwardKgv();
+        if (forwardYear && medianKgv && forwardKgv) {
+            return {
+                forwardYear: forwardYear + 1,
+                medianKgv: medianKgv,
+                forwardKgv: forwardKgv,
+                regressedValue: 0,
+                isRisky: (medianKgv / forwardKgv < 1.1)
+            }
+        }
+
+        return null;
+    }
+
+    medianKgv(): number|null
+    {
+        const balances = this.workingBalancesByDate();
+        if (balances.length > 0 && this.lastRate) {
+            for (const balance of balances) {
+                const values: number[] = [];
+                for (const balance of balances) {
+                    const kgv = balance.kgv(this.lastRate.rate);
+                    values.push(kgv);
+                }
+                if (values.length > 0) {
+                    const result = MedianHelper.calculateMedian(values);
+                    let precision = 0;
+                    if (result < 10) {
+                        precision = 1;
+                    }
+
+                    return +result.toFixed(precision);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    forwardKgv(forward = 1): number|null
+    {
+        let forwardYear = this.forwardYear();
+        if (forwardYear && this.lastRate) {
+            forwardYear += forward;
+            const estimation = this.estimationsByYear(forwardYear);
+            if (estimation && estimation.profitPerShare > 0) {
+                const result = this.lastRate?.rate / estimation.profitPerShare;
+                let precision = 0;
+                if (result < 10) {
+                    precision = 1;
+                }
+
+                return +result.toFixed(precision);
+            }
+        }
+
+        return null;
+    }
+
+    forwardYear(): number|null
+    {
+        const lastBalance = this.lastBalance();
+        if (null !== lastBalance) {
+
+            return lastBalance.year + 1;
+        }
+
+        return null;
+    }
 
     marketCap(lastRate: number): number|null
     {

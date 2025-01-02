@@ -11,7 +11,7 @@ import {
 import {Transaction} from "../../models/transaction";
 import {TransactionService} from "../../services/transaction.service";
 import {ShareheadService} from "../../services/sharehead.service";
-import {ShareheadShare} from "../../models/sharehead-share";
+import {KgvSummary, ShareheadShare} from "../../models/sharehead-share";
 import {ChartData} from "chart.js";
 import {LineChartComponent} from "../../components/line-chart/line-chart.component";
 import {DividendProjection} from "../../models/dividend-projection";
@@ -105,6 +105,7 @@ export class PositionDetailComponent implements OnInit {
     public nextYearsAvgPerformanceProjection?: number;
     public nextYearsAvgRateAlert = false;
     public nextYearsAvgPerformanceProjectionAlert = false;
+    public kgvSummary?: KgvSummary;
     selectedItem?: PositionLog|Transaction;
 
     transactionContextMenu?: GridContextMenuItem[];
@@ -797,6 +798,7 @@ export class PositionDetailComponent implements OnInit {
         this.hasReachedTargetPrice = false;
         this.rosaBrille = undefined;
         this.extraPola = undefined;
+        this.kgvSummary = undefined;
 
         if (this.position) {
             if (this.portfolioService.portfolio) {
@@ -855,6 +857,11 @@ export class PositionDetailComponent implements OnInit {
                     this.daysTillNextReport = Math.floor((Date.UTC(nextReportDate.getFullYear(), nextReportDate.getMonth(), nextReportDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
                 }
                 this.nextPayment = this.position.nextPayment();
+                const kgvSummary = this.position.shareheadShare.kgvSummary();
+                if (kgvSummary) {
+                    kgvSummary.regressedValue = +((kgvSummary.medianKgv / kgvSummary.forwardKgv) * +this.position.actualValue()).toFixed(0);
+                    this.kgvSummary = kgvSummary;
+                }
             }
             if (this.position.stopLossBroken()) {
                 this.stopLossBroken = true;
