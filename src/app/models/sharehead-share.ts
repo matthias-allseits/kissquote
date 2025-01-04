@@ -234,7 +234,7 @@ export class ShareheadShare {
             forwardYear += forward;
             const estimation = this.estimationsByYear(forwardYear);
             if (estimation && estimation.profitPerShare > 0) {
-                const result = this.lastRate?.rate / estimation.profitPerShare;
+                const result = this.lastRate?.rate / estimation.currencyCorrectedProfitPerShare(this.currency);
                 let precision = 0;
                 if (result < 10) {
                     precision = 1;
