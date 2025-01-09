@@ -120,20 +120,22 @@ export class DataGridComponent implements OnInit {
             const secondField = fieldSplit[1];
             const followingFields = fieldSplit.slice(1);
 
-            if (typeof entry[firstField] === 'function') {
-                const firstResult = entry[firstField]();
-                result = firstResult[secondField];
-                if (column.format) {
-                    result = this._decimalPipe.transform(result, column.format);
+            if (entry) {
+                if (typeof entry[firstField] === 'function') {
+                    const firstResult = entry[firstField]();
+                    result = firstResult[secondField];
+                    if (column.format) {
+                        result = this._decimalPipe.transform(result, column.format);
+                    }
+
+                    return result;
                 }
 
-                return result;
+                const subColumn = structuredClone(column);
+                subColumn.field = followingFields.join('.');
+
+                return this.renderContent(entry[fieldSplit[0]], subColumn);
             }
-
-            const subColumn = structuredClone(column);
-            subColumn.field = followingFields.join('.');
-
-            return this.renderContent(entry[fieldSplit[0]], subColumn);
         }
 
         if (entry) {
