@@ -193,6 +193,10 @@ export class PositionDetailComponent implements OnInit {
                                         if (loopCounter === crapRateDates.length && this.position) {
                                             this.position.historicRates = tempRates;
                                         }
+                                    } else {
+                                        if (loopCounter === crapRateDates.length) {
+                                            this.historicRates = tempRates;
+                                        }
                                     }
                                 });
                             }
