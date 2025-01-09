@@ -165,8 +165,9 @@ export class PositionDetailComponent implements OnInit {
             // todo: find a better solution...
             setTimeout(() => {
                 this.position = data['positionData']['position'];
-                if (!this.position?.isCash) {
+                if (this.position && !this.position?.isCash) {
                     let tempRates: StockRate[] = this.position?.historicRates ?? [];
+                    this.position.historicRates = [];
                     if (tempRates === undefined) {
                         tempRates = [];
                     }
@@ -194,8 +195,8 @@ export class PositionDetailComponent implements OnInit {
                                             this.position.historicRates = tempRates;
                                         }
                                     } else {
-                                        if (loopCounter === crapRateDates.length) {
-                                            this.historicRates = tempRates;
+                                        if (loopCounter === crapRateDates.length && this.position) {
+                                            this.position.historicRates = tempRates;
                                         }
                                     }
                                 });
