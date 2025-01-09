@@ -12,7 +12,6 @@ import {Label} from "../models/label";
 
 export interface PositionData {
     position?: Position;
-    historicRates?: StockRate[];
     costIncomeChartData?: ChartData;
 }
 
@@ -35,13 +34,12 @@ export class PositionDetailResolver implements Resolve<PositionData>{
             this.positionService.getPosition(positionId)
                 .subscribe(position => {
                     if (position) {
-                        const data: PositionData = {
+                        const positionData: PositionData = {
                             position: position,
-                            historicRates: undefined,
                             costIncomeChartData: position.costIncomeChartdata()
                         }
                         if (position.isCash) {
-                            holder.next(data);
+                            holder.next(positionData);
                         }
 
                         // this.positionService.getOfflineStockRates(this.position.share, this.position.currency)
@@ -49,22 +47,22 @@ export class PositionDetailResolver implements Resolve<PositionData>{
                             .subscribe(rates => {
                                 if (rates.length > 0) {
                                     this.addLatestRateToLineChart(position, rates);
-                                    data.historicRates = rates;
+                                    position.historicRates = rates;
 
                                     if (position.shareheadId && position.shareheadId > 0) {
                                         this.shareheadService.getShare(position.shareheadId)
                                             .subscribe(share => {
                                                 if (share) {
                                                     position.shareheadShare = share;
-                                                    holder.next(data);
+                                                    holder.next(positionData);
                                                 }
                                             });
                                     } else {
-                                        holder.next(data);
+                                        holder.next(positionData);
                                     }
                                 } else {
-                                    data.historicRates = [];
-                                    holder.next(data);
+                                    position.historicRates = [];
+                                    holder.next(positionData);
                                 }
                             });
                         let ultimateFilter: Label[];

@@ -70,8 +70,8 @@
             </div>
         </div>
         <div class="info-container">
-            <div *ngIf="historicRates && historicRates.length > 0">
-                <app-share-bar-chart-container [historicRates]="historicRates" [position]="position"></app-share-bar-chart-container>
+            <div *ngIf="position.historicRates && position.historicRates.length > 0">
+                <app-share-bar-chart-container [historicRates]="position.historicRates" [position]="position"></app-share-bar-chart-container>
                 <div *ngIf="!position.motherId && chartData" class="info-box chart-box" style="margin-top: 41px;">
                     <app-bar-chart [data]="chartData"></app-bar-chart>
                 </div>
@@ -444,15 +444,17 @@
                         <button *ngIf="position.manualDrawdown" (click)="openManualDrawdownConfirmModal(removeManualDrawdownConfirmModal)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Remove manual drawdown" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button>
                         <button *ngIf="!position.manualDrawdown" (click)="openManualDrawdownModal(manualDrawdownFormModal)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Set manual drawdown" tooltipClass="custom-tooltip"><fa-icon [icon]="addIcon"></fa-icon></button>
                     </h5>
-                    <div class="row">
-                        <div class="col-6">Post corona top:</div>
-                        <div class="col-3">{{ maxDrawdownSummary.postCoronaTop.date|date: 'dd.MM.yy' }}</div>
-                        <div class="col-3"><span class="float-end">{{ maxDrawdownSummary.postCoronaTop.rate }}</span></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-7">Post corona top value:</div>
-                        <div class="col-5"><span class="float-end">{{ maxDrawdownSummary.postCoronaTopValue|number: '1.0' }} {{ position.currency?.name }}</span></div>
-                    </div>
+                    <ng-container *ngIf="maxDrawdownSummary.postCoronaTop">
+                        <div class="row">
+                            <div class="col-6">Post corona top:</div>
+                            <div class="col-3">{{ maxDrawdownSummary.postCoronaTop.date|date: 'dd.MM.yy' }}</div>
+                            <div class="col-3"><span class="float-end">{{ maxDrawdownSummary.postCoronaTop.rate }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-7">Post corona top value:</div>
+                            <div class="col-5"><span class="float-end">{{ maxDrawdownSummary.postCoronaTopValue|number: '1.0' }} {{ position.currency?.name }}</span></div>
+                        </div>
+                    </ng-container>
                     <div class="row">
                         <div class="col-9">Max. drawdown:</div>
                         <div class="col-3"><span class="float-end">{{ maxDrawdownSummary.maxDrawdown }}%</span></div>

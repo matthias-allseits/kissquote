@@ -90,7 +90,6 @@ export class PositionDetailComponent implements OnInit {
 
     public selectedLogEntry?: PositionLog;
     public chartData?: ChartData;
-    public historicRates: StockRate[] = [];
     public daysTillNextEx?: number;
     public daysTillNextPayment?: number;
     public daysTillNextReport?: number;
@@ -159,7 +158,6 @@ export class PositionDetailComponent implements OnInit {
     ngOnInit(): void {
         this.route.data.subscribe(data => {
             this.position = undefined;
-            this.historicRates = [];
             this.chartData = undefined;
             this.nextYearsAvgRateAlert = false;
             this.nextYearsAvgPerformanceProjectionAlert = false;
@@ -168,7 +166,10 @@ export class PositionDetailComponent implements OnInit {
             setTimeout(() => {
                 this.position = data['positionData']['position'];
                 if (!this.position?.isCash) {
-                    let tempRates = data['positionData']['historicRates'];
+                    let tempRates: StockRate[] = this.position?.historicRates ?? [];
+                    if (tempRates === undefined) {
+                        tempRates = [];
+                    }
                     let rates2Check = 90;
                     if (this.position?.daysSinceStart() && rates2Check > this.position?.daysSinceStart()) {
                         rates2Check = this.position?.daysSinceStart();
@@ -189,21 +190,23 @@ export class PositionDetailComponent implements OnInit {
                                     loopCounter++;
                                     if (rate) {
                                         tempRates = this.replaceRate(rate, tempRates);
-                                        if (loopCounter === crapRateDates.length) {
-                                            this.historicRates = tempRates;
+                                        if (loopCounter === crapRateDates.length && this.position) {
+                                            this.position.historicRates = tempRates;
                                         }
                                     }
                                 });
                             }
                         });
                     } else {
-                        this.historicRates = tempRates;
+                        if (this.position) {
+                            this.position.historicRates = tempRates;
+                        }
                     }
                 }
                 // todo: find a better solution...
                 setTimeout(() => {
-                    if (this.position?.currency && this.historicRates) {
-                        this.thisYearsAverageRate = RatesHelper.calculateThisYearsAverageRate(this.historicRates, this.position.currency);
+                    if (this.position?.currency && this.position.historicRates) {
+                        this.thisYearsAverageRate = RatesHelper.calculateThisYearsAverageRate(this.position.historicRates, this.position.currency);
                         if (this.thisYearsAverageRate) {
                             this.nextYearsAvgPerformanceProjection = this.position?.shareheadShare?.getAvgPerformanceProjection(this.thisYearsAverageRate);
                             if (this.position.balance?.lastRate && this.position.balance?.lastRate?.rate < this.thisYearsAverageRate) {
@@ -776,11 +779,15 @@ export class PositionDetailComponent implements OnInit {
 
     private refreshChart(): void {
         // todo: find a better solution
-        const tempData = this.historicRates;
-        this.historicRates = [];
-        setTimeout(() => {
-            this.historicRates = tempData;
-        }, 100);
+        if (this.position) {
+            const tempData = this.position.historicRates;
+            this.position.historicRates = [];
+            setTimeout(() => {
+                if (this.position) {
+                    this.position.historicRates = tempData;
+                }
+            }, 100);
+        }
     }
 
 
@@ -817,6 +824,8 @@ export class PositionDetailComponent implements OnInit {
 
             this.rosaBrille = this.position.getTargetSummary();
             this.extraPola = this.position.getExtraPolaSummary();
+            this.maxDrawdownSummary = this.position?.getMaxDrawdownSummary();
+            this.dividendDropSummary = this.position?.getDividendDropSummary();
 
             if (this.position.shareheadShare) {
                 const share = this.position.shareheadShare;
@@ -843,8 +852,6 @@ export class PositionDetailComponent implements OnInit {
                         }
                     }
                 }
-                this.maxDrawdownSummary = this.position?.getMaxDrawdownSummary();
-                this.dividendDropSummary = this.position?.getDividendDropSummary();
                 const currentDate = new Date();
                 if (share.plannedDividends && share.plannedDividends.length > 0) {
                     const nextExDate = share.plannedDividends[0].exDate;

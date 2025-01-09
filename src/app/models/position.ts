@@ -34,8 +34,8 @@ export interface DividendTotal {
 }
 
 export interface MaxDrawdownSummary {
-    postCoronaTop: ShareheadTurningPoint;
-    postCoronaTopValue: number;
+    postCoronaTop: ShareheadTurningPoint|undefined;
+    postCoronaTopValue: number|undefined;
     maxDrawdown: number;
     maxDrawdownValue: number;
     method: string;
@@ -95,6 +95,7 @@ export class Position {
         public labels?: Label[],
         public bankAccountName?: string,
         public shareheadShare?: ShareheadShare,
+        public historicRates?: StockRate[],
         public visible?: boolean, // for filtering purposes
         public tempPerformanceValue?: number, // for filtering purposes
         public timeWarpDate?: Date, // for time-warp purposes
@@ -780,8 +781,9 @@ export class Position {
 
 
     public getMaxDrawdownSummary(): MaxDrawdownSummary|undefined {
+        let summary = undefined;
         if (this.balance) {
-            const postCoronaTop = this.shareheadShare?.postCoronaTop();
+            const shareheadPostCoronaTop = this.shareheadShare?.postCoronaTop();
             const financialCrisisDrawdown = this.shareheadShare?.financialCrisisDrawdown();
             const coronaPandemicDrawdown = this.shareheadShare?.coronaPandemicDrawdown();
             let maxDrawDown = 90;
@@ -799,8 +801,13 @@ export class Position {
                 maxDrawDown = this.manualDrawdown;
                 method = 'manual';
             }
-            if (postCoronaTop) {
-                let topValue = this.balance.amount * postCoronaTop?.rate;
+            let topValue = 0;
+            if (shareheadPostCoronaTop) {
+                topValue = this.balance.amount * shareheadPostCoronaTop?.rate;
+            } else if (this.balance.lastRate) {
+                topValue = this.balance.amount * this.balance.lastRate?.rate;
+            }
+            if (topValue > 0) {
                 if (this.currency && this.shareheadShare?.currency && this.shareheadShare?.currency?.name !== this.currency?.name) {
                     const usersCurrency = Forexhelper.getUsersCurrencyByName(this.shareheadShare?.currency.name);
                     if (usersCurrency) {
@@ -815,9 +822,9 @@ export class Position {
                 let fromInvestment = +(100 / this.balance.investment * lombardValue).toFixed();
                 let fromTop = +(100 / topValue * lombardValue).toFixed();
                 const risk = +(+this.actualValue() - maxDrawDownValue).toFixed();
-                const summary = {
-                    postCoronaTop: postCoronaTop,
-                    postCoronaTopValue: +topValue.toFixed(),
+                summary = {
+                    postCoronaTop: shareheadPostCoronaTop,
+                    postCoronaTopValue: shareheadPostCoronaTop ? +topValue.toFixed() : undefined,
                     maxDrawdown: maxDrawDown * -1,
                     maxDrawdownValue: maxDrawDownValue,
                     method: method,
@@ -826,27 +833,31 @@ export class Position {
                     lombardValueFromPostCoronaTop: fromTop,
                     risk: risk
                 };
-
-                return summary
             }
         }
 
-        return undefined;
+        return summary;
     }
 
 
     getDividendDropSummary(): DividendDropSummary|undefined {
-        if (this.balance && this.shareheadShare) {
-            const nextDividendPayment = +this.shareheadDividendPayment();
-            const worstEverDividendDropInfos = this.shareheadShare.worstEverDividendDrop();
-            const worstEverDividendDrop = worstEverDividendDropInfos[0];
-            const worstEverDividendDropNote = worstEverDividendDropInfos[1];
+        let summary = undefined;
+        if (this.balance) {
+            let nextDividendPayment = 0;
+            let worstEverDividendDrop = 0;
+            let worstEverDividendDropNote = '';
+            if (this.shareheadShare) {
+                nextDividendPayment = +this.shareheadDividendPayment();
+                const worstEverDividendDropInfos = this.shareheadShare.worstEverDividendDrop();
+                worstEverDividendDrop = worstEverDividendDropInfos[0];
+                worstEverDividendDropNote = worstEverDividendDropInfos[1];
+            } else {
+                const year = new Date().getFullYear();
+                nextDividendPayment = this.plannedDividendsTotalByYear(year).total;
+            }
 
-            let maxDividendDrop = -90;
-            let method = 'hardcoded';
-
-            maxDividendDrop = worstEverDividendDrop;
-            method = worstEverDividendDropNote;
+            let maxDividendDrop = worstEverDividendDrop;
+            let method = worstEverDividendDropNote;
             if (this.manualDividendDrop !== undefined && !isNaN(this.manualDividendDrop)) {
                 maxDividendDrop = this.manualDividendDrop;
                 method = 'manual';
@@ -867,19 +878,17 @@ export class Position {
                 let dividendAfterDrop = +(currentDividend * ((100 - maxDividendDrop) / 100)).toFixed(0);
                 let fromInvestment = +(100 / this.balance.investment * lombardValue).toFixed();
                 let fromTop = +(100 / currentDividend * lombardValue).toFixed();
-                const summary = {
+                summary = {
                     maxDrop: maxDividendDrop,
                     maxDropValue: 2,
                     method: method,
                     actualDividend: currentDividend,
                     dividendAfterDrop: dividendAfterDrop
                 };
-
-                return summary
             }
         }
 
-        return undefined;
+        return summary
     }
 
 
