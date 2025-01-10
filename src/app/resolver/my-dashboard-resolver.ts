@@ -74,24 +74,15 @@ export class MyDashboardResolver implements Resolve<Portfolio>{
     }
 
     private assignShareheadShares(allPositions: Position[], shares: ShareheadShare[], result: boolean, psitons: Subscriber<boolean>) {
-        let counter = 0;
-        allPositions.forEach((position, index) => {
+        for (const position of allPositions) {
             if (position.shareheadId !== undefined && position.shareheadId > 0 && position.active) {
                 shares.forEach(share => {
                     if (share.id === position.shareheadId) {
                         position.shareheadShare = share;
-                        counter++;
                     }
                 });
-            } else {
-                counter++;
             }
-            // console.log(counter);
-            if (counter == allPositions.length) {
-                result = true;
-                // console.log('we are done');
-                psitons.next(result);
-            }
-        });
+        }
+        psitons.next(result);
     }
 }
