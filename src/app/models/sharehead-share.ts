@@ -20,6 +20,7 @@ export interface KgvSummary {
     medianKgv: number;
     forwardKgv: number;
     regressedValue: number;
+    performance: number;
     isRisky: boolean;
 }
 
@@ -195,6 +196,7 @@ export class ShareheadShare {
                 medianKgv: medianKgv,
                 forwardKgv: forwardKgv,
                 regressedValue: 0,
+                performance: 0,
                 isRisky: (medianKgv / forwardKgv < 1.1)
             }
         }

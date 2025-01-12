@@ -350,10 +350,10 @@ export class Position {
         } else if (projectedDividend) {
             total = 0;
             if (projectedDividend.currencyCorrectedProjectionValue !== undefined) {
-                source = 'From stathead estimations (currency-corrected)';
+                source = 'From sharehead estimations (currency-corrected)';
                 total += projectedDividend.currencyCorrectedProjectionValue;
             } else {
-                source = 'From stathead estimations';
+                source = 'From sharehead estimations';
                 total += projectedDividend.projectionValue;
             }
         } else if (lastProjectedDividend && lastProjectedDividend.projectionValue > 0) {
@@ -367,7 +367,7 @@ export class Position {
             }
         } else if (+shareheadSharePayment > 0) {
             total = +shareheadSharePayment;
-            source = 'From stathead';
+            source = 'From sharehead';
         }
 
         const result = {
