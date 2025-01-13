@@ -682,6 +682,8 @@ export class Position {
             result = this.manualDividendPayment();
         } else if (this.shareheadShare && this.balance) {
             result = this.shareheadDividendPaymentCorrected();
+        } else if (this.balance) {
+            result = this.balance.projectedNextDividendPayment.toString();
         }
 
         return result;
