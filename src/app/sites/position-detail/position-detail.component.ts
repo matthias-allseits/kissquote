@@ -1008,7 +1008,7 @@ export class PositionDetailComponent implements OnInit {
     }
 
     private replaceRate(rate: StockRate, tempRates: StockRate[]): StockRate[] {
-        if (this.position?.share?.marketplace?.currency === 'GBX') {
+        if (this.position?.currency?.name === 'GBP') {
             // island apes shit!
             const ratesCopy = StockRateCreator.createNewStockRate();
             ratesCopy.rate = rate.rate * 100;
