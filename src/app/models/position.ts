@@ -495,8 +495,8 @@ export class Position {
     }
 
 
-    public valueFromMostOptimisticAnalyst(): number|undefined {
-        let result;
+    public valueFromMostOptimisticAnalyst(): number {
+        let result = 0;
         if (this.shareheadShare) {
             const mostOptimisticRating = this.shareheadShare.mostOptimisticRating();
             if (this.balance && mostOptimisticRating && mostOptimisticRating.priceTarget) {
@@ -513,15 +513,19 @@ export class Position {
         let methodShort = 'none';
         let actual = +this.actualValue();
         let target = +this.actualValue();
+        let actualPrice = 0;
+        if (this.balance?.lastRate) {
+            actualPrice = this.balance?.lastRate.rate;
+        }
         let targetPrice = 0;
         const targetFromMostOptimistic = this.valueFromMostOptimisticAnalyst();
+        const mostOptimisticRating = this.shareheadShare?.mostOptimisticRating();
         if (this.manualTargetPrice && this.balance) {
             target = this.balance?.amount * this.manualTargetPrice;
             targetPrice = this.manualTargetPrice;
             method = `from manual entry`;
             methodShort = `from manual entry`;
-        } else if (targetFromMostOptimistic && this.shareheadShare) {
-            const mostOptimisticRating = this.shareheadShare.mostOptimisticRating();
+        } else if (mostOptimisticRating && this.shareheadShare) {
             target = targetFromMostOptimistic;
             if (mostOptimisticRating?.date && mostOptimisticRating?.priceTarget) {
                 targetPrice = +mostOptimisticRating?.priceTarget;
@@ -536,9 +540,9 @@ export class Position {
                 }
             }
         }
-        let chance = +((100 / actual * target) - 100).toFixed();
-        if (isNaN(chance)) {
-            chance = 0;
+        let chance = 0;
+        if (actualPrice > 0 && targetPrice > actualPrice) {
+            chance = +((100 / actualPrice * targetPrice) - 100).toFixed();
         }
         const targetSummary = {
             position: this,
@@ -562,6 +566,10 @@ export class Position {
         let extraPolatedPrice = 0;
         let extraPolatedDividend = 0;
         let dividendCurrency = this.currency ? this.currency.name : '';
+        let actualPrice = 0;
+        if (this.balance?.lastRate) {
+            actualPrice = this.balance?.lastRate.rate;
+        }
 
         const shareheadsAveragePerformance = this.shareheadShare?.getAvgPerformance();
         if (shareheadsAveragePerformance) {
@@ -599,9 +607,9 @@ export class Position {
             }
         }
 
-        let performance = +((100 / actual * extraPolatedValue) - 100).toFixed();
-        if (isNaN(performance)) {
-            performance = 0;
+        let chance = 0;
+        if (actualPrice && extraPolatedPrice > actualPrice) {
+            chance = +((100 / actualPrice * extraPolatedPrice) - 100).toFixed();
         }
         const extraPolaSummary = {
             position: this,
@@ -611,7 +619,7 @@ export class Position {
             extraPolatedPrice: extraPolatedPrice,
             extraPolatedDividend: extraPolatedDividend,
             dividendCurrency: dividendCurrency,
-            performance: performance,
+            performance: chance,
             method: method,
         };
 

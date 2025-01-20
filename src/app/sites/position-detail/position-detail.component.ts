@@ -872,7 +872,6 @@ export class PositionDetailComponent implements OnInit {
                 const kgvSummary = this.position.shareheadShare.kgvSummary();
                 if (kgvSummary) {
                     kgvSummary.regressedValue = +((kgvSummary.medianKgv / kgvSummary.forwardKgv) * +this.position.actualValue()).toFixed(0);
-                    kgvSummary.performance = +((100 / +this.position.actualValue() * kgvSummary.regressedValue) - 100).toFixed(0);
                     this.kgvSummary = kgvSummary;
                 }
             }

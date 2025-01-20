@@ -196,7 +196,7 @@ export class ShareheadShare {
                 medianKgv: medianKgv,
                 forwardKgv: forwardKgv,
                 regressedValue: 0,
-                performance: 0,
+                performance: +(((100 / forwardKgv) * medianKgv) - 100).toFixed(0),
                 isRisky: (medianKgv / forwardKgv < 1.1)
             }
         }

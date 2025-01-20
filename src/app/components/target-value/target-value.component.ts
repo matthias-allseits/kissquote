@@ -91,7 +91,9 @@ export class TargetValueComponent {
             const targetSummary = position.getTargetSummary();
             this.actualTotal += targetSummary.actual;
             this.targetTotal += targetSummary.target;
-            this.targetList.push(targetSummary);
+            if (targetSummary.actual > 0) {
+                this.targetList.push(targetSummary);
+            }
         });
         this.chance = +((100 / this.actualTotal * this.targetTotal) - 100).toFixed();
         this.targetList.sort((a, b) => (+a.chance < +b.chance) ? 1 : ((+b.chance < +a.chance) ? -1 : 0));
@@ -130,7 +132,7 @@ export class TargetValueComponent {
                 title: 'Actual',
                 type: 'number',
                 field: 'actual',
-                format: '1.0',
+                format: '1.0-0',
                 alignment: 'right',
                 responsive: 'md-up',
             },
@@ -138,7 +140,7 @@ export class TargetValueComponent {
                 title: 'Target',
                 type: 'number',
                 field: 'target',
-                format: '1.0',
+                format: '1.0-0',
                 alignment: 'right',
             },
             {
@@ -165,7 +167,7 @@ export class TargetValueComponent {
             {
                 title: 'Chance',
                 type: 'percent',
-                format: '1.0',
+                format: '1.0-0',
                 field: 'chance',
                 alignment: 'right',
             }
