@@ -111,6 +111,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                     this.payDays.push(nextPayment);
                 }
             }
+            this.payDays.sort((a,b) => (a.date > b.date) ? 1 : (b.date > a.date) ? -1 : 0);
         }
 
         this.setUltimateGridOptions();
