@@ -461,7 +461,9 @@ export class MyDashboardComponent implements OnInit {
                 type: 'function',
                 format: '1.0',
                 field: 'actualValue',
-                alignment: 'right'
+                alignment: 'right',
+                width: '75px',
+                sortable: true,
             },
             {
                 title: this.tranService.trans('GLOB_CURRENCY'),
@@ -488,6 +490,7 @@ export class MyDashboardComponent implements OnInit {
                 field: 'shareFromTotal',
                 alignment: 'center',
                 responsive: 'sm-up',
+                sortable: true,
             },
             {
                 title: 'Active From',
@@ -496,6 +499,8 @@ export class MyDashboardComponent implements OnInit {
                 field: 'activeFrom',
                 responsive: 'md-up',
                 width: '125px',
+                sortable: true,
+                sorted: true
             },
             // {
             //     title: 'Active Until',
@@ -521,6 +526,7 @@ export class MyDashboardComponent implements OnInit {
                 toolTip: 'Log entries',
                 responsive: 'md-up',
                 width: '40px',
+                sortable: true,
             },
             {
                 title: 'Ta',
@@ -531,6 +537,7 @@ export class MyDashboardComponent implements OnInit {
                 toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
                 responsive: 'sm-up',
                 width: '40px',
+                sortable: true,
             }
         );
 

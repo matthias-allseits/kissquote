@@ -100,6 +100,7 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
                 field: 'balance.investment',
                 alignment: 'right',
                 responsive: 'md-up',
+                sortable: true
             },
             {
                 title: this.tranService.trans('GLOB_VALUE'),
@@ -108,6 +109,7 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
                 field: 'actualValue',
                 alignment: 'right',
                 responsive: 'sm-up',
+                sortable: true
             },
             {
                 title: 'Dividend',
@@ -115,6 +117,7 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
                 format: '1.0',
                 field: 'bestSelectedDividendPayment',
                 alignment: 'right',
+                sortable: true
             },
             {
                 title: this.tranService.trans('GLOB_CURRENCY'),
@@ -128,6 +131,7 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
                 field: 'daysSinceStart',
                 alignment: 'right',
                 responsive: 'sm-up',
+                sortable: true
             },
             {
                 title: 'Trpd',
@@ -136,6 +140,8 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
                 alignment: 'right',
                 toolTip: 'Total return per day',
                 responsive: 'sm-up',
+                sortable: true,
+                sorted: true
             }
         );
 

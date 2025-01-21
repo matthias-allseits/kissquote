@@ -73,7 +73,7 @@ export class DataGridComponent implements OnInit {
     }
 
 
-    setPositionAchor(entry: any, column: GridColumn): boolean {
+    setPositionAnchor(entry: any, column: GridColumn): boolean {
         if (entry instanceof Position && column.field === 'share.name') {
             return true;
         }
@@ -207,7 +207,23 @@ export class DataGridComponent implements OnInit {
     orderList(): void {
         this.gridColumns?.forEach(column => {
             if (column.sorted) {
-                this.gridData?.sort((a, b) => (+a[column.field] < +b[column.field]) ? 1 : ((+b[column.field] < +a[column.field]) ? -1 : 0));
+                if (column.type === 'function') {
+                    this.gridData?.sort((a, b) => {
+                        return (+a[column.field]() < +b[column.field]()) ? 1 : ((+b[column.field]() < +a[column.field]()) ? -1 : 0);
+                    });
+                } else if (this.gridData && isNaN(this.gridData[0][column.field])) {
+                    this.gridData?.sort((a, b) => {
+                        const valueA = this.renderContent(a, column)?.replace(/[^\d.-]/g, '') ?? 0;
+                        const valueB = this.renderContent(b, column)?.replace(/[^\d.-]/g, '') ?? 0;
+                        // console.log(column.title + ': ', valueA);
+                        return (+valueA < +valueB) ? 1 : ((+valueB < +valueA) ? -1 : 0);
+                    });
+                } else {
+                    this.gridData?.sort((a, b) => {
+                        // console.log(column.title + ': ', +a[column.field]);
+                        return (+a[column.field] < +b[column.field]) ? 1 : ((+b[column.field] < +a[column.field]) ? -1 : 0);
+                    });
+                }
             }
         });
     }

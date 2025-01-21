@@ -56,10 +56,10 @@
                 [class.d-md-none]="column.responsive === 'sm-only'"
                 [class.text-center]="column.alignment === 'center'"
             >
-                <ng-container *ngIf="setPositionAchor(entry, column)">
+                <ng-container *ngIf="setPositionAnchor(entry, column)">
                     <a [routerLink]="['/position-detail/' + getPosition(entry, column).id]">{{ getPosition(entry, column).share?.name }}</a>
                 </ng-container>
-                <ng-container *ngIf="!setPositionAchor(entry, column)">
+                <ng-container *ngIf="!setPositionAnchor(entry, column)">
                     <span *ngIf="column.type !== 'renderer'"
                           [class.float-end]="column.alignment === 'right'"
                           [class.red-text]="column.resultColoring && +renderContent(entry, column) < 0"

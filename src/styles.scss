@@ -252,6 +252,10 @@ a:hover, .nav-link:hover {
     .small-text {
         font-size: 0.6rem;
     }
+
+    th.sortable fa-icon {
+        display: none;
+    }
 }
 
 .green-text {

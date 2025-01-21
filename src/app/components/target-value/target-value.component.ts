@@ -96,7 +96,6 @@ export class TargetValueComponent {
             }
         });
         this.chance = +((100 / this.actualTotal * this.targetTotal) - 100).toFixed();
-        this.targetList.sort((a, b) => (+a.chance < +b.chance) ? 1 : ((+b.chance < +a.chance) ? -1 : 0));
     }
 
 
@@ -135,6 +134,7 @@ export class TargetValueComponent {
                 format: '1.0-0',
                 alignment: 'right',
                 responsive: 'md-up',
+                sortable: true,
             },
             {
                 title: 'Target',
@@ -142,6 +142,7 @@ export class TargetValueComponent {
                 field: 'target',
                 format: '1.0-0',
                 alignment: 'right',
+                sortable: true,
             },
             {
                 title: 'Method',
@@ -170,6 +171,8 @@ export class TargetValueComponent {
                 format: '1.0-0',
                 field: 'chance',
                 alignment: 'right',
+                sortable: true,
+                sorted: true
             }
         );
 

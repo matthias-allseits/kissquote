@@ -103,7 +103,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                     entry.position = posiObject;
                 }
             }
-            this.risksList.sort((a,b) => (a.maxDrawdownSummary.risk < b.maxDrawdownSummary.risk) ? 1 : (b.maxDrawdownSummary.risk < a.maxDrawdownSummary.risk) ? -1 : 0);
 
             this.payDays = [];
             for (const position of this.portfolio.getAllPositions()) {
@@ -112,7 +111,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                     this.payDays.push(nextPayment);
                 }
             }
-            this.payDays.sort((a,b) => (a.date > b.date) ? 1 : (b.date > a.date) ? -1 : 0);
         }
 
         this.setUltimateGridOptions();
@@ -255,7 +253,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 type: 'function',
                 format: '1.0',
                 field: 'actualValue',
-                alignment: 'right'
+                alignment: 'right',
+                sortable: true,
             },
             {
                 title: 'Labels',
@@ -277,6 +276,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 format: '1.0',
                 field: 'daysSinceStart',
                 alignment: 'right',
+                sortable: true,
             },
             {
                 title: 'Trpd',
@@ -284,6 +284,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 field: 'totalReturnPerDay',
                 alignment: 'right',
                 toolTip: 'Total return per day',
+                sortable: true,
+                sorted: true
             }
         );
 
@@ -316,6 +318,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 format: '1.0',
                 field: 'maxDrawdownSummary.lombardValue',
                 alignment: 'right',
+                sortable: true,
+                sorted: true
             },
             {
                 title: 'FrmInv',
@@ -324,6 +328,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 field: 'maxDrawdownSummary.lombardValueFromInvestment',
                 alignment: 'right',
                 toolTip: this.tranService.trans('LISTNGS_FROM_INVESTMENT'),
+                sortable: true,
             }
         );
 
@@ -351,6 +356,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 field: 'position.shareheadShare.historicDividends.length',
                 alignment: 'right',
                 responsive: 'md-up',
+                sortable: true,
             },
             {
                 title: 'Method',
@@ -363,6 +369,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 format: '1.0',
                 field: 'crisisDropSummary.maxDrop',
                 alignment: 'right',
+                sortable: true,
             },
             {
                 title: 'Actual',
@@ -371,6 +378,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 field: 'crisisDropSummary.actualDividend',
                 alignment: 'right',
                 responsive: 'md-up',
+                sortable: true,
             },
             {
                 title: 'After',
@@ -378,6 +386,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 format: '1.0',
                 field: 'crisisDropSummary.dividendAfterDrop',
                 alignment: 'right',
+                sortable: true,
+                sorted: true
             }
         );
 
@@ -443,6 +453,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 field: 'maxDrawdownSummary.risk',
                 format: '1.0',
                 alignment: 'right',
+                sortable: true,
+                sorted: true
             },
         );
 
