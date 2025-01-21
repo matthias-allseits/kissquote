@@ -59,9 +59,9 @@
                     (selectedItem)="selectPosition($event)"
                 ></app-data-grid>
             </ng-container>
-            <ng-container *ngIf="bankAccount.getActiveNonCashPositions().length > 0">
+            <ng-container *ngIf="nonCashPositions[accountIndex]">
                 <app-data-grid
-                    [gridData]="bankAccount.getActiveNonCashPositions()"
+                    [gridData]="nonCashPositions[accountIndex].positions"
                     [gridColumns]="nonCashColumns"
                     [contextMenu]="nonCashContextMenu"
                     (baseFunctionCall)="positionEventHandler($event)"

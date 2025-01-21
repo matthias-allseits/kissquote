@@ -22,6 +22,7 @@ export interface GridColumn {
     renderer?: string,
     sortable?: boolean, // todo: this should be a method... make a model
     sorted?: boolean,
+    sortDirection?: string,
     // renderer?: Type<CellRendererInterface>,
 }
 
@@ -195,6 +196,7 @@ export class DataGridComponent implements OnInit {
     // }
 
     changeOrderColumn(column: GridColumn): void {
+        // console.log(column);
         if (column.sortable) {
             this.gridColumns?.forEach(column => {
                 column.sorted = false;
@@ -209,6 +211,7 @@ export class DataGridComponent implements OnInit {
             if (column.sorted) {
                 if (column.type === 'function') {
                     this.gridData?.sort((a, b) => {
+                        // console.log(column.title + ': ', +a[column.field]());
                         return (+a[column.field]() < +b[column.field]()) ? 1 : ((+b[column.field]() < +a[column.field]()) ? -1 : 0);
                     });
                 } else if (this.gridData && isNaN(this.gridData[0][column.field])) {
@@ -223,6 +226,9 @@ export class DataGridComponent implements OnInit {
                         // console.log(column.title + ': ', +a[column.field]);
                         return (+a[column.field] < +b[column.field]) ? 1 : ((+b[column.field] < +a[column.field]) ? -1 : 0);
                     });
+                }
+                if (column.sortDirection === 'up') {
+                    this.gridData?.reverse();
                 }
             }
         });

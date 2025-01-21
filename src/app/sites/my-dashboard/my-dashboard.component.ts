@@ -44,6 +44,7 @@ export class MyDashboardComponent implements OnInit {
     // todo: the portfolio has to be ready at this time. probably the solution: resolvers!
     public portfolio: Portfolio|null = null;
     public labels?: Label[];
+    public nonCashPositions: any[] = [];
     private selectedPosition?: Position;
     private selectedBankAccount?: BankAccount;
     public selectedWatchlistEntry?: WatchlistEntry;
@@ -98,6 +99,9 @@ export class MyDashboardComponent implements OnInit {
                 }
                 this.portfolio.bankAccounts.forEach((account, index) => {
                     this.availableDashboardTabs.push(index.toString());
+                    this.nonCashPositions.push({
+                        positions: account.getActiveNonCashPositions()
+                    });
                 });
                 const storedTab = localStorage.getItem('dashboardTab');
                 if (storedTab && this.availableDashboardTabs.indexOf(storedTab) > -1) {
@@ -500,7 +504,8 @@ export class MyDashboardComponent implements OnInit {
                 responsive: 'md-up',
                 width: '125px',
                 sortable: true,
-                sorted: true
+                sorted: true,
+                sortDirection: 'up'
             },
             // {
             //     title: 'Active Until',
