@@ -58,7 +58,6 @@ export class ExtrapolationListComponent {
             this.extraPolaList.push(extraPolaSummary);
         });
         this.globalPerformance = +((100 / this.actualTotal * this.extraPolatedTotal) - 100).toFixed();
-        this.extraPolaList.sort((a, b) => (+a.extraPolatedValue < +b.extraPolatedValue) ? 1 : ((+b.extraPolatedValue < +a.extraPolatedValue) ? -1 : 0));
     }
 
 
@@ -83,6 +82,7 @@ export class ExtrapolationListComponent {
                 format: '1.0',
                 alignment: 'right',
                 responsive: 'sm-up',
+                sortable: true,
             },
             {
                 title: 'XtraPltd',
@@ -91,6 +91,8 @@ export class ExtrapolationListComponent {
                 toolTip: 'Extrapolated value',
                 format: '1.0',
                 alignment: 'right',
+                sortable: true,
+                sorted: true
             },
             {
                 title: 'Method',
@@ -105,6 +107,7 @@ export class ExtrapolationListComponent {
                 toolTip: 'Average from Sharehead',
                 responsive: 'md-up',
                 alignment: 'right',
+                sortable: true,
             },
             {
                 title: 'XPltdPrice',
@@ -114,6 +117,7 @@ export class ExtrapolationListComponent {
                 alignment: 'right',
                 toolTip: 'Extrapolated price',
                 responsive: 'md-up',
+                sortable: true,
             },
             {
                 title: 'Prfmce',
@@ -122,6 +126,7 @@ export class ExtrapolationListComponent {
                 field: 'performance',
                 toolTip: 'Performance till ' + this.year,
                 alignment: 'right',
+                sortable: true,
             },
             {
                 title: 'XPltdDivi',
@@ -131,6 +136,7 @@ export class ExtrapolationListComponent {
                 toolTip: 'Extrapolated dividend',
                 alignment: 'right',
                 responsive: 'sm-up',
+                sortable: true,
             }
         );
 

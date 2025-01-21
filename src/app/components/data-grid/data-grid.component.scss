@@ -9,3 +9,17 @@
         padding-right: 10px;
     }
 }
+
+.sorting-arrow {
+    font-size: 12px;
+    margin-top: 3px;
+    margin-left: 2px;
+}
+
+.sorted-column {
+    border-bottom: solid 2px #ff6633 !important;
+}
+
+th.sortable {
+    cursor: pointer;
+}

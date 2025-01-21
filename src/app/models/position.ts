@@ -602,7 +602,7 @@ export class Position {
         if (dividendProjection) {
             if (dividendProjection.currencyCorrectedProjectionValue) {
                 extraPolatedDividend = +(dividendProjection.currencyCorrectedProjectionValue).toFixed();
-            } else {
+            } else if (!isNaN(dividendProjection.projectionValue)) {
                 extraPolatedDividend = +(dividendProjection.projectionValue).toFixed();
             }
         }

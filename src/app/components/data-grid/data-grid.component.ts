@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, Type, ViewChild, ViewEncapsulation} from '@angular/core';
-import {faEdit, faPlus, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
+import {faArrowDown, faArrowsV, faEdit, faPlus, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons/faEllipsisVertical";
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {DateHelper} from "../../core/datehelper";
@@ -20,6 +20,8 @@ export interface GridColumn {
     responsive?: string,
     width?: string,
     renderer?: string,
+    sortable?: boolean, // todo: this should be a method... make a model
+    sorted?: boolean,
     // renderer?: Type<CellRendererInterface>,
 }
 
@@ -54,6 +56,8 @@ export class DataGridComponent implements OnInit {
     protected readonly addIcon = faPlus;
     protected readonly editIcon = faEdit;
     protected readonly naviIcon = faEllipsisVertical;
+    protected readonly arrowDownIcon = faArrowDown;
+    protected readonly arrowsIcon = faArrowsV;
 
     constructor(
         private _decimalPipe: DecimalPipe
@@ -65,6 +69,7 @@ export class DataGridComponent implements OnInit {
         // setTimeout(() => {
         //     this.renderCells();
         // }, 1000);
+        this.orderList();
     }
 
 
@@ -188,6 +193,24 @@ export class DataGridComponent implements OnInit {
     //         }
     //     }
     // }
+
+    changeOrderColumn(column: GridColumn): void {
+        if (column.sortable) {
+            this.gridColumns?.forEach(column => {
+                column.sorted = false;
+            });
+            column.sorted = true;
+            this.orderList();
+        }
+    }
+
+    orderList(): void {
+        this.gridColumns?.forEach(column => {
+            if (column.sorted) {
+                this.gridData?.sort((a, b) => (+a[column.field] < +b[column.field]) ? 1 : ((+b[column.field] < +a[column.field]) ? -1 : 0));
+            }
+        });
+    }
 
     toggleMenu(entry: any): void {
         this.selectedItem.next(entry);

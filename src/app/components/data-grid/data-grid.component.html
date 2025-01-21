@@ -2,6 +2,7 @@
     <thead>
         <tr>
             <th *ngFor="let column of gridColumns"
+                (click)="changeOrderColumn(column)"
                 [class.d-none]="column.responsive && ['md-up', 'sm-up', 'xl-up'].indexOf(column.responsive) > -1"
                 [class.d-md-table-cell]="column.responsive === 'md-up'"
                 [class.d-sm-table-cell]="column.responsive === 'sm-up'"
@@ -9,13 +10,31 @@
                 [class.d-table-cell]="column.responsive === 'sm-only'"
                 [class.d-md-none]="column.responsive === 'sm-only'"
                 [class.text-center]="column.alignment === 'center'"
+                [class.sorted-column]="column.sorted"
+                [class.sortable]="column.sortable"
                 [style.width]="column.width"
                 scope="col">
+                <ng-container *ngIf="column.sortable && column.alignment === 'right'">
+                    <fa-icon *ngIf="column.sorted"
+                         [icon]="arrowDownIcon"
+                         class="kissquote-text float-end sorting-arrow"></fa-icon>
+                    <fa-icon *ngIf="!column.sorted"
+                         [icon]="arrowsIcon"
+                         class="grey-text float-end sorting-arrow"></fa-icon>
+                </ng-container>
                 <span
                     [class.float-end]="column.alignment === 'right'"
                     ngbTooltip="{{ column.toolTip }}"
                     tooltipClass="custom-tooltip"
                 >{{ column.title }}</span>
+                <ng-container *ngIf="column.sortable && column.alignment !== 'right'">
+                    <fa-icon *ngIf="column.sorted"
+                         [icon]="arrowDownIcon"
+                         class="kissquote-text sorting-arrow"></fa-icon>
+                    <fa-icon *ngIf="!column.sorted"
+                         [icon]="arrowsIcon"
+                         class="grey-text sorting-arrow"></fa-icon>
+                </ng-container>
             </th>
             <th *ngFor="let entry of contextMenu" scope="col" class="d-none d-md-table-cell" style="width: 35px;"></th>
             <th *ngIf="contextMenu && contextMenu.length > 0" scope="col" class="d-sm-table-cell d-md-none mobile-navi-cell"></th>
