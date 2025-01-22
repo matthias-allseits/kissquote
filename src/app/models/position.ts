@@ -20,6 +20,7 @@ import {ChartData} from "chart.js";
 import {DateHelper} from "../core/datehelper";
 import {TargetSummary} from "../components/target-value/target-value.component";
 import {ExtraPolaSummary} from "../components/extrapolation-list/extrapolation-list.component";
+import {ShareheadPlannedDividend} from "./sharehead-planned-dividend";
 
 
 export interface DividendTotal {
@@ -61,6 +62,12 @@ export interface NextPayment {
     currency: string;
     paymentCorrected?: number;
     currencyCorrected?: string;
+}
+
+export interface DividendDeclaration {
+    position: Position;
+    positionId: number;
+    plannedDividend: ShareheadPlannedDividend;
 }
 
 export class Position {

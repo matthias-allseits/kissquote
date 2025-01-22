@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {TranslationService} from "../../services/translation.service";
 import {Label} from "../../models/label";
-import {NextPayment, Position} from "../../models/position";
+import {DividendDeclaration, NextPayment, Position} from "../../models/position";
 import {CrisisDividendSummary, LombardValuesSummary, Portfolio} from "../../models/portfolio";
 import {ShareheadService} from "../../services/sharehead.service";
 import {ShareheadShare} from "../../models/sharehead-share";
@@ -28,6 +28,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public performanceListTab = '1day';
     public performanceList?: Position[];
     public payDays?: NextPayment[];
+    public declarationDays?: DividendDeclaration[];
     public nextReportsList?: ShareheadShare[];
     public lastMinuteList?: ShareheadShare[];
     public newestRatingsList?: AnalystRating[];
@@ -50,6 +51,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public crisisDivisContextMenu?: GridContextMenuItem[];
     public payDaysColumns?: GridColumn[];
     public payDaysContextMenu?: GridContextMenuItem[];
+    public declarationDaysColumns?: GridColumn[];
+    public declarationDaysContextMenu?: GridContextMenuItem[];
     public riskColumns?: GridColumn[];
     public riskContextMenu?: GridContextMenuItem[];
 
@@ -112,12 +115,30 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 }
             }
             this.payDays.sort((a,b) => (a.date > b.date) ? 1 : (b.date > a.date) ? -1 : 0);
+
+            this.declarationDays = [];
+            for (const position of this.portfolio.getAllPositions()) {
+                const plannedDividend = position.shareheadShare?.plannedDividends ? position.shareheadShare?.plannedDividends[0] : undefined;
+                if (plannedDividend && plannedDividend.amount === 0 && plannedDividend.declarationDate) {
+                    this.declarationDays.push({
+                        position: position,
+                        positionId: position.id,
+                        plannedDividend: plannedDividend
+                    });
+                }
+            }
+            this.declarationDays.sort((a,b) => {
+                const dataA = a.plannedDividend.declarationDate;
+                const dateB = b.plannedDividend.declarationDate;
+                return (dataA !== undefined && dateB !== undefined && dataA > dateB) ? 1 : (dataA !== undefined && dateB !== undefined && dateB > dataA) ? -1 : 0;
+            });
         }
 
         this.setUltimateGridOptions();
         this.setLombardGridOptions();
         this.setCrisisDivisGridOptions();
         this.setPayDaysGridOptions();
+        this.setDeclarationDaysGridOptions();
         this.setRiskGridOptions();
     }
 
@@ -433,6 +454,31 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         );
 
         this.payDaysContextMenu = [];
+    }
+
+
+    private setDeclarationDaysGridOptions() {
+        this.declarationDaysColumns = [];
+        this.declarationDaysColumns.push(
+            {
+                title: this.tranService.trans('GLOB_SHARE'),
+                type: 'string',
+                field: 'position.share.name',
+            },
+            {
+                title: 'Account',
+                type: 'string',
+                field: 'position.bankAccountName',
+            },
+            {
+                title: 'Date',
+                type: 'date',
+                format: 'dd.MM.yy',
+                field: 'plannedDividend.declarationDate',
+            },
+        );
+
+        this.declarationDaysContextMenu = [];
     }
 
     private setRiskGridOptions() {

@@ -24,9 +24,10 @@ export class ShareheadPlannedDividendCreator {
             const currency = CurrencyCreator.oneFromApiArray(apiArray.currency);
             return new ShareheadPlannedDividend(
                 apiArray.id,
+                apiArray.declarationDate ? new Date(apiArray.declarationDate) : undefined,
                 new Date(apiArray.exDate),
                 new Date(apiArray.payDate),
-                +apiArray.amount,
+                apiArray.amount ? +apiArray.amount : 0,
                 currency,
             );
         } else {

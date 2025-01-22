@@ -150,6 +150,16 @@
             (baseFunctionCall)="positionEventHandler($event)"
             (selectedItem)="selectPosition($event)"
         ></app-data-grid>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1 pt-3">
+            <h4>Declaration Days</h4>
+        </div>
+        <app-data-grid
+            [gridData]="declarationDays"
+            [gridColumns]="declarationDaysColumns"
+            [contextMenu]="declarationDaysContextMenu"
+            (baseFunctionCall)="positionEventHandler($event)"
+            (selectedItem)="selectPosition($event)"
+        ></app-data-grid>
     </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'newestRatings'">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">

@@ -157,6 +157,10 @@
                     <div class="col-3"><span class="float-end">{{ shareheadShare.nextReportDate|date:'dd.MM.y' }}</span></div>
                 </div>
                 <ng-container *ngIf="shareheadShare.plannedDividends && shareheadShare.plannedDividends.length > 0">
+                    <div *ngIf="shareheadShare.plannedDividends[0].declarationDate" class="row">
+                        <div class="col-9">Next Declaration Date:</div>
+                        <div class="col-3"><span class="float-end">{{ shareheadShare.plannedDividends[0].declarationDate|date:'dd.MM.y' }}</span></div>
+                    </div>
                     <div class="row">
                         <div class="col-9">Next Ex-Dividend Date:</div>
                         <div class="col-3"><span class="float-end">{{ shareheadShare.plannedDividends[0].exDate|date:'dd.MM.y' }}</span></div>
