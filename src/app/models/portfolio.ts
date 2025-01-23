@@ -505,6 +505,36 @@ export class Portfolio {
     }
 
 
+    diversityByRelevanceChartData(): ChartData {
+        const positions = this.getActiveNonCashPositions();
+
+        let total = positions.length;
+        let relevant = 0;
+        let irrelevant = 0;
+        positions.forEach(position => {
+            if (position.isRelevant()) {
+                relevant++;
+            } else {
+                irrelevant++;
+            }
+        });
+        const relevantPercentage = (100/ total * relevant).toFixed(0);
+        const irrelevantPercentage = (100/ total * irrelevant).toFixed(0);
+        const chartData: ChartData = {
+            labels: [`Relevant ${relevantPercentage}%`, `Irrelevant ${irrelevantPercentage}%`],
+            datasets: [
+                {
+                    label: 'Value',
+                    data: [relevant, irrelevant],
+                    backgroundColor: ['rgb(0,253,0)', 'rgb(220,0,0)'],
+                }
+            ]
+        };
+
+        return chartData;
+    }
+
+
     strategiesByInvestmentChartData(): ChartData {
         const summaries = this.strategiesSummary();
 

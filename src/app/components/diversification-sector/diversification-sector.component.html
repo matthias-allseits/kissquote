@@ -17,6 +17,12 @@
         <app-pie-chart [data]="diversityByDividendChartData" [height]="400" (triggerClick)="listDiversityPositions($event)"></app-pie-chart>
     </ng-container>
 </div>
+<div class="info-box chart-box">
+    <h5>by relevance</h5>
+    <ng-container *ngIf="diversityByRelevanceChartData">
+        <app-pie-chart [data]="diversityByRelevanceChartData" [height]="400" (triggerClick)="listDiversityPositions($event)"></app-pie-chart>
+    </ng-container>
+</div>
 <ng-container *ngIf="diversityList && diversityList.length > 0">
     <h5>{{ diversityListTitle }}</h5>
     <app-data-grid

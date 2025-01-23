@@ -21,6 +21,7 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
     public diversityByInvestmentChartData?: ChartData;
     public diversityByValueChartData?: ChartData;
     public diversityByDividendChartData?: ChartData;
+    public diversityByRelevanceChartData?: ChartData;
     public diversificationColumns?: GridColumn[];
     public diversificationContextMenu?: GridContextMenuItem[];
     public diversityListTitle = '';
@@ -44,20 +45,33 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
             this.diversityByInvestmentChartData = this.portfolio.diversityByInvestmentChartData();
             this.diversityByValueChartData = this.portfolio.diversityByValueChartData();
             this.diversityByDividendChartData = this.portfolio.diversityByDividendChartData();
+            this.diversityByRelevanceChartData = this.portfolio.diversityByRelevanceChartData();
         }
     }
 
     listDiversityPositions(event: any): void {
+        console.log(event);
         this.diversityList = [];
         this.diversityListTitle = event;
         const filteredIds: number[] = [];
+        const relevanceLabels = ['Relevant', 'Irrelevant'];
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
-            if (position.sector?.name === event) {
-                if (this.timeWarpMode) {
-                    position.timeWarpDate = this.timeWarpDate;
+            if (relevanceLabels.indexOf(event) === -1) {
+                if (position.sector?.name === event) {
+                    if (this.timeWarpMode) {
+                        position.timeWarpDate = this.timeWarpDate;
+                    }
+                    this.diversityList.push(position);
+                    filteredIds.push(position.id);
                 }
-                this.diversityList.push(position);
-                filteredIds.push(position.id);
+            } else {
+                if (position.isRelevant() && event === 'Relevant') {
+                    this.diversityList.push(position);
+                    filteredIds.push(position.id);
+                } else if (!position.isRelevant() && event === 'Irrelevant') {
+                    this.diversityList.push(position);
+                    filteredIds.push(position.id);
+                }
             }
         });
         if (!this.timeWarpMode) {

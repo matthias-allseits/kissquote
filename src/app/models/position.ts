@@ -501,6 +501,16 @@ export class Position {
     }
 
 
+    isRelevant(): boolean {
+        const cap = 5000;
+        if (this.balance?.investment && +this.balance?.investment > cap || +this.actualValue() > cap) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     public valueFromMostOptimisticAnalyst(): number {
         let result = 0;
         if (this.shareheadShare) {
