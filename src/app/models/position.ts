@@ -102,7 +102,6 @@ export class Position {
         public labels?: Label[],
         public bankAccountName?: string,
         public shareheadShare?: ShareheadShare,
-        public historicRates?: StockRate[],
         public visible?: boolean, // for filtering purposes
         public tempPerformanceValue?: number, // for filtering purposes
         public timeWarpDate?: Date, // for time-warp purposes

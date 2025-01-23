@@ -70,8 +70,8 @@
             </div>
         </div>
         <div class="info-container">
-            <div *ngIf="position.historicRates && position.historicRates.length > 0">
-                <app-share-bar-chart-container [historicRates]="position.historicRates" [position]="position"></app-share-bar-chart-container>
+            <div *ngIf="historicRates && historicRates.length > 0">
+                <app-share-bar-chart-container [historicRates]="historicRates" [position]="position"></app-share-bar-chart-container>
                 <div *ngIf="!position.motherId && chartData" class="info-box chart-box" style="margin-top: 41px;">
                     <app-bar-chart [data]="chartData"></app-bar-chart>
                 </div>

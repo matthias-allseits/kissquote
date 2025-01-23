@@ -12,6 +12,7 @@ import {Label} from "../models/label";
 
 export interface PositionData {
     position?: Position;
+    historicRates?: StockRate[];
     costIncomeChartData?: ChartData;
 }
 
@@ -36,6 +37,7 @@ export class PositionDetailResolver implements Resolve<PositionData>{
                     if (position) {
                         const positionData: PositionData = {
                             position: position,
+                            historicRates: undefined,
                             costIncomeChartData: position.costIncomeChartdata()
                         }
                         if (position.isCash) {
@@ -47,7 +49,7 @@ export class PositionDetailResolver implements Resolve<PositionData>{
                             .subscribe(rates => {
                                 if (rates.length > 0) {
                                     this.addLatestRateToLineChart(position, rates);
-                                    position.historicRates = rates;
+                                    positionData.historicRates = rates;
 
                                     if (position.shareheadId && position.shareheadId > 0) {
                                         this.shareheadService.getShare(position.shareheadId)
@@ -61,7 +63,7 @@ export class PositionDetailResolver implements Resolve<PositionData>{
                                         holder.next(positionData);
                                     }
                                 } else {
-                                    position.historicRates = [];
+                                    positionData.historicRates = [];
                                     holder.next(positionData);
                                 }
                             });

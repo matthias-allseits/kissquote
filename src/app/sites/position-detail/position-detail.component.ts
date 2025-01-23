@@ -90,6 +90,7 @@ export class PositionDetailComponent implements OnInit {
 
     public selectedLogEntry?: PositionLog;
     public chartData?: ChartData;
+    public historicRates: StockRate[] = [];
     public daysTillNextEx?: number;
     public daysTillNextPayment?: number;
     public daysTillNextReport?: number;
@@ -159,6 +160,7 @@ export class PositionDetailComponent implements OnInit {
         this.route.data.subscribe(data => {
             this.position = undefined;
             this.chartData = undefined;
+            this.historicRates = [];
             this.nextYearsAvgRateAlert = false;
             this.nextYearsAvgPerformanceProjectionAlert = false;
             // console.log(data);
@@ -166,8 +168,7 @@ export class PositionDetailComponent implements OnInit {
             setTimeout(() => {
                 this.position = data['positionData']['position'];
                 if (this.position && !this.position?.isCash) {
-                    let tempRates: StockRate[] = this.position?.historicRates ?? [];
-                    this.position.historicRates = [];
+                    let tempRates = data['positionData']['historicRates'];
                     if (tempRates === undefined) {
                         tempRates = [];
                     }
@@ -192,11 +193,11 @@ export class PositionDetailComponent implements OnInit {
                                     if (rate) {
                                         tempRates = this.replaceRate(rate, tempRates);
                                         if (loopCounter === crapRateDates.length && this.position) {
-                                            this.position.historicRates = tempRates;
+                                            this.historicRates = tempRates;
                                         }
                                     } else {
                                         if (loopCounter === crapRateDates.length && this.position) {
-                                            this.position.historicRates = tempRates;
+                                            this.historicRates = tempRates;
                                         }
                                     }
                                 });
@@ -204,14 +205,14 @@ export class PositionDetailComponent implements OnInit {
                         });
                     } else {
                         if (this.position) {
-                            this.position.historicRates = tempRates;
+                            this.historicRates = tempRates;
                         }
                     }
                 }
                 // todo: find a better solution...
                 setTimeout(() => {
-                    if (this.position?.currency && this.position.historicRates) {
-                        this.thisYearsAverageRate = RatesHelper.calculateThisYearsAverageRate(this.position.historicRates, this.position.currency);
+                    if (this.position?.currency && this.historicRates) {
+                        this.thisYearsAverageRate = RatesHelper.calculateThisYearsAverageRate(this.historicRates, this.position.currency);
                         if (this.thisYearsAverageRate) {
                             this.nextYearsAvgPerformanceProjection = this.position?.shareheadShare?.getAvgPerformanceProjection(this.thisYearsAverageRate);
                             if (this.position.balance?.lastRate && this.position.balance?.lastRate?.rate < this.thisYearsAverageRate) {
@@ -784,15 +785,11 @@ export class PositionDetailComponent implements OnInit {
 
     private refreshChart(): void {
         // todo: find a better solution
-        if (this.position) {
-            const tempData = this.position.historicRates;
-            this.position.historicRates = [];
-            setTimeout(() => {
-                if (this.position) {
-                    this.position.historicRates = tempData;
-                }
-            }, 100);
-        }
+        const tempData = this.historicRates;
+        this.historicRates = [];
+        setTimeout(() => {
+            this.historicRates = tempData;
+        }, 100);
     }
 
 
