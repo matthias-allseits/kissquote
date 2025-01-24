@@ -41,6 +41,7 @@ import {RatesHelper} from "../../helper/rates.helper";
 import {StockrateService} from "../../services/stockrate.service";
 import {DateHelper} from "../../core/datehelper";
 import {StockRateCreator} from "../../creators/stock-rate-creator";
+import {StringHelper} from "../../helper/string.helper";
 
 
 @Component({
@@ -87,6 +88,7 @@ export class PositionDetailComponent implements OnInit {
     public logBook?: any[];
     public commentsFilter = false;
     public positionType = 'Position';
+    public filterTitle = '';
 
     public selectedLogEntry?: PositionLog;
     public chartData?: ChartData;
@@ -896,6 +898,8 @@ export class PositionDetailComponent implements OnInit {
                     // console.log('rasiere ultimate-filter');
                     localStorage.removeItem('ultimateFilterType');
                     localStorage.removeItem('ultimateFilterLabel');
+                    localStorage.removeItem('ultimateFilterValue');
+                    this.filterTitle = '';
                     this.getFilteredPositions()
                         .subscribe(posis => {
                             this.setFilteredPositions(posis);
@@ -911,7 +915,9 @@ export class PositionDetailComponent implements OnInit {
             this.positionService.getNonCashAndActivePositions()
                 .subscribe(posis => {
                     const filterType = localStorage.getItem('ultimateFilterType');
+                    const filterValue = localStorage.getItem('ultimateFilterValue');
                     if (filterType === 'label') {
+                        // this.filterTitle = `Label: ${filterValue}`;
                         let ultimateFilter = localStorage.getItem('ultimateFilterLabel');
                         if (ultimateFilter === null) {
                             psitons.next(posis);
@@ -922,6 +928,7 @@ export class PositionDetailComponent implements OnInit {
                             psitons.next(positions);
                         }
                     } else if (filterType === 'sector' || filterType === 'strategy') {
+                        this.filterTitle = StringHelper.capitalizeFirstLetter(filterType) + ` -> ${filterValue}`;
                         let ultimateFilter;
                         if (filterType === 'sector') {
                             ultimateFilter = localStorage.getItem('ultimateFilterSector');

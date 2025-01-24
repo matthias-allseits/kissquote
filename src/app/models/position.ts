@@ -502,7 +502,11 @@ export class Position {
 
 
     isRelevant(): boolean {
-        const cap = 5000;
+        let cap = 5000;
+        let relevanceLimit = localStorage.getItem('relevanceLimit');
+        if (relevanceLimit) {
+            cap = +relevanceLimit;
+        }
         if (this.balance?.investment && +this.balance?.investment > cap || +this.actualValue() > cap) {
             return true;
         } else {

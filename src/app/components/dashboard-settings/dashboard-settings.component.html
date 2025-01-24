@@ -6,6 +6,15 @@
     <label for="darkmode-switch" class="form-label">Darkmode</label>
 </div>
 <div class="info-box">
+    <h5>Settings</h5>
+    <form [formGroup]="settingsForm">
+        <div class="mb-3">
+            <label class="form-label">Relevance limit</label>
+            <input (change)="persistRelevanceLimit()" formControlName="relevanceLimit" class="form-control" type="text" name="relevanceLimit" value="">
+        </div>
+    </form>
+</div>
+<div class="info-box">
     <h5>Currencies</h5>
     <app-data-grid
         [gridData]="currencies"

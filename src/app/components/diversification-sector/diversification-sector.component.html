@@ -18,7 +18,7 @@
     </ng-container>
 </div>
 <div class="info-box chart-box">
-    <h5>by relevance</h5>
+    <h5>by relevance ({{ relevanceLimit }})</h5>
     <ng-container *ngIf="diversityByRelevanceChartData">
         <app-pie-chart [data]="diversityByRelevanceChartData" [height]="400" (triggerClick)="listDiversityPositions($event)"></app-pie-chart>
     </ng-container>

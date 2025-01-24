@@ -26,6 +26,7 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
     public diversificationContextMenu?: GridContextMenuItem[];
     public diversityListTitle = '';
     public diversityList: Position[] = [];
+    public relevanceLimit = 5000;
 
     constructor(
         public tranService: TranslationService,
@@ -33,6 +34,10 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+        const relevanceLimit = localStorage.getItem('relevanceLimit');
+        if (relevanceLimit) {
+            this.relevanceLimit = +relevanceLimit;
+        }
         this.setDiversificationGridOptions();
     }
 
@@ -50,7 +55,6 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
     }
 
     listDiversityPositions(event: any): void {
-        console.log(event);
         this.diversityList = [];
         this.diversityListTitle = event;
         const filteredIds: number[] = [];
@@ -81,6 +85,7 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
         }
         localStorage.setItem('ultimateFilterSector', JSON.stringify(filteredIds));
         localStorage.setItem('ultimateFilterType', 'sector');
+        localStorage.setItem('ultimateFilterValue', event);
     }
 
 

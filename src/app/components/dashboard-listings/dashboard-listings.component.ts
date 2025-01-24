@@ -161,6 +161,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         });
         localStorage.setItem('ultimateFilterLabel', JSON.stringify(this.ultimateBalanceFilter));
         localStorage.setItem('ultimateFilterType', 'label');
+        localStorage.setItem('ultimateFilterValue', label.name);
         this.filterUltmateList.emit();
     }
 
@@ -174,6 +175,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         });
         localStorage.setItem('ultimateFilterLabel', JSON.stringify(this.ultimateBalanceFilter));
         localStorage.setItem('ultimateFilterType', 'label');
+        localStorage.setItem('ultimateFilterValue', label.name);
         this.filterUltmateList.emit();
         this.calculateUltimateBalance();
     }
@@ -187,6 +189,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         });
         localStorage.setItem('ultimateFilterLabel', JSON.stringify(this.ultimateBalanceFilter));
         localStorage.setItem('ultimateFilterType', 'label');
+        localStorage.setItem('ultimateFilterValue', '');
         this.filterUltmateList.emit();
     }
 

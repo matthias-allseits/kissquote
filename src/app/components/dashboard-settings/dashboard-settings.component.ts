@@ -52,11 +52,16 @@ export class DashboardSettingsComponent implements OnInit {
     public selectedStrategy?: Strategy;
     public color = 'ffffff';
     public darkMode = false;
+    public relevanceLimit = 5000;
 
     public currenciesColumns?: GridColumn[];
     public currenciesContextMenu?: GridContextMenuItem[];
 
     modalRef?: NgbModalRef;
+
+    settingsForm = new FormGroup({
+        relevanceLimit: new UntypedFormControl('', Validators.required),
+    });
 
     exchangeRateForm = new FormGroup({
         rate: new UntypedFormControl('', Validators.required),
@@ -87,6 +92,11 @@ export class DashboardSettingsComponent implements OnInit {
 
     ngOnInit() {
         this.darkMode = localStorage.getItem('darkMode') === 'yes';
+        const relevanceLimit = localStorage.getItem('relevanceLimit');
+        if (relevanceLimit) {
+            this.relevanceLimit = +relevanceLimit;
+        }
+        this.settingsForm.get('relevanceLimit')?.setValue(this.relevanceLimit);
         this.currencyService.getAllCurrencies()
             .subscribe(currencies => {
                 this.currencies = currencies;
@@ -107,6 +117,14 @@ export class DashboardSettingsComponent implements OnInit {
         this.darkMode = !this.darkMode;
         localStorage.setItem('darkMode', this.darkMode ? 'yes' : 'no');
         document.location.reload();
+    }
+
+    persistRelevanceLimit(): void {
+        const relevanceLimit = +this.settingsForm.get('relevanceLimit')?.getRawValue();
+        console.log(relevanceLimit);
+        if (relevanceLimit > 0) {
+            localStorage.setItem('relevanceLimit', relevanceLimit.toString());
+        }
     }
 
     openExchangeRateModal(template: TemplateRef<any>) {
