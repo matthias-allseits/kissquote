@@ -883,6 +883,7 @@ export class ShareheadShare {
     }
 
 
+    // todo: useless
     public getStockRates(): Observable<StockRate[]> {
         return new Observable(obsData => {
             if (this.currency) {

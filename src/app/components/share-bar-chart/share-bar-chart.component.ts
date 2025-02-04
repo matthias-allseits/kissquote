@@ -170,9 +170,6 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                             this.context.beginPath();
                             const xValue = CanvasHelper.optimizeCoordinate(this.offsetLeft + ((i * this.stepWidth) + 3));
                             let transactionsRate = transaction.rate;
-                            if (this.position?.currency?.name === 'GBP') {
-                                transactionsRate *= 100;
-                            }
                             if (this.position?.share?.name && this.position?.share?.name.indexOf('BRC') > -1) {
                                 transactionsRate /= 10;
                             }
@@ -200,9 +197,6 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                             this.context.beginPath();
                             this.context.strokeStyle = this.greenColor;
                             const xValue = CanvasHelper.optimizeCoordinate(this.offsetLeft + ((i * this.stepWidth) + 3));
-                            if (this.position?.currency?.name === 'GBP') {
-                                transactionsRate *= 100;
-                            }
                             if (this.position?.share?.name && this.position?.share?.name.indexOf('BRC') > -1) {
                                 transactionsRate /= 10;
                             }
@@ -223,9 +217,6 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                 this.context.strokeStyle = this.redColor;
                 this.context.setLineDash([5, 5]);
                 let avgPriceForChart = this.position?.balance?.averagePayedPriceGross;
-                if (this.position.currency?.name === 'GBP') {
-                    avgPriceForChart *= 100;
-                }
                 if (this.position?.share?.name && this.position?.share?.name.indexOf('BRC') > -1) {
                     avgPriceForChart /= 10;
                 }
@@ -241,9 +232,6 @@ export class ShareBarChartComponent implements OnInit, AfterViewInit {
                 this.context.strokeStyle = this.yellowColor;
                 this.context.setLineDash([5, 5]);
                 let breakEvenForChart = this.position?.balance?.breakEvenPrice;
-                if (this.position.currency?.name === 'GBP') {
-                    breakEvenForChart *= 100;
-                }
                 if (this.position?.share?.name && this.position?.share?.name.indexOf('BRC') > -1) {
                     breakEvenForChart /= 10;
                 }

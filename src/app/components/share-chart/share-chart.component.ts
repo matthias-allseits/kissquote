@@ -131,9 +131,6 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                             this.context.setLineDash([5, 5]);
                             const xValue = this.offsetLeft + (i * this.stepWidth);
                             let transactionsRate = transaction.rate;
-                            if (this.position?.currency?.name === 'GBP') {
-                                transactionsRate *= 100;
-                            }
                             if (this.position?.share?.name && this.position?.share?.name.indexOf('BRC') > -1) {
                                 transactionsRate /= 10;
                             }
@@ -152,9 +149,6 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                             this.context.setLineDash([5, 5]);
                             const xValue = this.offsetLeft + (i * this.stepWidth);
                             let transactionsRate = transaction.rate;
-                            if (this.position?.currency?.name === 'GBP') {
-                                transactionsRate *= 100;
-                            }
                             if (this.position?.share?.name && this.position?.share?.name.indexOf('BRC') > -1) {
                                 transactionsRate /= 10;
                             }
@@ -175,9 +169,6 @@ export class ShareChartComponent implements OnInit, AfterViewInit {
                 this.context.strokeStyle = this.redColor;
                 this.context.setLineDash([5, 5]);
                 let avgPriceForChart = this.position?.balance?.averagePayedPriceGross;
-                if (this.position.currency?.name === 'GBP') {
-                    avgPriceForChart *= 100;
-                }
                 if (this.position?.share?.name && this.position?.share?.name.indexOf('BRC') > -1) {
                     avgPriceForChart /= 10;
                 }

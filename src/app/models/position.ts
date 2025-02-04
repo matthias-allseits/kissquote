@@ -160,7 +160,7 @@ export class Position {
         const actualValue = this.actualValue();
         if (this.balance && this.stopLoss && actualValue) {
             let stopLossResult = this.stopLoss * this.balance?.amount;
-            if (this.currency && this.currency.name === 'GBP') {
+            if (this.currency && this.currency.name === 'GBP') { // yes, island-apes-shit, but here we keep it!
                 (stopLossResult /= 100).toFixed(0);
             }
             result = +(stopLossResult - +actualValue).toFixed(0);
@@ -175,9 +175,6 @@ export class Position {
         let result = false;
         if (this.stopLoss && this.stopLoss > 0 && this.balance && this.balance.lastRate?.rate) {
             let stopLoss = this.stopLoss;
-            if (this.currency?.name === 'GBP') {
-                stopLoss = stopLoss / 100;
-            }
             if (this.balance.lastRate?.rate < stopLoss) {
                 result = true;
             }
@@ -195,9 +192,6 @@ export class Position {
         let result = false;
         if (this.targetPrice && this.targetPrice > 0 && this.balance && this.balance.lastRate?.rate) {
             let targetPrice = this.targetPrice;
-            if (this.currency?.name === 'GBP') {
-                targetPrice = targetPrice / 100;
-            }
             if (
                 (this.targetType === 'sell' && this.balance.lastRate?.rate > targetPrice) ||
                 (this.targetType === 'buy' && this.balance.lastRate?.rate < targetPrice)
@@ -774,6 +768,7 @@ export class Position {
     }
 
 
+    // todo: useless
     public getStockRates(): Observable<StockRate[]> {
         return new Observable(obsData => {
             if (this.share && this.currency) {
