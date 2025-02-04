@@ -589,6 +589,7 @@ export class Position {
         let actualPrice = 0;
         if (this.balance?.lastRate) {
             actualPrice = this.balance?.lastRate.rate;
+            extraPolatedPrice = this.balance?.lastRate.rate;
         }
 
         const shareheadsAveragePerformance = this.shareheadShare?.getAvgPerformance();
@@ -616,6 +617,10 @@ export class Position {
                 }
                 extraPolatedValue = +(this.balance.amount * extraPolatedPrice).toFixed();
             }
+        }
+        if (+this.actualValue() > extraPolatedValue) {
+            extraPolatedValue = +this.actualValue();
+            method = 'from actual price';
         }
 
         const dividendProjection = this.extrapolateProjection(5);
