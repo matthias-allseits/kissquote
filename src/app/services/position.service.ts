@@ -53,7 +53,7 @@ export class PositionService extends ApiService {
                             let rates: StockRate[] = [];
                             const date = new Date();
                             date.setFullYear(2022);
-                            rates = SwissquoteHelper.parseRates(data, date, 1000);
+                            rates = SwissquoteHelper.parseRates(data, currencyName === 'GBX');
 
                             obsData.next(rates);
                     })

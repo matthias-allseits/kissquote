@@ -57,6 +57,28 @@ export class ShareheadService {
     }
 
 
+    public getRatesForPositionFromSwissquote(position: Position): Observable<StockRate[]>
+    {
+        if (position.currency) {
+            let currencyName = position.currency.name;
+            if (currencyName === 'GBP') {
+                currencyName = 'GBX';
+            }
+            const combinedStrangeString = `${position.share?.isin}_${position.share?.marketplace?.urlKey}_${currencyName}`;
+            return this.http.get(this.baseUrl + '/rates/raw/' + combinedStrangeString)
+                .pipe(
+                    map(res => {
+                        const rates = SwissquoteHelper.parseRates(res.toString(), currencyName === 'GBX');
+
+                        return rates;
+                    })
+                );
+        }
+
+        return new Observable<StockRate[]>();
+    }
+
+
     public searchShare(search: string): Observable<ShareheadShare[]|undefined>
     {
         return this.http.post<ShareheadShare>(this.baseUrl + '/share/search', JSON.stringify(search))

@@ -44,8 +44,8 @@ export class PositionDetailResolver implements Resolve<PositionData>{
                             holder.next(positionData);
                         }
 
-                        // this.positionService.getOfflineStockRates(this.position.share, this.position.currency)
-                        position.getStockRates()
+                        this.shareheadService.getRatesForPositionFromSwissquote(position)
+                        // position.getStockRates()
                             .subscribe(rates => {
                                 if (rates.length > 0) {
                                     this.addLatestRateToLineChart(position, rates);
@@ -100,24 +100,15 @@ export class PositionDetailResolver implements Resolve<PositionData>{
             const lastRateFromBalance = position.balance.lastRate;
             if (lastRateFromBalance.date > rates[rates.length - 1].date && !this.areRatesEqual(lastRateFromBalance, rates[rates.length - 1])) {
                 if (position) {
-                    if (position.currency?.name === 'GBP') {
-                        // island apes shit!
-                        const ratesCopy = StockRateCreator.createNewStockRate();
-                        ratesCopy.rate = lastRateFromBalance.rate * 100;
-                        ratesCopy.high = lastRateFromBalance.high * 100;
-                        ratesCopy.low = lastRateFromBalance.low * 100;
-                        rates.push(ratesCopy);
-                    } else {
-                        if (position.share?.name && position.share?.name?.indexOf('BRC') > -1) {
-                            if (lastRateFromBalance.low === 0) {
-                                lastRateFromBalance.low = lastRateFromBalance.rate / 10;
-                            }
-                            if (lastRateFromBalance.high === 0) {
-                                lastRateFromBalance.high = lastRateFromBalance.rate / 10;
-                            }
+                    if (position.share?.name && position.share?.name?.indexOf('BRC') > -1) {
+                        if (lastRateFromBalance.low === 0) {
+                            lastRateFromBalance.low = lastRateFromBalance.rate / 10;
                         }
-                        rates.push(lastRateFromBalance);
+                        if (lastRateFromBalance.high === 0) {
+                            lastRateFromBalance.high = lastRateFromBalance.rate / 10;
+                        }
                     }
+                    rates.push(lastRateFromBalance);
                 }
             }
         }

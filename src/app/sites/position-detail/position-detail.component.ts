@@ -1011,15 +1011,6 @@ export class PositionDetailComponent implements OnInit {
     }
 
     private replaceRate(rate: StockRate, tempRates: StockRate[]): StockRate[] {
-        if (this.position?.currency?.name === 'GBP') {
-            // island apes shit!
-            const ratesCopy = StockRateCreator.createNewStockRate();
-            ratesCopy.rate = rate.rate * 100;
-            ratesCopy.high = rate.high * 100;
-            ratesCopy.low = rate.low * 100;
-            ratesCopy.date = rate.date;
-            rate = ratesCopy;
-        }
         let index = 0;
         for (let histRate of tempRates) {
             if (DateHelper.datesAreEqual(histRate.date, rate.date)) {

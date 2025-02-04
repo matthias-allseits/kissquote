@@ -896,7 +896,7 @@ export class ShareheadShare {
                 request.send(null);
                 let content = request.responseText;
                 // console.log(content);
-                const rates = SwissquoteHelper.parseRates(content, new Date(1970, 1, 1), 10000);
+                const rates = SwissquoteHelper.parseRates(content, currencyName === 'GBX');
 
                 obsData.next(rates);
             }

@@ -3,23 +3,17 @@ import {StockRateCreator} from "../creators/stock-rate-creator";
 
 export class SwissquoteHelper {
 
-    // todo: activeFrom is obsolete!?
-    public static parseRates(content: string, activeFrom: Date, daysSinceStart: number): StockRate[] {
+    public static parseRates(content: string, islandApesShit = false): StockRate[] {
         // 20220603 | 286.0 | 277.6 | 286.0 | 278.4   | 27525
         // Datum    | Hoch  | Tief  | Start | Schluss | Volumen
         const rates: StockRate[] = [];
         const lines = content.split("\n");
-        let startDate = new Date(activeFrom);
         let addedMonthsToShow = 276;
         let daysSinceStartLimit = 4000;
         // if (screen.width < 400) {
         //     addedMonthsToShow = 4;
         //     daysSinceStartLimit = 150
         // }
-        if (daysSinceStart < daysSinceStartLimit) {
-            startDate.setMonth(startDate.getMonth() - addedMonthsToShow);
-        }
-        startDate.setHours(0);
         lines.forEach((line: any, index: number) => {
             line = line.replaceAll("'", '');
             line = line.replaceAll("\r", '');
@@ -33,22 +27,27 @@ export class SwissquoteHelper {
                 // console.log(monthIndex);
                 const day = +rawDate.substr(6, 2);
                 const date = new Date(year, monthIndex, day);
-                if (date >= startDate) {
-                    // console.log(date);
-                    const rate = StockRateCreator.createNewStockRate();
-                    rate.date = date;
+                // console.log(date);
+                const rate = StockRateCreator.createNewStockRate();
+                rate.date = date;
+                if (!islandApesShit) {
                     rate.rate = +cells[4];
                     rate.open = +cells[3];
                     rate.high = +cells[1];
                     rate.low = +cells[2];
-                    if (rate.low === 0) {
-                        rate.low = rate.rate;
-                    }
-                    if (rate.high === 0) {
-                        rate.high = rate.rate;
-                    }
-                    rates.push(rate);
+                } else {
+                    rate.rate = +cells[4] / 100;
+                    rate.open = +cells[3] / 100;
+                    rate.high = +cells[1] / 100;
+                    rate.low = +cells[2] / 100;
                 }
+                if (rate.low === 0) {
+                    rate.low = rate.rate;
+                }
+                if (rate.high === 0) {
+                    rate.high = rate.rate;
+                }
+                rates.push(rate);
             }
         });
 

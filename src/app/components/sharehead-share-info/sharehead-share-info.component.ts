@@ -3,6 +3,8 @@ import {ShareheadShare} from "../../models/sharehead-share";
 import {ShareheadService} from "../../services/sharehead.service";
 import {StockRate} from "../../models/stock-rate";
 import {faExternalLinkAlt} from "@fortawesome/free-solid-svg-icons";
+import {PositionCreator} from "../../creators/position-creator";
+import {ShareCreator} from "../../creators/share-creator";
 
 
 @Component({
@@ -40,7 +42,14 @@ export class ShareheadShareInfoComponent implements OnInit {
                     }
                 });
             if (!this.positionContext || this.timeWarpMode) {
-                this.shareheadShare.getStockRates()
+                // todo: fix this
+                const position = PositionCreator.createNewPosition();
+                const share = ShareCreator.createNewShare();
+                share.marketplace = this.shareheadShare.marketplace;
+                share.isin = this.shareheadShare.isin;
+                position.currency = this.shareheadShare.currency;
+                position.share = share;
+                this.shareheadService.getRatesForPositionFromSwissquote(position)
                     .subscribe((rates => {
                         this.historicStockRates = rates;
                     }));

@@ -788,9 +788,7 @@ export class Position {
                 let content = request.responseText;
                 // console.log(content);
                 let rates: StockRate[] = [];
-                if (this.activeFrom instanceof Date) {
-                    rates = SwissquoteHelper.parseRates(content, new Date(1970, 1, 1), 10000);
-                }
+                rates = SwissquoteHelper.parseRates(content, currencyName === 'GBX');
 
                 obsData.next(rates);
             }
