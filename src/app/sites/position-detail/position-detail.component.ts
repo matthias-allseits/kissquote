@@ -836,8 +836,9 @@ export class PositionDetailComponent implements OnInit {
                 this.diviProjectionYears = this.position?.dividendProjections();
                 this.shareheadDividendPayment = this.position?.shareheadDividendPayment();
                 this.shareheadDividendPaymentCorrected = this.position?.shareheadDividendPaymentCorrected();
-                if (this.position && this.position.balance?.lastRate && this.shareheadDividendPayment !== undefined && +this.shareheadDividendPayment > 0) {
-                    this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * (+this.shareheadDividendPayment / this.position.balance.amount)).toFixed(1);
+                const lastBalance = this.position.shareheadShare.lastBalance();
+                if (this.position && this.position.balance?.lastRate && lastBalance) {
+                    this.currentYieldOnValue = (100 / +this.position.balance?.lastRate.rate * lastBalance.dividend).toFixed(1);
                     this.currentYieldOnValueSource = '(from sharehead)';
                 }
 
