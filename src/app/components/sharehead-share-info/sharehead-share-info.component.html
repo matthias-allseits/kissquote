@@ -231,6 +231,8 @@
         </div>
     </div>
     <div *ngIf="!positionContext || timeWarpMode" class="info-container">
-        <app-share-bar-chart-container [historicRates]="historicStockRates"></app-share-bar-chart-container>
+        <ng-container *ngIf="historicStockRates.length > 0">
+            <app-share-bar-chart-container [historicRates]="historicStockRates"></app-share-bar-chart-container>
+        </ng-container>
     </div>
 </ng-container>
