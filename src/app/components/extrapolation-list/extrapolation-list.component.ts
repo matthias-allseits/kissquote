@@ -120,7 +120,7 @@ export class ExtrapolationListComponent {
                 sortable: true,
             },
             {
-                title: 'Prfmce',
+                title: 'Chance',
                 type: 'percent',
                 format: '1.0',
                 field: 'performance',
