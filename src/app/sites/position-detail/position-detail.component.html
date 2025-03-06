@@ -380,7 +380,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-6">Xtrapolated Value:</div>
-                                <div class="col-6"><span class="float-end">{{ extraPola.extraPolatedValue|number: '1.0-0' }}</span></div>
+                                <div class="col-6"><span class="float-end" [class.red-text]="extraPola.extraPolatedValue < +position.actualValue()">{{ extraPola.extraPolatedValue|number: '1.0-0' }}</span></div>
                             </div>
                             <div class="row">
                                 <div class="col-3">Chance:</div>

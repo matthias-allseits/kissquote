@@ -96,7 +96,17 @@ export class DataGridComponent implements OnInit {
     }
 
     checkForRedColoring(entry: any): boolean {
-        return !this.suppressColoring && entry instanceof Position && entry.active && entry.stopLossBroken();
+        if (this.suppressColoring) {
+            return false;
+        } else {
+            if (entry instanceof Position && entry.active && entry.stopLossBroken()) {
+                return true;
+            } else if (entry.extraPolatedValue && entry.actual && entry.actual > entry.extraPolatedValue) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     checkForGreenColoring(entry: any): boolean {
