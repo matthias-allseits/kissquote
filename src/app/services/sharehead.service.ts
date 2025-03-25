@@ -10,7 +10,6 @@ import {StockRateCreator} from "../creators/stock-rate-creator";
 import {StockRate} from "../models/stock-rate";
 import {AnalystRating} from "../models/analyst-rating";
 import {AnalystRatingCreator} from "../creators/analyst-rating-creator";
-import {WatchlistCreator} from "../creators/watchlist-creator";
 import {Position} from "../models/position";
 import {Portfolio} from "../models/portfolio";
 import {DateHelper} from "../core/datehelper";
@@ -31,6 +30,9 @@ export class ShareheadService {
 
     private baseUrl = 'http://sharehead.dyn-o-saur.com/api';
     private cachedCollections: CollectionsCache;
+    private cachedLastMinutes?: ShareheadShare[];
+    private cachedNewestRatings?: AnalystRating[];
+    private cachedNextReports?: ShareheadShare[];
 
     constructor(
         private http: HttpClient,
@@ -40,8 +42,7 @@ export class ShareheadService {
             this.baseUrl = 'http://sharehead.local/api';
         } else if (+window.location.port === 4500) {
             // this.baseUrl = 'http://localhost:8009/api';
-            this.baseUrl = 'http://head.local/api';
-            // this.baseUrl = 'http://head.om/api';
+            this.baseUrl = 'https://api.sharehead.allseits.ch/api';
         } else if (window.location.href.indexOf('allseits.ch') > -1) {
             this.baseUrl = 'https://api.sharehead.allseits.ch/api';
         }
@@ -191,67 +192,98 @@ export class ShareheadService {
 
     public getLastMinuteList(): Observable<ShareheadShare[]>
     {
-        return this.http.get<ShareheadShare[]>(this.baseUrl + '/listing/last-minute')
-            .pipe(
-                map(res => ShareheadShareCreator.fromApiArray(res))
-            );
+        if (this.cachedLastMinutes) {
+            console.log('deliver last-minutes from cache');
+            return new Observable(cache => {
+                cache.next(this.cachedLastMinutes);
+            });
+        } else {
+            console.log('deliver last-minutes from server');
+            return this.http.get<ShareheadShare[]>(this.baseUrl + '/listing/last-minute')
+                .pipe(
+                    map(res => {
+                        const shares = ShareheadShareCreator.fromApiArray(res);
+                        this.cachedLastMinutes = shares;
+
+                        return shares;
+                    })
+                );
+        }
     }
 
     public getNewestRatingsList(portfolio: Portfolio): Observable<AnalystRating[]>
     {
-        const shareheadIds: number[] = [];
-        portfolio.getActiveNonCashPositions().forEach(position => {
-            if (position.shareheadId) {
-                shareheadIds.push(position.shareheadId);
-            }
-        });
-        portfolio.watchlistEntries.forEach(entry => {
-            shareheadIds.push(entry.shareheadId);
-        });
-        return this.http.post(this.baseUrl + '/listing/newest-ratings', JSON.stringify(shareheadIds))
-            .pipe(
-                map(res => {
-                    const ratings = AnalystRatingCreator.fromApiArray(res);
-                    ratings.reverse();
-                    portfolio.getActiveNonCashPositions().forEach(position => {
-                        ratings.forEach(rating => {
-                            if (position.shareheadId === rating.share?.id) {
-                                rating.positionId = position.id;
-                            }
+        if (this.cachedNewestRatings) {
+            console.log('deliver newests-ratings from cache');
+            return new Observable(cache => {
+                cache.next(this.cachedNewestRatings);
+            });
+        } else {
+            console.log('deliver newests-ratings from server');
+            const shareheadIds: number[] = [];
+            portfolio.getActiveNonCashPositions().forEach(position => {
+                if (position.shareheadId) {
+                    shareheadIds.push(position.shareheadId);
+                }
+            });
+            portfolio.watchlistEntries.forEach(entry => {
+                shareheadIds.push(entry.shareheadId);
+            });
+            return this.http.post(this.baseUrl + '/listing/newest-ratings', JSON.stringify(shareheadIds))
+                .pipe(
+                    map(res => {
+                        const ratings = AnalystRatingCreator.fromApiArray(res);
+                        ratings.reverse();
+                        portfolio.getActiveNonCashPositions().forEach(position => {
+                            ratings.forEach(rating => {
+                                if (position.shareheadId === rating.share?.id) {
+                                    rating.positionId = position.id;
+                                }
+                            });
                         });
-                    });
+                        this.cachedNewestRatings = ratings;
 
-                    return ratings;
-                }),
-            );
+                        return ratings;
+                    }),
+                );
+        }
     }
 
     public getNextReportsList(portfolio: Portfolio): Observable<ShareheadShare[]>
     {
-        const shareheadIds: number[] = [];
-        portfolio.getActiveNonCashPositions().forEach(position => {
-            if (position.shareheadId) {
-                shareheadIds.push(position.shareheadId);
-            }
-        });
-        portfolio.watchlistEntries.forEach(entry => {
-            shareheadIds.push(entry.shareheadId);
-        });
-        return this.http.post(this.baseUrl + '/listing/next-reports', JSON.stringify(shareheadIds))
-            .pipe(
-                map(res => {
-                    const shares = ShareheadShareCreator.fromApiArray(res);
-                    portfolio.getActiveNonCashPositions().forEach(position => {
-                        shares.forEach(share => {
-                            if (position.shareheadId === share.id) {
-                                share.positionId = position.id;
-                            }
+        if (this.cachedNextReports) {
+            console.log('deliver next-reports from cache');
+            return new Observable(cache => {
+                cache.next(this.cachedNextReports);
+            });
+        } else {
+            console.log('deliver next-reports from server');
+            const shareheadIds: number[] = [];
+            portfolio.getActiveNonCashPositions().forEach(position => {
+                if (position.shareheadId) {
+                    shareheadIds.push(position.shareheadId);
+                }
+            });
+            portfolio.watchlistEntries.forEach(entry => {
+                shareheadIds.push(entry.shareheadId);
+            });
+            return this.http.post(this.baseUrl + '/listing/next-reports', JSON.stringify(shareheadIds))
+                .pipe(
+                    map(res => {
+                        const shares = ShareheadShareCreator.fromApiArray(res);
+                        portfolio.getActiveNonCashPositions().forEach(position => {
+                            shares.forEach(share => {
+                                if (position.shareheadId === share.id) {
+                                    share.positionId = position.id;
+                                }
+                            });
                         });
-                    });
+                        this.cachedNextReports = shares;
 
-                    return shares;
-                }),
-            );
+                        return shares;
+                    }),
+                );
+        }
     }
 
 }

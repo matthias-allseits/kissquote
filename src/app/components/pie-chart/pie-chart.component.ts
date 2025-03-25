@@ -29,7 +29,6 @@ export class PieChartComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        console.log();
         if (this.data) {
             this.chartData = this.data;
         }
