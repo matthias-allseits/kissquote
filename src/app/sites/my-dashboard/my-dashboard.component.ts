@@ -364,7 +364,11 @@ export class MyDashboardComponent implements OnInit {
                 break;
             case 'delete':
                 if (this.selectedPosition && this.removeModal) {
-                    this.openPositionConfirmModal(this.removeModal, this.selectedPosition);
+                    if (this.selectedPosition.transactions.length === 0) {
+                        this.openPositionConfirmModal(this.removeModal, this.selectedPosition);
+                    } else {
+                        alert('Löschen dieser Position nicht möglich!!!');
+                    }
                 }
                 break;
         }

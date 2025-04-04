@@ -37,7 +37,7 @@
         </ul>
         <div *ngFor="let bankAccount of portfolio.bankAccounts index as accountIndex;" class="shadow-sm  p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== accountIndex.toString()">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-                <h4 class="pt-2">{{ bankAccount.name }} ({{ bankAccount.getActiveNonCashPositions().length }})</h4>
+                <h4 class="pt-2">{{ bankAccount.name }} ({{ bankAccount.getActiveNonCashPositions().length }}/{{ bankAccount.getRealActiveNonCashPositions().length }})</h4>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
                         <button [routerLink]="['/bank-account-form/' + bankAccount.id]" type="button" class="btn btn-sm btn-outline-primary">Edit Bank-Account</button>

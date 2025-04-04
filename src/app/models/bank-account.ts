@@ -23,6 +23,18 @@ export class BankAccount {
     }
 
 
+    getRealActiveNonCashPositions(): Position[] {
+        const positions: Position[] = [];
+        this.positions.forEach(position => {
+            if (!position.isCash && position.active && position.balance && position.balance?.amount > 0) {
+                positions.push(position);
+            }
+        });
+
+        return positions;
+    }
+
+
     getCashPositions(): Position[] {
         const positions: Position[] = [];
         this.positions.forEach(position => {
