@@ -94,9 +94,7 @@ export class MyDashboardComponent implements OnInit {
             if (data['portfolio'] instanceof Portfolio) {
                 this.portfolio = data['portfolio'];
                 this.shareheadSharesLoaded = true;
-                if (this.portfolio) {
-                    this.dividendLists = this.portfolio.collectDividendLists();
-                }
+                this.loadDividendListings();
                 this.portfolio.bankAccounts.forEach((account, index) => {
                     this.availableDashboardTabs.push(index.toString());
                     this.nonCashPositions.push({
@@ -223,14 +221,12 @@ export class MyDashboardComponent implements OnInit {
                 if (this.selectedManualDividend.id > 0) {
                     this.manualDividendService.update(this.selectedManualDividend)
                         .subscribe(dividend => {
-                            // todo: implement a data updater
-                            document.location.reload();
+                            this.loadDividendListings();
                         });
                 } else {
                     this.manualDividendService.create(this.selectedManualDividend)
                         .subscribe(dividend => {
-                            // todo: implement a data updater
-                            document.location.reload();
+                            this.loadDividendListings();
                         });
                 }
             }
@@ -371,6 +367,12 @@ export class MyDashboardComponent implements OnInit {
                     }
                 }
                 break;
+        }
+    }
+
+    private loadDividendListings() {
+        if (this.portfolio) {
+            this.dividendLists = this.portfolio.collectDividendLists();
         }
     }
 
