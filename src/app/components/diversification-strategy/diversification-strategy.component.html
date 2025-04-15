@@ -17,6 +17,12 @@
         <app-pie-chart [data]="strategiesByDividendChartData" [height]="400" (triggerClick)="listStrategyPositions($event)"></app-pie-chart>
     </ng-container>
 </div>
+<div class="info-box chart-box">
+    <h5>dividend quality</h5>
+    <ng-container *ngIf="dividendQualityChartData">
+        <app-pie-chart [data]="dividendQualityChartData" [height]="400" (triggerClick)="listQualityPositions($event)"></app-pie-chart>
+    </ng-container>
+</div>
 <ng-container *ngIf="strategyList && strategyList.length > 0">
     <h5>{{ strategyListTitle }}</h5>
     <app-data-grid

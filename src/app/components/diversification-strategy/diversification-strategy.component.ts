@@ -21,6 +21,7 @@ export class DiversificationStrategyComponent implements OnInit {
     public strategiesByInvestmentChartData?: ChartData;
     public strategiesByValueChartData?: ChartData;
     public strategiesByDividendChartData?: ChartData;
+    public dividendQualityChartData?: ChartData;
     public strategyColumns?: GridColumn[];
     public strategyContextMenu?: GridContextMenuItem[];
     public strategyListTitle = '';
@@ -44,6 +45,7 @@ export class DiversificationStrategyComponent implements OnInit {
             this.strategiesByInvestmentChartData = this.portfolio.strategiesByInvestmentChartData();
             this.strategiesByValueChartData = this.portfolio.strategiesByValueChartData();
             this.strategiesByDividendChartData = this.portfolio.strategiesByDividendChartData();
+            this.dividendQualityChartData = this.portfolio.strategiesByDividendQualityChartData();
         }
     }
 
@@ -64,6 +66,43 @@ export class DiversificationStrategyComponent implements OnInit {
             this.strategyList.sort((a, b) => (+a.totalReturnPerDay() < +b.totalReturnPerDay()) ? 1 : ((+b.totalReturnPerDay() < +a.totalReturnPerDay()) ? -1 : 0));
         } else {
             this.strategyList.sort((a, b) => (+a.activeFrom > +b.activeFrom) ? 1 : ((+b.activeFrom > +a.activeFrom) ? -1 : 0));
+        }
+        if (this.strategyColumns) {
+            this.strategyColumns[7].sorted = true;
+            this.strategyColumns[4].sorted = false;
+        }
+        localStorage.setItem('ultimateFilterStrategy', JSON.stringify(filteredIds));
+        localStorage.setItem('ultimateFilterType', 'strategy');
+        localStorage.setItem('ultimateFilterValue', event);
+    }
+
+    listQualityPositions(event: any): void {
+        this.strategyList = [];
+        this.strategyListTitle = `${event} dividend quality`;
+        const filteredIds: number[] = [];
+        this.portfolio?.getActiveNonCashPositions().forEach(position => {
+            const dividendDropSummary = position.getDividendDropSummary();
+            position.tempPerformanceValue = dividendDropSummary?.actualDividend;
+            if (dividendDropSummary) {
+                if (event === 'Good' && dividendDropSummary?.maxDrop <= 51) {
+                    this.strategyList.push(position);
+                    filteredIds.push(position.id);
+                } else if (event === 'Poor' && dividendDropSummary.maxDrop > 51) {
+                    this.strategyList.push(position);
+                    filteredIds.push(position.id);
+                }
+            }
+        });
+        this.strategyList.sort((a, b) => {
+            if (a.tempPerformanceValue && b.tempPerformanceValue) {
+                return (+a.tempPerformanceValue < +b.tempPerformanceValue) ? 1 : ((+b.tempPerformanceValue < +a.tempPerformanceValue) ? -1 : 0)
+            } else {
+                return 0;
+            }
+        });
+        if (this.strategyColumns) {
+            this.strategyColumns[7].sorted = false;
+            this.strategyColumns[4].sorted = true;
         }
         localStorage.setItem('ultimateFilterStrategy', JSON.stringify(filteredIds));
         localStorage.setItem('ultimateFilterType', 'strategy');

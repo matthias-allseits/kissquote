@@ -640,6 +640,40 @@ export class Portfolio {
     }
 
 
+    strategiesByDividendQualityChartData(): ChartData {
+        const positions = this.getActiveNonCashPositions();
+
+        let total = 0;
+        let goodDividends = 0;
+        let poorDividends = 0;
+        positions.forEach(position => {
+            const dividendDropSummary = position.getDividendDropSummary();
+            if (dividendDropSummary) {
+                if (dividendDropSummary?.maxDrop <= 51) {
+                    goodDividends += dividendDropSummary.actualDividend;
+                } else {
+                    poorDividends += dividendDropSummary.actualDividend;
+                }
+            }
+        });
+        total = goodDividends + poorDividends;
+        const relevantPercentage = (100/ total * goodDividends).toFixed(0);
+        const irrelevantPercentage = (100/ total * poorDividends).toFixed(0);
+        const chartData: ChartData = {
+            labels: [`Good ${relevantPercentage}%`, `Poor ${irrelevantPercentage}%`],
+            datasets: [
+                {
+                    label: 'Value',
+                    data: [+goodDividends.toFixed(0), +poorDividends.toFixed(0)],
+                    backgroundColor: ['rgb(0,253,0)', 'rgb(220,0,0)'],
+                }
+            ]
+        };
+
+        return chartData;
+    }
+
+
     incomeChartDataImproved(netOrGross: string): ChartData {
         const chartData: ChartData = {
             labels: [],
