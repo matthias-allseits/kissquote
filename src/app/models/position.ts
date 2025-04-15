@@ -875,15 +875,21 @@ export class Position {
                 worstEverDividendDrop = worstEverDividendDropInfos[0];
                 worstEverDividendDropNote = worstEverDividendDropInfos[1];
             } else {
-                const year = new Date().getFullYear();
-                nextDividendPayment = this.plannedDividendsTotalByYear(year).total;
+                if (this.manualDividend) {
+                    nextDividendPayment = +this.manualDividendPayment();
+                    worstEverDividendDropNote = 'manual dividend';
+                } else {
+                    const year = new Date().getFullYear();
+                    nextDividendPayment = this.plannedDividendsTotalByYear(year).total;
+                    worstEverDividendDropNote = `dividend projection ${year}`;
+                }
             }
 
             let maxDividendDrop = worstEverDividendDrop;
             let method = worstEverDividendDropNote;
             if (this.manualDividendDrop !== undefined && !isNaN(this.manualDividendDrop)) {
                 maxDividendDrop = this.manualDividendDrop;
-                method = 'manual';
+                method = 'manual drop';
             }
             if (nextDividendPayment) {
                 let currentDividend = nextDividendPayment;
