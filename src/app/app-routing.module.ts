@@ -23,7 +23,7 @@ import {LandingpageOpensourceComponent} from "./sites/landingpage-opensource/lan
 
 
 const routes: Routes = [
-    { path: '', redirectTo: '/landingpage', pathMatch: 'full' },
+    { path: '', redirectTo: '/my-dashboard', pathMatch: 'full' },
     { path: 'landingpage', component: LandingpageOpensourceComponent },
     {
         path: 'my-dashboard',

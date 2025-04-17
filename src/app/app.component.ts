@@ -66,7 +66,8 @@ export class AppComponent implements OnInit {
         }
         if (null !== localStorage.getItem('my-key')) {
             this.myKey = localStorage.getItem('my-key');
-            this.router.navigate([`my-dashboard`]);
+        } else {
+            this.router.navigate([`landingpage`]);
         }
     }
 
