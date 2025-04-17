@@ -99,6 +99,9 @@ export class Position {
         public manualTargetPrice?: number,
         public manualDrawdown?: number,
         public manualDividendDrop?: number,
+        public manualDividendExDate?: Date|string,
+        public manualDividendPayDate?: Date|string,
+        public manualDividendAmount?: number,
         public labels?: Label[],
         public bankAccountName?: string,
         public shareheadShare?: ShareheadShare,
@@ -284,6 +287,20 @@ export class Position {
     nextPayment(): NextPayment|undefined {
         let result;
         const shareheadShare = this.shareheadShare;
+        const manualNextDividendPayment = this.manualNextDividendPayment();
+        if (manualNextDividendPayment && this.manualDividendPayDate instanceof Date && this.currency?.name) {
+            result = {
+                position: this,
+                positionId: this.id,
+                payment: manualNextDividendPayment,
+                date: this.manualDividendPayDate,
+                currency: this.currency?.name,
+                paymentCorrected: manualNextDividendPayment,
+                currencyCorrected: this.currency?.name,
+            };
+
+            return result;
+        }
         if (this.share && shareheadShare && shareheadShare.plannedDividends && shareheadShare.plannedDividends.length > 0) {
             if (shareheadShare.plannedDividends[0].amount > 0) {
                 const nextPayDate = shareheadShare.plannedDividends[0].payDate;
@@ -1030,4 +1047,13 @@ export class Position {
         return null;
     }
 
+    private manualNextDividendPayment(): number|undefined
+    {
+        let result;
+        if (this.balance && this.balance.amount && this.manualDividendExDate && this.manualDividendPayDate && this.manualDividendAmount && this.manualDividendAmount > 0) {
+            result = +((this.manualDividendAmount * this.balance.amount).toFixed(0));
+        }
+
+        return result;
+    }
 }
