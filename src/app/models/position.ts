@@ -157,6 +157,24 @@ export class Position {
     }
 
 
+    countOfSharesByDate(date: Date): number
+    {
+        let quantity = 0;
+        const realTransactions = this.realTransactions();
+        realTransactions.forEach(transaction => {
+            if (transaction.date < date) {
+                if (transaction.title === 'Kauf') {
+                    quantity += transaction.quantity;
+                } else {
+                    quantity -= transaction.quantity;
+                }
+            }
+        });
+
+        return quantity;
+    }
+
+
     stopLossWastage(): number
     {
         let result = 0;
@@ -302,13 +320,14 @@ export class Position {
             return result;
         }
         if (this.share && shareheadShare && shareheadShare.plannedDividends && shareheadShare.plannedDividends.length > 0) {
+            const relevantSharesCount = this.countOfSharesByDate(shareheadShare.plannedDividends[0].exDate);
             if (shareheadShare.plannedDividends[0].amount > 0) {
                 const nextPayDate = shareheadShare.plannedDividends[0].payDate;
                 let nextPaymentCorrected;
                 let nextPaymentCurrency = '';
                 let nextPayment = 0;
                 if (this.balance) {
-                    nextPayment = nextPaymentCorrected = shareheadShare.plannedDividends[0].amount * this.balance?.amount;
+                    nextPayment = nextPaymentCorrected = shareheadShare.plannedDividends[0].amount * relevantSharesCount;
                     if (shareheadShare.plannedDividends[0].currency) {
                         nextPaymentCurrency = shareheadShare.plannedDividends[0].currency.name;
                         if (this.currency?.name !== nextPaymentCurrency) {

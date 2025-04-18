@@ -830,6 +830,7 @@ export class PositionDetailComponent implements OnInit {
             this.extraPola = this.position.getExtraPolaSummary();
             this.maxDrawdownSummary = this.position?.getMaxDrawdownSummary();
             this.dividendDropSummary = this.position?.getDividendDropSummary();
+            this.nextPayment = this.position.nextPayment();
 
             if (this.position.shareheadShare) {
                 const share = this.position.shareheadShare;
@@ -868,7 +869,6 @@ export class PositionDetailComponent implements OnInit {
                     const nextReportDate = share.nextReportDate;
                     this.daysTillNextReport = Math.floor((Date.UTC(nextReportDate.getFullYear(), nextReportDate.getMonth(), nextReportDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
                 }
-                this.nextPayment = this.position.nextPayment();
                 const kgvSummary = this.position.shareheadShare.kgvSummary();
                 if (kgvSummary) {
                     kgvSummary.regressedValue = +((kgvSummary.medianKgv / kgvSummary.forwardKgv) * +this.position.actualValue()).toFixed(0);
