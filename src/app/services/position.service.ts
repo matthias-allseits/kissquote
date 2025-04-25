@@ -124,6 +124,19 @@ export class PositionService extends ApiService {
         } else {
             position.activeUntil = null;
         }
+        if (position.manualDividendExDate) {
+            position.manualDividendExDate = DateHelper.convertDateToMysql(position.manualDividendExDate);
+        } else {
+            position.manualDividendExDate = null;
+        }
+        if (position.manualDividendPayDate) {
+            position.manualDividendPayDate = DateHelper.convertDateToMysql(position.manualDividendPayDate);
+        } else {
+            position.manualDividendPayDate = null;
+        }
+        if (position.manualDividendAmount === undefined) {
+            position.manualDividendAmount = null;
+        }
         position.transactions.forEach(transaction => {
             transaction.date = DateHelper.convertDateToMysql(transaction.date);
         });
@@ -179,6 +192,19 @@ export class PositionService extends ApiService {
             deepCopy.activeUntil = DateHelper.convertDateToMysql(deepCopy.activeUntil);
         } else {
             deepCopy.activeUntil = null;
+        }
+        if (deepCopy.manualDividendExDate) {
+            deepCopy.manualDividendExDate = DateHelper.convertDateToMysql(deepCopy.manualDividendExDate);
+        } else {
+            deepCopy.manualDividendExDate = null;
+        }
+        if (deepCopy.manualDividendPayDate) {
+            deepCopy.manualDividendPayDate = DateHelper.convertDateToMysql(deepCopy.manualDividendPayDate);
+        } else {
+            deepCopy.manualDividendPayDate = null;
+        }
+        if (deepCopy.manualDividendAmount === undefined) {
+            deepCopy.manualDividendAmount = null;
         }
         if (deepCopy.removeUnderlying && deepCopy.underlying) {
             deepCopy.underlying = undefined;
