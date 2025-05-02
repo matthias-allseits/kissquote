@@ -65,7 +65,8 @@ export class PositionCreator {
                 apiArray.manualDividendPayDate ? new Date(apiArray.manualDividendPayDate) : undefined,
                 apiArray.manualDividendAmount ? apiArray.manualDividendAmount : undefined,
                 apiArray.labels ? LabelCreator.fromApiArray(apiArray.labels) : undefined,
-                apiArray.bankAccountName ? apiArray?.bankAccountName : accountName? accountName : undefined
+                apiArray.bankAccountName ? apiArray?.bankAccountName : accountName? accountName : undefined,
+                apiArray.markedLines ? JSON.parse(apiArray.markedLines.toString()) : []
             );
         } else {
             return undefined;

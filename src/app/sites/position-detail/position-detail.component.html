@@ -86,7 +86,7 @@
                         <div class="col-9">Anzahl:</div>
                         <div class="col-3"><span class="float-end">{{ position.balance.amount|number: '1.0-2' }}</span></div>
                     </div>
-                    <app-posi-detail-markable key="state-start">
+                    <app-posi-detail-markable key="state-start" [markedLines]="position.markedLines">
                         <div class="row">
                             <div class="col-9">Start:</div>
                             <div class="col-3"><span class="float-end">{{ position.activeFrom|date:'dd.MM.y' }}</span></div>
@@ -173,7 +173,7 @@
                         <div class="col-9">Letzter Kurs<span *ngIf="position.balance.lastRate"> ({{ position.balance.lastRate.date|date: 'dd.MM.y' }})</span>:</div>
                         <div class="col-3"><span *ngIf="position.balance.lastRate" class="float-end">{{ position.balance.lastRate.rate }}</span></div>
                     </div>
-                    <app-posi-detail-markable key="state-yield">
+                    <app-posi-detail-markable key="state-yield" [markedLines]="position.markedLines">
                         <div *ngIf="position.balance.lastRate" class="row">
                             <div class="col-10">Yield on value {{ currentYieldOnValueSource }}</div>
                             <div class="col-2"><span class="float-end">{{ currentYieldOnValue }}%</span></div>
@@ -191,19 +191,19 @@
                         <div class="col-9">Bez. Kurs Netto:</div>
                         <div class="col-3"><span *ngIf="position.balance.investment > 0" class="float-end">{{ position.balance.averagePayedPriceNet }}</span></div>
                     </div>
-                    <app-posi-detail-markable key="state-investment">
+                    <app-posi-detail-markable key="state-investment" [markedLines]="position.markedLines">
                         <div class="row">
                             <div class="col-9">Investition:</div>
                             <div class="col-3"><span class="float-end" [class.red-text]="position.balance.investment < 0">{{ position.balance.investment|number: '1.0' }}</span></div>
                         </div>
                     </app-posi-detail-markable>
-                    <app-posi-detail-markable key="state-value">
+                    <app-posi-detail-markable key="state-value" [markedLines]="position.markedLines">
                         <div class="row">
                             <div class="col-9">Akt. Wert:</div>
                             <div class="col-3"><span class="float-end">{{ position.actualValue()|number: '1.0' }}</span></div>
                         </div>
                     </app-posi-detail-markable>
-                    <app-posi-detail-markable key="state-balance">
+                    <app-posi-detail-markable key="state-balance" [markedLines]="position.markedLines">
                         <div class="row">
                             <div class="col-9">{{ tranService.trans('GLOB_BALANCE') }}:</div>
                             <div class="col-3"><span *ngIf="position.balance.investment > 0" class="float-end" [class.red-text]="+position.investmentBalance() < 0" [class.green-text]="+position.investmentBalance() > 0">{{ position.investmentBalance() }}%</span></div>
@@ -212,14 +212,14 @@
                 </div>
                 <div *ngIf="position.balance" class="info-box">
                     <h5>Performance</h5>
-                    <app-posi-detail-markable key="performance-days">
+                    <app-posi-detail-markable key="performance-days" [markedLines]="position.markedLines">
                         <div class="row">
                             <div class="col-9">Days since start:</div>
                             <div class="col-3"><span class="float-end">{{ position.daysSinceStart()|number: '1.0' }}</span></div>
                         </div>
                     </app-posi-detail-markable>
                     <div class="mb-3">
-                        <app-posi-detail-markable key="performance-trpd">
+                        <app-posi-detail-markable key="performance-trpd" [markedLines]="position.markedLines">
                             <div class="row">
                                 <div class="col-9">Total return per day:</div>
                                 <div class="col-3"><span class="float-end" [class.red-text]="+position.totalReturnPerDay() < 0" [class.green-text]="+position.totalReturnPerDay() > 0">{{ position.totalReturnPerDay() }}</span></div>
@@ -246,13 +246,13 @@
                         <div class="col-9">6 months:</div>
                         <div class="col-3"><span class="float-end" [class.red-text]="position.balance.performance[4] < 0" [class.green-text]="position.balance.performance[4] > 0">{{ position.balance.performance[4] }}%</span></div>
                     </div>
-                    <app-posi-detail-markable key="performance-1year">
+                    <app-posi-detail-markable key="performance-1year" [markedLines]="position.markedLines">
                         <div *ngIf="position.balance.performance[5] !== undefined" class="row">
                             <div class="col-9">1 year:</div>
                             <div class="col-3"><span class="float-end" [class.red-text]="position.balance.performance[5] < 0" [class.green-text]="position.balance.performance[5] > 0">{{ position.balance.performance[5] }}%</span></div>
                         </div>
                     </app-posi-detail-markable>
-                    <app-posi-detail-markable key="performance-3years">
+                    <app-posi-detail-markable key="performance-3years" [markedLines]="position.markedLines">
                         <div *ngIf="position.balance.performance[6] !== undefined" class="row">
                             <div class="col-9">3 years:</div>
                             <div class="col-3"><span class="float-end" [class.red-text]="position.balance.performance[6] < 0" [class.green-text]="position.balance.performance[6] > 0">{{ position.balance.performance[6] }}%</span></div>
@@ -285,13 +285,13 @@
                             <fa-icon *ngIf="!position.manualDividend" [icon]="addIcon"></fa-icon>
                         </button>
                     </h5>
-                    <app-posi-detail-markable key="chance-collected-dividends">
+                    <app-posi-detail-markable key="chance-collected-dividends" [markedLines]="position.markedLines">
                         <div class="row">
                             <div class="col-8">Collected dividends:</div>
                             <div class="col-4"><span class="float-end">{{ position.balance.collectedDividends|number: '1.0' }} {{ position.balance.collectedDividendsCurrency }}</span></div>
                         </div>
                     </app-posi-detail-markable>
-                    <app-posi-detail-markable key="chance-roi-dividends">
+                    <app-posi-detail-markable key="chance-roi-dividends" [markedLines]="position.markedLines">
                         <div class="row">
                             <div class="col-9">ROI by dividends:</div>
                             <div class="col-3"><span class="float-end" *ngIf="position.balance.investment > 0">{{ position.balance.returnOnInvestentByDividends() }}%</span></div>
@@ -299,13 +299,13 @@
                     </app-posi-detail-markable>
                     <ng-container *ngIf="nextPayment">
                         <h6>Next payment</h6>
-                        <app-posi-detail-markable key="chance-next-payment">
+                        <app-posi-detail-markable key="chance-next-payment" [markedLines]="position.markedLines">
                         <div class="row">
                             <div class="col-8">{{ nextPayment.date|date: 'dd.MM.y' }}</div>
                             <div class="col-4"><span class="float-end">{{ nextPayment.payment|number: '1.0' }} {{ nextPayment.currency }}</span></div>
                         </div>
                         </app-posi-detail-markable>
-                        <app-posi-detail-markable key="chance-next-payment-corrected">
+                        <app-posi-detail-markable key="chance-next-payment-corrected" [markedLines]="position.markedLines">
                             <div *ngIf="position.currency?.name !== nextPayment.currency" class="row">
                                 <div class="col-8">Currency-corrected:</div>
                                 <div class="col-4"><span class="float-end bold">{{ nextPayment.paymentCorrected|number: '1.0-2' }} {{ position.currency?.name }}</span></div>
@@ -314,13 +314,13 @@
                     </ng-container>
                     <ng-container *ngIf="position.manualDividend && position.currency">
                         <h6>Projection from manual dividend</h6>
-                        <app-posi-detail-markable key="chance-next-payment-manual">
+                        <app-posi-detail-markable key="chance-next-payment-manual" [markedLines]="position.markedLines">
                             <div class="row">
                                 <div class="col-8">Next payment:</div>
                                 <div class="col-4"><span class="float-end">{{ position.manualDividendPayment() }} {{ position.currency.name }}</span></div>
                             </div>
                         </app-posi-detail-markable>
-                        <app-posi-detail-markable key="chance-next-payment-manual-yield">
+                        <app-posi-detail-markable key="chance-next-payment-manual-yield" [markedLines]="position.markedLines">
                             <div class="row" *ngIf="position.balance.investment > 0">
                                 <div class="col-6">Yield on investment:</div>
                                 <div class="col-6"><span class="float-end">{{ position.manualYieldOnInvestent() }}%</span></div>
@@ -328,13 +328,13 @@
                         </app-posi-detail-markable>
                     </ng-container>
                     <h6>Projection from last payment(s)</h6>
-                    <app-posi-detail-markable key="chance-next-payment-last">
+                    <app-posi-detail-markable key="chance-next-payment-last" [markedLines]="position.markedLines">
                         <div class="row">
                             <div class="col-8">Next payment:</div>
                             <div class="col-4"><span class="float-end">{{ position.balance.projectedNextDividendPayment|number: '1.0' }} {{ position.balance.projectedNextDividendCurrency }}</span></div>
                         </div>
                     </app-posi-detail-markable>
-                    <app-posi-detail-markable key="chance-next-payment-last-yield">
+                    <app-posi-detail-markable key="chance-next-payment-last-yield" [markedLines]="position.markedLines">
                         <div class="row" *ngIf="position.balance.investment > 0">
                             <div class="col-6">Yield on investment:</div>
                             <div class="col-6"><span class="float-end"><span *ngIf="position.dividendPeriodicity === 'quaterly'">(annualized) </span>{{ position.yieldOnInvestent() }}%</span></div>
@@ -342,14 +342,14 @@
                     </app-posi-detail-markable>
                     <ng-container *ngIf="position.shareheadShare && shareheadDividendPayment">
                         <h6>Projection according to sharehead</h6>
-                        <app-posi-detail-markable key="chance-next-payment-sharehead">
+                        <app-posi-detail-markable key="chance-next-payment-sharehead" [markedLines]="position.markedLines">
                             <div class="row">
                                 <div class="col-8">Next payment:</div>
                                 <div class="col-4"><span class="float-end">{{ shareheadDividendPayment|number: '1.0' }} {{ position.shareheadShare.currency?.name }}</span></div>
                             </div>
                         </app-posi-detail-markable>
                         <ng-container *ngIf="position.currency?.name === position.shareheadShare.currency?.name">
-                            <app-posi-detail-markable key="chance-next-payment-sharehead-yield">
+                            <app-posi-detail-markable key="chance-next-payment-sharehead-yield" [markedLines]="position.markedLines">
                                 <div class="row" *ngIf="position.balance.investment > 0">
                                     <div class="col-8">Yield on investment:</div>
                                     <div class="col-4"><span class="float-end">{{ (100 / position.balance.investment * +shareheadDividendPayment).toFixed(1) }}%</span></div>
@@ -357,13 +357,13 @@
                             </app-posi-detail-markable>
                         </ng-container>
                         <ng-container *ngIf="position.currency?.name !== position.shareheadShare.currency?.name && shareheadCurrencyCorrectedDividendPayment">
-                            <app-posi-detail-markable key="chance-next-payment-sharehead-corrected">
+                            <app-posi-detail-markable key="chance-next-payment-sharehead-corrected" [markedLines]="position.markedLines">
                                 <div class="row">
                                     <div class="col-8">Currency-corrected:</div>
                                     <div class="col-4"><span class="float-end bold">{{ shareheadCurrencyCorrectedDividendPayment|number: '1.0' }} {{ position.currency?.name }}</span></div>
                                 </div>
                             </app-posi-detail-markable>
-                            <app-posi-detail-markable key="chance-next-payment-sharehead-yield-corrected">
+                            <app-posi-detail-markable key="chance-next-payment-sharehead-yield-corrected" [markedLines]="position.markedLines">
                                 <div class="row" *ngIf="position.balance.investment > 0">
                                     <div class="col-8">Yield on investment:</div>
                                     <div class="col-4"><span class="float-end">{{ (100 / position.balance.investment * +shareheadCurrencyCorrectedDividendPayment).toFixed(1) }}%</span></div>
@@ -402,7 +402,7 @@
                             <div class="col-3">Target:</div>
                             <div class="col-9"><span class="float-end">{{ rosaBrille.target|number: '1.0-0' }}</span></div>
                         </div>
-                        <app-posi-detail-markable key="rosabrille-chance-target">
+                        <app-posi-detail-markable key="rosabrille-chance-target" [markedLines]="position.markedLines">
                             <div class="row">
                                 <div class="col-3">Chance:</div>
                                 <div class="col-9"><span class="float-end">{{ rosaBrille.chance|number: '1.0-0' }}%</span></div>
@@ -428,7 +428,7 @@
                                 <div class="col-6">Xtrapolated Value:</div>
                                 <div class="col-6"><span class="float-end" [class.red-text]="extraPola.extraPolatedValue < +position.actualValue()">{{ extraPola.extraPolatedValue|number: '1.0-0' }}</span></div>
                             </div>
-                            <app-posi-detail-markable key="rosabrille-chance-xtrapola">
+                            <app-posi-detail-markable key="rosabrille-chance-xtrapola" [markedLines]="position.markedLines">
                                 <div class="row">
                                     <div class="col-3">Chance:</div>
                                     <div class="col-9"><span class="float-end">{{ extraPola.performance|number: '1.0-0' }}%</span></div>
@@ -457,7 +457,7 @@
                                     <div class="col-7">Regressed value:</div>
                                     <div class="col-5"><span class="float-end">{{ kgvSummary.regressedValue|number: '1.0' }}</span></div>
                                 </div>
-                                <app-posi-detail-markable key="rosabrille-chance-kgv">
+                                <app-posi-detail-markable key="rosabrille-chance-kgv" [markedLines]="position.markedLines">
                                     <div class="row">
                                         <div class="col-3">Chance:</div>
                                         <div class="col-9"><span class="float-end">{{ kgvSummary.performance|number: '1.0-0' }}%</span></div>
@@ -485,7 +485,7 @@
                 <div *ngIf="kgvSummary && kgvSummary.isRisky">
                     <div class="info-box">
                         <h5>KGV</h5>
-                        <app-posi-detail-markable key="risk-kgv">
+                        <app-posi-detail-markable key="risk-kgv" [markedLines]="position.markedLines">
                             <div class="row">
                                 <div class="col-9">Median KGV:</div>
                                 <div class="col-3"><span class="float-end">{{ kgvSummary.medianKgv }}</span></div>
@@ -538,7 +538,7 @@
                         <div class="col-10">Lombard value from post corona top:</div>
                         <div class="col-2"><span class="float-end">{{ maxDrawdownSummary.lombardValueFromPostCoronaTop }}%</span></div>
                     </div>
-                    <app-posi-detail-markable key="risk-lombard">
+                    <app-posi-detail-markable key="risk-lombard" [markedLines]="position.markedLines">
                         <div class="row" [class.red-text]="+position.actualValue() < maxDrawdownSummary.maxDrawdownValue">
                             <div class="col-6">Risk:</div>
                             <div class="col-6"><span class="float-end">{{ maxDrawdownSummary.risk|number: '1.0' }} {{ position.currency?.name }}</span></div>
@@ -551,7 +551,7 @@
                         <button *ngIf="position.manualDividendDrop !== undefined" (click)="openManualDividendDropConfirmModal(removeManualDividendDropConfirmModal)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Remove manual dividend drop" tooltipClass="custom-tooltip"><fa-icon [icon]="deleteIcon"></fa-icon></button>
                         <button *ngIf="position.manualDividendDrop === undefined" (click)="openManualDividendDropModal(manualDividendDropFormModal)" type="button" class="btn btn-tiny btn-outline-primary float-end" ngbTooltip="Set manual dividend drop" tooltipClass="custom-tooltip"><fa-icon [icon]="addIcon"></fa-icon></button>
                     </h5>
-                    <app-posi-detail-markable key="risk-crisis">
+                    <app-posi-detail-markable key="risk-crisis" [markedLines]="position.markedLines">
                         <div class="row">
                             <div class="col-9">Max. dividend drop:</div>
                             <div class="col-3"><span class="float-end">{{ dividendDropSummary.maxDrop }}%</span></div>
