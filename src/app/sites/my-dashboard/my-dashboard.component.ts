@@ -467,6 +467,11 @@ export class MyDashboardComponent implements OnInit {
                 field: 'share.name',
             },
             {
+                title: this.tranService.trans('GLOB_CURRENCY'),
+                type: 'string',
+                field: 'currency.name',
+            },
+            {
                 title: this.tranService.trans('GLOB_VALUE'),
                 type: 'function',
                 format: '1.0',
@@ -476,9 +481,14 @@ export class MyDashboardComponent implements OnInit {
                 sortable: true,
             },
             {
-                title: this.tranService.trans('GLOB_CURRENCY'),
+                title: 'ISIN',
                 type: 'string',
-                field: 'currency.name',
+                field: 'share.isin',
+            },
+            {
+                title: 'Market',
+                type: 'string',
+                field: 'share.marketplace.name',
             },
             {
                 title: 'Sector',
@@ -486,13 +496,13 @@ export class MyDashboardComponent implements OnInit {
                 field: 'sector.name',
                 responsive: 'sm-up',
             },
-            {
-                title: 'Labels',
-                type: 'renderer',
-                field: 'labels',
-                responsive: 'md-up',
-                renderer: 'LabelsCellRendererComponent'
-            },
+            // {
+            //     title: 'Labels',
+            //     type: 'renderer',
+            //     field: 'labels',
+            //     responsive: 'md-up',
+            //     renderer: 'LabelsCellRendererComponent'
+            // },
             {
                 title: 'Anteil',
                 type: 'percent',
@@ -513,43 +523,54 @@ export class MyDashboardComponent implements OnInit {
                 sorted: true,
                 sortDirection: 'up'
             },
-            // {
-            //     title: 'Active Until',
-            //     type: 'date',
-            //     format: 'dd.MM.y',
-            //     field: 'activeUntil',
-            //     responsive: 'xl-up',
-            //     width: '125px',
-            // },
             {
-                title: '',
-                type: 'renderer',
-                field: '',
-                renderer: 'PricealertsCellRendererComponent',
-                width: '55px',
-            },
-            {
-                title: 'Le',
-                type: 'number',
+                title: this.tranService.trans('LISTNGS_DAYS'),
+                type: 'function',
                 format: '1.0',
-                field: 'logEntries.length',
-                alignment: 'center',
-                toolTip: 'Log entries',
-                responsive: 'md-up',
-                width: '40px',
-                sortable: true,
-            },
-            {
-                title: 'Ta',
-                type: 'number',
-                format: '1.0',
-                field: 'realTransactions.length',
-                alignment: 'center',
-                toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
+                field: 'daysSinceStart',
+                alignment: 'right',
                 responsive: 'sm-up',
-                width: '40px',
+                sortable: true
+            },
+            {
+                title: 'Trpd',
+                type: 'function',
+                field: 'totalReturnPerDay',
+                alignment: 'right',
+                toolTip: 'Total return per day',
+                responsive: 'sm-up',
                 sortable: true,
-            }
+                sorted: true
+            },
+            // {
+            //     title: '',
+            //     type: 'renderer',
+            //     field: '',
+            //     renderer: 'PricealertsCellRendererComponent',
+            //     width: '55px',
+            // },
+            // {
+            //     title: 'Le',
+            //     type: 'number',
+            //     format: '1.0',
+            //     field: 'logEntries.length',
+            //     alignment: 'center',
+            //     toolTip: 'Log entries',
+            //     responsive: 'md-up',
+            //     width: '40px',
+            //     sortable: true,
+            // },
+            // {
+            //     title: 'Ta',
+            //     type: 'number',
+            //     format: '1.0',
+            //     field: 'realTransactions.length',
+            //     alignment: 'center',
+            //     toolTip: this.tranService.trans('GLOB_TRANSACTIONS'),
+            //     responsive: 'sm-up',
+            //     width: '40px',
+            //     sortable: true,
+            // }
         );
 
         this.nonCashContextMenu = [];
