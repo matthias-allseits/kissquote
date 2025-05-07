@@ -832,6 +832,9 @@ export class PositionDetailComponent implements OnInit {
             this.dividendDropSummary = this.position?.getDividendDropSummary();
             this.nextPayment = this.position.nextPayment();
 
+            const currentDate = new Date();
+            let nextExDate = this.position.manualDividendExDate;
+            let nextPayDate = this.position.manualDividendPayDate;
             if (this.position.shareheadShare) {
                 const share = this.position.shareheadShare;
                 this.diviProjectionYears = this.position?.dividendProjections();
@@ -858,12 +861,9 @@ export class PositionDetailComponent implements OnInit {
                         }
                     }
                 }
-                const currentDate = new Date();
                 if (share.plannedDividends && share.plannedDividends.length > 0) {
-                    const nextExDate = share.plannedDividends[0].exDate;
-                    const nextPayDate = share.plannedDividends[0].payDate;
-                    this.daysTillNextEx = Math.floor((Date.UTC(nextExDate.getFullYear(), nextExDate.getMonth(), nextExDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
-                    this.daysTillNextPayment = Math.floor((Date.UTC(nextPayDate.getFullYear(), nextPayDate.getMonth(), nextPayDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
+                    nextExDate = share.plannedDividends[0].exDate;
+                    nextPayDate = share.plannedDividends[0].payDate;
                 }
                 if (share.nextReportDate) {
                     const nextReportDate = share.nextReportDate;
@@ -874,6 +874,10 @@ export class PositionDetailComponent implements OnInit {
                     kgvSummary.regressedValue = +((kgvSummary.medianKgv / kgvSummary.forwardKgv) * +this.position.actualValue()).toFixed(0);
                     this.kgvSummary = kgvSummary;
                 }
+            }
+            if (nextExDate instanceof Date && nextPayDate instanceof Date) {
+                this.daysTillNextEx = Math.floor((Date.UTC(nextExDate.getFullYear(), nextExDate.getMonth(), nextExDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
+                this.daysTillNextPayment = Math.floor((Date.UTC(nextPayDate.getFullYear(), nextPayDate.getMonth(), nextPayDate.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) / (1000 * 60 * 60 * 24));
             }
             if (this.position.stopLossBroken()) {
                 this.stopLossBroken = true;
