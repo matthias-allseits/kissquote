@@ -33,6 +33,13 @@ export class PositionCreator {
 
     public static oneFromApiArray(apiArray?: Position|undefined, accountName?: string): Position|undefined
     {
+        if (apiArray && apiArray.markedLines) {
+            try {
+                JSON.parse(apiArray.markedLines.toString());
+            } catch (e) {
+                apiArray.markedLines = undefined;
+            }
+        }
         if (apiArray !== undefined && apiArray !== null) {
             return new Position(
                 apiArray.id,
