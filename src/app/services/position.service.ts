@@ -209,6 +209,9 @@ export class PositionService extends ApiService {
         if (deepCopy.removeUnderlying && deepCopy.underlying) {
             deepCopy.underlying = undefined;
         }
+        if (deepCopy.markedLines) {
+            deepCopy.markedLines = JSON.stringify(deepCopy.markedLines);
+        }
         const url = `${this.apiUrl}/${position.id}`;
         return this.http
             .put<Position>(url, JSON.stringify(deepCopy), httpOptions)
@@ -220,6 +223,14 @@ export class PositionService extends ApiService {
                     }
                     return castedPosi;
                 }),
+            );
+    }
+
+
+    toggleMarkable(positionId: number, key: string): Observable<Object> {
+        const url = `${this.apiUrl}/${positionId}/toggle-markable/${key}`;
+        return this.http.get(url, httpOptions)
+            .pipe(
             );
     }
 

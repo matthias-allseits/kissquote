@@ -1,4 +1,5 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {PositionService} from "../../services/position.service";
 
 @Component({
   selector: 'app-posi-detail-markable',
@@ -7,10 +8,16 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 })
 export class PosiDetailMarkableComponent implements OnInit, OnChanges {
 
+    @Input() positionId?: number;
     @Input() key?: string;
-    @Input() markedLines?: string[];
+    @Input() markedLines?: string[]|string;
 
     public marked = false;
+
+    constructor(
+        private positionService: PositionService,
+    ) {
+    }
 
     ngOnInit(): void {
         if (this.key && this.markedLines && this.markedLines.indexOf(this.key) > -1) {
@@ -19,8 +26,6 @@ export class PosiDetailMarkableComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log('changed: ', this.key);
-        console.log('changed: ', this.markedLines);
         if (this.key && this.markedLines && this.markedLines.indexOf(this.key) > -1) {
             this.marked = true;
         }
@@ -28,6 +33,10 @@ export class PosiDetailMarkableComponent implements OnInit, OnChanges {
 
     toggleMarking(): void
     {
-        console.log('toggle ' + this.key);
+        if (this.key !== undefined && this.positionId) {
+            this.positionService.toggleMarkable(this.positionId, this.key).subscribe(() => {
+                this.marked = !this.marked;
+            });
+        }
     }
 }
