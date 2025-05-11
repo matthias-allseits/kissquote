@@ -20,23 +20,25 @@ export class PosiDetailMarkableComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
-        if (this.key && this.markedLines && this.markedLines.indexOf(this.key) > -1) {
-            this.marked = true;
-        }
+        // if (this.key && this.markedLines && this.markedLines.indexOf(this.key) > -1) {
+        //     this.marked = true;
+        // }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (this.key && this.markedLines && this.markedLines.indexOf(this.key) > -1) {
+        if (this.key && this.markedLines && this.markedLines instanceof Array && this.markedLines.indexOf(this.key) > -1) {
             this.marked = true;
         }
     }
 
     toggleMarking(): void
     {
-        if (this.key !== undefined && this.positionId) {
-            this.positionService.toggleMarkable(this.positionId, this.key).subscribe(() => {
-                this.marked = !this.marked;
-            });
+        if (screen.width > 400) {
+            if (this.key !== undefined && this.positionId) {
+                this.positionService.toggleMarkable(this.positionId, this.key).subscribe(() => {
+                    this.marked = !this.marked;
+                });
+            }
         }
     }
 }
