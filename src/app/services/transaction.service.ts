@@ -54,6 +54,19 @@ export class TransactionService extends ApiService {
             if (deepCopy.position.underlying) {
                 deepCopy.position.underlying = undefined;
             }
+            if (deepCopy.position.manualDividendExDate) {
+                deepCopy.position.manualDividendExDate = DateHelper.convertDateToMysql(deepCopy.position.manualDividendExDate);
+            } else {
+                deepCopy.position.manualDividendExDate = null;
+            }
+            if (deepCopy.position.manualDividendPayDate) {
+                deepCopy.position.manualDividendPayDate = DateHelper.convertDateToMysql(deepCopy.position.manualDividendPayDate);
+            } else {
+                deepCopy.position.manualDividendPayDate = null;
+            }
+            if (deepCopy.position.manualDividendAmount === undefined) {
+                deepCopy.position.manualDividendAmount = null;
+            }
             if (deepCopy.position.markedLines) {
                 deepCopy.position.markedLines = JSON.stringify(deepCopy.position.markedLines);
             }
@@ -79,6 +92,19 @@ export class TransactionService extends ApiService {
                 deepCopy.position.activeUntil = DateHelper.convertDateToMysql(deepCopy.position.activeUntil);
             } else {
                 deepCopy.position.activeUntil = null;
+            }
+            if (deepCopy.position.manualDividendExDate) {
+                deepCopy.position.manualDividendExDate = DateHelper.convertDateToMysql(deepCopy.position.manualDividendExDate);
+            } else {
+                deepCopy.position.manualDividendExDate = null;
+            }
+            if (deepCopy.position.manualDividendPayDate) {
+                deepCopy.position.manualDividendPayDate = DateHelper.convertDateToMysql(deepCopy.position.manualDividendPayDate);
+            } else {
+                deepCopy.position.manualDividendPayDate = null;
+            }
+            if (deepCopy.position.manualDividendAmount === undefined) {
+                deepCopy.position.manualDividendAmount = null;
             }
             if (deepCopy.position.markedLines) {
                 deepCopy.position.markedLines = JSON.stringify(deepCopy.position.markedLines);
