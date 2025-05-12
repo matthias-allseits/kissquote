@@ -54,6 +54,9 @@ export class TransactionService extends ApiService {
             if (deepCopy.position.underlying) {
                 deepCopy.position.underlying = undefined;
             }
+            if (deepCopy.position.markedLines) {
+                deepCopy.position.markedLines = JSON.stringify(deepCopy.position.markedLines);
+            }
         }
         const url = `${this.apiUrl}`;
         return this.http
@@ -76,6 +79,9 @@ export class TransactionService extends ApiService {
                 deepCopy.position.activeUntil = DateHelper.convertDateToMysql(deepCopy.position.activeUntil);
             } else {
                 deepCopy.position.activeUntil = null;
+            }
+            if (deepCopy.position.markedLines) {
+                deepCopy.position.markedLines = JSON.stringify(deepCopy.position.markedLines);
             }
             deepCopy.position.transactions.forEach(trans => {
                 trans.date = DateHelper.convertDateToMysql(trans.date);
