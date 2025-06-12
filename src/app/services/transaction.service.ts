@@ -6,8 +6,6 @@ import {Transaction} from "../models/transaction";
 import {TransactionCreator} from "../creators/transaction-creator";
 import {ApiService} from "./api-service";
 import {DateHelper} from "../core/datehelper";
-import {PositionCreator} from "../creators/position-creator";
-import {Position} from "../models/position";
 
 
 const httpOptions = {
@@ -25,13 +23,14 @@ export class TransactionService extends ApiService {
     constructor(
         public override http: HttpClient,
     ) {
-        super('/transaction', http);
+        super('/', http);
     }
 
 
-    public getTransaction(id: number): Observable<Transaction|undefined>
+    public getTransaction(positionId: number, transactionId: number): Observable<Transaction|undefined>
     {
-        return this.http.get<Transaction>(this.apiUrl + '/' + id)
+        const url = `${this.apiUrl}position/${positionId}/transaction/${transactionId}`;
+        return this.http.get<Transaction>(url)
             .pipe(
                 map(res => TransactionCreator.oneFromApiArray(res))
             );
@@ -39,89 +38,43 @@ export class TransactionService extends ApiService {
 
 
     create(transaction: Transaction): Observable<Transaction|undefined> {
-        transaction.date = DateHelper.convertDateToMysql(transaction.date);
-        const deepCopy = structuredClone(transaction);
-        if (deepCopy.position) {
-            deepCopy.position.activeFrom = DateHelper.convertDateToMysql(deepCopy.position.activeFrom);
-            if (deepCopy.position.activeUntil) {
-                deepCopy.position.activeUntil = DateHelper.convertDateToMysql(deepCopy.position.activeUntil);
-            } else {
-                deepCopy.position.activeUntil = null;
-            }
-            deepCopy.position.transactions.forEach(trans => {
-                trans.date = DateHelper.convertDateToMysql(trans.date);
-            });
-            if (deepCopy.position.underlying) {
-                deepCopy.position.underlying = undefined;
-            }
-            if (deepCopy.position.manualDividendExDate) {
-                deepCopy.position.manualDividendExDate = DateHelper.convertDateToMysql(deepCopy.position.manualDividendExDate);
-            } else {
-                deepCopy.position.manualDividendExDate = null;
-            }
-            if (deepCopy.position.manualDividendPayDate) {
-                deepCopy.position.manualDividendPayDate = DateHelper.convertDateToMysql(deepCopy.position.manualDividendPayDate);
-            } else {
-                deepCopy.position.manualDividendPayDate = null;
-            }
-            if (deepCopy.position.manualDividendAmount === undefined) {
-                deepCopy.position.manualDividendAmount = null;
-            }
-            if (deepCopy.position.markedLines) {
-                deepCopy.position.markedLines = JSON.stringify(deepCopy.position.markedLines);
-            }
+        if (transaction.position) {
+            transaction.date = DateHelper.convertDateToMysql(transaction.date);
+            const positionId = transaction.position.id;
+            transaction.position = undefined;
+            const url = `${this.apiUrl}position/${positionId}/transaction`;
+            return this.http
+                .post<Transaction>(url, JSON.stringify(transaction), httpOptions)
+                .pipe(
+                    map(res => {
+                        const castedTransi = TransactionCreator.oneFromApiArray(res);
+
+                        return castedTransi;
+                    }),
+                );
         }
-        const url = `${this.apiUrl}`;
-        return this.http
-            .post<Transaction>(url, JSON.stringify(deepCopy), httpOptions)
-            .pipe(
-                map(res => {
-                    const castedTransi = TransactionCreator.oneFromApiArray(res);
-                    return castedTransi;
-                }),
-            );
+
+        return new Observable(undefined);
     }
 
 
     update(transaction: Transaction): Observable<Transaction|undefined> {
-        transaction.date = DateHelper.convertDateToMysql(transaction.date);
-        const deepCopy = structuredClone(transaction);
-        if (deepCopy.position) {
-            deepCopy.position.activeFrom = DateHelper.convertDateToMysql(deepCopy.position.activeFrom);
-            if (deepCopy.position.activeUntil) {
-                deepCopy.position.activeUntil = DateHelper.convertDateToMysql(deepCopy.position.activeUntil);
-            } else {
-                deepCopy.position.activeUntil = null;
+        if (transaction.position) {
+            transaction.date = DateHelper.convertDateToMysql(transaction.date);
+            const positionId = transaction.position.id;
+            transaction.position = undefined;
+            const url = `${this.apiUrl}position/${positionId}/transaction/${transaction.id}`;
+            return this.http
+                .put<Transaction>(url, JSON.stringify(transaction), httpOptions)
+                .pipe(
+                    map(res => {
+                        const castedTransi = TransactionCreator.oneFromApiArray(res);
+                        return castedTransi;
+                    }),
+                );
             }
-            if (deepCopy.position.manualDividendExDate) {
-                deepCopy.position.manualDividendExDate = DateHelper.convertDateToMysql(deepCopy.position.manualDividendExDate);
-            } else {
-                deepCopy.position.manualDividendExDate = null;
-            }
-            if (deepCopy.position.manualDividendPayDate) {
-                deepCopy.position.manualDividendPayDate = DateHelper.convertDateToMysql(deepCopy.position.manualDividendPayDate);
-            } else {
-                deepCopy.position.manualDividendPayDate = null;
-            }
-            if (deepCopy.position.manualDividendAmount === undefined) {
-                deepCopy.position.manualDividendAmount = null;
-            }
-            if (deepCopy.position.markedLines) {
-                deepCopy.position.markedLines = JSON.stringify(deepCopy.position.markedLines);
-            }
-            deepCopy.position.transactions.forEach(trans => {
-                trans.date = DateHelper.convertDateToMysql(trans.date);
-            });
-        }
-        const url = `${this.apiUrl}/${transaction.id}`;
-        return this.http
-            .put<Transaction>(url, JSON.stringify(deepCopy), httpOptions)
-            .pipe(
-                map(res => {
-                    const castedTransi = TransactionCreator.oneFromApiArray(res);
-                    return castedTransi;
-                }),
-            );
+
+        return new Observable(undefined);
     }
 
 
@@ -152,8 +105,8 @@ export class TransactionService extends ApiService {
     }
 
 
-    delete(id: number): Observable<Object> {
-        const url = `${this.apiUrl}/${id}`;
+    delete(positionId: number, transactionId: number): Observable<Object> {
+        const url = `${this.apiUrl}position/${positionId}/transaction/${transactionId}`;
         return this.http.delete(url, httpOptions)
             .pipe(
             );

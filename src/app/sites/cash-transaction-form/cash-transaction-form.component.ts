@@ -69,7 +69,7 @@ export class CashTransactionFormComponent extends MotherFormComponent implements
                         }
                     });
                 if (transactionId > 0) {
-                    this.transactionService.getTransaction(transactionId)
+                    this.transactionService.getTransaction(positionId, transactionId)
                         .subscribe(transaction => {
                             console.log(transaction);
                             if (transaction instanceof Transaction) {

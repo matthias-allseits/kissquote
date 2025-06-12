@@ -23,25 +23,23 @@ export class PositionLogService extends ApiService {
     constructor(
         public override http: HttpClient,
     ) {
-        super('/position-log', http);
+        super('/', http);
     }
 
 
     create(logEntry: PositionLog): Observable<PositionLog|undefined> {
         logEntry.date = DateHelper.convertDateToMysql(logEntry.date);
-        const url = `${this.apiUrl}`;
+        const url = `${this.apiUrl}position/${logEntry.positionId}/position-log`;
         return this.http.post<PositionLog>(url, JSON.stringify(logEntry), httpOptions)
             .pipe(
                 map(res => PositionLogCreator.oneFromApiArray(res)),
-            //     map(() => logEntry),
-            //     catchError(this.handleError)
             );
     }
 
 
     update(logEntry: PositionLog): Observable<PositionLog|undefined> {
         logEntry.date = DateHelper.convertDateToMysql(logEntry.date);
-        const url = `${this.apiUrl}/${logEntry.id}`;
+        const url = `${this.apiUrl}position/${logEntry.positionId}/position-log/${logEntry.id}`;
         return this.http.put<PositionLog>(url, JSON.stringify(logEntry), httpOptions)
             .pipe(
                 map(res => PositionLogCreator.oneFromApiArray(res)),
@@ -77,8 +75,8 @@ export class PositionLogService extends ApiService {
     }
 
 
-    public delete(id: number): Observable<Object> {
-        const url = `${this.apiUrl}/${id}`;
+    public delete(positionId: number, logId: number): Observable<Object> {
+        const url = `${this.apiUrl}position/${positionId}/position-log/${logId}`;
         return this.http.delete(url, httpOptions)
             .pipe(
                 // map(res => PositionLogCreator.fromApiArray(res)),

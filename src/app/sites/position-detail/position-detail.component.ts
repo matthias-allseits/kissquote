@@ -555,10 +555,12 @@ export class PositionDetailComponent implements OnInit {
 
 
     deleteTransaction(transaction: Transaction): void {
-        this.transactionService.delete(transaction.id).subscribe(() => {
-            this.transactionService.removeEntry(this.position?.transactions, transaction);
-            this.setLogBook();
-        });
+        if (this.position) {
+            this.transactionService.delete(this.position.id, transaction.id).subscribe(() => {
+                this.transactionService.removeEntry(this.position?.transactions, transaction);
+                this.setLogBook();
+            });
+        }
     }
 
 
@@ -573,10 +575,12 @@ export class PositionDetailComponent implements OnInit {
     }
 
     deleteLogEntry(logEntry: PositionLog): void {
-        this.positionLogService.delete(logEntry.id).subscribe(() => {
-            this.positionLogService.removeEntry(this.position?.logEntries, logEntry);
-            this.setLogBook();
-        });
+        if (this.position) {
+            this.positionLogService.delete(this.position.id, logEntry.id).subscribe(() => {
+                this.positionLogService.removeEntry(this.position?.logEntries, logEntry);
+                this.setLogBook();
+            });
+        }
     }
 
 

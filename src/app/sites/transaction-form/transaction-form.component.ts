@@ -68,7 +68,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
                         }
                     });
                 if (transactionId > 0) {
-                    this.transactionService.getTransaction(transactionId)
+                    this.transactionService.getTransaction(positionId, transactionId)
                         .subscribe(transaction => {
                             if (transaction instanceof Transaction) {
                                 this.transaction = transaction;
