@@ -26,26 +26,30 @@ export class SectorService extends ApiService {
     }
 
 
-    create(sector: Sector): Observable<Sector|null> {
+    create(sector: Sector): Observable<Sector|undefined> {
         const url = `${this.apiUrl}`;
-        // todo: cast this as we do in position-log-service
         return this.http
-            .post(url, JSON.stringify(sector), httpOptions)
+            .post<Sector>(url, JSON.stringify(sector), httpOptions)
             .pipe(
-                map(() => sector),
-                // catchError(this.handleError)
+                map(res => {
+                    const castedSector = SectorCreator.oneFromApiArray(res);
+
+                    return castedSector;
+                }),
             );
     }
 
 
-    update(sector: Sector): Observable<Sector|null> {
+    update(sector: Sector): Observable<Sector|undefined> {
         const url = `${this.apiUrl}/${sector.id}`;
-        // todo: cast this as we do in position-log-service
         return this.http
-            .put(url, JSON.stringify(sector), httpOptions)
+            .put<Sector>(url, JSON.stringify(sector), httpOptions)
             .pipe(
-                map(() => sector),
-                // catchError(this.handleError)
+                map(res => {
+                    const castedSector = SectorCreator.oneFromApiArray(res);
+
+                    return castedSector;
+                }),
             );
     }
 

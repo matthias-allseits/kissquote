@@ -136,7 +136,7 @@ export class DashboardSettingsComponent implements OnInit {
 
     persistExchangeRate(): void {
         if (this.selectedCurrency) {
-            this.selectedCurrency.rate = this.exchangeRateForm.get('rate')?.value;
+            this.selectedCurrency.rate = +this.exchangeRateForm.get('rate')?.value;
             this.currencyService.update(this.selectedCurrency)
                 .subscribe(currency => {
                     // todo: implement a data updater
@@ -224,8 +224,8 @@ export class DashboardSettingsComponent implements OnInit {
                     .subscribe(sector => {
                         this.sectors?.forEach( (sectr, index) => {
                             if (sectr.id === this.selectedSector?.id) {
-                                if (this.sectors) {
-                                    this.sectors[index] = sectr;
+                                if (this.sectors && sector) {
+                                    this.sectors[index] = sector;
                                 }
                             }
                         });
@@ -284,8 +284,8 @@ export class DashboardSettingsComponent implements OnInit {
                     .subscribe(strategy => {
                         this.strategies?.forEach( (strtegy, index) => {
                             if (strtegy.id === this.selectedStrategy?.id) {
-                                if (this.strategies) {
-                                    this.strategies[index] = strtegy;
+                                if (this.strategies && strategy) {
+                                    this.strategies[index] = strategy;
                                 }
                             }
                         });

@@ -26,26 +26,30 @@ export class LabelService extends ApiService {
     }
 
 
-    create(label: Label): Observable<Label|null> {
+    create(label: Label): Observable<Label|undefined> {
         const url = `${this.apiUrl}`;
-        // todo: cast this as we do in position-log-service
         return this.http
-            .post(url, JSON.stringify(label), httpOptions)
+            .post<Label>(url, JSON.stringify(label), httpOptions)
             .pipe(
-                map(() => label),
-                // catchError(this.handleError)
+                map(res => {
+                    const castedLabel = LabelCreator.oneFromApiArray(res);
+
+                    return castedLabel;
+                }),
             );
     }
 
 
-    update(label: Label): Observable<Label|null> {
+    update(label: Label): Observable<Label|undefined> {
         const url = `${this.apiUrl}/${label.id}`;
-        // todo: cast this as we do in position-log-service
         return this.http
-            .put(url, JSON.stringify(label), httpOptions)
+            .put<Label>(url, JSON.stringify(label), httpOptions)
             .pipe(
-                map(() => label),
-                // catchError(this.handleError)
+                map(res => {
+                    const castedLabel = LabelCreator.oneFromApiArray(res);
+
+                    return castedLabel;
+                }),
             );
     }
 

@@ -26,26 +26,31 @@ export class CurrencyService extends ApiService {
     }
 
 
-    create(currency: Currency): Observable<Currency|null> {
+    // todo: probably useless?
+    create(currency: Currency): Observable<Currency|undefined> {
         const url = `${this.apiUrl}`;
-        // todo: cast this as we do in position-log-service
         return this.http
-            .post(url, JSON.stringify(currency), httpOptions)
+            .post<Currency>(url, JSON.stringify(currency), httpOptions)
             .pipe(
-                map(() => currency),
-                // catchError(this.handleError)
+                map(res => {
+                    const castedCurrency = CurrencyCreator.oneFromApiArray(res);
+
+                    return castedCurrency;
+                }),
             );
     }
 
 
-    update(currency: Currency): Observable<Currency|null> {
+    update(currency: Currency): Observable<Currency|undefined> {
         const url = `${this.apiUrl}/${currency.id}`;
-        // todo: cast this as we do in position-log-service
         return this.http
-            .put(url, JSON.stringify(currency), httpOptions)
+            .put<Currency>(url, JSON.stringify(currency), httpOptions)
             .pipe(
-                map(() => currency),
-                // catchError(this.handleError)
+                map(res => {
+                    const castedCurrency = CurrencyCreator.oneFromApiArray(res);
+
+                    return castedCurrency;
+                }),
             );
     }
 

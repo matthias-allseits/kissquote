@@ -3,8 +3,6 @@ import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {ApiService} from "./api-service";
-import {Sector} from "../models/sector";
-import {SectorCreator} from "../creators/sector-creator";
 import {Strategy} from "../models/strategy";
 import {StrategyCreator} from "../creators/strategy-creator";
 
@@ -28,26 +26,30 @@ export class StrategyService extends ApiService {
     }
 
 
-    create(strategy: Strategy): Observable<Strategy|null> {
+    create(strategy: Strategy): Observable<Strategy|undefined> {
         const url = `${this.apiUrl}`;
-        // todo: cast this as we do in position-log-service
         return this.http
-            .post(url, JSON.stringify(strategy), httpOptions)
+            .post<Strategy>(url, JSON.stringify(strategy), httpOptions)
             .pipe(
-                map(() => strategy),
-                // catchError(this.handleError)
+                map(res => {
+                    const castedStrategy = StrategyCreator.oneFromApiArray(res);
+
+                    return castedStrategy;
+                }),
             );
     }
 
 
-    update(strategy: Strategy): Observable<Strategy|null> {
+    update(strategy: Strategy): Observable<Strategy|undefined> {
         const url = `${this.apiUrl}/${strategy.id}`;
-        // todo: cast this as we do in position-log-service
         return this.http
-            .put(url, JSON.stringify(strategy), httpOptions)
+            .put<Strategy>(url, JSON.stringify(strategy), httpOptions)
             .pipe(
-                map(() => strategy),
-                // catchError(this.handleError)
+                map(res => {
+                    const castedStrategy = StrategyCreator.oneFromApiArray(res);
+
+                    return castedStrategy;
+                }),
             );
     }
 
