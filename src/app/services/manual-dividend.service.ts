@@ -28,24 +28,30 @@ export class ManualDividendService extends ApiService {
 
     create(dividend: ManualDividend): Observable<ManualDividend|null> {
         const url = `${this.apiUrl}`;
-        // todo: cast this as we do in position-log-service
+        dividend.shareId = dividend.share?.id;
+        dividend.share = null;
         return this.http
-            .post(url, JSON.stringify(dividend), httpOptions)
+            .post<ManualDividend>(url, JSON.stringify(dividend), httpOptions)
             .pipe(
-                map(() => dividend),
-                // catchError(this.handleError)
+                map(res => {
+                    const castedDividend = ManualDividendCreator.oneFromApiArray(res);
+
+                    return castedDividend;
+                }),
             );
     }
 
 
     update(dividend: ManualDividend): Observable<ManualDividend|null> {
         const url = `${this.apiUrl}/${dividend.id}`;
-        // todo: cast this as we do in position-log-service
         return this.http
-            .put(url, JSON.stringify(dividend), httpOptions)
+            .put<ManualDividend>(url, JSON.stringify(dividend), httpOptions)
             .pipe(
-                map(() => dividend),
-                // catchError(this.handleError)
+                map(res => {
+                    const castedDividend = ManualDividendCreator.oneFromApiArray(res);
+
+                    return castedDividend;
+                }),
             );
     }
 

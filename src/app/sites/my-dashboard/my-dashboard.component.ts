@@ -211,9 +211,9 @@ export class MyDashboardComponent implements OnInit {
 
     persistManualDividend(): void {
         if (this.selectedManualDividend) {
-            const amount = this.manualDividendForm.get('amount')?.value;
+            const amount = +this.manualDividendForm.get('amount')?.value;
             console.log(amount);
-            if (amount === '') {
+            if (amount === 0) {
                 this.deleteManualDividend(this.selectedManualDividend);
             } else {
                 this.selectedManualDividend.amount = amount;

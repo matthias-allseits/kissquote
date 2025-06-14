@@ -7,6 +7,7 @@ export class ManualDividend {
         public share: Share|null,
         public year?: number,
         public amount?: number,
+        public shareId?: number,
     ) {}
 
 }
