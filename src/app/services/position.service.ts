@@ -188,6 +188,7 @@ export class PositionService extends ApiService {
         const shareheadShare = position.shareheadShare;
         const deepCopy = structuredClone(position);
         deepCopy.activeFrom = DateHelper.convertDateToMysql(deepCopy.activeFrom);
+        deepCopy.logEntries = [];
         if (deepCopy.activeUntil) {
             deepCopy.activeUntil = DateHelper.convertDateToMysql(deepCopy.activeUntil);
         } else {

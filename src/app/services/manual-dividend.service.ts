@@ -44,6 +44,8 @@ export class ManualDividendService extends ApiService {
 
     update(dividend: ManualDividend): Observable<ManualDividend|null> {
         const url = `${this.apiUrl}/${dividend.id}`;
+        dividend.shareId = dividend.share?.id;
+        dividend.share = null;
         return this.http
             .put<ManualDividend>(url, JSON.stringify(dividend), httpOptions)
             .pipe(
