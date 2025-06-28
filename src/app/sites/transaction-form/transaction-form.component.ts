@@ -26,7 +26,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
     public transaction: Transaction;
     public position: Position|undefined = undefined;
     public currencies: Currency[] = [];
-    public titleOptions = ['Kauf', 'Fx-Gutschrift Comp.', 'Zins', 'Coupon', 'Negativzins', 'Verkauf', 'Auszahlung', 'Dividende', 'Capital Gain', 'Forex-Gutschrift', 'Vergütung', 'Einzahlung', 'Depotgebühren', 'Fx-Belastung Comp.', 'Kapitalrückzahlung', 'Forex-Belastung', 'Corporate Action', 'Split'];
+    public titleOptions = ['Kauf', 'Fx-Gutschrift Comp.', 'Zins', 'Coupon', 'Negativzins', 'Verkauf', 'Auszahlung', 'Dividende', 'Capital Gain', 'Forex-Gutschrift', 'Vergütung', 'Einzahlung', 'Depotgebühren', 'Fx-Belastung Comp.', 'Kapitalrückzahlung', 'Forex-Belastung', 'Corporate Action', 'Split', 'Spin-off', 'Spin-in'];
 
     transactionForm = new UntypedFormGroup({
         title: new FormControl('', Validators.required),
@@ -95,6 +95,7 @@ export class TransactionFormComponent extends MotherFormComponent  implements On
 
     onSubmit(): void {
         this.patchValuesBack(this.transactionForm, this.transaction);
+        this.transaction.fee = this.transaction.fee ? this.transaction.fee : null;
         this.transaction.position = this.position;
         if (this.transaction.position) {
             this.transaction.position.balance = undefined;
