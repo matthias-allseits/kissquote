@@ -414,7 +414,7 @@
                             <div class="col-12">n.v.</div>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="extraPola">
+                    <ng-container *ngIf="extraPola && extraPola.avgPerformance !== 0">
                         <h6>By extrapolation for 2030 with {{ extraPola.avgPerformance }}%</h6>
                         <div class="row">
                             <div class="col-6">Xtrapolated Price:</div>
