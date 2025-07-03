@@ -40,6 +40,7 @@ export class TransactionService extends ApiService {
     create(transaction: Transaction): Observable<Transaction|undefined> {
         if (transaction.position) {
             transaction.date = DateHelper.convertDateToMysql(transaction.date);
+            transaction.fee = transaction.fee ? transaction.fee : null;
             const positionId = transaction.position.id;
             transaction.position = undefined;
             const url = `${this.apiUrl}position/${positionId}/transaction`;
@@ -61,6 +62,7 @@ export class TransactionService extends ApiService {
     update(transaction: Transaction): Observable<Transaction|undefined> {
         if (transaction.position) {
             transaction.date = DateHelper.convertDateToMysql(transaction.date);
+            transaction.fee = transaction.fee ? transaction.fee : null;
             const positionId = transaction.position.id;
             transaction.position = undefined;
             const url = `${this.apiUrl}position/${positionId}/transaction/${transaction.id}`;
