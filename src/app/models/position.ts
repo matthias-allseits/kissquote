@@ -102,6 +102,8 @@ export class Position {
         public manualDividendExDate?: Date|null|string,
         public manualDividendPayDate?: Date|null|string,
         public manualDividendAmount?: number|null,
+        public manualAveragePerformance?: number|null,
+        public manualLastAverageRate?: number|null,
         public labels?: Label[],
         public bankAccountName?: string,
         public markedLines?: string[]|string,
@@ -626,9 +628,15 @@ export class Position {
         if (shareheadsAveragePerformance) {
             avgPerformance = +shareheadsAveragePerformance;
         }
+        if (this.manualAveragePerformance && this.manualLastAverageRate) {
+            avgPerformance = this.manualAveragePerformance;
+        }
         if (this.balance && avgPerformance > 0) {
             const lastRate = this.balance.lastRate;
-            const lastAvgRate = this.shareheadShare?.lastBalance()?.avgRate;
+            let lastAvgRate = this.shareheadShare?.lastBalance()?.avgRate;
+            if (this.manualLastAverageRate) {
+                lastAvgRate = this.manualLastAverageRate;
+            }
             let baseRate = 0;
             if (lastRate instanceof StockRate && lastAvgRate !== undefined) {
                 if (lastRate.rate < lastAvgRate) {
