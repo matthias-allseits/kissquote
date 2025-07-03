@@ -71,6 +71,8 @@ export class PositionCreator {
                 apiArray.manualDividendExDate ? new Date(apiArray.manualDividendExDate) : undefined,
                 apiArray.manualDividendPayDate ? new Date(apiArray.manualDividendPayDate) : undefined,
                 apiArray.manualDividendAmount ? apiArray.manualDividendAmount : undefined,
+                apiArray.manualAveragePerformance ? apiArray.manualAveragePerformance : undefined,
+                apiArray.manualLastAverageRate ? apiArray.manualLastAverageRate : undefined,
                 apiArray.labels ? LabelCreator.fromApiArray(apiArray.labels) : undefined,
                 apiArray.bankAccountName ? apiArray?.bankAccountName : accountName? accountName : undefined,
                 apiArray.markedLines ? JSON.parse(apiArray.markedLines.toString()) : []

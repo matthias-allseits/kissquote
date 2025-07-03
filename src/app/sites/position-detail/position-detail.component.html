@@ -414,26 +414,26 @@
                             <div class="col-12">n.v.</div>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="position.shareheadShare">
-                        <h6>By extrapolation for 2030 with {{ position.shareheadShare.getAvgPerformance() }}%</h6>
-                        <ng-container *ngIf="extraPola">
+                    <ng-container *ngIf="extraPola && extraPola.avgPerformance !== 0">
+                        <h6>By extrapolation for 2030 with {{ extraPola.avgPerformance }}%</h6>
+                        <div class="row">
+                            <div class="col-6">Xtrapolated Price:</div>
+                            <div class="col-6"><span class="float-end">{{ extraPola.extraPolatedPrice|number: '1.0-2' }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">{{ extraPola.method }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">Xtrapolated Value:</div>
+                            <div class="col-6"><span class="float-end" [class.red-text]="extraPola.extraPolatedValue < +position.actualValue()">{{ extraPola.extraPolatedValue|number: '1.0-0' }}</span></div>
+                        </div>
+                        <app-posi-detail-markable key="rosabrille-chance-xtrapola" [markedLines]="position.markedLines" [positionId]="position.id">
                             <div class="row">
-                                <div class="col-6">Xtrapolated Price:</div>
-                                <div class="col-6"><span class="float-end">{{ extraPola.extraPolatedPrice|number: '1.0-2' }}</span></div>
+                                <div class="col-3">Chance:</div>
+                                <div class="col-9"><span class="float-end">{{ extraPola.performance|number: '1.0-0' }}%</span></div>
                             </div>
-                            <div class="row">
-                                <div class="col-12">{{ extraPola.method }}</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">Xtrapolated Value:</div>
-                                <div class="col-6"><span class="float-end" [class.red-text]="extraPola.extraPolatedValue < +position.actualValue()">{{ extraPola.extraPolatedValue|number: '1.0-0' }}</span></div>
-                            </div>
-                            <app-posi-detail-markable key="rosabrille-chance-xtrapola" [markedLines]="position.markedLines" [positionId]="position.id">
-                                <div class="row">
-                                    <div class="col-3">Chance:</div>
-                                    <div class="col-9"><span class="float-end">{{ extraPola.performance|number: '1.0-0' }}%</span></div>
-                                </div>
-                            </app-posi-detail-markable>
+                        </app-posi-detail-markable>
+                        <ng-container *ngIf="position.shareheadShare">
                             <h6>Projection 2026</h6>
                             <div class="row">
                                 <div class="col-8">This years average rate:</div>
@@ -443,27 +443,27 @@
                                 <div class="col-9">Next years average performance:</div>
                                 <div class="col-3"><span class="float-end" [class.red-text]="nextYearsAvgPerformanceProjectionAlert" [class.green-text]="!nextYearsAvgPerformanceProjectionAlert">{{ nextYearsAvgPerformanceProjection|number: '1.0-2' }}%</span></div>
                             </div>
-                            <ng-container *ngIf="kgvSummary && !kgvSummary.isRisky">
-                                <h6>KGV</h6>
+                        </ng-container>
+                        <ng-container *ngIf="kgvSummary && !kgvSummary.isRisky">
+                            <h6>KGV</h6>
+                            <div class="row">
+                                <div class="col-9">Median KGV:</div>
+                                <div class="col-3"><span class="float-end">{{ kgvSummary.medianKgv }}</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-9">KGV {{ kgvSummary.forwardYear }}:</div>
+                                <div class="col-3"><span class="float-end">{{ kgvSummary.forwardKgv }}</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-7">Regressed value:</div>
+                                <div class="col-5"><span class="float-end">{{ kgvSummary.regressedValue|number: '1.0' }}</span></div>
+                            </div>
+                            <app-posi-detail-markable key="rosabrille-chance-kgv" [markedLines]="position.markedLines" [positionId]="position.id">
                                 <div class="row">
-                                    <div class="col-9">Median KGV:</div>
-                                    <div class="col-3"><span class="float-end">{{ kgvSummary.medianKgv }}</span></div>
+                                    <div class="col-3">Chance:</div>
+                                    <div class="col-9"><span class="float-end">{{ kgvSummary.performance|number: '1.0-0' }}%</span></div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-9">KGV {{ kgvSummary.forwardYear }}:</div>
-                                    <div class="col-3"><span class="float-end">{{ kgvSummary.forwardKgv }}</span></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-7">Regressed value:</div>
-                                    <div class="col-5"><span class="float-end">{{ kgvSummary.regressedValue|number: '1.0' }}</span></div>
-                                </div>
-                                <app-posi-detail-markable key="rosabrille-chance-kgv" [markedLines]="position.markedLines" [positionId]="position.id">
-                                    <div class="row">
-                                        <div class="col-3">Chance:</div>
-                                        <div class="col-9"><span class="float-end">{{ kgvSummary.performance|number: '1.0-0' }}%</span></div>
-                                    </div>
-                                </app-posi-detail-markable>
-                            </ng-container>
+                            </app-posi-detail-markable>
                         </ng-container>
                         <ng-container *ngIf="!extraPola">
                             <div class="row">
