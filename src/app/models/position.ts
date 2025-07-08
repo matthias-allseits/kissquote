@@ -699,6 +699,15 @@ export class Position {
     }
 
 
+    urlJustEtf(): string|null {
+        if (this.share?.name?.substring(0, 3) === 'ETF') {
+            return `https://www.justetf.com/en/etf-profile.html?isin=${this.share.isin}`;
+        }
+
+        return null;
+    }
+
+
     public dividendProjections(): any {
         const results = [];
 

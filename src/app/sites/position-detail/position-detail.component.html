@@ -66,8 +66,11 @@
             <a *ngIf="!position.motherId" [routerLink]="['/bank-account/0/position-form/' + position.id]" class="btn btn-sm btn-outline-primary">Edit this position</a>
             <div class="btn-toolbar mb-md-0">
                 <div class="btn-toolbar mb-md-0">
-                    <div *ngIf="position.urlSwissquote()" class="btn-group me-2">
+                    <div *ngIf="position.urlSwissquote()" class="btn-group me-2 d-none d-sm-table-cell">
                         <a href="{{ position.urlSwissquote() }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> Swissquote</a>
+                    </div>
+                    <div *ngIf="position.urlJustEtf()" class="btn-group me-2">
+                        <a href="{{ position.urlJustEtf() }}" target="_blank" type="button" class="btn btn-sm btn-outline-primary"><fa-icon [icon]="externalLinkIcon"></fa-icon> JustETF</a>
                     </div>
                 </div>
             </div>
