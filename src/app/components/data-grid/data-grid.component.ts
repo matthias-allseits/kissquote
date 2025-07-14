@@ -103,6 +103,8 @@ export class DataGridComponent implements OnInit {
                 return true;
             } else if (entry.extraPolatedValue && entry.actual && entry.actual > entry.extraPolatedValue) {
                 return true;
+            } else if (entry.target && entry.actual && entry.actual > entry.target) {
+                return true;
             }
         }
 
