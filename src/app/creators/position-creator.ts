@@ -67,7 +67,7 @@ export class PositionCreator {
                 apiArray.manualDividend ? apiArray.manualDividend : undefined,
                 apiArray.manualTargetPrice ? apiArray.manualTargetPrice : undefined,
                 apiArray.manualDrawdown ? apiArray.manualDrawdown : undefined,
-                apiArray.manualDividendDrop && !isNaN(apiArray.manualDividendDrop) ? apiArray.manualDividendDrop : undefined,
+                apiArray.manualDividendDrop !== undefined && apiArray.manualDividendDrop !== null && !isNaN(apiArray.manualDividendDrop) ? apiArray.manualDividendDrop : undefined,
                 apiArray.manualDividendExDate ? new Date(apiArray.manualDividendExDate) : undefined,
                 apiArray.manualDividendPayDate ? new Date(apiArray.manualDividendPayDate) : undefined,
                 apiArray.manualDividendAmount ? apiArray.manualDividendAmount : undefined,
