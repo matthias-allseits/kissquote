@@ -89,6 +89,8 @@ export class PositionDetailComponent implements OnInit {
     public commentsFilter = false;
     public positionType = 'Position';
     public filterTitle = '';
+    public positionSizeByInvestment = 0;
+    public positionSizeByValue = 0;
 
     public selectedLogEntry?: PositionLog;
     public chartData?: ChartData;
@@ -835,6 +837,12 @@ export class PositionDetailComponent implements OnInit {
             this.maxDrawdownSummary = this.position?.getMaxDrawdownSummary();
             this.dividendDropSummary = this.position?.getDividendDropSummary();
             this.nextPayment = this.position.nextPayment();
+            const investmentTotal = localStorage.getItem('investmentTotal');
+            const valueTotal = localStorage.getItem('valueTotal');
+            if (investmentTotal && valueTotal && this.position.balance) {
+                this.positionSizeByInvestment = +(100 / +investmentTotal * this.position.balance.investment).toFixed(1);
+                this.positionSizeByValue = +(100 / +valueTotal * +this.position.actualValue()).toFixed(1);
+            }
 
             const currentDate = new Date();
             let nextExDate = this.position.manualDividendExDate;

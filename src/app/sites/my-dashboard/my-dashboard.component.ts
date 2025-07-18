@@ -93,6 +93,8 @@ export class MyDashboardComponent implements OnInit {
         this.route.data.subscribe(data => {
             if (data['portfolio'] instanceof Portfolio) {
                 this.portfolio = data['portfolio'];
+                localStorage.setItem('investmentTotal', this.portfolio?.investmentTotal().toString());
+                localStorage.setItem('valueTotal', this.portfolio?.valueTotal().toString());
                 this.shareheadSharesLoaded = true;
                 this.loadDividendListings();
                 this.portfolio.bankAccounts.forEach((account, index) => {
