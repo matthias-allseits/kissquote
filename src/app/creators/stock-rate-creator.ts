@@ -24,7 +24,7 @@ export class StockRateCreator {
     public static oneFromApiArray(apiArray: StockRate): StockRate|undefined
     {
         if (apiArray !== undefined && apiArray !== null) {
-            return new StockRate(
+            const stockRate = new StockRate(
                 apiArray.id,
                 new Date(apiArray.date),
                 apiArray.rate,
@@ -33,6 +33,9 @@ export class StockRateCreator {
                 apiArray.low > 0 ? apiArray.low : apiArray.rate,
                 apiArray.currency,
             );
+            stockRate.date.setHours(0);
+
+            return stockRate;
         } else {
             return undefined;
         }
