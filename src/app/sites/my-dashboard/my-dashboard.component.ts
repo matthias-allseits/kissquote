@@ -14,7 +14,7 @@ import {ShareheadShare} from "../../models/sharehead-share";
 import {WatchlistService} from "../../services/watchlist.service";
 import {ManualDividend} from "../../models/manual-dividend";
 import {ManualDividendService} from "../../services/manual-dividend.service";
-import {DividendCreator} from "../../creators/dividend-creator";
+import {ManualDividendCreator} from "../../creators/manual-dividend-creator";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {Label} from "../../models/label";
 import {LabelService} from "../../services/label.service";
@@ -195,7 +195,7 @@ export class MyDashboardComponent implements OnInit {
         console.log(position);
         if (position) {
             if (entry.manualDividend === undefined) {
-                this.selectedManualDividend = DividendCreator.createNewDividend();
+                this.selectedManualDividend = ManualDividendCreator.createNewManualDividend();
                 this.selectedManualDividend.share = position.share;
                 this.selectedManualDividend.year = year;
                 this.manualDividendForm.get('amount')?.setValue(null);
@@ -213,9 +213,9 @@ export class MyDashboardComponent implements OnInit {
 
     persistManualDividend(): void {
         if (this.selectedManualDividend) {
-            const amount = +this.manualDividendForm.get('amount')?.value;
-            console.log(amount);
-            if (amount === 0) {
+            const amount = this.manualDividendForm.get('amount')?.value;
+            // console.log(amount);
+            if (amount === '') {
                 this.deleteManualDividend(this.selectedManualDividend);
             } else {
                 this.selectedManualDividend.amount = amount;
@@ -228,7 +228,8 @@ export class MyDashboardComponent implements OnInit {
                 } else {
                     this.manualDividendService.create(this.selectedManualDividend)
                         .subscribe(dividend => {
-                            this.loadDividendListings();
+                            // this.loadDividendListings();
+                            document.location.reload();
                         });
                 }
             }
