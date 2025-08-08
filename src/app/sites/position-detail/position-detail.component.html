@@ -482,6 +482,9 @@
                             </div>
                         </ng-container>
                     </ng-container>
+                    <ng-container *ngIf="extraPola && extraPola.avgPerformance === 0">
+                        <h6>No extraPola bcs avgPerformance = 0</h6>
+                    </ng-container>
                 </div>
             </div>
             <div class="info-box-wrapper">
