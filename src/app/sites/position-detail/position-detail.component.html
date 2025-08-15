@@ -269,6 +269,12 @@
                             <div class="col-3"><span class="float-end" [class.red-text]="position.balance.performance[6] < 0" [class.green-text]="position.balance.performance[6] > 0">{{ position.balance.performance[6] }}%</span></div>
                         </div>
                     </app-posi-detail-markable>
+                    <app-posi-detail-markable key="performance-5years" [markedLines]="position.markedLines" [positionId]="position.id">
+                        <div *ngIf="position.balance.performance[6] !== undefined" class="row">
+                            <div class="col-9">5 years:</div>
+                            <div class="col-3"><span class="float-end" [class.red-text]="position.balance.performance[7] < 0" [class.green-text]="position.balance.performance[7] > 0">{{ position.balance.performance[7] }}%</span></div>
+                        </div>
+                    </app-posi-detail-markable>
                 </div>
                 <div *ngIf="position.balance" class="info-box">
                     <h5>Events</h5>
