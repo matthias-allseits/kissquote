@@ -389,7 +389,7 @@
                         </ng-container>
                     </ng-container>
                     <h5 style="margin-top: 15px;">Dividend projections</h5>
-                    <ng-container *ngFor="let projection of diviProjectionYears">
+                    <ng-container *ngFor="let projection of diviProjectionYears; index as i;">
                         <div class="row">
                             <div class="col-2">{{ projection.year|date:'y' }}:</div>
                             <div class="col-10"><span class="float-end">{{ projection.projectionSource }} {{ projection.projectionValue.toFixed(0) }} {{ projection.projectionCurrency }}</span></div>
@@ -397,11 +397,13 @@
                         <div *ngIf="projection.currencyCorrectedProjectionValue" class="row">
                             <div class="col-12"><span class="float-end bold">currency-corrected: {{ projection.currencyCorrectedProjectionValue.toFixed(0) }} {{ projection.currencyCorrectedProjectionCurrency }}</span></div>
                         </div>
-                        <div class="row mb-2" *ngIf="position.balance.investment > 0">
-                            <div class="col-4"></div>
-                            <div class="col-6">Yield on investment: </div>
-                            <div class="col-2"><span class="float-end">{{ projection.yieldFloat }}</span></div>
-                        </div>
+                        <app-posi-detail-markable key="divi-projection-{{ i }}" [markedLines]="position.markedLines" [positionId]="position.id">
+                            <div class="row mb-2" *ngIf="position.balance.investment > 0">
+                                <div class="col-4"></div>
+                                <div class="col-6">Yield on investment: </div>
+                                <div class="col-2"><span class="float-end">{{ projection.yieldFloat }}</span></div>
+                            </div>
+                        </app-posi-detail-markable>
                     </ng-container>
                 </div>
                 <div *ngIf="position.balance" class="info-box" [class.green20]="position.balance.investment < 0 || hasReachedTargetPrice" [class.red20]="stopLossBroken">
@@ -452,14 +454,16 @@
                         </app-posi-detail-markable>
                         <ng-container *ngIf="position.shareheadShare">
                             <h6>Projection 2026</h6>
-                            <div class="row">
-                                <div class="col-8">This years average rate:</div>
-                                <div class="col-4"><span class="float-end" [class.red-text]="nextYearsAvgRateAlert" [class.green-text]="!nextYearsAvgRateAlert">{{ thisYearsAverageRate|number: '1.0-2' }}</span></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-9">Next years average performance:</div>
-                                <div class="col-3"><span class="float-end" [class.red-text]="nextYearsAvgPerformanceProjectionAlert" [class.green-text]="!nextYearsAvgPerformanceProjectionAlert">{{ nextYearsAvgPerformanceProjection|number: '1.0-2' }}%</span></div>
-                            </div>
+                            <app-posi-detail-markable key="rosabrille-projection-xtrapola" [markedLines]="position.markedLines" [positionId]="position.id">
+                                <div class="row">
+                                    <div class="col-8">This years average rate:</div>
+                                    <div class="col-4"><span class="float-end" [class.red-text]="nextYearsAvgRateAlert" [class.green-text]="!nextYearsAvgRateAlert">{{ thisYearsAverageRate|number: '1.0-2' }}</span></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-9">Next years average performance:</div>
+                                    <div class="col-3"><span class="float-end" [class.red-text]="nextYearsAvgPerformanceProjectionAlert" [class.green-text]="!nextYearsAvgPerformanceProjectionAlert">{{ nextYearsAvgPerformanceProjection|number: '1.0-2' }}%</span></div>
+                                </div>
+                            </app-posi-detail-markable>
                         </ng-container>
                         <ng-container *ngIf="kgvSummary && !kgvSummary.isRisky">
                             <h6>KGV</h6>
