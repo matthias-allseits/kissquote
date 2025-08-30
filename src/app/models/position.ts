@@ -247,13 +247,13 @@ export class Position {
         let value = 0;
         this.transactions.forEach(transaction => {
             if (transaction.rate && transaction.date <= date) {
-                if (transaction.title === 'Kauf') {
+                if (transaction.title === 'Kauf' || transaction.title === 'Spin-in') {
                     let transResult = (transaction.quantity * transaction.rate);
                     if (transaction.fee) {
                         transResult += transaction.fee;
                     }
                     value += transResult;
-                } else if (transaction.title === 'Verkauf') {
+                } else if (transaction.title === 'Verkauf' || transaction.title === 'Spin-off') {
                     let transResult = (transaction.quantity * transaction.rate);
                     if (transaction.fee) {
                         transResult -= transaction.fee;
