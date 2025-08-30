@@ -24,3 +24,7 @@ th.sortable {
     cursor: pointer;
     white-space: nowrap;
 }
+
+tr.data-grid-row:hover {
+    background-color: rgba(255, 102, 51, 0.1) !important;
+}
