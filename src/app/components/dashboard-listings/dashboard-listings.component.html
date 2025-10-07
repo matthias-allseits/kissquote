@@ -53,8 +53,8 @@
         <div>
             <div *ngFor="let label of ultimateBalanceFilter" class="form-check label-checklist">
                 <div style="white-space: nowrap; display: inline;">
-                    <input (dblclick)="setThisFilterAsOnlyFilter(label)" (change)="toggleUltimateBalanceFilter(label)" type="checkbox" class="form-check-input" id="label-{{ label.name }}" [checked]="label.checked">
-                    <label (dblclick)="setThisFilterAsOnlyFilter(label)" class="form-check-label" for="label-{{ label.name }}">{{ label.name }}</label>
+                    <input (dblclick)="setThisFilterAsOnlyFilter(label)" (change)="toggleUltimateBalanceFilter(label)" type="checkbox" class="btn-check" id="label-{{ label.name }}" [checked]="label.checked" autocomplete="off">
+                    <label (dblclick)="setThisFilterAsOnlyFilter(label)" class="btn btn-sm btn-outline-primary" for="label-{{ label.name }}">{{ label.name }}</label>
                 </div>
             </div>
         </div>

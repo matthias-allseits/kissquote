@@ -130,6 +130,24 @@ a:hover, .nav-link:hover {
   box-shadow: 0 0 0 0.25rem rgb(255 102 51 / 50%);
 }
 
+.btn-check:checked + .btn {
+    background-color: #ff6633 !important;
+    border-color: #ff6633 !important;
+}
+
+.btn-check:hover + .btn, .btn-check:active + .btn {
+    background-color: #c9461a !important;;
+    border-color: #c9461a !important;;
+}
+
+.btn-check + .btn:hover {
+    color: #ffffff;
+}
+
+.form-check {
+    padding-left: 5px;
+}
+
 //outline red btn
 .btn-outline-red {
   color: red;
