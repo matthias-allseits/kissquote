@@ -22,6 +22,9 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
     public diversityByValueChartData?: ChartData;
     public diversityByDividendChartData?: ChartData;
     public diversityByRelevanceChartData?: ChartData;
+    public diversityByCurrencyInvestmentChartData?: ChartData;
+    public diversityByCurrencyValueChartData?: ChartData;
+    public diversityByCurrencyDividendChartData?: ChartData;
     public diversificationColumns?: GridColumn[];
     public diversificationContextMenu?: GridContextMenuItem[];
     public diversityListTitle = '';
@@ -51,6 +54,9 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
             this.diversityByValueChartData = this.portfolio.diversityByValueChartData();
             this.diversityByDividendChartData = this.portfolio.diversityByDividendChartData();
             this.diversityByRelevanceChartData = this.portfolio.diversityByRelevanceChartData();
+            this.diversityByCurrencyInvestmentChartData = this.portfolio.diversityByCurrencyInvestmentChartData();
+            this.diversityByCurrencyValueChartData = this.portfolio.diversityByCurrencyValueChartData();
+            this.diversityByCurrencyDividendChartData = this.portfolio.diversityByCurrencyDividendChartData();
         }
     }
 
@@ -59,14 +65,25 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
         this.diversityListTitle = event;
         const filteredIds: number[] = [];
         const relevanceLabels = ['Relevant', 'Irrelevant'];
+        const currencyLabels = ['CHF', 'EUR', 'USD', 'GBP'];
         this.portfolio?.getActiveNonCashPositions().forEach(position => {
             if (relevanceLabels.indexOf(event) === -1) {
-                if (position.sector?.name === event) {
-                    if (this.timeWarpMode) {
-                        position.timeWarpDate = this.timeWarpDate;
+                if (currencyLabels.indexOf(event) === -1) {
+                    if (position.sector?.name === event) {
+                        if (this.timeWarpMode) {
+                            position.timeWarpDate = this.timeWarpDate;
+                        }
+                        this.diversityList.push(position);
+                        filteredIds.push(position.id);
                     }
-                    this.diversityList.push(position);
-                    filteredIds.push(position.id);
+                } else {
+                    if (position.currency?.name === event) {
+                        if (this.timeWarpMode) {
+                            position.timeWarpDate = this.timeWarpDate;
+                        }
+                        this.diversityList.push(position);
+                        filteredIds.push(position.id);
+                    }
                 }
             } else {
                 if (position.isRelevant() && event === 'Relevant') {

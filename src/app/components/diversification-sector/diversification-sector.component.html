@@ -23,6 +23,25 @@
         <app-pie-chart [data]="diversityByRelevanceChartData" [height]="400" (triggerClick)="listDiversityPositions($event)"></app-pie-chart>
     </ng-container>
 </div>
+<h4 class="col-6">Diversification by currencies</h4>
+<div class="info-box chart-box">
+    <h5>by investment</h5>
+    <ng-container *ngIf="diversityByCurrencyInvestmentChartData">
+        <app-pie-chart [data]="diversityByCurrencyInvestmentChartData" [height]="400" (triggerClick)="listDiversityPositions($event)"></app-pie-chart>
+    </ng-container>
+</div>
+<div class="info-box chart-box">
+    <h5>by value</h5>
+    <ng-container *ngIf="diversityByCurrencyValueChartData">
+        <app-pie-chart [data]="diversityByCurrencyValueChartData" [height]="400" (triggerClick)="listDiversityPositions($event)"></app-pie-chart>
+    </ng-container>
+</div>
+<div class="info-box chart-box">
+    <h5>by dividend</h5>
+    <ng-container *ngIf="diversityByCurrencyDividendChartData">
+        <app-pie-chart [data]="diversityByCurrencyDividendChartData" [height]="400" (triggerClick)="listDiversityPositions($event)"></app-pie-chart>
+    </ng-container>
+</div>
 <ng-container *ngIf="diversityList && diversityList.length > 0">
     <h5>{{ diversityListTitle }}</h5>
     <app-data-grid

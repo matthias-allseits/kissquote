@@ -31,6 +31,7 @@ export interface CrisisDividendSummary {
 
 export interface DiversitySummary {
     sector: Sector;
+    currency: Currency|undefined;
     investment: number;
     value: number;
     dividends: number;
@@ -535,6 +536,117 @@ export class Portfolio {
     }
 
 
+    diversityByCurrencyInvestmentChartData(): ChartData {
+        const summaries = this.diversityByCurrencySummary();
+
+        let total = 0;
+        summaries.forEach(summary => {
+            total += summary.investment;
+        });
+        summaries.forEach(summary => {
+            summary.percentage = +(100 / total * summary.investment).toFixed(1);
+        });
+
+        summaries.sort((a,b) => (a.investment < b.investment) ? 1 : ((b.investment < a.investment) ? -1 : 0))
+        const data: number[] = [];
+        const colors: string[] = [];
+        const labels: string[] = [];
+        summaries.forEach(summary => {
+            if (summary.currency) {
+                data.push(summary.investment);
+                colors.push(summary.color);
+                labels.push(`${summary.currency.name} ${summary.percentage}%`);
+            }
+        });
+        const chartData: ChartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Value',
+                    data: data,
+                    backgroundColor: colors,
+                }
+            ]
+        };
+
+        return chartData;
+    }
+
+
+    diversityByCurrencyValueChartData(): ChartData {
+        const summaries = this.diversityByCurrencySummary();
+
+        let total = 0;
+        summaries.forEach(summary => {
+            total += summary.value;
+        });
+        summaries.forEach(summary => {
+            summary.percentage = +(100 / total * summary.value).toFixed(1);
+        });
+
+        summaries.sort((a,b) => (a.value < b.value) ? 1 : ((b.value < a.value) ? -1 : 0))
+        const data: number[] = [];
+        const colors: string[] = [];
+        const labels: string[] = [];
+        summaries.forEach(summary => {
+            if (summary.currency) {
+                data.push(summary.value);
+                colors.push(summary.color);
+                labels.push(`${summary.currency.name} ${summary.percentage}%`);
+            }
+        });
+        const chartData: ChartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Value',
+                    data: data,
+                    backgroundColor: colors,
+                }
+            ]
+        };
+
+        return chartData;
+    }
+
+
+    diversityByCurrencyDividendChartData(): ChartData {
+        const summaries = this.diversityByCurrencySummary();
+
+        let total = 0;
+        summaries.forEach(summary => {
+            total += summary.dividends;
+        });
+        summaries.forEach(summary => {
+            summary.percentage = +(100 / total * summary.dividends).toFixed(1);
+        });
+
+        summaries.sort((a,b) => (a.dividends < b.dividends) ? 1 : ((b.dividends < a.dividends) ? -1 : 0))
+        const data: number[] = [];
+        const colors: string[] = [];
+        const labels: string[] = [];
+        summaries.forEach(summary => {
+            if (summary.currency) {
+                data.push(+summary.dividends.toFixed(0));
+                colors.push(summary.color);
+                labels.push(`${summary.currency.name} ${summary.percentage}%`);
+            }
+        });
+        const chartData: ChartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Value',
+                    data: data,
+                    backgroundColor: colors,
+                }
+            ]
+        };
+
+        return chartData;
+    }
+
+
     strategiesByInvestmentChartData(): ChartData {
         const summaries = this.strategiesSummary();
 
@@ -879,6 +991,48 @@ export class Portfolio {
                 } else {
                     const summary = {
                         sector: position.sector,
+                        currency: position.currency ? position.currency : undefined,
+                        investment: position.balance?.investment,
+                        value: +position.actualValue(),
+                        dividends: dividend,
+                        percentage: 0,
+                        color: colors[index]
+                    };
+                    index++;
+                    summaries.push(summary);
+                }
+            }
+        });
+
+        return summaries;
+    }
+
+
+    private diversityByCurrencySummary(): DiversitySummary[] {
+        const colors = [
+            'rgb(200, 255, 99, 1)',
+            'rgb(153, 102, 255, 1)',
+            'rgb(54, 162, 235, 1)',
+            'rgb(255, 99, 132, 1)',
+            'rgb(255, 206, 86, 1)',
+            'rgb(75, 192, 192, 1)'
+        ];
+
+        const summaries: DiversitySummary[] = [];
+        const positions = this.getActiveNonCashPositions();
+        let index = 0;
+        positions.forEach(position => {
+            if (position.sector && position.currency && position.balance && position.balance.lastRate) {
+                const summary = this.getSummaryByCurrency(summaries, position.currency);
+                let dividend = +position.bestSelectedDividendPayment();
+                if (summary) {
+                    summary.investment += position.balance?.investment;
+                    summary.value += +position.actualValue();
+                    summary.dividends += dividend;
+                } else {
+                    const summary = {
+                        sector: position.sector,
+                        currency: position.currency ? position.currency : undefined,
                         investment: position.balance?.investment,
                         value: +position.actualValue(),
                         dividends: dividend,
@@ -960,6 +1114,18 @@ export class Portfolio {
         let result = null;
         summaries.forEach(summary => {
             if (summary.sector.id === sector.id) {
+                result = summary;
+            }
+        });
+
+        return result;
+    }
+
+
+    private getSummaryByCurrency(summaries: DiversitySummary[], currency: Currency): DiversitySummary|null {
+        let result = null;
+        summaries.forEach(summary => {
+            if (summary.currency && summary.currency.id === currency.id) {
                 result = summary;
             }
         });
