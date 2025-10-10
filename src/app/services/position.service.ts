@@ -228,8 +228,8 @@ export class PositionService extends ApiService {
     }
 
 
-    toggleMarkable(positionId: number, key: string): Observable<Object> {
-        const url = `${this.apiUrl}/${positionId}/toggle-markable/${key}`;
+    toggleMarkable(positionId: number, key: string, color: string): Observable<Object> {
+        const url = `${this.apiUrl}/${positionId}/toggle-markable/${key}/${color}`;
         return this.http.get(url, httpOptions)
             .pipe(
             );

@@ -1,3 +1,9 @@
-<div (dblclick)="toggleMarking()" class="markable" [class.marked]="marked">
+<div (dblclick)="toggleMarking()"
+     class="markable"
+     [class.marked]="marked"
+     [class.green-background]="color === 'green'"
+     [class.red-background]="color === 'red'"
+     [class.yellow-background]="color === 'yellow'"
+>
     <ng-content></ng-content>
 </div>

@@ -70,6 +70,12 @@ export interface DividendDeclaration {
     plannedDividend: ShareheadPlannedDividend;
 }
 
+export interface MarkedLines {
+    green?: string[];
+    red?: string[];
+    yellow?: string[];
+}
+
 export class Position {
 
     constructor(
@@ -106,7 +112,7 @@ export class Position {
         public manualLastAverageRate?: number|null,
         public labels?: Label[],
         public bankAccountName?: string,
-        public markedLines?: string[]|string,
+        public markedLines?: MarkedLines|string,
         public shareheadShare?: ShareheadShare,
         public visible?: boolean, // for filtering purposes
         public tempPerformanceValue?: number, // for filtering purposes

@@ -280,12 +280,24 @@ a:hover, .nav-link:hover {
   color: green;
 }
 
+.green-background {
+    background-color: rgb(100, 246, 100);
+}
+
 .red-text {
   color: #ff0000;
 }
 
+.red-background {
+    background-color: rgb(246, 116, 116);
+}
+
 .yellow-text {
   color: orange;
+}
+
+.yellow-background {
+    background-color: rgb(250, 250, 1);
 }
 
 .grey-text {
