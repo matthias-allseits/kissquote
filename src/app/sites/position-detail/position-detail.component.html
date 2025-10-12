@@ -190,6 +190,12 @@
                             <div class="col-2"><span class="float-end">{{ currentYieldOnValue }}%</span></div>
                         </div>
                     </app-posi-detail-markable>
+                    <app-posi-detail-markable key="buybackings" [markedLines]="position.markedLines" [positionId]="position.id">
+                        <div *ngIf="position.isBuyBacker()" class="row">
+                            <div class="col-10">Bought shares back since {{ position.firstYahooBalanceYear() }}</div>
+                            <div class="col-2"><span class="float-end">{{ position.boughtBackPercentage() }}%</span></div>
+                        </div>
+                    </app-posi-detail-markable>
                     <div class="row">
                         <div class="col-8">Dividend payment:</div>
                         <div class="col-4"><span class="float-end">{{ position.dividendPeriodicity }}</span></div>

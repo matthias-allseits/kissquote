@@ -1005,6 +1005,28 @@ export class Position {
     }
 
 
+    isBuyBacker(): boolean
+    {
+        return !!(this.shareheadShare && this.shareheadShare.shareNumbersChanges() < 0);
+    }
+
+    firstYahooBalanceYear(): number
+    {
+        if (this.shareheadShare && this.shareheadShare.yahooBalances().length > 0) {
+            return this.shareheadShare.yahooBalances()[0].year;
+        }
+        return new Date().getFullYear();
+    }
+
+    boughtBackPercentage(): number
+    {
+        if (this.shareheadShare) {
+            return this.shareheadShare.shareNumbersChanges() * -1;
+        }
+        return 0;
+    }
+
+
     private extrapolateProjection(extrapolationDelta: number): DividendProjection|null
     {
         let projection = null;

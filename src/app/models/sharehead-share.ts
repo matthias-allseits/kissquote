@@ -160,7 +160,7 @@ export class ShareheadShare {
     }
 
 
-    shareNumbersChanges(): number|null
+    shareNumbersChanges(): number
     {
         let result = 0;
         const yahooBalances = this.yahooBalances();
