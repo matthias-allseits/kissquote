@@ -52,13 +52,11 @@ export class PosiDetailMarkableComponent implements OnInit, OnChanges {
         } else if (this.color === 'yellow') {
             nextColor = 'none';
         }
-        if (screen.width > 400) {
-            if (this.key !== undefined && this.positionId) {
-                this.positionService.toggleMarkable(this.positionId, this.key, nextColor).subscribe(() => {
-                    this.marked = !this.marked;
-                    this.color = nextColor;
-                });
-            }
+        if (this.key !== undefined && this.positionId) {
+            this.positionService.toggleMarkable(this.positionId, this.key, nextColor).subscribe(() => {
+                this.marked = !this.marked;
+                this.color = nextColor;
+            });
         }
     }
 }
