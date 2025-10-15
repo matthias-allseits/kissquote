@@ -168,6 +168,7 @@ export class PositionDetailComponent implements OnInit {
             this.historicRates = [];
             this.nextYearsAvgRateAlert = false;
             this.nextYearsAvgPerformanceProjectionAlert = false;
+            this.nextYearsAvgPerformanceProjectionConversionAlert = false;
             // console.log(data);
             // todo: find a better solution...
             setTimeout(() => {
@@ -229,7 +230,7 @@ export class PositionDetailComponent implements OnInit {
                                 this.nextYearsAvgPerformanceProjectionAlert = true;
                             }
                         }
-                        if (lastBalanceCurrency !== this.position.currency) {
+                        if (lastBalanceCurrency === undefined || lastBalanceCurrency.name !== this.position.currency.name) {
                             this.nextYearsAvgPerformanceProjectionConversionAlert = true;
                             this.nextYearsAvgRateAlert = this.nextYearsAvgPerformanceProjectionAlert;
                         }
