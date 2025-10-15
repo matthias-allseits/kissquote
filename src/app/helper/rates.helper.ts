@@ -3,7 +3,7 @@ import {Currency} from "../models/currency";
 
 export class RatesHelper {
 
-    public static calculateThisYearsAverageRate(historicRates: StockRate[], positionsCurrency: Currency): number|undefined {
+    public static calculateThisYearsAverageRate(historicRates: StockRate[], positionsCurrency: Currency, lastBalanceCurrency?: Currency): number|undefined {
         const thisYearsRates: StockRate[] = [];
         let ratesTotal = 0;
         let averageRate;
@@ -16,6 +16,9 @@ export class RatesHelper {
         });
         if (thisYearsRates.length > 0) {
             averageRate = ratesTotal / thisYearsRates.length;
+        }
+        if (averageRate && lastBalanceCurrency && lastBalanceCurrency.name !== positionsCurrency.name) {
+            averageRate = +(averageRate * positionsCurrency.rate / lastBalanceCurrency.rate);
         }
 
         return averageRate;

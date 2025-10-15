@@ -109,6 +109,7 @@ export class PositionDetailComponent implements OnInit {
     public nextYearsAvgPerformanceProjection?: number;
     public nextYearsAvgRateAlert = false;
     public nextYearsAvgPerformanceProjectionAlert = false;
+    public nextYearsAvgPerformanceProjectionConversionAlert = false;
     public kgvSummary?: KgvSummary;
     selectedItem?: PositionLog|Transaction;
 
@@ -215,8 +216,10 @@ export class PositionDetailComponent implements OnInit {
                 }
                 // todo: find a better solution...
                 setTimeout(() => {
+                    const lastBalance = this.position?.shareheadShare?.lastBalance();
+                    const lastBalanceCurrency = lastBalance?.currency;
                     if (this.position?.currency && this.historicRates) {
-                        this.thisYearsAverageRate = RatesHelper.calculateThisYearsAverageRate(this.historicRates, this.position.currency);
+                        this.thisYearsAverageRate = RatesHelper.calculateThisYearsAverageRate(this.historicRates, this.position.currency, lastBalanceCurrency);
                         if (this.thisYearsAverageRate) {
                             this.nextYearsAvgPerformanceProjection = this.position?.shareheadShare?.getAvgPerformanceProjection(this.thisYearsAverageRate);
                             if (this.position.balance?.lastRate && this.position.balance?.lastRate?.rate < this.thisYearsAverageRate) {
@@ -225,6 +228,10 @@ export class PositionDetailComponent implements OnInit {
                             if (this.nextYearsAvgPerformanceProjection && this.position.shareheadShare && this.nextYearsAvgPerformanceProjection < this.position.shareheadShare.getAvgPerformance()) {
                                 this.nextYearsAvgPerformanceProjectionAlert = true;
                             }
+                        }
+                        if (lastBalanceCurrency !== this.position.currency) {
+                            this.nextYearsAvgPerformanceProjectionConversionAlert = true;
+                            this.nextYearsAvgRateAlert = this.nextYearsAvgPerformanceProjectionAlert;
                         }
                     }
                     this.chartData = data['positionData']['costIncomeChartData'];

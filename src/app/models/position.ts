@@ -640,6 +640,13 @@ export class Position {
         if (this.balance && avgPerformance > 0) {
             const lastRate = this.balance.lastRate;
             let lastAvgRate = this.shareheadShare?.lastBalance()?.avgRate;
+            const lastBalance = this.shareheadShare?.lastBalance();
+            const lastBalanceCurrency = lastBalance?.currency;
+            let currencyConversion = false;
+            if (lastAvgRate && lastBalanceCurrency instanceof Currency && this.currency && lastBalanceCurrency.name !== this.currency.name) {
+                currencyConversion = true;
+                lastAvgRate = +(lastAvgRate * lastBalanceCurrency.rate / this.currency.rate).toFixed(1);
+            }
             if (this.manualLastAverageRate) {
                 lastAvgRate = this.manualLastAverageRate;
             }
@@ -651,6 +658,9 @@ export class Position {
                 } else {
                     baseRate = lastAvgRate;
                     method = 'from last average rate (' + baseRate + ')';
+                }
+                if (currencyConversion) {
+                    method += ' (converted)';
                 }
                 extraPolatedPrice = baseRate;
             }
