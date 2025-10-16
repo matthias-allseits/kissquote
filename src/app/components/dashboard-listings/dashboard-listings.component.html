@@ -269,9 +269,10 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
             <h4>Risks</h4>
         </div>
-        <h6>Total: {{ riskTotal|number: '1.0' }}</h6>
-        <h6>{{ (100 / portfolio.valueTotal() * riskTotal).toFixed() }}% von aktueller Bewertung</h6>
-        <span>! {{ missingPositionsInRisklist }} positions are missing in this list !</span>
+        <h6>Total Risk: {{ riskTotal|number: '1.0' }}</h6>
+        <h6>{{ (100 / portfolio.valueTotal() * riskTotal).toFixed() }}% Verlust von aktueller Bewertung</h6>
+        <span>{{ risksList?.length }} positions listed</span><br>
+        <span>! {{ missingPositionsInRisklist }} positions are missing in this list !</span><br>
         <app-data-grid
             [gridData]="risksList"
             [gridColumns]="riskColumns"

@@ -498,6 +498,11 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 field: 'position.sector.name',
             },
             {
+                title: 'Method',
+                type: 'string',
+                field: 'maxDrawdownSummary.method',
+            },
+            {
                 title: 'Risk',
                 type: 'number',
                 field: 'maxDrawdownSummary.risk',
