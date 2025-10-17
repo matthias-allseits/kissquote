@@ -74,6 +74,7 @@ export class DiversificationStrategyComponent implements OnInit {
         localStorage.setItem('ultimateFilterStrategy', JSON.stringify(filteredIds));
         localStorage.setItem('ultimateFilterType', 'strategy');
         localStorage.setItem('ultimateFilterValue', event);
+        localStorage.setItem('ultimateNegation', JSON.stringify(false));
     }
 
     listQualityPositions(event: any): void {
@@ -107,6 +108,7 @@ export class DiversificationStrategyComponent implements OnInit {
         localStorage.setItem('ultimateFilterStrategy', JSON.stringify(filteredIds));
         localStorage.setItem('ultimateFilterType', 'strategy');
         localStorage.setItem('ultimateFilterValue', event);
+        localStorage.setItem('ultimateNegation', JSON.stringify(false));
     }
 
 

@@ -103,6 +103,7 @@ export class DiversificationSectorComponent implements OnInit, OnChanges {
         localStorage.setItem('ultimateFilterSector', JSON.stringify(filteredIds));
         localStorage.setItem('ultimateFilterType', 'sector');
         localStorage.setItem('ultimateFilterValue', event);
+        localStorage.setItem('ultimateNegation', JSON.stringify(false));
     }
 
 

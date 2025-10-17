@@ -167,7 +167,13 @@
             </table>
         </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'listings'">
-            <app-dashboard-listings *ngIf="shareheadSharesLoaded" [portfolio]="portfolio" [ultimateBalanceList]="ultimateBalanceList" [ultimateBalanceFilter]="ultimateBalanceFilter" (filterUltmateList)="filterUltimateList()"></app-dashboard-listings>
+            <app-dashboard-listings *ngIf="shareheadSharesLoaded"
+                                    [portfolio]="portfolio"
+                                    [ultimateBalanceList]="ultimateBalanceList"
+                                    [ultimateBalanceFilter]="ultimateBalanceFilter"
+                                    [ultimateNegation]="ultimateNegation"
+                                    (filterUltmateList)="filterUltimateList($event)"
+            ></app-dashboard-listings>
         </div>
         <div class="shadow-sm p-1 p-md-3 mb-5 bg-body rounded" [class.visually-hidden]="dashboardTab !== 'settings'">
             <app-dashboard-settings [labels]="labels" (refreshLabels)="getAllLabels()"></app-dashboard-settings>

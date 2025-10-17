@@ -20,6 +20,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     @Input() portfolio?: Portfolio;
     @Input() ultimateBalanceList?: Position[];
     @Input() ultimateBalanceFilter?: Label[];
+    @Input() ultimateNegation?: boolean;
     @Output() filterUltmateList: EventEmitter<any> = new EventEmitter();
 
     private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'payDays', 'newestRatings', 'nextReports', 'diversification', 'performance', 'risks', 'strategies', 'targetValue', 'extraPola'];
@@ -42,6 +43,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public ultimateBalance?: number;
     public ultimateTotalReturn?: number;
     public ultimateValue?: number;
+    public ultimateShowSingleFilter = false;
 
     public ultimateColumns?: GridColumn[];
     public ultimateContextMenu?: GridContextMenuItem[];
@@ -146,6 +148,9 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         if (changes.hasOwnProperty('ultimateBalanceFilter') && changes['ultimateBalanceFilter'].currentValue instanceof Array) {
             this.ultimateBalanceFilter = changes['ultimateBalanceFilter'].currentValue;
         }
+        if (changes.hasOwnProperty('ultimateNegation')) {
+            this.ultimateNegation = changes['ultimateNegation'].currentValue;
+        }
     }
 
     changeListingTab(selectedTab: string): void {
@@ -162,25 +167,34 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         localStorage.setItem('ultimateFilterLabel', JSON.stringify(this.ultimateBalanceFilter));
         localStorage.setItem('ultimateFilterType', 'label');
         localStorage.setItem('ultimateFilterValue', label.name);
-        this.filterUltmateList.emit();
+        localStorage.setItem('ultimateNegation', JSON.stringify(this.ultimateNegation));
+        this.filterUltmateList.emit(this.ultimateNegation);
+    }
+
+    toggleNegation(): void {
+        this.ultimateNegation = !this.ultimateNegation;
+        localStorage.setItem('ultimateNegation', JSON.stringify(this.ultimateNegation));
+        this.filterUltmateList.emit(this.ultimateNegation);
+        this.calculateUltimateBalance();
     }
 
     setThisFilterAsOnlyFilter(label: Label): void {
+        this.ultimateShowSingleFilter = true;
+        this.ultimateNegation = false;
         this.ultimateBalanceFilter?.forEach(filter => {
-            if (filter.id === label.id) {
-                filter.checked = true;
-            } else {
-                filter.checked = false;
-            }
+            filter.checked = filter.id === label.id;
         });
         localStorage.setItem('ultimateFilterLabel', JSON.stringify(this.ultimateBalanceFilter));
         localStorage.setItem('ultimateFilterType', 'label');
         localStorage.setItem('ultimateFilterValue', label.name);
-        this.filterUltmateList.emit();
+        localStorage.setItem('ultimateNegation', JSON.stringify(this.ultimateNegation));
+        this.filterUltmateList.emit(this.ultimateNegation);
         this.calculateUltimateBalance();
     }
 
     setAllLabelsActive(): void {
+        this.ultimateShowSingleFilter = false;
+        this.ultimateNegation = false;
         this.ultimateBalance = undefined;
         this.ultimateTotalReturn = undefined;
         this.ultimateValue = undefined;
@@ -190,7 +204,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         localStorage.setItem('ultimateFilterLabel', JSON.stringify(this.ultimateBalanceFilter));
         localStorage.setItem('ultimateFilterType', 'label');
         localStorage.setItem('ultimateFilterValue', '');
-        this.filterUltmateList.emit();
+        localStorage.setItem('ultimateNegation', JSON.stringify(this.ultimateNegation));
+        this.filterUltmateList.emit(this.ultimateNegation);
     }
 
     changePerformanceListTab(selectedTab: string): void {

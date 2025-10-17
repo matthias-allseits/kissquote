@@ -57,6 +57,7 @@ export class MyDashboardComponent implements OnInit {
     public years = [2023, 2024, 2025, 2026, 2027, 2028, 2029];
     public ultimateBalanceList?: Position[];
     public ultimateBalanceFilter?: Label[];
+    public ultimateNegation = false;
     public shareheadSharesLoaded = false;
     private positionListForBalance: Position[] = [];
     public balanceResult = 0;
@@ -283,16 +284,18 @@ export class MyDashboardComponent implements OnInit {
             });
     }
 
-    filterUltimateList(): void {
+    filterUltimateList(ultimateNegation: boolean = false): void {
+        this.ultimateNegation = ultimateNegation;
         this.ultimateBalanceList?.forEach(entry => {
             if (entry.labels && this.ultimateBalanceFilter) {
-                if (this.checkFilterVisibility(entry.labels, this.ultimateBalanceFilter)) {
-                    entry.visible = true;
-                } else {
-                    entry.visible = false;
-                }
+                entry.visible = this.checkFilterVisibility(entry.labels, this.ultimateBalanceFilter);
             }
         });
+        if (this.ultimateNegation) {
+            this.ultimateBalanceList?.forEach(entry => {
+                entry.visible = !entry.visible;
+            });
+        }
     }
 
     checkFilterVisibility(posiLabels: Label[], filterLabels: Label[]): boolean {

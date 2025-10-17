@@ -42,6 +42,7 @@ import {StockrateService} from "../../services/stockrate.service";
 import {DateHelper} from "../../core/datehelper";
 import {StockRateCreator} from "../../creators/stock-rate-creator";
 import {StringHelper} from "../../helper/string.helper";
+import {LabelCreator} from "../../creators/label-creator";
 
 
 @Component({
@@ -924,6 +925,7 @@ export class PositionDetailComponent implements OnInit {
                     localStorage.removeItem('ultimateFilterType');
                     localStorage.removeItem('ultimateFilterLabel');
                     localStorage.removeItem('ultimateFilterValue');
+                    localStorage.removeItem('ultimateNegation');
                     this.filterTitle = '';
                     this.getFilteredPositions()
                         .subscribe(posis => {
@@ -944,11 +946,14 @@ export class PositionDetailComponent implements OnInit {
                     if (filterType === 'label') {
                         // this.filterTitle = `Label: ${filterValue}`;
                         let ultimateFilter = localStorage.getItem('ultimateFilterLabel');
-                        if (ultimateFilter === null) {
+                        let filterNegation = localStorage.getItem('ultimateNegation');
+                        if (ultimateFilter === null || filterNegation === null) {
                             psitons.next(posis);
                         } else {
                             ultimateFilter = JSON.parse(ultimateFilter);
-                            const positions = this.filterPositions(posis, ultimateFilter);
+                            filterNegation = JSON.parse(filterNegation);
+                            const ultimateNegation = !!filterNegation;
+                            const positions = this.filterPositions(posis, ultimateFilter, ultimateNegation);
                             this.setFilteredPositions(positions);
                             psitons.next(positions);
                         }
@@ -984,11 +989,11 @@ export class PositionDetailComponent implements OnInit {
     }
 
 
-    private filterPositions(allPositions: Position[], positionsFilter: any): Position[] {
+    private filterPositions(allPositions: Position[], positionsFilter: any, ultimateNegation: boolean): Position[] {
         const filteredPosis: Position[] = [];
         allPositions?.forEach(entry => {
             if (entry.labels && positionsFilter) {
-                if (this.checkFilterVisibility(entry.labels, positionsFilter)) {
+                if (this.checkFilterVisibility(entry.labels, positionsFilter, ultimateNegation)) {
                     filteredPosis.push(entry);
                 }
             }
@@ -1007,15 +1012,26 @@ export class PositionDetailComponent implements OnInit {
     }
 
 
-    private checkFilterVisibility(posiLabels: Label[], filterLabels: Label[]): boolean {
+    private checkFilterVisibility(posiLabels: Label[], filterLabels: Label[], ultimateNegation: boolean): boolean {
         let result = false;
+        let singleLabelFilter: Label|undefined;
         posiLabels.forEach(label => {
             filterLabels.forEach(filter => {
-                if (label.id === filter.id && filter.checked) {
+                if (!ultimateNegation && label.id === filter.id && filter.checked) {
                     result = true;
+                } else if (ultimateNegation && filter.checked) {
+                    singleLabelFilter = LabelCreator.oneFromApiArray(filter);
                 }
             });
         });
+        if (ultimateNegation && singleLabelFilter instanceof Label) {
+            result = true;
+            posiLabels.forEach(label => {
+                if (singleLabelFilter && label.id === singleLabelFilter.id) {
+                    result = false;
+                }
+            });
+        }
 
         return result;
     }
