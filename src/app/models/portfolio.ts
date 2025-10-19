@@ -2,7 +2,7 @@ import {BankAccount} from './bank-account';
 import {BankAccountCreator} from "../creators/bank-account-creator";
 import {Currency} from "./currency";
 import {ChartData} from "chart.js";
-import {DividendDropSummary, DividendTotal, MaxDrawdownSummary, Position} from "./position";
+import {DividendDropSummary, DividendTotal, MaxDrawdownSummary, Position, YtdReturnSummary} from "./position";
 import {WatchlistEntry} from "./watchlistEntry";
 import {DateHelper} from "../core/datehelper";
 import {Sector} from "./sector";
@@ -27,6 +27,11 @@ export interface LombardValuesSummary {
 export interface CrisisDividendSummary {
     position: Position;
     crisisDropSummary: DividendDropSummary;
+}
+
+export interface YtdReturnsSummary {
+    position: Position;
+    ytdReturnSummary: YtdReturnSummary;
 }
 
 export interface DiversitySummary {
@@ -254,6 +259,26 @@ export class Portfolio {
             }
         });
         positions.sort((a,b) => (a.crisisDropSummary.dividendAfterDrop < b.crisisDropSummary.dividendAfterDrop) ? 1 : ((b.crisisDropSummary.dividendAfterDrop < a.crisisDropSummary.dividendAfterDrop) ? -1 : 0));
+
+        return positions;
+    }
+
+
+    ytdReturnsSummary(): YtdReturnsSummary[] {
+        const positions: YtdReturnsSummary[] = [];
+        const relevantPositions = this.getActiveNonCashPositions();
+        // todo: include closed positions also
+        // relevantPositions = relevantPositions.concat(this.portfolio?.getClosedNonCashPositions());
+        relevantPositions.forEach(position => {
+            const summary = position.getYtdReturnSummary();
+            if (summary) {
+                positions.push({
+                    position: position,
+                    ytdReturnSummary: summary,
+                });
+            }
+        });
+        positions.sort((a,b) => (a.ytdReturnSummary.returnTotal < b.ytdReturnSummary.returnTotal) ? 1 : ((b.ytdReturnSummary.returnTotal < a.ytdReturnSummary.returnTotal) ? -1 : 0));
 
         return positions;
     }

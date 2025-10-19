@@ -19,6 +19,7 @@ export class Balance {
         public collectedCoupons: number,
         public performance: number[],
         public lastRate?: StockRate|null,
+        public newYearsRate?: StockRate|null,
         public cashValue?: number,
         public closedResult?: number,
     ) {}

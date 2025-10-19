@@ -38,6 +38,12 @@ export class CrashListingsComponent implements OnInit {
     }
 
     ngOnInit() {
+        const storedListingTab = localStorage.getItem('crashListingsTab');
+        if (storedListingTab && this.availableCrashListingTabs.indexOf(storedListingTab) > -1) {
+            this.crashListingsTab = storedListingTab;
+        } else {
+            this.crashListingsTab = 'ultimate';
+        }
         if (this.portfolio) {
             this.lombardValueList = this.portfolio.lombardValuePositions();
             this.lombardValueList.forEach(entry => {

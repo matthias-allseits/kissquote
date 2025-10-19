@@ -34,6 +34,9 @@
             <a class="nav-link" [class.active]="listingTab === 'extraPola'" (click)="changeListingTab('extraPola')" aria-current="page">Extrapolation</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" [class.active]="listingTab === 'ytdReturns'" (click)="changeListingTab('ytdReturns')" aria-current="page">YTD TRs</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" [class.active]="listingTab === 'crashListings'" (click)="changeListingTab('crashListings')" aria-current="page">Crash</a>
         </li>
     </ul>
@@ -234,5 +237,8 @@
     </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'crashListings'">
         <app-crash-listings [portfolio]="portfolio"></app-crash-listings>
+    </div>
+    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'ytdReturns'">
+        <app-ytd-returns-list [portfolio]="portfolio"></app-ytd-returns-list>
     </div>
 </ng-container>

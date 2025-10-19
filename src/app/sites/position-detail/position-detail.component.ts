@@ -1,6 +1,6 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DividendDropSummary, MaxDrawdownSummary, NextPayment, Position} from '../../models/position';
+import {DividendDropSummary, MaxDrawdownSummary, NextPayment, Position, YtdReturnSummary} from '../../models/position';
 import {PositionService} from '../../services/position.service';
 import {
     faChevronLeft, faChevronRight,
@@ -112,6 +112,7 @@ export class PositionDetailComponent implements OnInit {
     public nextYearsAvgPerformanceProjectionAlert = false;
     public nextYearsAvgPerformanceProjectionConversionAlert = false;
     public kgvSummary?: KgvSummary;
+    public ytdReturnsSummary?: YtdReturnSummary;
     selectedItem?: PositionLog|Transaction;
 
     transactionContextMenu?: GridContextMenuItem[];
@@ -825,6 +826,7 @@ export class PositionDetailComponent implements OnInit {
         this.rosaBrille = undefined;
         this.extraPola = undefined;
         this.kgvSummary = undefined;
+        this.ytdReturnsSummary = undefined;
 
         if (this.position) {
             if (this.portfolioService.portfolio) {
@@ -846,6 +848,7 @@ export class PositionDetailComponent implements OnInit {
             this.maxDrawdownSummary = this.position?.getMaxDrawdownSummary();
             this.dividendDropSummary = this.position?.getDividendDropSummary();
             this.nextPayment = this.position.nextPayment();
+            this.ytdReturnsSummary = this.position.getYtdReturnSummary();
             const investmentTotal = localStorage.getItem('investmentTotal');
             const valueTotal = localStorage.getItem('valueTotal');
             if (investmentTotal && valueTotal && this.position.balance) {

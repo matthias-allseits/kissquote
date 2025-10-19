@@ -42,6 +42,11 @@ export class DateHelper {
         return day + '.' + month + '.' + year;
     }
 
+    public static calculateSaysBetweenTwoDates(start: Date, end: Date): number {
+        const days =  (Date.UTC(end.getFullYear(), end.getMonth(), end.getDate()) - Date.UTC(start.getFullYear(), start.getMonth(), start.getDate())) / 24 / 60 / 60 / 1000;
+
+        return days;
+    }
 
     public static convertGermanDateStringToDateObject(date: string): Date {
         const year = +date.substr(6, 4);

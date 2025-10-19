@@ -63,6 +63,7 @@ import { DiversificationStrategyContainerComponent } from './components/diversif
 import { ExtrapolationListComponent } from './components/extrapolation-list/extrapolation-list.component';
 import { PosiDetailMarkableComponent } from './components/posi-detail-markable/posi-detail-markable.component';
 import { CrashListingsComponent } from './components/crash-listings/crash-listings.component';
+import { YtdReturnsListComponent } from './components/ytd-returns-list/ytd-returns-list.component';
 registerLocaleData(localeCH);
 
 
@@ -118,6 +119,7 @@ registerLocaleData(localeCH);
         ExtrapolationListComponent,
         PosiDetailMarkableComponent,
         CrashListingsComponent,
+        YtdReturnsListComponent,
     ],
     imports: [
         BrowserModule,

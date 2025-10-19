@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {TranslationService} from "../../services/translation.service";
 import {Label} from "../../models/label";
 import {DividendDeclaration, NextPayment, Position} from "../../models/position";
-import {CrisisDividendSummary, Portfolio} from "../../models/portfolio";
+import {Portfolio} from "../../models/portfolio";
 import {ShareheadService} from "../../services/sharehead.service";
 import {ShareheadShare} from "../../models/sharehead-share";
 import {AnalystRating} from "../../models/analyst-rating";
@@ -22,7 +22,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     @Input() ultimateNegation?: boolean;
     @Output() filterUltmateList: EventEmitter<any> = new EventEmitter();
 
-    private availableListingTabs = ['ultimate', 'lastMinute', 'payDays', 'newestRatings', 'nextReports', 'diversification', 'performance', 'strategies', 'crashListings', 'targetValue', 'extraPola'];
+    private availableListingTabs = ['ultimate', 'lastMinute', 'payDays', 'newestRatings', 'nextReports', 'diversification', 'performance', 'strategies', 'crashListings', 'targetValue', 'extraPola', 'ytdReturns'];
     public listingTab = 'ultimate';
     private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year', '3years', '5years', '10years'];
     public performanceListTab = '1day';

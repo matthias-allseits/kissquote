@@ -23,6 +23,7 @@ export class BalanceCreator {
                 apiArray.collectedCoupons,
                 apiArray.performance,
                 apiArray.lastRate ? StockRateCreator.oneFromApiArray(apiArray.lastRate) : undefined,
+                apiArray.newYearsRate ? StockRateCreator.oneFromApiArray(apiArray.newYearsRate) : undefined,
                 apiArray.cashValue,
                 apiArray.closedResult,
             );

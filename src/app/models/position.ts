@@ -54,6 +54,14 @@ export interface DividendDropSummary {
     dividendAfterDrop: number;
 }
 
+export interface YtdReturnSummary {
+    valueStart: number;
+    valueEnd: number;
+    returnTotal: number;
+    investments: number;
+    dividends: number;
+}
+
 export interface NextPayment {
     position: Position;
     positionId: number;
@@ -181,6 +189,24 @@ export class Position {
         });
 
         return quantity;
+    }
+
+
+    investmentsSinceDate(date: Date): number
+    {
+        let investment = 0;
+        const realTransactions = this.realTransactions();
+        realTransactions.forEach(transaction => {
+            if (transaction.date > date) {
+                if (transaction.title === 'Kauf') {
+                    investment += transaction.total();
+                } else {
+                    investment -= transaction.total();
+                }
+            }
+        });
+
+        return investment;
     }
 
 
@@ -985,6 +1011,37 @@ export class Position {
                     dividendAfterDrop: dividendAfterDrop
                 };
             }
+        }
+
+        return summary
+    }
+
+
+    getYtdReturnSummary(): YtdReturnSummary|undefined {
+        let summary = undefined;
+        if (this.balance && this.balance.newYearsRate) {
+            let relevantRate = this.balance.newYearsRate.rate;
+            const year = new Date().getFullYear();
+            let startDate = new Date();
+            startDate.setMonth(0);
+            startDate.setDate(1);
+            if (this.activeFrom instanceof Date && startDate < this.activeFrom) {
+                relevantRate = this.balance.firstRate;
+                startDate = this.activeFrom;
+            }
+            const dividendTotal = this.payedDividendsTotalByYear(year);
+            const dividends = dividendTotal.total
+            const valueStart = +(relevantRate ? relevantRate * this.countOfSharesByDate(startDate) :  0).toFixed(0);
+            const valueEnd = +this.actualValue();
+            const investments = +this.investmentsSinceDate(startDate).toFixed(0);
+            const returnTotal = valueEnd - valueStart + dividends - investments;
+            summary = {
+                valueStart: valueStart,
+                valueEnd: valueEnd,
+                returnTotal: returnTotal,
+                investments: investments,
+                dividends: dividends,
+            };
         }
 
         return summary

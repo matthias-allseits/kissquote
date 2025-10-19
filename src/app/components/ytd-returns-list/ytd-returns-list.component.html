@@ -1,0 +1,10 @@
+<h4>YTD Total Returns</h4>
+<ng-container *ngIf="summaryActive">
+    <h6>Total: {{ ytdReturnsTotal|number: '1.0' }}</h6>
+    <app-data-grid
+        [gridData]="ytdReturnsList"
+        [gridColumns]="returnColumns"
+        [contextMenu]="returnContextMenu"
+    ></app-data-grid>
+</ng-container>
+<p *ngIf="!summaryActive">too close to call...</p>

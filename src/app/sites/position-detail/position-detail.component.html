@@ -196,6 +196,14 @@
                             <div class="col-2"><span class="float-end">{{ position.boughtBackPercentage() }}%</span></div>
                         </div>
                     </app-posi-detail-markable>
+                    <div *ngIf="ytdReturnsSummary">
+                        <app-posi-detail-markable key="ytd-tr" [markedLines]="position.markedLines" [positionId]="position.id">
+                            <div class="row">
+                                <div class="col-9">YTD total return:</div>
+                                <div class="col-3"><span class="float-end" [class.red-text]="ytdReturnsSummary.returnTotal < 0" [class.green-text]="ytdReturnsSummary.returnTotal > 0">{{ ytdReturnsSummary.returnTotal|number: '1.0' }}</span></div>
+                            </div>
+                        </app-posi-detail-markable>
+                    </div>
                     <div class="row">
                         <div class="col-8">Dividend payment:</div>
                         <div class="col-4"><span class="float-end">{{ position.dividendPeriodicity }}</span></div>
@@ -235,7 +243,7 @@
                             <div class="col-3"><span class="float-end">{{ position.daysSinceStart()|number: '1.0' }}</span></div>
                         </div>
                     </app-posi-detail-markable>
-                    <div class="mb-3">
+                    <div>
                         <app-posi-detail-markable key="performance-trpd" [markedLines]="position.markedLines" [positionId]="position.id">
                             <div class="row">
                                 <div class="col-9">Total return per day:</div>
@@ -243,7 +251,7 @@
                             </div>
                         </app-posi-detail-markable>
                     </div>
-                    <div class="row">
+                    <div class="row mt-3">
                         <div class="col-9">1 day:</div>
                         <div class="col-3"><span class="float-end" [class.red-text]="position.balance.performance[0] < 0" [class.green-text]="position.balance.performance[0] > 0">{{ position.balance.performance[0] }}%</span></div>
                     </div>
