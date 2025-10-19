@@ -2,12 +2,11 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {TranslationService} from "../../services/translation.service";
 import {Label} from "../../models/label";
 import {DividendDeclaration, NextPayment, Position} from "../../models/position";
-import {CrisisDividendSummary, LombardValuesSummary, Portfolio} from "../../models/portfolio";
+import {CrisisDividendSummary, Portfolio} from "../../models/portfolio";
 import {ShareheadService} from "../../services/sharehead.service";
 import {ShareheadShare} from "../../models/sharehead-share";
 import {AnalystRating} from "../../models/analyst-rating";
 import {GridColumn, GridContextMenuItem} from "../data-grid/data-grid.component";
-import {PositionCreator} from "../../creators/position-creator";
 
 
 @Component({
@@ -23,7 +22,7 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     @Input() ultimateNegation?: boolean;
     @Output() filterUltmateList: EventEmitter<any> = new EventEmitter();
 
-    private availableListingTabs = ['ultimate', 'lombard', 'crisisDividendProjection', 'lastMinute', 'payDays', 'newestRatings', 'nextReports', 'diversification', 'performance', 'risks', 'strategies', 'targetValue', 'extraPola'];
+    private availableListingTabs = ['ultimate', 'lastMinute', 'payDays', 'newestRatings', 'nextReports', 'diversification', 'performance', 'strategies', 'crashListings', 'targetValue', 'extraPola'];
     public listingTab = 'ultimate';
     private availablePerformanceTabs = ['1day', '1week', '1month', '3month', '6month', '1year', '3years', '5years', '10years'];
     public performanceListTab = '1day';
@@ -33,13 +32,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
     public nextReportsList?: ShareheadShare[];
     public lastMinuteList?: ShareheadShare[];
     public newestRatingsList?: AnalystRating[];
-    public crisisDividendList?: CrisisDividendSummary[];
-    public crisisDividendTotal = 0;
-    public lombardValueList?: LombardValuesSummary[];
-    public lombardTotal = 0;
-    public risksList?: LombardValuesSummary[];
-    public riskTotal = 0;
-    public missingPositionsInRisklist = 0;
     public ultimateBalance?: number;
     public ultimateTotalReturn?: number;
     public ultimateValue?: number;
@@ -47,16 +39,10 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
 
     public ultimateColumns?: GridColumn[];
     public ultimateContextMenu?: GridContextMenuItem[];
-    public lombardColumns?: GridColumn[];
-    public lombardContextMenu?: GridContextMenuItem[];
-    public crisisDivisColumns?: GridColumn[];
-    public crisisDivisContextMenu?: GridContextMenuItem[];
     public payDaysColumns?: GridColumn[];
     public payDaysContextMenu?: GridContextMenuItem[];
     public declarationDaysColumns?: GridColumn[];
     public declarationDaysContextMenu?: GridContextMenuItem[];
-    public riskColumns?: GridColumn[];
-    public riskContextMenu?: GridContextMenuItem[];
 
     constructor(
         public tranService: TranslationService,
@@ -91,23 +77,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
                 .subscribe(shares => {
                     this.newestRatingsList = shares;
                 });
-            this.crisisDividendList = this.portfolio.crisisDividendProjections();
-            this.crisisDividendList.forEach(entry => {
-                this.crisisDividendTotal += +entry.crisisDropSummary.dividendAfterDrop;
-            });
-            this.lombardValueList = this.portfolio.lombardValuePositions();
-            this.missingPositionsInRisklist = this.portfolio.getActiveNonCashPositions().length - this.lombardValueList.length;
-            this.lombardValueList.forEach(entry => {
-                this.lombardTotal += +entry.maxDrawdownSummary.lombardValue;
-                this.riskTotal += +entry.maxDrawdownSummary.risk;
-            });
-            this.risksList = structuredClone(this.lombardValueList);
-            for (const entry of this.risksList) {
-                const posiObject = PositionCreator.oneFromApiArray(entry.position);
-                if (posiObject) {
-                    entry.position = posiObject;
-                }
-            }
 
             this.payDays = [];
             for (const position of this.portfolio.getAllPositions()) {
@@ -137,11 +106,8 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         }
 
         this.setUltimateGridOptions();
-        this.setLombardGridOptions();
-        this.setCrisisDivisGridOptions();
         this.setPayDaysGridOptions();
         this.setDeclarationDaysGridOptions();
-        this.setRiskGridOptions();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -265,15 +231,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         }
     }
 
-
-    selectPosition(position: Position) {
-    }
-
-    positionEventHandler(event: any) {
-        switch(event.key) {
-        }
-    }
-
     private setUltimateGridOptions() {
         this.ultimateColumns = [];
         this.ultimateColumns.push(
@@ -330,108 +287,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         );
 
         this.ultimateContextMenu = [];
-    }
-
-
-    private setLombardGridOptions() {
-        this.lombardColumns = [];
-        this.lombardColumns.push(
-            {
-                title: this.tranService.trans('GLOB_SHARE'),
-                type: 'string',
-                field: 'position.share.name',
-            },
-            {
-                title: 'Sector',
-                type: 'string',
-                field: 'position.sector.name',
-                responsive: 'md-up',
-            },
-            {
-                title: 'Method',
-                type: 'string',
-                field: 'maxDrawdownSummary.method',
-            },
-            {
-                title: this.tranService.trans('GLOB_VALUE'),
-                type: 'number',
-                format: '1.0',
-                field: 'maxDrawdownSummary.lombardValue',
-                alignment: 'right',
-                sortable: true,
-                sorted: true
-            },
-            {
-                title: 'FrmInv',
-                type: 'percent',
-                format: '1.0',
-                field: 'maxDrawdownSummary.lombardValueFromInvestment',
-                alignment: 'right',
-                toolTip: this.tranService.trans('LISTNGS_FROM_INVESTMENT'),
-                sortable: true,
-            }
-        );
-
-        this.lombardContextMenu = [];
-    }
-
-    private setCrisisDivisGridOptions() {
-        this.crisisDivisColumns = [];
-        this.crisisDivisColumns.push(
-            {
-                title: this.tranService.trans('GLOB_SHARE'),
-                type: 'string',
-                field: 'position.share.name',
-            },
-            {
-                title: 'Sector',
-                type: 'string',
-                field: 'position.sector.name',
-                responsive: 'md-up',
-            },
-            {
-                title: 'Data',
-                type: 'number',
-                format: '1.0',
-                field: 'position.shareheadShare.historicDividends.length',
-                alignment: 'right',
-                responsive: 'md-up',
-                sortable: true,
-            },
-            {
-                title: 'Method',
-                type: 'string',
-                field: 'crisisDropSummary.method',
-            },
-            {
-                title: 'Drop',
-                type: 'percent',
-                format: '1.0',
-                field: 'crisisDropSummary.maxDrop',
-                alignment: 'right',
-                sortable: true,
-            },
-            {
-                title: 'Actual',
-                type: 'number',
-                format: '1.0-0',
-                field: 'crisisDropSummary.actualDividend',
-                alignment: 'right',
-                responsive: 'md-up',
-                sortable: true,
-            },
-            {
-                title: 'After',
-                type: 'number',
-                format: '1.0',
-                field: 'crisisDropSummary.dividendAfterDrop',
-                alignment: 'right',
-                sortable: true,
-                sorted: true
-            }
-        );
-
-        this.crisisDivisContextMenu = [];
     }
 
 
@@ -497,38 +352,6 @@ export class DashboardListingsComponent implements OnInit, OnChanges {
         );
 
         this.declarationDaysContextMenu = [];
-    }
-
-    private setRiskGridOptions() {
-        this.riskColumns = [];
-        this.riskColumns.push(
-            {
-                title: this.tranService.trans('GLOB_SHARE'),
-                type: 'string',
-                field: 'position.share.name',
-            },
-            {
-                title: 'Sector',
-                type: 'string',
-                field: 'position.sector.name',
-            },
-            {
-                title: 'Method',
-                type: 'string',
-                field: 'maxDrawdownSummary.method',
-            },
-            {
-                title: 'Risk',
-                type: 'number',
-                field: 'maxDrawdownSummary.risk',
-                format: '1.0',
-                alignment: 'right',
-                sortable: true,
-                sorted: true
-            },
-        );
-
-        this.riskContextMenu = [];
     }
 
 }

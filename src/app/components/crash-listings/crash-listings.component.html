@@ -1,0 +1,53 @@
+<ng-container *ngIf="portfolio">
+    <h4>Crash Listings</h4>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="crashListingsTab === 'lombard'" (click)="changeListingTab('lombard')" aria-current="page">Lombard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="crashListingsTab === 'crisisDividendProjection'" (click)="changeListingTab('crisisDividendProjection')" aria-current="page">DiviDropProj</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="crashListingsTab === 'risks'" (click)="changeListingTab('risks')" aria-current="page">Risks</a>
+        </li>
+    </ul>
+    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="crashListingsTab !== 'lombard'">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
+            <h4>Lombard value</h4>
+        </div>
+        <h6>Total: {{ lombardTotal|number: '1.0' }}</h6>
+        <h6>{{ tranService.trans('LISTNGS_FROM_INVESTMENT') }}: {{ (100 / portfolio.investmentTotal() * lombardTotal).toFixed() }}%</h6>
+        <app-data-grid
+            [gridData]="lombardValueList"
+            [gridColumns]="lombardColumns"
+            [contextMenu]="lombardContextMenu"
+        ></app-data-grid>
+    </div>
+    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="crashListingsTab !== 'crisisDividendProjection'">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
+            <h4>Crisis dividend projection</h4>
+        </div>
+        <h6>Dividend projection: {{ crisisDividendTotal|number: '1.0' }}</h6>
+        <h6>Drop: {{ (100 - 100 / portfolio.thisYearsDividendsTotal() * crisisDividendTotal).toFixed() }}%</h6>
+        <h6>ROI by projected dividends: {{ (100 / portfolio.investmentTotal() * crisisDividendTotal).toFixed(1) }}%</h6>
+        <app-data-grid
+            [gridData]="crisisDividendList"
+            [gridColumns]="crisisDivisColumns"
+            [contextMenu]="crisisDivisContextMenu"
+        ></app-data-grid>
+    </div>
+    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="crashListingsTab !== 'risks'">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
+            <h4>Risks</h4>
+        </div>
+        <h6>Total Risk: {{ riskTotal|number: '1.0' }}</h6>
+        <h6>{{ (100 / portfolio.valueTotal() * riskTotal).toFixed() }}% Verlust von aktueller Bewertung</h6>
+        <span>{{ risksList?.length }} positions listed</span><br>
+        <span>! {{ missingPositionsInRisklist }} positions are missing in this list !</span><br>
+        <app-data-grid
+            [gridData]="risksList"
+            [gridColumns]="riskColumns"
+            [contextMenu]="riskContextMenu"
+        ></app-data-grid>
+    </div>
+</ng-container>

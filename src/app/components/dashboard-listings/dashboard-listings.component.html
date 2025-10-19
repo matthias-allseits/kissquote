@@ -7,10 +7,7 @@
             <a class="nav-link" [class.active]="listingTab === 'ultimate'" (click)="changeListingTab('ultimate')" aria-current="page">Ultimate balance</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.active]="listingTab === 'lombard'" (click)="changeListingTab('lombard')" aria-current="page">Lombard</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" [class.active]="listingTab === 'crisisDividendProjection'" (click)="changeListingTab('crisisDividendProjection')" aria-current="page">DiviDropProj</a>
+            <a class="nav-link" [class.active]="listingTab === 'performance'" (click)="changeListingTab('performance')" aria-current="page">Performance</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" [class.active]="listingTab === 'lastMinute'" (click)="changeListingTab('lastMinute')" aria-current="page">Last Minute</a>
@@ -25,22 +22,19 @@
             <a class="nav-link" [class.active]="listingTab === 'nextReports'" (click)="changeListingTab('nextReports')" aria-current="page">Next Reports</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.active]="listingTab === 'performance'" (click)="changeListingTab('performance')" aria-current="page">Performance</a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link" [class.active]="listingTab === 'diversification'" (click)="changeListingTab('diversification')" aria-current="page">Diversification</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" [class.active]="listingTab === 'strategies'" (click)="changeListingTab('strategies')" aria-current="page">Strategies</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.active]="listingTab === 'risks'" (click)="changeListingTab('risks')" aria-current="page">Risks</a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link" [class.active]="listingTab === 'targetValue'" (click)="changeListingTab('targetValue')" aria-current="page">Target Value</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" [class.active]="listingTab === 'extraPola'" (click)="changeListingTab('extraPola')" aria-current="page">Extrapolation</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="listingTab === 'crashListings'" (click)="changeListingTab('crashListings')" aria-current="page">Crash</a>
         </li>
     </ul>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'ultimate'">
@@ -64,8 +58,6 @@
             [gridData]="ultimateBalanceList"
             [gridColumns]="ultimateColumns"
             [contextMenu]="ultimateContextMenu"
-            (baseFunctionCall)="positionEventHandler($event)"
-            (selectedItem)="selectPosition($event)"
             [filterActive]="true"
         ></app-data-grid>
         <div *ngIf="ultimateBalance" class="row">
@@ -84,34 +76,53 @@
             </div>
         </div>
     </div>
-    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'lombard'">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
-            <h4>Lombard value</h4>
+    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'performance'">
+        <h4>Performance</h4>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="performanceListTab === '1day'" (click)="changePerformanceListTab('1day')" aria-current="page">1 day</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="performanceListTab === '1week'" (click)="changePerformanceListTab('1week')" aria-current="page">1 week</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="performanceListTab === '1month'" (click)="changePerformanceListTab('1month')" aria-current="page">1 month</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="performanceListTab === '3month'" (click)="changePerformanceListTab('3month')" aria-current="page">3 months</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="performanceListTab === '6month'" (click)="changePerformanceListTab('6month')" aria-current="page">6 months</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="performanceListTab === '1year'" (click)="changePerformanceListTab('1year')" aria-current="page">1 year</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="performanceListTab === '3years'" (click)="changePerformanceListTab('3years')" aria-current="page">3 years</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="performanceListTab === '5years'" (click)="changePerformanceListTab('5years')" aria-current="page">5 years</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="performanceListTab === '10years'" (click)="changePerformanceListTab('10years')" aria-current="page">10 years</a>
+            </li>
+        </ul>
+        <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded">
+            <table class="table table-striped table-sm">
+                <tbody>
+                <ng-container *ngFor="let position of performanceList">
+                    <tr [class.red20]="position.stopLossBroken()" [class.green20]="position.hasReachedTargetPrice()">
+                        <td><a [routerLink]="['/position-detail/' + position.id]">{{ position.share?.name }}</a></td>
+                        <td class="d-sm-none d-md-table-cell"><span *ngIf="position.sector">{{ position.sector.name }}</span></td>
+                        <td class="d-none d-sm-table-cell">
+                            <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
+                        </td>
+                        <td><span *ngIf="position.tempPerformanceValue !== undefined" class="float-end" [class.red-text]="position.tempPerformanceValue < 0" [class.green-text]="position.tempPerformanceValue > 0">{{ position.tempPerformanceValue|number: '1.0-1' }}%</span></td>
+                    </tr>
+                </ng-container>
+                </tbody>
+            </table>
         </div>
-        <h6>Total: {{ lombardTotal|number: '1.0' }}</h6>
-        <h6>{{ tranService.trans('LISTNGS_FROM_INVESTMENT') }}: {{ (100 / portfolio.investmentTotal() * lombardTotal).toFixed() }}%</h6>
-        <app-data-grid
-            [gridData]="lombardValueList"
-            [gridColumns]="lombardColumns"
-            [contextMenu]="lombardContextMenu"
-            (baseFunctionCall)="positionEventHandler($event)"
-            (selectedItem)="selectPosition($event)"
-        ></app-data-grid>
-    </div>
-    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'crisisDividendProjection'">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
-            <h4>Crisis dividend projection</h4>
-        </div>
-        <h6>Dividend projection: {{ crisisDividendTotal|number: '1.0' }}</h6>
-        <h6>Drop: {{ (100 - 100 / portfolio.thisYearsDividendsTotal() * crisisDividendTotal).toFixed() }}%</h6>
-        <h6>ROI by projected dividends: {{ (100 / portfolio.investmentTotal() * crisisDividendTotal).toFixed(1) }}%</h6>
-        <app-data-grid
-            [gridData]="crisisDividendList"
-            [gridColumns]="crisisDivisColumns"
-            [contextMenu]="crisisDivisContextMenu"
-            (baseFunctionCall)="positionEventHandler($event)"
-            (selectedItem)="selectPosition($event)"
-        ></app-data-grid>
     </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'lastMinute'">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
@@ -149,8 +160,6 @@
             [gridData]="payDays"
             [gridColumns]="payDaysColumns"
             [contextMenu]="payDaysContextMenu"
-            (baseFunctionCall)="positionEventHandler($event)"
-            (selectedItem)="selectPosition($event)"
         ></app-data-grid>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1 pt-3">
             <h4>Declaration Days</h4>
@@ -159,8 +168,6 @@
             [gridData]="declarationDays"
             [gridColumns]="declarationDaysColumns"
             [contextMenu]="declarationDaysContextMenu"
-            (baseFunctionCall)="positionEventHandler($event)"
-            (selectedItem)="selectPosition($event)"
         ></app-data-grid>
     </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'newestRatings'">
@@ -213,80 +220,19 @@
             </tbody>
         </table>
     </div>
-    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'performance'">
-        <h4>Performance</h4>
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link" [class.active]="performanceListTab === '1day'" (click)="changePerformanceListTab('1day')" aria-current="page">1 day</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" [class.active]="performanceListTab === '1week'" (click)="changePerformanceListTab('1week')" aria-current="page">1 week</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" [class.active]="performanceListTab === '1month'" (click)="changePerformanceListTab('1month')" aria-current="page">1 month</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" [class.active]="performanceListTab === '3month'" (click)="changePerformanceListTab('3month')" aria-current="page">3 months</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" [class.active]="performanceListTab === '6month'" (click)="changePerformanceListTab('6month')" aria-current="page">6 months</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" [class.active]="performanceListTab === '1year'" (click)="changePerformanceListTab('1year')" aria-current="page">1 year</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" [class.active]="performanceListTab === '3years'" (click)="changePerformanceListTab('3years')" aria-current="page">3 years</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" [class.active]="performanceListTab === '5years'" (click)="changePerformanceListTab('5years')" aria-current="page">5 years</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" [class.active]="performanceListTab === '10years'" (click)="changePerformanceListTab('10years')" aria-current="page">10 years</a>
-            </li>
-        </ul>
-        <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded">
-            <table class="table table-striped table-sm">
-                <tbody>
-                <ng-container *ngFor="let position of performanceList">
-                    <tr [class.red20]="position.stopLossBroken()" [class.green20]="position.hasReachedTargetPrice()">
-                        <td><a [routerLink]="['/position-detail/' + position.id]">{{ position.share?.name }}</a></td>
-                        <td class="d-sm-none d-md-table-cell"><span *ngIf="position.sector">{{ position.sector.name }}</span></td>
-                        <td class="d-none d-sm-table-cell">
-                            <span *ngFor="let label of position.labels" class="badge" [style.background]="label.color">{{ label.name }}</span>
-                        </td>
-                        <td><span *ngIf="position.tempPerformanceValue !== undefined" class="float-end" [class.red-text]="position.tempPerformanceValue < 0" [class.green-text]="position.tempPerformanceValue > 0">{{ position.tempPerformanceValue|number: '1.0-1' }}%</span></td>
-                    </tr>
-                </ng-container>
-                </tbody>
-            </table>
-        </div>
-    </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'diversification'">
         <app-diversification-sector-container [portfolio]="portfolio"></app-diversification-sector-container>
     </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'strategies'">
         <app-diversification-strategy-container [portfolio]="portfolio"></app-diversification-strategy-container>
     </div>
-    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'risks'">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1">
-            <h4>Risks</h4>
-        </div>
-        <h6>Total Risk: {{ riskTotal|number: '1.0' }}</h6>
-        <h6>{{ (100 / portfolio.valueTotal() * riskTotal).toFixed() }}% Verlust von aktueller Bewertung</h6>
-        <span>{{ risksList?.length }} positions listed</span><br>
-        <span>! {{ missingPositionsInRisklist }} positions are missing in this list !</span><br>
-        <app-data-grid
-            [gridData]="risksList"
-            [gridColumns]="riskColumns"
-            [contextMenu]="riskContextMenu"
-            (baseFunctionCall)="positionEventHandler($event)"
-            (selectedItem)="selectPosition($event)"
-        ></app-data-grid>
-    </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'targetValue'">
         <app-target-value [portfolio]="portfolio"></app-target-value>
     </div>
     <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'extraPola'">
         <app-extrapolation-list [portfolio]="portfolio"></app-extrapolation-list>
+    </div>
+    <div class="shadow-sm p-1 pt-3 mb-5 bg-body rounded" [class.visually-hidden]="listingTab !== 'crashListings'">
+        <app-crash-listings [portfolio]="portfolio"></app-crash-listings>
     </div>
 </ng-container>
