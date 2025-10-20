@@ -266,9 +266,17 @@ export class Portfolio {
 
     ytdReturnsSummary(): YtdReturnsSummary[] {
         const positions: YtdReturnsSummary[] = [];
+        let newYearsDay = new Date();
+        newYearsDay.setMonth(0);
+        newYearsDay.setDate(1);
         const relevantPositions = this.getActiveNonCashPositions();
-        // todo: include closed positions also
-        // relevantPositions = relevantPositions.concat(this.portfolio?.getClosedNonCashPositions());
+        this.getClosedNonCashPositions().forEach(closed => {
+            if (closed.activeUntil && closed.activeUntil > newYearsDay) {
+                relevantPositions.push(closed);
+            } else if (closed.activeFrom > newYearsDay) {
+                relevantPositions.push(closed);
+            }
+        });
         relevantPositions.forEach(position => {
             const summary = position.getYtdReturnSummary();
             if (summary) {
