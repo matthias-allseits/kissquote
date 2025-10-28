@@ -389,7 +389,7 @@ export class Position {
     }
 
 
-    plannedDividendsTotalByYear(year: number): DividendTotal
+    plannedDividendsTotalByYear(year: number, payed: number): DividendTotal
     {
         let total = 0;
         let totalNet = 0;
@@ -404,7 +404,8 @@ export class Position {
         const shareheadSharePayment = this.shareheadDividendPaymentCorrected();
         let projectedDividend = null;
         let lastProjectedDividend = null;
-        if (year > new Date().getFullYear()) {
+        const thisYear = new Date().getFullYear();
+        if (year > thisYear) {
             const yearObject = new Date(new Date().setFullYear(year));
             projectedDividend = this.generateProjection(yearObject);
             if (projectedDividend === null) {
@@ -413,11 +414,31 @@ export class Position {
             }
         }
 
+        let announcedPayment: number|null = null;
+        if (year === thisYear) {
+            const thisMonth = new Date().getMonth() +  1;
+            const nextPayment = this.nextPayment();
+            if (this.dividendPeriodicity === 'quaterly' && thisMonth > 9 && nextPayment?.paymentCorrected && nextPayment.paymentCorrected > 0) {
+                announcedPayment = nextPayment.paymentCorrected;
+                console.log('quarterly: ', this.getName());
+                console.log('total: ', total);
+                console.log('announcedPayment: ', announcedPayment);
+            } else if (this.dividendPeriodicity === 'yearly' && thisMonth > 6) {
+                announcedPayment = 0;
+                console.log('yearly: ', this.getName());
+                console.log('total: ', total);
+                console.log('announcedPayment: ', announcedPayment);
+            }
+        }
+
         const manualDividend = this.share?.manualDividendByYear(year);
 
         if (manualDividend && manualDividend.amount !== undefined) {
             source = 'From manual dividend entry';
             total = +manualDividend.amount;
+        } else if (announcedPayment !== null) {
+            source = 'From announced last-of-year dividend';
+            total = payed + announcedPayment;
         } else if (projectedDividend) {
             total = 0;
             if (projectedDividend.currencyCorrectedProjectionValue !== undefined) {
@@ -976,7 +997,7 @@ export class Position {
                     worstEverDividendDropNote = 'manual dividend';
                 } else {
                     const year = new Date().getFullYear();
-                    nextDividendPayment = this.plannedDividendsTotalByYear(year).total;
+                    nextDividendPayment = this.plannedDividendsTotalByYear(year, 0).total;
                     worstEverDividendDropNote = `dividend projection ${year}`;
                 }
             }

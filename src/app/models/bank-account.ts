@@ -175,7 +175,7 @@ export class BankAccount {
         let plannedTotal = 0;
         this.getActiveNonCashPositions().forEach(position => {
             const payedResult = position.payedDividendsTotalByYear(year);
-            const plannedResult = position.plannedDividendsTotalByYear(year);
+            const plannedResult = position.plannedDividendsTotalByYear(year, payedResult.total);
             if (payedResult.total > 0) {
                 payedList.push(payedResult);
                 payedTotal += payedResult.total;
