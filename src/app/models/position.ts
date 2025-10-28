@@ -414,20 +414,30 @@ export class Position {
             }
         }
 
-        let announcedPayment: number|null = null;
+        let guessedPayment: number|null = null;
+        let guessedSource = 'Just guessed';
+        if (!this.active) {
+            guessedSource = 'Position closed';
+        }
         if (year === thisYear) {
             const thisMonth = new Date().getMonth() +  1;
             const nextPayment = this.nextPayment();
             if (this.dividendPeriodicity === 'quaterly' && thisMonth > 9 && nextPayment?.paymentCorrected && nextPayment.paymentCorrected > 0) {
-                announcedPayment = nextPayment.paymentCorrected;
+                guessedPayment = nextPayment.paymentCorrected;
+                guessedSource = 'From announced last-of-year dividend';
                 console.log('quarterly: ', this.getName());
                 console.log('total: ', total);
-                console.log('announcedPayment: ', announcedPayment);
+                console.log('guessedPayment: ', guessedPayment);
+            } else if (this.dividendPeriodicity === 'half-yearly' && thisMonth > 6 && nextPayment?.paymentCorrected && nextPayment.paymentCorrected > 0) {
+                guessedSource = 'From announced last-of-year dividend';
+                console.log('half-yearly: ', this.getName());
+                console.log('total: ', total);
+                console.log('guessedPayment: ', guessedPayment);
             } else if (this.dividendPeriodicity === 'yearly' && thisMonth > 6) {
-                announcedPayment = 0;
+                guessedPayment = 0;
                 console.log('yearly: ', this.getName());
                 console.log('total: ', total);
-                console.log('announcedPayment: ', announcedPayment);
+                console.log('guessedPayment: ', guessedPayment);
             }
         }
 
@@ -436,9 +446,9 @@ export class Position {
         if (manualDividend && manualDividend.amount !== undefined) {
             source = 'From manual dividend entry';
             total = +manualDividend.amount;
-        } else if (announcedPayment !== null) {
-            source = 'From announced last-of-year dividend';
-            total = payed + announcedPayment;
+        } else if (guessedPayment !== null) {
+            source = guessedSource;
+            total = payed + guessedPayment;
         } else if (projectedDividend) {
             total = 0;
             if (projectedDividend.currencyCorrectedProjectionValue !== undefined) {
