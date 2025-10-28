@@ -420,24 +420,28 @@ export class Position {
             guessedSource = 'Position closed';
         }
         if (year === thisYear) {
-            const thisMonth = new Date().getMonth() +  1;
             const nextPayment = this.nextPayment();
-            if (this.dividendPeriodicity === 'quaterly' && thisMonth > 9 && nextPayment?.paymentCorrected && nextPayment.paymentCorrected > 0) {
-                guessedPayment = nextPayment.paymentCorrected;
-                guessedSource = 'From announced last-of-year dividend';
-                console.log('quarterly: ', this.getName());
-                console.log('total: ', total);
-                console.log('guessedPayment: ', guessedPayment);
-            } else if (this.dividendPeriodicity === 'half-yearly' && thisMonth > 6 && nextPayment?.paymentCorrected && nextPayment.paymentCorrected > 0) {
-                guessedSource = 'From announced last-of-year dividend';
-                console.log('half-yearly: ', this.getName());
-                console.log('total: ', total);
-                console.log('guessedPayment: ', guessedPayment);
+            const thisMonth = new Date().getFullYear() + 1;
+            if (nextPayment) {
+                const paymentMonth = nextPayment.date.getMonth() + 1;
+                if (this.dividendPeriodicity === 'quaterly' && paymentMonth > 9 && nextPayment?.paymentCorrected && nextPayment.paymentCorrected > 0) {
+                    guessedPayment = nextPayment.paymentCorrected;
+                    guessedSource = 'From announced last-of-year dividend';
+                    // console.log('quarterly: ', this.getName());
+                    // console.log('total: ', total);
+                    // console.log('guessedPayment: ', guessedPayment);
+                } else if (this.dividendPeriodicity === 'half-yearly' && paymentMonth > 6 && nextPayment?.paymentCorrected && nextPayment.paymentCorrected > 0) {
+                    guessedPayment = nextPayment.paymentCorrected;
+                    guessedSource = 'From announced last-of-year dividend';
+                    // console.log('half-yearly: ', this.getName());
+                    // console.log('total: ', total);
+                    // console.log('guessedPayment: ', guessedPayment);
+                }
             } else if (this.dividendPeriodicity === 'yearly' && thisMonth > 6) {
                 guessedPayment = 0;
-                console.log('yearly: ', this.getName());
-                console.log('total: ', total);
-                console.log('guessedPayment: ', guessedPayment);
+                // console.log('yearly: ', this.getName());
+                // console.log('total: ', total);
+                // console.log('guessedPayment: ', guessedPayment);
             }
         }
 
